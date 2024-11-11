@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Placement_Preparation</title>
+    <link rel="stylesheet" href="~/css/output.css" />
+    <link rel="stylesheet" href="~/css/ste.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Placement_Preparation.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
+</head>
+
+        @* hader *@
+<body class="font-[Poppins] bg-gradient-to-t from-[#fbc2eb] to-[#a6c1ee] min-h-screen overflow-hidden">
+            <header class="bg-white">
+                <nav class="flex justify-between items-center w-[92%]  mx-auto">
+                    <div>
+                        <img class="w-16 cursor-pointer" src="https://cdn-icons-png.flaticon.com/512/5968/5968204.png" alt="...">
+                    </div>
+                    <div class="nav-links duration-500 md:static absolute bg-white md:min-h-fit  left-0 top-[-100%] md:w-auto  w-full flex justify-center items-center "> 
+                        <ul class="flex md:flex-row flex-col items-center md:gap-[4vw] gap-8">
+                            <li>
+                                <a class="hover:text-gray-500" href="#">Home</a>
+                            </li>
+                            <li>
+                               <a class="hover:text-gray-500" href="#">Programing</a>
+                            </li>
+                    <li>
+                        <div class="relative inline-block text-left ">
+                            <!-- Dropdown Button -->
+                            <div onclick="onToggleDropdown()" class="inline-flex items-center w-full justify-center hover:text-gray-500 hover:cursor-pointer gap-x-1.5" id="dropdown-button" aria-expanded="true" aria-haspopup="true">
+                                Aptitude
+                                <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+
+                            <!-- Dropdown Menu -->
+                            <div id="dropdownlist" class="hidden absolute left-0 mt-2 w-fit origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" tabindex="-1">
+                                <div class="py-1" role="none">
+                                    <a href="#" class="block px-2 py-2 hover:text-gray-500 text-sm text-gray-700" role="menuitem" tabindex="-1">Quantitative</a>
+                                    <a href="#" class="block px-2 py-2 hover:text-gray-500 text-sm text-gray-700" role="menuitem" tabindex="-1">Reasoning</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                            <li>
+                                <a class="hover:text-gray-500" href="#">Other</a>
+                            </li>
+                          
+                        </ul>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <a asp-area="Authentication" asp-controller="Auth" asp-action="SignIn" class="bg-primaryLight text-white px-5 py-2 rounded-full hover:bg-primary">Log out</a>
+                        <ion-icon onclick="onToggleMenu(this)" name="menu" class="text-3xl cursor-pointer md:hidden"></ion-icon>
+                    </div>
+            </header>
+
+    <div class="flex">
+        <div id="sidebar" class="w-72 duration-300 bg-white h-screen relative transition-width">
+            <img onclick="onToggleSideBar()" src="~/assets/icons/control.png" id="sidebarButton" class="duration-300 absolute cursor-pointer rounded-full top-9 left-72 md:left-60 lg:left-72 w-8 border-2" />
+
+            <ul class="flex-col justify-center gap-x-4 mt-5 overflow-hidden">
+                @{
+                    foreach (var menu in new[] { "Branch", "Course Type", "Difficulty Level", "Course", "Topic", "Sub Topic", "Question" })
+                    {
+                        <li class="cursor-pointer m-2 p-2 hover:bg-slate-300 rounded-md">
+                            <ion-icon name="menu"></ion-icon>
+                            <span class="origin-left duration-200 menu-items">@menu</span>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+        <div class="p-7 flex-1 sm:hidden" id="renderBody">
+            @RenderBody()
+        </div>
+    </div>
+
+
+
+
+
+            <script>
+                const navLinks = document.querySelector('.nav-links');
+                const dropdownList = document.getElementById('dropdownlist');
+                const dropdownButton = document.getElementById('dropdown-button');
+                const sidebar = document.getElementById('sidebar');
+                const sidebarButton = document.getElementById('sidebarButton');
+                const renderBody = document.getElementById('renderBody');
+
+          
+              function onToggleDropdown(){
+                     dropdownList.classList.toggle('hidden');
+              }
+
+                function onToggleMenu(e) {
+                    e.name = e.name === 'menu' ? 'close' : 'menu'
+                    navLinks.classList.toggle('top-[7%]')
+                }
+
+                // Close dropdown if clicking outside
+                document.addEventListener('click', function (event) {
+            const isClickInside = dropdownButton.contains(event.target) || dropdownList.contains(event.target);
+
+                    if (!isClickInside) {
+                dropdownList.classList.add('hidden');
+                    }
+                });
+
+                //side bar
+        function onToggleSideBar() {
+            const menuItems = document.querySelectorAll('.menu-items'); // Select all items
+            const sidebar = document.getElementById('sidebar');
+            const sidebarButton = document.getElementById('sidebarButton');
+            const renderBody = document.getElementById('renderBody');
+
+            // Toggle menu item visibility
+            menuItems.forEach(item => item.classList.toggle("hidden"));
+
+            // Responsive sidebar width adjustments
+            if (sidebar.classList.contains('w-72')) {
+                sidebar.classList.replace('w-72', 'w-15');
+                sidebarButton.classList.replace("left-72", "left-15");
+              //  renderBody.classList.add('hidden'); // Hide the main body when sidebar is in mini-mode
+            } else {
+                sidebar.classList.replace('w-15', 'w-72');
+                sidebarButton.classList.replace("left-15", "left-72");
+              //  renderBody.classList.remove('hidden'); // Show the main body
+            }
+        }
+
+            </script>
+
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

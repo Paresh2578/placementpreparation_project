@@ -1,0 +1,101 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\my data\\Placement Preparation\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Placement Preparation.bundle.scp.css",
+      "PackagePath": "staticwebassets\\Placement Preparation.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\control.png",
+      "PackagePath": "staticwebassets\\assets\\icons\\control.png"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\down-arrow.png",
+      "PackagePath": "staticwebassets\\assets\\icons\\down-arrow.png"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\css\\input.css",
+      "PackagePath": "staticwebassets\\css\\input.css"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\css\\output.css",
+      "PackagePath": "staticwebassets\\css\\output.css"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\js\\site.js",
+      "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Placement Preparation.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.Placement Preparation.props",
+      "PackagePath": "build\\Placement Preparation.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.Placement Preparation.props",
+      "PackagePath": "buildMultiTargeting\\Placement Preparation.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.Placement Preparation.props",
+      "PackagePath": "buildTransitive\\Placement Preparation.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
