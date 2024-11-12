@@ -15,16 +15,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap"
           rel="stylesheet">
     <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
+
+    @* tailwind *@
 </head>
 
-        @* hader *@
-<body class="font-[Poppins] bg-gradient-to-t from-[#fbc2eb] to-[#a6c1ee] min-h-screen overflow-hidden">
+<body class="font-[Poppins] bg-gradient-to-t from-[#fbc2eb] to-[#a6c1ee]">
+            @* Header *@
             <header class="bg-white">
                 <nav class="flex justify-between items-center w-[92%]  mx-auto">
                     <div>
                         <img class="w-16 cursor-pointer" src="https://cdn-icons-png.flaticon.com/512/5968/5968204.png" alt="...">
                     </div>
-                    <div class="nav-links duration-500 md:static absolute bg-white md:min-h-fit  left-0 top-[-100%] md:w-auto  w-full flex justify-center items-center "> 
+                    <div style="z-index:10" class="nav-links duration-500 md:static absolute bg-white md:min-h-fit  left-0 top-[-100%] md:w-auto  w-full flex justify-center items-center "> 
                         <ul class="flex md:flex-row flex-col items-center md:gap-[4vw] gap-8">
                             <li>
                                 <a class="hover:text-gray-500" href="#">Home</a>
@@ -59,30 +61,44 @@
                     </div>
                     <div class="flex items-center gap-6">
                         <a asp-area="Authentication" asp-controller="Auth" asp-action="SignIn" class="bg-primaryLight text-white px-5 py-2 rounded-full hover:bg-primary">Log out</a>
-                        <ion-icon onclick="onToggleMenu(this)" name="menu" class="text-3xl cursor-pointer md:hidden"></ion-icon>
+                             <img height="20" width="20" src="~/assets/icons/menu.png" onclick="onToggleMenu(this)" class="duration-500 text-3xl cursor-pointer md:hidden" />
                     </div>
             </header>
 
-    <div class="flex">
-        <div id="sidebar" class="w-72 duration-300 bg-white h-screen relative transition-width">
-            <img onclick="onToggleSideBar()" src="~/assets/icons/control.png" id="sidebarButton" class="duration-300 absolute cursor-pointer rounded-full top-9 left-72 md:left-60 lg:left-72 w-8 border-2" />
+            <div class="flex">
+                @* Sidebar *@
+                 <div id="sidebar" style="z-index:1; transition-duration: 300ms;" class="shadow-lg w-15 bg-white  duration-300  relative">
+                    <img style="position:absolute;right:-10px;top:-5px; " onclick="onToggleSideBar()" src="~/assets/icons/control.png" id="sidebarButton" class="duration-300 absolute right-0 cursor-pointer rounded-full top-9 w-8 border-2" />
 
-            <ul class="flex-col justify-center gap-x-4 mt-5 overflow-hidden">
-                @{
-                    foreach (var menu in new[] { "Branch", "Course Type", "Difficulty Level", "Course", "Topic", "Sub Topic", "Question" })
-                    {
-                        <li class="cursor-pointer m-2 p-2 hover:bg-slate-300 rounded-md">
-                            <ion-icon name="menu"></ion-icon>
-                            <span class="origin-left duration-200 menu-items">@menu</span>
-                        </li>
-                    }
-                }
-            </ul>
-        </div>
-        <div class="p-7 flex-1 sm:hidden" id="renderBody">
-            @RenderBody()
-        </div>
-    </div>
+                    <ul class="flex-col justify-center gap-x-4 mt-5 rounded-md ">
+                        @{
+                            var itemlist = new []
+                                 {
+                        new {name = "Home" , icon = "~/assets/icons/home.png" , controller="Home" , action="Home"},
+                        new {name = "Branch" , icon = "~/assets/icons/branch.png" ,controller="Branch" , action="List"},
+                        new {name = "Course Type" , icon = "~/assets/icons/topic.png",controller="Home" , action="List"},
+                        new {name = "Difficulty Level" , icon = "~/assets/icons/level-up.png",controller="Home" , action="List"},
+                        new {name = "Topic" , icon = "~/assets/icons/topic.png",controller="Home" , action="List"},
+                        new {name = "Sub Topic" , icon = "~/assets/icons/topic.png",controller="Home" , action="List"},
+                        new {name = "Question"  , icon = "~/assets/icons/qa.png",controller="Home" , action="List"},
+                        new {name = "Mcq"  , icon = "~/assets/icons/online-test.png",controller="Home" , action="List"},
+                            };
+                            foreach (var menu in itemlist)
+                            {
+                                <a asp-controller="@menu.controller" asp-action="@menu.action" class="cursor-pointer m-2 flex gap-6 p-2 hover:bg-slate-300 rounded-md">
+                                    <img src="@Url.Content(menu.icon)" alt="@menu.icon icon" height="20" width="20" />
+                                    <span class="origin-left duration-200 menu-items" >@menu.name</span>
+                                </a>
+                            }
+                        }
+                    </ul>
+                </div>
+
+                @* Body *@
+                <div class="p-7 flex-1" id="renderBody">
+                    @RenderBody()
+                </div>
+            </div>
 
 
 
@@ -92,9 +108,6 @@
                 const navLinks = document.querySelector('.nav-links');
                 const dropdownList = document.getElementById('dropdownlist');
                 const dropdownButton = document.getElementById('dropdown-button');
-                const sidebar = document.getElementById('sidebar');
-                const sidebarButton = document.getElementById('sidebarButton');
-                const renderBody = document.getElementById('renderBody');
 
           
               function onToggleDropdown(){
@@ -102,7 +115,7 @@
               }
 
                 function onToggleMenu(e) {
-                    e.name = e.name === 'menu' ? 'close' : 'menu'
+                    e.src = e.src.includes("assets/icons/menu.png") ? '/assets/icons/close.png' : '/assets/icons/menu.png'
                     navLinks.classList.toggle('top-[7%]')
                 }
 
@@ -120,7 +133,6 @@
             const menuItems = document.querySelectorAll('.menu-items'); // Select all items
             const sidebar = document.getElementById('sidebar');
             const sidebarButton = document.getElementById('sidebarButton');
-            const renderBody = document.getElementById('renderBody');
 
             // Toggle menu item visibility
             menuItems.forEach(item => item.classList.toggle("hidden"));
@@ -128,18 +140,17 @@
             // Responsive sidebar width adjustments
             if (sidebar.classList.contains('w-72')) {
                 sidebar.classList.replace('w-72', 'w-15');
-                sidebarButton.classList.replace("left-72", "left-15");
-              //  renderBody.classList.add('hidden'); // Hide the main body when sidebar is in mini-mode
+                sidebarButton.classList.add("rotate-180");
             } else {
                 sidebar.classList.replace('w-15', 'w-72');
-                sidebarButton.classList.replace("left-15", "left-72");
-              //  renderBody.classList.remove('hidden'); // Show the main body
+                sidebarButton.classList.remove("rotate-180");
             }
         }
 
             </script>
 
 
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

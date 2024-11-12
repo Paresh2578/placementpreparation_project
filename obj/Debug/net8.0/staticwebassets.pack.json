@@ -5,12 +5,48 @@
       "PackagePath": "staticwebassets\\Placement Preparation.bundle.scp.css"
     },
     {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\branch.png",
+      "PackagePath": "staticwebassets\\assets\\icons\\branch.png"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\close.png",
+      "PackagePath": "staticwebassets\\assets\\icons\\close.png"
+    },
+    {
       "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\control.png",
       "PackagePath": "staticwebassets\\assets\\icons\\control.png"
     },
     {
       "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\down-arrow.png",
       "PackagePath": "staticwebassets\\assets\\icons\\down-arrow.png"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\home.png",
+      "PackagePath": "staticwebassets\\assets\\icons\\home.png"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\level-up.png",
+      "PackagePath": "staticwebassets\\assets\\icons\\level-up.png"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\menu.png",
+      "PackagePath": "staticwebassets\\assets\\icons\\menu.png"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\online-learning.png",
+      "PackagePath": "staticwebassets\\assets\\icons\\online-learning.png"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\online-test.png",
+      "PackagePath": "staticwebassets\\assets\\icons\\online-test.png"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\qa.png",
+      "PackagePath": "staticwebassets\\assets\\icons\\qa.png"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\topic.png",
+      "PackagePath": "staticwebassets\\assets\\icons\\topic.png"
     },
     {
       "Id": "C:\\my data\\Placement Preparation\\wwwroot\\css\\input.css",
