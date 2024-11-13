@@ -17,8 +17,16 @@
       "PackagePath": "staticwebassets\\assets\\icons\\control.png"
     },
     {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\delete.svg",
+      "PackagePath": "staticwebassets\\assets\\icons\\delete.svg"
+    },
+    {
       "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\down-arrow.png",
       "PackagePath": "staticwebassets\\assets\\icons\\down-arrow.png"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\edit.svg",
+      "PackagePath": "staticwebassets\\assets\\icons\\edit.svg"
     },
     {
       "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\home.png",
@@ -43,6 +51,10 @@
     {
       "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\qa.png",
       "PackagePath": "staticwebassets\\assets\\icons\\qa.png"
+    },
+    {
+      "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\search.png",
+      "PackagePath": "staticwebassets\\assets\\icons\\search.png"
     },
     {
       "Id": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\topic.png",

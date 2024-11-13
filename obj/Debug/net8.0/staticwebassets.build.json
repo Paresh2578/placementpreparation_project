@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "J4IYBbxdWuokTJXygR9Oz9mFwA3SpvqrnpBgIiXL2jw=",
+  "Hash": "cGgKJrNEEEnU3znr4zm0/ngDoRuqWRLXhnmP8S3RCWk=",
   "Source": "Placement Preparation",
   "BasePath": "_content/Placement Preparation",
   "Mode": "Default",
@@ -112,6 +112,25 @@
       "OriginalItemSpec": "wwwroot\\assets\\icons\\control.png"
     },
     {
+      "Identity": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\delete.svg",
+      "SourceId": "Placement Preparation",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\my data\\Placement Preparation\\wwwroot\\",
+      "BasePath": "_content/Placement Preparation",
+      "RelativePath": "assets/icons/delete.svg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\assets\\icons\\delete.svg"
+    },
+    {
       "Identity": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\down-arrow.png",
       "SourceId": "Placement Preparation",
       "SourceType": "Discovered",
@@ -129,6 +148,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\assets\\icons\\down-arrow.png"
+    },
+    {
+      "Identity": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\edit.svg",
+      "SourceId": "Placement Preparation",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\my data\\Placement Preparation\\wwwroot\\",
+      "BasePath": "_content/Placement Preparation",
+      "RelativePath": "assets/icons/edit.svg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\assets\\icons\\edit.svg"
     },
     {
       "Identity": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\home.png",
@@ -243,6 +281,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\assets\\icons\\qa.png"
+    },
+    {
+      "Identity": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\search.png",
+      "SourceId": "Placement Preparation",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\my data\\Placement Preparation\\wwwroot\\",
+      "BasePath": "_content/Placement Preparation",
+      "RelativePath": "assets/icons/search.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\assets\\icons\\search.png"
     },
     {
       "Identity": "C:\\my data\\Placement Preparation\\wwwroot\\assets\\icons\\topic.png",

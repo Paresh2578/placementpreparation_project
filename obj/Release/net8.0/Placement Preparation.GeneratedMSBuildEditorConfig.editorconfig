@@ -26,6 +26,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\my data\Placement Preparation
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/my data/Placement Preparation/Areas/Admin/Views/Branch/AddOrEditBranch.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQnJhbmNoXEFkZE9yRWRpdEJyYW5jaC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/my data/Placement Preparation/Areas/Admin/Views/Branch/List.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQnJhbmNoXExpc3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -76,6 +80,18 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/my data/Placement Preparation/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/my data/Placement Preparation/Views/Shared/_Back_Button.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9CYWNrX0J1dHRvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/my data/Placement Preparation/Views/Shared/_My_Button.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9NeV9CdXR0b24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/my data/Placement Preparation/Views/Shared/_Submit_Button.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9TdWJtaXRfQnV0dG9uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/my data/Placement Preparation/Views/Shared/_ValidationScriptsPartial.cshtml]

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Placement Preparation")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d277092f1cf287bd37185ada3df87caeb577a246")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b96f52efcd979d3d39cd33ccdafbaad0926a2e12")]
 [assembly: System.Reflection.AssemblyProductAttribute("Placement Preparation")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Placement Preparation")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
