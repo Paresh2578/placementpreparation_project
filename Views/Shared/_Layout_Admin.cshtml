@@ -19,7 +19,7 @@
     @* tailwind *@
 </head>
 
-<body class="font-[Poppins] bg-gradient-to-t from-[#fbc2eb] to-[#a6c1ee] ">
+<body class="font-[Poppins] bg-gradient-to-t from-[#fbc2eb] to-[#a6c1ee] " onload="handleOnLoad()">
 
     <!-- Header -->
     <header class="bg-white">
@@ -80,9 +80,9 @@
                     {
                 new {name = "Home" , icon = "~/assets/icons/home.png" , controller="Home" , action="Home"},
                 new {name = "Branch" , icon = "~/assets/icons/branch.png" ,controller="Branch" , action="List"},
-                new {name = "Difficulty Level" , icon = "~/assets/icons/level-up.png",controller="Home" , action="List"},
-                new {name = "Course" , icon = "~/assets/icons/topic.png",controller="Home" , action="List"},
-                new {name = "Course Type" , icon = "~/assets/icons/topic.png",controller="Home" , action="List"},
+                new {name = "Difficulty Level" , icon = "~/assets/icons/level-up.png",controller="DifficultyLevel" , action="List"},
+                new {name = "Course Type" , icon = "~/assets/icons/topic.png",controller="CourseType" , action="ListCourseType"},
+                new {name = "Course" , icon = "~/assets/icons/online-learning.png",controller="Course" , action="ListCourse"},
                 new {name = "Topic" , icon = "~/assets/icons/topic.png",controller="Home" , action="List"},
                 new {name = "Sub Topic" , icon = "~/assets/icons/topic.png",controller="Home" , action="List"},
                 new {name = "Question"  , icon = "~/assets/icons/qa.png",controller="Home" , action="List"},
@@ -90,10 +90,10 @@
                 };
                     foreach (var menu in itemlist)
                     {
-                        <a asp-controller="@menu.controller" asp-action="@menu.action" class="cursor-pointer m-2 flex gap-6 p-2 hover:bg-slate-300 rounded-md">
-                            <img src="@Url.Content(menu.icon)" alt="@menu.icon icon" height="20" width="20" />
-                            <span class="origin-left duration-200 menu-items">@menu.name</span>
-                        </a>
+                                <a asp-controller="@menu.controller" asp-action="@menu.action" class="cursor-pointer m-2 flex gap-6 p-2 hover:bg-slate-300 rounded-md">
+                                    <img src="@Url.Content(menu.icon)" alt="@menu.icon icon" height="10" width="20" />
+                                    <span class="origin-left duration-200 menu-items">@menu.name</span>
+                                </a>
                     }
                 }
             </ul>
@@ -115,7 +115,9 @@
         const dropdownList = document.getElementById('dropdownlist');
         const dropdownButton = document.getElementById('dropdown-button');
         const mainContent = document.getElementById('mainContent');
+        const sidebarButton = document.getElementById('sidebarButton');
         const sidebar = document.getElementById('sidebar');
+        const menuItems = document.querySelectorAll('.menu-items');
 
         function onToggleDropdown() {
             dropdownList.classList.toggle('hidden');
@@ -137,23 +139,52 @@
 
         // Sidebar control
         function onToggleSideBar() {
-            const menuItems = document.querySelectorAll('.menu-items');
-            const sidebarButton = document.getElementById('sidebarButton');
-            const screenWidth = window.innerWidth;
-
-            // Toggle visibility of menu items and sidebar width
-            menuItems.forEach(item => item.classList.toggle("hidden"));
             if (sidebar.classList.contains('w-72')) {
-                sidebar.classList.replace('w-72', 'w-15');
-                sidebarButton.classList.add("rotate-180");
+                handleSideBarState(true);
             } else {
-                sidebar.classList.replace('w-15', 'w-72');
-                sidebarButton.classList.remove("rotate-180");
+               handleSideBarState(false);
             }
 
-            // Hide main content if screen width is less than 600px
-            if (screenWidth < 600) {
-                mainContent.classList.toggle('hidden');
+            const screenWidth = window.innerWidth;
+
+
+           
+        }
+
+        // Handle side open and close
+        function  handleSideBarState(state){
+            const screenWidth = window.innerWidth;
+            if(state){
+                sidebar.classList.replace('w-72', 'w-15');
+                sidebarButton.classList.add("rotate-180");
+
+                // Toggle visibility of menu items and sidebar width
+                menuItems.forEach(item => item.classList.add("hidden"));
+
+                     // Hide main content if screen width is less than 600px
+                    if (screenWidth < 600) {
+                        mainContent.classList.add('hidden');
+                    }
+
+                // Save the sidebar state as 'open' in localStorage so that it persists across page reloads.
+                // Using "true" to indicate that the sidebar is currently open.
+                localStorage.setItem("sidebar-open", false);
+            }else{
+                 sidebar.classList.replace('w-15', 'w-72');
+                sidebarButton.classList.remove("rotate-180");
+
+                // Toggle visibility of menu items and sidebar width
+                 menuItems.forEach(item => item.classList.remove("hidden"));
+
+
+                   //  main content if screen width is less than 600px
+                    if (screenWidth >= 600) {
+                        mainContent.classList.remove('hidden');
+                    }
+
+                // Save the sidebar state as 'open' in localStorage so that it persists across page reloads.
+                // Using "true" to indicate that the  is currently open.
+                localStorage.setItem("sidebar-open", true);
             }
         }
 
@@ -164,6 +195,36 @@
                 mainContent.classList.remove('hidden');
             }
         });
+
+        // Load page when set sidebar width
+        function handleOnLoad(){
+            const sidebarStatus = localStorage.getItem("sidebar-open");
+            const screenWidth = window.innerWidth;
+
+            if(sidebarStatus == "true"){
+                 sidebar.classList.replace('w-15', 'w-72');
+                 sidebarButton.classList.remove("rotate-180");
+
+                // Toggle visibility of menu items and sidebar width
+                menuItems.forEach(item => item.classList.remove("hidden"));
+
+                // Hide main content if screen width is less than 600px
+                if (screenWidth < 600) {
+                    mainContent.classList.add('hidden');
+                }
+
+            }else{
+                sidebar.classList.replace('w-72', 'w-15');
+               sidebarButton.classList.add("rotate-180");
+
+                // Toggle visibility of menu items and sidebar width
+                menuItems.forEach(item => item.classList.add("hidden"));
+
+                if (screenWidth < 600) {
+                    mainContent.classList.remove('hidden');
+                }
+            }
+        }
     </script>
 
 

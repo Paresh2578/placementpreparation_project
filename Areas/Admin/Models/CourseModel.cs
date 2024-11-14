@@ -25,7 +25,7 @@ namespace Placement_Preparation.Areas.Admin.Models
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Image is required.")]
-        [Url(ErrorMessage = "Please provide a valid URL for the image.")]
+        //[Url(ErrorMessage = "Please provide a valid URL for the image.")]
         public string Img { get; set; }
 
         [Required(ErrorMessage = "Course Type is required.")]

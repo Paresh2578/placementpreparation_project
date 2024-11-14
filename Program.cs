@@ -1,11 +1,20 @@
 using Microsoft.Extensions.FileSystemGlobbing.Internal;
+using Placement_Preparation.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
+// All class 
+builder.Services.AddScoped<AllDropDown>();
+
 var app = builder.Build();
+
+
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
