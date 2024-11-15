@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Placement_Preparation.Areas.Admin.Models
 {
+    [TopicOrSubTopicRequired(ErrorMessage = "Please select either a  Topic or a Sub-topic, but not both.")]
     public class QuestionModel
     {
         // Primary Key
@@ -10,12 +11,18 @@ namespace Placement_Preparation.Areas.Admin.Models
         public int QuestionId { get; set; }
 
         // Foreign Key to SubTopic
-        [Required(ErrorMessage = "Sub-topic is required.")]
         [Range(1, int.MaxValue, ErrorMessage = "Please select a valid Sub-topic.")]
-        public int SubTopicId { get; set; }
+        public int? SubTopicId { get; set; }
 
         [ForeignKey("SubTopicId")]
-        public virtual SubTopicModel SubTopic { get; set; }
+        public virtual SubTopicModel? SubTopic { get; set; }
+
+        // Foreign Key to Topic
+        [Range(1, int.MaxValue, ErrorMessage = "Please select a valid topic.")]
+        public int? TopicId { get; set; }
+
+        [ForeignKey("TopicId")]
+        public virtual TopicModel? Topic { get; set; }
 
         // The actual question with validation
         [Required(ErrorMessage = "Question  is required.")]
@@ -26,5 +33,39 @@ namespace Placement_Preparation.Areas.Admin.Models
         [Required(ErrorMessage = "Question Answer is required.")]
         [StringLength(1000, ErrorMessage = "Question Answer can't be longer than 1000 characters.")]
         public string QuestionAnswer { get; set; }
+    }
+}
+
+
+public class TopicOrSubTopicRequiredAttribute : ValidationAttribute
+{
+    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+    {
+        // Get the TopicId and SubTopicId properties from the validation context
+        var topicIdProperty = validationContext.ObjectType.GetProperty("TopicId");
+        var subTopicIdProperty = validationContext.ObjectType.GetProperty("SubTopicId");
+
+        if (topicIdProperty == null || subTopicIdProperty == null )
+        {
+            return new ValidationResult("TopicId or SubTopicId fields are Required.");
+        }
+
+        var topicIdValue = topicIdProperty.GetValue(validationContext.ObjectInstance) as int?;
+        var subTopicIdValue = subTopicIdProperty.GetValue(validationContext.ObjectInstance) as int?;
+
+        if(topicIdValue == null && subTopicIdValue == null)
+        {
+            return new ValidationResult("TopicId or SubTopicId fields are Required.");
+        }
+
+        // Check if exactly one is provided (not both and not none)
+        if ((topicIdValue.HasValue && !subTopicIdValue.HasValue) ||
+            (!topicIdValue.HasValue && subTopicIdValue.HasValue))
+        {
+            return ValidationResult.Success;
+        }
+
+        // Validation failed, return error message
+        return new ValidationResult("Please select either a  Topic or a  Sub-topic, but not both.");
     }
 }

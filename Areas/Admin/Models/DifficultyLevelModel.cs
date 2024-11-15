@@ -17,6 +17,7 @@ namespace Placement_Preparation.Areas.Admin.Models
 
         // Name of the Difficulty Level (e.g., Easy, Medium, Hard)
         [Required(ErrorMessage = "Difficulty Level is required.")]
+        
         public DifficultyLevelName DifficultyLevelName { get; set; }
     }
 }

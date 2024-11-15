@@ -14,9 +14,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap"
           rel="stylesheet">
-    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
 
-    @* tailwind *@
+    <!--EasyMDE-->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
 </head>
 
 <body class="font-[Poppins] bg-gradient-to-t from-[#fbc2eb] to-[#a6c1ee] " onload="handleOnLoad()">
@@ -83,10 +85,10 @@
                 new {name = "Difficulty Level" , icon = "~/assets/icons/level-up.png",controller="DifficultyLevel" , action="List"},
                 new {name = "Course Type" , icon = "~/assets/icons/topic.png",controller="CourseType" , action="ListCourseType"},
                 new {name = "Course" , icon = "~/assets/icons/online-learning.png",controller="Course" , action="ListCourse"},
-                new {name = "Topic" , icon = "~/assets/icons/topic.png",controller="Home" , action="List"},
-                new {name = "Sub Topic" , icon = "~/assets/icons/topic.png",controller="Home" , action="List"},
-                new {name = "Question"  , icon = "~/assets/icons/qa.png",controller="Home" , action="List"},
-                new {name = "Mcq"  , icon = "~/assets/icons/online-test.png",controller="Home" , action="List"},
+                new {name = "Topic" , icon = "~/assets/icons/topic.png",controller="Topic" , action="ListTopic"},
+                new {name = "Sub Topic" , icon = "~/assets/icons/topic.png",controller="SubTopic" , action="ListSubTopic"},
+                new {name = "Question"  , icon = "~/assets/icons/qa.png",controller="Question" , action="ListQuestion"},
+                new {name = "Mcq"  , icon = "~/assets/icons/online-test.png",controller="Mcq" , action="ListMcq"},
                 };
                     foreach (var menu in itemlist)
                     {

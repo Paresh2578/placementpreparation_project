@@ -1,20 +1,20 @@
-﻿@model List<CourseTypeModel>
-
+﻿@model List<SubTopicModel>
 
 <div class="bg-white p-4 rounded-md shadow-lg ">
     <!-- Header Section -->
     <div class="flex mb-4 justify-between">
-        <h1 class="text-xl">List of Course Type</h1>
+        <h1 class="text-xl">List of Sub Topic</h1>
         <div>
-            <partial name="_My_Button" model='new Placement_Preparation.Models.ButtonModel { Title = "Add Course Type", Url="/Admin/CourseType/AddOrEditCourseType" }' />
+            <partial name="_My_Button" model='new Placement_Preparation.Models.ButtonModel { Title = "Add Sub Topic", Url="/Admin/SubTopic/AddOrEditSubTopic" }' />
         </div>
     </div>
 
     <div>
         <!-- Search Bar Section -->
         <div class="relative">
+
             <input class="bg-gray-100 w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-500 shadow-sm focus:shadow-md"
-                   placeholder="Search for Course Type..." />
+                   placeholder="Search for SubTopic..." />
             <button class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
                     type="button">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="transparent" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-8 h-8 text-slate-600">
@@ -29,17 +29,20 @@
                 <thead>
                     <tr class="bg-gray-100 text-nowrap text-gray-600  uppercase text-sm leading-normal">
                         <th class="py-3 px-6 text-left">#</th>
-                        <th class="py-3 px-6 text-left">CourseType Name</th>
+                        <th class="py-3 px-6 text-left">Sub Topic Name</th>
+                        <th class="py-3 px-6 text-left">Topic Name</th>
                         <th class="py-3 px-6 text-left">Action</th>
                     </tr>
                 </thead>
                 <tbody class="text-gray-700 text-sm font-light">
                     @{
-                        foreach (var courseType in Model)
+                        foreach (var subTopic in Model)
                         {
                             <tr class="border-b text-nowrap  border-gray-200 hover:bg-gray-50">
-                                <td class="py-3 px-6 text-left">@courseType.CourseTypeId</td>
-                                <td class="py-3 px-6 text-left">@courseType.CourseTypeName</td>
+                                <td class="py-3 px-6 text-left">@subTopic.SubTopicId</td>
+                                <td class="py-3 px-6 text-left">@subTopic.SubTopicName</td>
+                                <td class="py-3 px-6 text-left">@subTopic.Topic!.TopicName</td>
+
                                 <td class="py-3 px-6 text-left flex gap-x-4">
                                     <a class="cursor-pointer"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
                                     <a class="cursor-pointer"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a>

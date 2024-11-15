@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Placement_Preparation.Areas.Admin.Models
 {
+    [TopicOrSubTopicRequired(ErrorMessage = "Please select either a  Topic or a Sub-topic, but not both.")]
     public class McqModel
     {
         // Primary Key
@@ -10,13 +11,20 @@ namespace Placement_Preparation.Areas.Admin.Models
         public int McqId { get; set; }
 
         // Foreign Key to SubTopic
-        [Required(ErrorMessage = "Sub-topic is required.")]
         [Range(1, int.MaxValue, ErrorMessage = "Please select a valid Sub-topic.")]
-        public int SubTopicId { get; set; }
+        public int? SubTopicId { get; set; }
 
         // Navigation property for related SubTopic (optional, if you have a SubTopic model)
         [ForeignKey("SubTopicId")]
-        public virtual SubTopicModel SubTopic { get; set; }
+        public virtual SubTopicModel? SubTopic { get; set; }
+
+        // Foreign Key to Topic
+        [Range(1, int.MaxValue, ErrorMessage = "Please select a valid topic.")]
+        public int? TopicId { get; set; }
+
+        // Navigation property for related SubTopic (optional, if you have a SubTopic model)
+        [ForeignKey("TopicId")]
+        public virtual TopicModel? Topic { get; set; }
 
         // The actual question text
         [Required(ErrorMessage = "Question text is required.")]
@@ -49,3 +57,6 @@ namespace Placement_Preparation.Areas.Admin.Models
         public string CorrectAnswer { get; set; }
     }
 }
+
+
+

@@ -21,7 +21,7 @@ namespace Placement_Preparation.Areas.Admin.Models
 
         // Navigation property for related Topic (optional, if you have a Topic model)
         [ForeignKey("TopicId")]
-        public virtual TopicModel Topic { get; set; }
+        public virtual TopicModel? Topic { get; set; }
 
         // Content for the Sub-topic with validation
         [Required(ErrorMessage = "Content is required.")]

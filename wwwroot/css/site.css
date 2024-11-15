@@ -21,6 +21,9 @@
 .mb-2 {
     margin-bottom: 0.5rem;
 }
+.md:/flex-row {
+    flex-direction: row;
+}
 
 
 *, ::before, ::after {
