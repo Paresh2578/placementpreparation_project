@@ -1,0 +1,243 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Placement_Preparation</title>
+    <link rel="stylesheet" href="~/css/output.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Placement_Preparation.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!--EasyMDE-->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+</head>
+
+<body class="font-[Poppins] bg-gradient-to-t from-[#fbc2eb] to-[#a6c1ee] " onload="handleOnLoad()">
+
+    <!-- Header -->
+    <header class="bg-white">
+        <nav class="flex justify-between items-center w-[92%]  mx-auto">
+            <div>
+                <img class="w-16 cursor-pointer" src="https://cdn-icons-png.flaticon.com/512/5968/5968204.png" alt="...">
+            </div>
+            <div style="z-index:10" class="nav-links duration-500 md:static absolute bg-white md:min-h-fit  left-0 top-[-100%] md:w-auto  w-full flex justify-center items-center ">
+                <ul class="flex md:flex-row flex-col items-center md:gap-[4vw] gap-8">
+                    <li>
+                        <a class="hover:text-gray-500" href="#">Home</a>
+                    </li>
+                    <li>
+
+                        <a class="hover:text-gray-500" href="#">Programing</a>
+                    </li>
+                    <li>
+                        <div class="relative inline-block text-left ">
+                            <!-- Dropdown Button -->
+                            <div onclick="onToggleDropdown()" class="inline-flex items-center w-full justify-center hover:text-gray-500 hover:cursor-pointer gap-x-1.5" id="dropdown-button" aria-expanded="true" aria-haspopup="true">
+                                Aptitude
+                                <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+
+                            <!-- Dropdown Menu -->
+                            <div id="dropdownlist" class="hidden absolute left-0 mt-2 w-fit origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" tabindex="-1">
+                                <div class="py-1" role="none">
+                                    <a href="#" class="block px-2 py-2 hover:text-gray-500 text-sm text-gray-700" role="menuitem" tabindex="-1">Quantitative</a>
+                                    <a href="#" class="block px-2 py-2 hover:text-gray-500 text-sm text-gray-700" role="menuitem" tabindex="-1">Reasoning</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="hover:text-gray-500" href="#">Other</a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="flex items-center gap-6">
+                <a asp-area="Authentication" asp-controller="Auth" asp-action="SignIn" class="bg-primaryLight text-white px-5 py-2 rounded-full hover:bg-primary">Sign in</a>
+                <img height="20" width="20" src="~/assets/icons/menu.png" onclick="onToggleMenu(this)" class="duration-500 text-3xl cursor-pointer md:hidden" />
+            </div>
+    </header>
+
+
+
+    <div class="flex w-full">
+        <!-- Side bar-->
+       <div id="sidebar" style="z-index:1; transition-duration: 300ms;" class="shadow-lg w-72 bg-white  duration-300  relative">
+            <img style="position:absolute;right:-10px;top:-5px; " onclick="onToggleSideBar()" src="~/assets/icons/control.png" id="sidebarButton" class="duration-300 absolute right-0 cursor-pointer rounded-full top-9 w-8 border-2" />
+
+            <ul class="flex-col justify-center gap-x-4 mt-5 rounded-md ">
+                @{
+                    var itemlist = new[]
+                    {
+                new {name = "Home" , icon = "~/assets/icons/home.png" , controller="Home" , action="Home"},
+                new {name = "Branch" , icon = "~/assets/icons/branch.png" ,controller="Branch" , action="List"},
+                new {name = "Difficulty Level" , icon = "~/assets/icons/level-up.png",controller="DifficultyLevel" , action="List"},
+                new {name = "Course Type" , icon = "~/assets/icons/topic.png",controller="CourseType" , action="ListCourseType"},
+                new {name = "Course" , icon = "~/assets/icons/online-learning.png",controller="Course" , action="ListCourse"},
+                new {name = "Topic" , icon = "~/assets/icons/topic.png",controller="Topic" , action="ListTopic"},
+                new {name = "Sub Topic" , icon = "~/assets/icons/topic.png",controller="SubTopic" , action="ListSubTopic"},
+                new {name = "Question"  , icon = "~/assets/icons/qa.png",controller="Question" , action="ListQuestion"},
+                new {name = "Mcq"  , icon = "~/assets/icons/online-test.png",controller="Mcq" , action="ListMcq"},
+                };
+                    foreach (var menu in itemlist)
+                    {
+                                <a asp-controller="@menu.controller" asp-action="@menu.action" class="cursor-pointer m-2 flex gap-6 p-2 hover:bg-slate-300 rounded-md">
+                                    <img src="@Url.Content(menu.icon)" alt="@menu.icon icon" height="10" width="20" />
+                                    <span class="origin-left duration-200 menu-items">@menu.name</span>
+                                </a>
+                    }
+                }
+            </ul>
+        </div>
+
+
+        <!--body-->
+        <div id="mainContent" class="p-4 w-[92%] transition-all duration-300 md:block hidden no-scrollbar" style="overflow-x: scroll;">
+            @RenderBody()
+          
+        </div>
+       
+
+    </div>
+
+
+    <script>
+        const navLinks = document.querySelector('.nav-links');
+        const dropdownList = document.getElementById('dropdownlist');
+        const dropdownButton = document.getElementById('dropdown-button');
+        const mainContent = document.getElementById('mainContent');
+        const sidebarButton = document.getElementById('sidebarButton');
+        const sidebar = document.getElementById('sidebar');
+        const menuItems = document.querySelectorAll('.menu-items');
+
+        function onToggleDropdown() {
+            dropdownList.classList.toggle('hidden');
+        }
+
+        function onToggleMenu(e) {
+            e.src = e.src.includes("assets/icons/menu.png") ? '/assets/icons/close.png' : '/assets/icons/menu.png'
+            navLinks.classList.toggle('top-[7%]');
+        }
+
+        // Close dropdown if clicking outside
+        document.addEventListener('click', function (event) {
+            const isClickInside = dropdownButton.contains(event.target) || dropdownList.contains(event.target);
+
+            if (!isClickInside) {
+                dropdownList.classList.add('hidden');
+            }
+        });
+
+        // Sidebar control
+        function onToggleSideBar() {
+            if (sidebar.classList.contains('w-72')) {
+                handleSideBarState(true);
+            } else {
+               handleSideBarState(false);
+            }
+
+            const screenWidth = window.innerWidth;
+
+
+           
+        }
+
+        // Handle side open and close
+        function  handleSideBarState(state){
+            const screenWidth = window.innerWidth;
+            if(state){
+                sidebar.classList.replace('w-72', 'w-15');
+                sidebarButton.classList.add("rotate-180");
+
+                // Toggle visibility of menu items and sidebar width
+                menuItems.forEach(item => item.classList.add("hidden"));
+
+                     // Hide main content if screen width is less than 600px
+                    if (screenWidth < 600) {
+                        mainContent.classList.add('hidden');
+                    }
+
+                // Save the sidebar state as 'open' in localStorage so that it persists across page reloads.
+                // Using "true" to indicate that the sidebar is currently open.
+                localStorage.setItem("sidebar-open", false);
+            }else{
+                 sidebar.classList.replace('w-15', 'w-72');
+                sidebarButton.classList.remove("rotate-180");
+
+                // Toggle visibility of menu items and sidebar width
+                 menuItems.forEach(item => item.classList.remove("hidden"));
+
+
+                   //  main content if screen width is less than 600px
+                    if (screenWidth >= 600) {
+                        mainContent.classList.remove('hidden');
+                    }
+
+                // Save the sidebar state as 'open' in localStorage so that it persists across page reloads.
+                // Using "true" to indicate that the  is currently open.
+                localStorage.setItem("sidebar-open", true);
+            }
+        }
+
+        // Adjust visibility based on screen resize
+        window.addEventListener('resize', function () {
+            const screenWidth = window.innerWidth;
+            if (screenWidth >= 600) {
+                mainContent.classList.remove('hidden');
+            }
+        });
+
+        // Load page when set sidebar width
+        function handleOnLoad(){
+            const sidebarStatus = localStorage.getItem("sidebar-open");
+            const screenWidth = window.innerWidth;
+
+            if(sidebarStatus == "true"){
+                 sidebar.classList.replace('w-15', 'w-72');
+                 sidebarButton.classList.remove("rotate-180");
+
+                // Toggle visibility of menu items and sidebar width
+                menuItems.forEach(item => item.classList.remove("hidden"));
+
+                // Hide main content if screen width is less than 600px
+                if (screenWidth < 600) {
+                    mainContent.classList.add('hidden');
+                }
+
+            }else{
+                sidebar.classList.replace('w-72', 'w-15');
+               sidebarButton.classList.add("rotate-180");
+
+                // Toggle visibility of menu items and sidebar width
+                menuItems.forEach(item => item.classList.add("hidden"));
+
+                if (screenWidth < 600) {
+                    mainContent.classList.remove('hidden');
+                }
+            }
+        }
+    </script>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!--client side Validation-->
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
