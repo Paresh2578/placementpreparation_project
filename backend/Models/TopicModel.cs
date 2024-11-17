@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Placement_Preparation.Areas.Admin.Models
+namespace backend.Models
 {
     public class TopicModel
     {

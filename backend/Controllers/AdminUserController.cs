@@ -20,46 +20,45 @@ namespace backend.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+
+        #region  Signup Admin User
         [HttpPost("signup")]
         public async  Task<IActionResult> SignUp([FromBody] AdminUserModel adminUser )
         {
 
-            // check if the email exists
+            // check if the email alredy exists or not
             var emailCheck = await _adminUserRepo.CheckEmailExist(adminUser.Email);
-                if (!emailCheck.Success)
-                {
-                    return Conflict(emailCheck);
-                }
-            ResponseModel response = await _adminUserRepo.AddAdminUser(adminUser);
-
-            if(!response.Success) {
-                return BadRequest(response);
+            if(emailCheck.StatusCode != 200) {
+                return StatusCode(emailCheck.StatusCode, emailCheck);
             }
 
-             return CreatedAtAction(nameof(SignUp), new { id = adminUser.AdminUserId }, new
-                {
-                    message = "User signed up successfully",
-                    success = true,
-                });
+            // add the admin user
+            ResponseModel response = await _adminUserRepo.AddAdminUser(adminUser);
+
+            return StatusCode(response.StatusCode, response);
         }
+        #endregion
    
+       #region  SignIn Admin User
        [HttpPost("signin/{email}/{password}")]
         public async Task<IActionResult> SignIn(String email,String password)
         {
             // validate the email and password
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password)){
-                return BadRequest(new ResponseModel { Success = false, Message = "Email and Password are required." });
+                return BadRequest(new ResponseModel { StatusCode = 400, Message = "Email and Password are required." });
             }
 
              // check if the email exists
             ResponseModel response = await _adminUserRepo.SignIn(email, password);
-            if (!response.Success)
+             if (response.StatusCode != 200)
             {
-                return BadRequest(response);
+                return StatusCode(response.StatusCode,response);
             }
+
 
                 // Generate token
                 var token = TokenGenerator.CreateToken(response.Data!.AdminUserId.ToString());
+
 
                 // Set cookie with token
                     _httpContextAccessor.HttpContext!.Response.Cookies.Append("token", token, new CookieOptions
@@ -67,7 +66,8 @@ namespace backend.Controllers
                         HttpOnly = false,
                         Secure = true, // Set to true in production
                         SameSite = SameSiteMode.None, // Adjust as needed
-                        Expires = DateTime.Now.AddDays(2)
+                        // Expires = DateTime.Now.AddDays(2)
+                        Expires = DateTime.Now.AddMinutes(2)
                     });
 
                 // set cookie with  user data 
@@ -87,42 +87,21 @@ namespace backend.Controllers
 
             return Ok(new { message = "User signed in successfully", success = true });
         }
-
+        #endregion
+   
+        #region Delete Admin
         [HttpDelete("delete/{adminUserId}")]  
         public async Task<IActionResult> DeleteAdminUser(Guid adminUserId)
         {
             // find the admin user
             ResponseModel adminUser = await _adminUserRepo.FindAdminUsersById(adminUserId);
-            if(!adminUser.Success) {
-                return NotFound(adminUser);
+            if(adminUser.StatusCode != 200) {
+                return StatusCode(adminUser.StatusCode, adminUser);
             }
 
             ResponseModel response = await _adminUserRepo.DeleteAdminUser(adminUser.Data);
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
-
-            return Ok(response);
+            return StatusCode(response.StatusCode, response);
         }
-   
-       //[HttpPut]
-       // public async Task<IActionResult> UpdateAdminUser([FromBody] AdminUserModel adminUser)
-       // {
-       //     // verify admin user id
-       //     ResponseModel adminUserResponse = await _adminUserRepo.FindAdminUsersById(adminUser.AdminUserId);
-       //     if(!adminUserResponse.Success) {
-       //         return NotFound(adminUserResponse);
-       //     }
-            
-       //     adminUser.Password = adminUserResponse.Data!.Password;
-       //     ResponseModel response = await _adminUserRepo.UpdateAdminUser(adminUser);
-       //     if (!response.Success)
-       //     {
-       //         return BadRequest(response);
-       //     }
-
-       //     return Ok(response);
-       // }
+        #endregion
     }
 }

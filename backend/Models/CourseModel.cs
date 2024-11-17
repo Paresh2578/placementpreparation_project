@@ -1,21 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Placement_Preparation.Areas.Admin.Models
+namespace backend.Models
 {
     public class CourseModel
     {
         // Primary Key
         [Key]
-        public int CourseId { get; set; }
+        public Guid CourseId { get; set; }
 
         [Required(ErrorMessage = "Course Name is required.")]
         [StringLength(100, ErrorMessage = "Course Name can't be longer than 100 characters.")]
-        public string CourseName { get; set; }
+        public required string CourseName { get; set; }
 
         [Required(ErrorMessage = "Branch is required.")]
         [Range(1, int.MaxValue, ErrorMessage = "Please select a valid Branch.")]
-        public int BranchId { get; set; }
+        public Guid BranchId { get; set; }
 
         [ForeignKey("BranchId")]
         public BranchModel Branch { get; set; }

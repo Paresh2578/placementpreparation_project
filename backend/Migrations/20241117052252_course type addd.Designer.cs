@@ -12,8 +12,8 @@ using backend.data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241116093625_Initial Migration")]
-    partial class InitialMigration
+    [Migration("20241117052252_course type addd")]
+    partial class coursetypeaddd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,37 @@ namespace backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Placement_Preparation.Areas.Admin.Models.BranchModel", b =>
+                {
+                    b.Property<Guid>("BranchId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BranchName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BranchId");
+
+                    b.ToTable("branches");
+                });
+
+            modelBuilder.Entity("Placement_Preparation.Areas.Admin.Models.CourseTypeModel", b =>
+                {
+                    b.Property<Guid>("CourseTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CourseTypeName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("CourseTypeId");
+
+                    b.ToTable("courseTypes");
+                });
 
             modelBuilder.Entity("backend.Models.AdminUserModel", b =>
                 {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Placement_Preparation.Areas.Admin.Models
+namespace backend.Models
 {
     // Enum to define the difficulty levels
     public enum DifficultyLevelName
@@ -13,11 +13,12 @@ namespace Placement_Preparation.Areas.Admin.Models
     public class DifficultyLevelModel
     {
         // Primary Key
-        public int DifficultyLevelId { get; set; }
+        [Key]
+        public Guid DifficultyLevelId { get; set; }
 
         // Name of the Difficulty Level (e.g., Easy, Medium, Hard)
         [Required(ErrorMessage = "Difficulty Level is required.")]
-        
-        public DifficultyLevelName DifficultyLevelName { get; set; }
+        [StringLength(100, ErrorMessage = "Difficulty Level can't be longer than 100 characters.")]
+        public required string DifficultyLevelName { get; set; }
     }
 }

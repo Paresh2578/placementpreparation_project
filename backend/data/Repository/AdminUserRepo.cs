@@ -30,12 +30,12 @@ namespace backend.data.Repository
                 await _context.SaveChangesAsync();
                 
                 // If successful, return a success response
-                return new ResponseModel { Success = true };
+                return new ResponseModel { StatusCode= 201 };
             }
-            catch (Exception e)
+            catch
             {
                 // Return a failure response
-                return new ResponseModel { Success = false, Message = e.Message };
+                return new ResponseModel { StatusCode= 500, Message = "Internal Server Error"};
             }
         }
 
@@ -47,16 +47,15 @@ namespace backend.data.Repository
                 var emailExist = await _context.adminUsers.FirstOrDefaultAsync(x => x.Email == email);
                 if (emailExist != null)
                 {
-                    return new ResponseModel { Success = false, Message = "Email already exists." };
+                    return new ResponseModel { StatusCode= 409, Message = "Email already exists." };
                 }
                 else
                 {
-                    return new ResponseModel { Success = true };
+                    return new ResponseModel { StatusCode= 200 };
                 }
             }
-            catch (Exception e)
-            {
-                return new ResponseModel { Success = false, Message = $"Error: {e.Message}" };
+            catch {
+                return new ResponseModel { StatusCode= 500, Message = "Internal Server Error" };
             }
         }
 
@@ -66,11 +65,10 @@ namespace backend.data.Repository
             {
                 _context.adminUsers.Remove(adminUser);
                 await _context.SaveChangesAsync();
-                return new ResponseModel { Success = true, Message = "Admin user deleted successfully." };
+                return new ResponseModel { StatusCode= 200, Message = "Admin user deleted successfully." };
             }
-            catch (Exception e)
-            {
-                return new ResponseModel { Success = false, Message = $"Error: {e.Message}" };
+            catch {
+                return new ResponseModel { StatusCode= 500, Message = "Internal Server Error" };
             }
         }
 
@@ -82,28 +80,25 @@ namespace backend.data.Repository
                 AdminUserModel? user = await _context.adminUsers.FirstOrDefaultAsync(x => x.Email == email);
                 if (user == null)
                 {
-                    return new ResponseModel { Success = false, Message = "Invalid email." };
+                    return new ResponseModel { StatusCode= 400, Message = "Invalid email." };
                 }
 
                 // Verify the password
                 if (!PasswordHasher.VerifyPassword(password, user.Password))
                 {
-                    return new ResponseModel { Success = false, Message = "Invalid password." };
+                    return new ResponseModel { StatusCode= 400, Message = "Invalid password." };
                 }
 
                 // Find the user by email and password
                 user = await _context.adminUsers.FirstOrDefaultAsync(x => x.Email == email && x.Password == user.Password);
                 if(user == null){
-                    return new ResponseModel { Success = false, Message = "Invalid email or password." };
+                    return new ResponseModel { StatusCode= 400, Message = "Invalid email or password." };
                 }
-
                
-               
-                return new ResponseModel { Success = true, Data = user , Message = "User signed in successfully." };
+                return new ResponseModel { StatusCode= 200, Data = user , Message = "User signed in successfully." };
             }
-            catch (Exception e)
-            {
-                return new ResponseModel { Success = false, Message = $"Error: {e.Message}" };
+            catch {
+                return new ResponseModel { StatusCode= 500, Message = "Internal Server Error" };
             }
         }
 
@@ -114,11 +109,10 @@ namespace backend.data.Repository
                 _context.adminUsers.Update(adminUser);
                 await _context.SaveChangesAsync();
 
-                return new ResponseModel { Success = true, Message = "Admin user updated successfully." };
+                return new ResponseModel { StatusCode= 200, Message = "Admin user updated successfully." };
             }
-            catch (Exception e)
-            {
-                return new ResponseModel { Success = false, Message = $"Error: {e.Message}" };
+            catch {
+                return new ResponseModel { StatusCode= 500, Message = "Internal Server Error" };
             }
         }
 
@@ -127,11 +121,11 @@ namespace backend.data.Repository
             try{
                 AdminUserModel? adminUser = await _context.adminUsers.FirstOrDefaultAsync(x => x.AdminUserId == adminUserId);
                 if(adminUser == null){
-                    return new ResponseModel { Success = false, Message = "Admin user not found." };
+                    return new ResponseModel { StatusCode= 404, Message = "Admin user not found." };
                 }
-                return new ResponseModel { Success = true, Data = adminUser };
-            }catch(Exception e){
-                  return new ResponseModel { Success = false, Message = $"Error: {e.Message}" };
+                return new ResponseModel { StatusCode= 200, Data = adminUser };
+            }catch{
+                  return new ResponseModel { StatusCode= 500, Message = "Internal Server Error" };
                }
         }
     }

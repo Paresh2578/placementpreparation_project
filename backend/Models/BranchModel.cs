@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Placement_Preparation.Areas.Admin.Models
+namespace backend.Models
 {
     public class BranchModel
     {
         // Primary Key
         [Key]
-        public int BranchId { get; set; }
+        public Guid BranchId { get; set; }
 
-        public string BranchName { get; set; }
+        [Required(ErrorMessage = "Branch Name is required")]
+        public required string BranchName { get; set; }
     }
 }
