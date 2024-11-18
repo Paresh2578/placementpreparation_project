@@ -1,3 +1,4 @@
+using backend.Controllers;
 using backend.data;
 using backend.data.Interface;
 using backend.data.Repository;
@@ -19,6 +20,7 @@ builder.Services.AddScoped<CourseRepo>();
 builder.Services.AddScoped<TopicRepo>();
 builder.Services.AddScoped<SubTopicRepo>();
 builder.Services.AddScoped<QuestionRepo>();
+builder.Services.AddScoped<McqController>();
 
 // Interface
 builder.Services.AddScoped<AdminUserInterface, AdminUserRepo>();
@@ -29,6 +31,9 @@ builder.Services.AddScoped<CourseInterface, CourseRepo>();
 builder.Services.AddScoped<TopicInterface, TopicRepo>();
 builder.Services.AddScoped<SubTopicInterface, SubTopicRepo>();
 builder.Services.AddScoped<QuestionInterface, QuestionRepo>();
+builder.Services.AddScoped<McqInterface, McqRepo>();
+
+
 
 
 // Add services to the container.

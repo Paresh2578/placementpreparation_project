@@ -15,17 +15,10 @@ namespace backend.Models
         [NotEmptyGuid(ErrorMessage = "Please select a valid sub-topic.")]
         public Guid? SubTopicId { get; set; }
 
-        // Navigation property for related SubTopic (optional, if you have a SubTopic model)
-        [ForeignKey("SubTopicId")]
-        public virtual SubTopicModel? SubTopic { get; set; }
 
         // Foreign Key to Topic
         [NotEmptyGuid(ErrorMessage = "Please select a valid topic.")]
         public Guid? TopicId { get; set; }
-
-        // Navigation property for related SubTopic (optional, if you have a SubTopic model)
-        [ForeignKey("TopicId")]
-        public virtual TopicModel? Topic { get; set; }
 
         // The actual question text
         [Required(ErrorMessage = "Question text is required.")]

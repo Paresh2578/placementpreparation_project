@@ -14,7 +14,7 @@ namespace backend.data.Repository
        public async Task<ResponseModel> AddMcq(McqModel mcq)
         {
             try{
-                 await _context.AddAsync(mcq);
+                 await _context.Mcqs.AddAsync(mcq);
                 await _context.SaveChangesAsync();
                 return new ResponseModel { StatusCode = 201, Message = "Mcq Added Successfully" };
             }catch(Exception ex){
@@ -25,7 +25,7 @@ namespace backend.data.Repository
        public async Task<ResponseModel> DeleteMcq(McqModel mcq)
         {
             try{
-                _context.Remove(mcq);
+                _context.Mcqs.Remove(mcq);
                 await _context.SaveChangesAsync();
                 return new ResponseModel { StatusCode = 200, Message = "Mcq Deleted Successfully" };
             }catch(Exception ex){
