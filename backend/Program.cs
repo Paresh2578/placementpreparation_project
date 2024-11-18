@@ -2,6 +2,8 @@ using backend.Controllers;
 using backend.data;
 using backend.data.Interface;
 using backend.data.Repository;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +36,17 @@ builder.Services.AddScoped<QuestionInterface, QuestionRepo>();
 builder.Services.AddScoped<McqInterface, McqRepo>();
 
 
+// Cloudinary Configuration
+var cloudinaryAccount = new Account(
+    builder.Configuration["Cloudinary:CloudName"],
+    builder.Configuration["Cloudinary:ApiKey"],
+    builder.Configuration["Cloudinary:ApiSecret"]
+);
+
+var cloudinary = new Cloudinary(cloudinaryAccount);
+
+// Register Cloudinary as a service
+builder.Services.AddSingleton(cloudinary);
 
 
 // Add services to the container.
