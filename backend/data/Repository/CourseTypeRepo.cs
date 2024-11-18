@@ -14,7 +14,7 @@ namespace backend.data.Repository
        public async Task<ResponseModel> AddCourseType(CourseTypeModel courseType)
         {
             try{
-                await _context.courseTypes.AddAsync(courseType);
+                await _context.CourseTypes.AddAsync(courseType);
                 await _context.SaveChangesAsync();
                 return new ResponseModel { StatusCode= 201, Message = "Course Type Added Successfully" };
             }catch{
@@ -26,7 +26,7 @@ namespace backend.data.Repository
         {
             try{
                 // Delete course type
-                _context.courseTypes.Remove(courseType);
+                _context.CourseTypes.Remove(courseType);
                     await _context.SaveChangesAsync();
                     return new ResponseModel { StatusCode= 200, Message = "Course Type Deleted Successfully" };
                 
@@ -38,7 +38,7 @@ namespace backend.data.Repository
        public async Task<ResponseModel> GetAllCourseTypes()
         {
             try{
-                var courseTypes = await _context.courseTypes.ToListAsync();
+                var courseTypes = await _context.CourseTypes.ToListAsync();
                 return new ResponseModel { StatusCode= 200, Message = "Successfully Get All CourseTypes", Data = courseTypes };
             }catch{
                 return new ResponseModel { StatusCode= 500, Message = "Internal Server Error" };
@@ -48,7 +48,7 @@ namespace backend.data.Repository
        public async Task<ResponseModel> GetCourseTypeById(Guid courseTypeId)
         {
             try{
-                var courseType = await _context.courseTypes.FirstOrDefaultAsync(x => x.CourseTypeId == courseTypeId);
+                var courseType = await _context.CourseTypes.FirstOrDefaultAsync(x => x.CourseTypeId == courseTypeId);
                 if (courseType is null)
                 {
                     return new ResponseModel { StatusCode= 404, Message = "Course Type Not Found" };
@@ -63,7 +63,7 @@ namespace backend.data.Repository
         {
             try{
                 // Check if course type exists
-                var courseTypeExist = await _context.courseTypes.FirstOrDefaultAsync(x => x.CourseTypeId == courseType.CourseTypeId);
+                var courseTypeExist = await _context.CourseTypes.FirstOrDefaultAsync(x => x.CourseTypeId == courseType.CourseTypeId);
                 if (courseTypeExist is null)
                 {
                     return new ResponseModel { StatusCode= 404, Message = "Course Type Not Found" };

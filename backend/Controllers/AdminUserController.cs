@@ -22,6 +22,7 @@ namespace backend.Controllers
 
 
         #region  Signup Admin User
+        [CheckAccess]
         [HttpPost("signup")]
         public async  Task<IActionResult> SignUp([FromBody] AdminUserModel adminUser )
         {
@@ -67,7 +68,7 @@ namespace backend.Controllers
                         Secure = true, // Set to true in production
                         SameSite = SameSiteMode.None, // Adjust as needed
                         // Expires = DateTime.Now.AddDays(2)
-                        Expires = DateTime.Now.AddMinutes(2)
+                        Expires = DateTime.Now.AddHours(1)
                     });
 
                 // set cookie with  user data 
@@ -90,6 +91,7 @@ namespace backend.Controllers
         #endregion
    
         #region Delete Admin
+        [CheckAccess]
         [HttpDelete("delete/{adminUserId}")]  
         public async Task<IActionResult> DeleteAdminUser(Guid adminUserId)
         {

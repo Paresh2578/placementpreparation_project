@@ -15,7 +15,7 @@ namespace backend.data.Repository
         {
             try{    
                 // Add the difficulty level to the database
-                await _context.difficultyLevels.AddAsync(difficultyLevelModel);
+                await _context.DifficultyLevels.AddAsync(difficultyLevelModel);
                 await _context.SaveChangesAsync();
                 return new ResponseModel { StatusCode = 201, Message = "Difficulty level added successfully." };
             }catch{
@@ -27,12 +27,12 @@ namespace backend.data.Repository
         {
             try{
                 // Find the difficulty level by id
-                var difficultyLevel = await _context.difficultyLevels.FindAsync(difficultyLevelId);
+                var difficultyLevel = await _context.DifficultyLevels.FindAsync(difficultyLevelId);
                 if(difficultyLevel == null){
                     return new ResponseModel { StatusCode = 404, Message = "Difficulty level not found." };
                 }
                 // Remove the difficulty level from the database
-                _context.difficultyLevels.Remove(difficultyLevel);
+                _context.DifficultyLevels.Remove(difficultyLevel);
                 await _context.SaveChangesAsync();
                 return new ResponseModel { StatusCode = 200, Message = "Difficulty level deleted successfully." };
             }catch{
@@ -44,7 +44,7 @@ namespace backend.data.Repository
         {
             try{
                 // Get all difficulty levels from the database
-                var difficultyLevels = await _context.difficultyLevels.ToListAsync();
+                var difficultyLevels = await _context.DifficultyLevels.ToListAsync();
                 return new ResponseModel { StatusCode = 200, Data = difficultyLevels , Message = "Difficulty levels retrieved successfully." };
             }catch{
                 return new ResponseModel { StatusCode = 500, Message = "An error occurred while retrieving difficulty levels." };
@@ -55,7 +55,7 @@ namespace backend.data.Repository
         {
             try{
                 // Find the difficulty level by id
-                var difficultyLevel = await _context.difficultyLevels.FindAsync(difficultyLevelId);
+                var difficultyLevel = await _context.DifficultyLevels.FindAsync(difficultyLevelId);
                 if(difficultyLevel == null){
                     return new ResponseModel { StatusCode = 404, Message = "Difficulty level not found." };
                 }
@@ -69,7 +69,7 @@ namespace backend.data.Repository
         {
             try{
                 // Find the difficulty level by id
-                var difficultyLevel = await _context.difficultyLevels.FindAsync(difficultyLevelModel.DifficultyLevelId);
+                var difficultyLevel = await _context.DifficultyLevels.FindAsync(difficultyLevelModel.DifficultyLevelId);
                 if(difficultyLevel == null){
                     return new ResponseModel { StatusCode = 404, Message = "Difficulty level not found." };
                 }

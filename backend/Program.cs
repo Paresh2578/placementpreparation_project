@@ -15,12 +15,20 @@ builder.Services.AddScoped<AdminUserRepo>();
 builder.Services.AddScoped<BranchRepo>();
 builder.Services.AddScoped<CourseTypeRepo>();
 builder.Services.AddScoped<DifficultyLevelRepo>();
+builder.Services.AddScoped<CourseRepo>();
+builder.Services.AddScoped<TopicRepo>();
+builder.Services.AddScoped<SubTopicRepo>();
+builder.Services.AddScoped<QuestionRepo>();
 
 // Interface
 builder.Services.AddScoped<AdminUserInterface, AdminUserRepo>();
 builder.Services.AddScoped<BranchInterface, BranchRepo>();
 builder.Services.AddScoped<CourseTypeInterface, CourseTypeRepo>();
 builder.Services.AddScoped<DifficultyLevelInterface, DifficultyLevelRepo>();
+builder.Services.AddScoped<CourseInterface, CourseRepo>();
+builder.Services.AddScoped<TopicInterface, TopicRepo>();
+builder.Services.AddScoped<SubTopicInterface, SubTopicRepo>();
+builder.Services.AddScoped<QuestionInterface, QuestionRepo>();
 
 
 // Add services to the container.

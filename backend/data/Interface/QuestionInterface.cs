@@ -1,0 +1,13 @@
+﻿using backend.Models;
+
+namespace backend.data.Interface
+{
+    public interface QuestionInterface
+    {
+      public Task<ResponseModel> GetAllQuestions();
+      public Task<ResponseModel> GetQuestionById(Guid id);
+      public Task<ResponseModel> AddQuestion(QuestionModel question);
+      public Task<ResponseModel> UpdateQuestion(QuestionModel question);
+      public Task<ResponseModel> DeleteQuestion(QuestionModel question);   
+    }
+}

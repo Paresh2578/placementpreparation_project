@@ -26,11 +26,11 @@ namespace backend.data.Repository
                 adminUser.Password = PasswordHasher.HashPassword(password : adminUser.Password);
 
                 // add the admin user
-                await _context.adminUsers.AddAsync(adminUser);
+                await _context.AdminUsers.AddAsync(adminUser);
                 await _context.SaveChangesAsync();
                 
                 // If successful, return a success response
-                return new ResponseModel { StatusCode= 201 };
+                return new ResponseModel { StatusCode= 201 , Message = "Admin user added successfully." };
             }
             catch
             {
@@ -44,7 +44,7 @@ namespace backend.data.Repository
             try
             {
                 // Check if the email exists
-                var emailExist = await _context.adminUsers.FirstOrDefaultAsync(x => x.Email == email);
+                var emailExist = await _context.AdminUsers.FirstOrDefaultAsync(x => x.Email == email);
                 if (emailExist != null)
                 {
                     return new ResponseModel { StatusCode= 409, Message = "Email already exists." };
@@ -63,7 +63,7 @@ namespace backend.data.Repository
         {
             try
             {
-                _context.adminUsers.Remove(adminUser);
+                _context.AdminUsers.Remove(adminUser);
                 await _context.SaveChangesAsync();
                 return new ResponseModel { StatusCode= 200, Message = "Admin user deleted successfully." };
             }
@@ -77,7 +77,7 @@ namespace backend.data.Repository
             try
             {
                 // Find the user by email
-                AdminUserModel? user = await _context.adminUsers.FirstOrDefaultAsync(x => x.Email == email);
+                AdminUserModel? user = await _context.AdminUsers.FirstOrDefaultAsync(x => x.Email == email);
                 if (user == null)
                 {
                     return new ResponseModel { StatusCode= 400, Message = "Invalid email." };
@@ -90,7 +90,7 @@ namespace backend.data.Repository
                 }
 
                 // Find the user by email and password
-                user = await _context.adminUsers.FirstOrDefaultAsync(x => x.Email == email && x.Password == user.Password);
+                user = await _context.AdminUsers.FirstOrDefaultAsync(x => x.Email == email && x.Password == user.Password);
                 if(user == null){
                     return new ResponseModel { StatusCode= 400, Message = "Invalid email or password." };
                 }
@@ -106,7 +106,7 @@ namespace backend.data.Repository
         {
             try
             {
-                _context.adminUsers.Update(adminUser);
+                _context.AdminUsers.Update(adminUser);
                 await _context.SaveChangesAsync();
 
                 return new ResponseModel { StatusCode= 200, Message = "Admin user updated successfully." };
@@ -119,7 +119,7 @@ namespace backend.data.Repository
        public async Task<ResponseModel> FindAdminUsersById(Guid adminUserId)
         {
             try{
-                AdminUserModel? adminUser = await _context.adminUsers.FirstOrDefaultAsync(x => x.AdminUserId == adminUserId);
+                AdminUserModel? adminUser = await _context.AdminUsers.FirstOrDefaultAsync(x => x.AdminUserId == adminUserId);
                 if(adminUser == null){
                     return new ResponseModel { StatusCode= 404, Message = "Admin user not found." };
                 }

@@ -15,7 +15,7 @@ namespace backend.data.Repository
         {
             try{
                 // Add branch to database
-                await _context.branches.AddAsync(branch);
+                await _context.Branches.AddAsync(branch);
                 await _context.SaveChangesAsync();
 
                 return new ResponseModel
@@ -36,7 +36,7 @@ namespace backend.data.Repository
         {
             try{ 
                 // Remove branch from database
-                _context.branches.Remove(branch);
+                _context.Branches.Remove(branch);
                 await _context.SaveChangesAsync();
 
                 return new ResponseModel
@@ -57,7 +57,7 @@ namespace backend.data.Repository
         {
             try{
                 // Get all branches
-                var branches = await _context.branches.ToListAsync();
+                var branches = await _context.Branches.ToListAsync();
                  return new ResponseModel{StatusCode= 200, Data = branches , Message = "Branches fetched successfully"};
             }catch{
                 return new ResponseModel
@@ -72,7 +72,7 @@ namespace backend.data.Repository
         {
             try{
                 // Get branch by id
-                var branch = await _context.branches.FirstOrDefaultAsync(x => x.BranchId == branchId);
+                var branch = await _context.Branches.FirstOrDefaultAsync(x => x.BranchId == branchId);
                 if(branch is null){
                     return new ResponseModel
                     {
@@ -100,7 +100,7 @@ namespace backend.data.Repository
         {
             try{
                 // get branch by id
-                var branch = await _context.branches.FirstOrDefaultAsync(x => x.BranchId == newBranch.BranchId);
+                var branch = await _context.Branches.FirstOrDefaultAsync(x => x.BranchId == newBranch.BranchId);
                 if(branch is null){
                     return new ResponseModel
                     {
@@ -111,7 +111,7 @@ namespace backend.data.Repository
 
                 // Update branch
                 branch.BranchName = newBranch.BranchName;
-            //    _context.branches.Update(branch);
+            //    _context.Branches.Update(branch);
                 await _context.SaveChangesAsync();
 
                 return new ResponseModel

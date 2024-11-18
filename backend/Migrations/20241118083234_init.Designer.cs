@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.data;
 
@@ -11,9 +12,11 @@ using backend.data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241118083234_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,33 +126,6 @@ namespace backend.Migrations
                     b.ToTable("DifficultyLevels");
                 });
 
-            modelBuilder.Entity("backend.Models.QuestionModel", b =>
-                {
-                    b.Property<Guid>("QuestionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Question")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("QuestionAnswer")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<Guid?>("SubTopicId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("TopicId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("QuestionId");
-
-                    b.ToTable("Questions");
-                });
-
             modelBuilder.Entity("backend.Models.SubTopicModel", b =>
                 {
                     b.Property<Guid>("SubTopicId")
@@ -170,6 +146,8 @@ namespace backend.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("SubTopicId");
+
+                    b.HasIndex("TopicId");
 
                     b.ToTable("SubTopics");
                 });
@@ -198,6 +176,17 @@ namespace backend.Migrations
                     b.HasKey("TopicId");
 
                     b.ToTable("Topics");
+                });
+
+            modelBuilder.Entity("backend.Models.SubTopicModel", b =>
+                {
+                    b.HasOne("backend.Models.TopicModel", "Topic")
+                        .WithMany()
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Topic");
                 });
 #pragma warning restore 612, 618
         }
