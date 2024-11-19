@@ -11,6 +11,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Connect SQL
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DBCS")));
 
+// Allow any origin, method, and header (not recommended for production)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
+
 
 // Register services
 builder.Services.AddHttpContextAccessor();
@@ -63,6 +75,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Enable CORS
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 

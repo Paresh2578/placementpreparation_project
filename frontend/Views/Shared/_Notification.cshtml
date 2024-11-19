@@ -1,0 +1,36 @@
+﻿@inject AspNetCoreHero.ToastNotification.Abstractions.INotyfService Notyf
+
+<script>
+    // Wait until the DOM is fully loaded
+    document.addEventListener("DOMContentLoaded", function () {
+        // Initialize a new JavaScript Notyf instance
+        var notyf = new Notyf({
+            position: {
+                x: 'right',
+                y: 'top',
+            }
+        });
+
+        // Display notifications if they exist in TempData
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <text>
+                notyf.success("@TempData["SuccessMessage"]");
+        </text>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <text>
+                notyf.error("@TempData["ErrorMessage"]");
+        </text>
+    }
+
+    @if (TempData["WarningMessage"] != null)
+    {
+        <text>
+                notyf.warning("@TempData["WarningMessage"]");
+        </text>
+    }
+        });
+</script>

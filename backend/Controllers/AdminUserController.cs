@@ -60,33 +60,53 @@ namespace backend.Controllers
                 // Generate token
                 var token = TokenGenerator.CreateToken(response.Data!.AdminUserId.ToString());
 
+                var commonCookieOptions = new CookieOptions
+                {
+                    HttpOnly = false,
+                    Secure = true, // Set to true in production
+                    SameSite = SameSiteMode.None, // Adjust as needed
+                    Expires = DateTime.Now.AddDays(1)
+                };
 
-                // Set cookie with token
-                    _httpContextAccessor.HttpContext!.Response.Cookies.Append("token", token, new CookieOptions
-                    {
-                        HttpOnly = false,
-                        Secure = true, // Set to true in production
-                        SameSite = SameSiteMode.None, // Adjust as needed
-                        // Expires = DateTime.Now.AddDays(2)
-                        Expires = DateTime.Now.AddHours(1)
-                    });
+                // Set the 'token' cookie
+                _httpContextAccessor.HttpContext!.Response.Cookies.Append("token", Newtonsoft.Json.JsonConvert.SerializeObject(token), commonCookieOptions);
 
-                // set cookie with  user data 
+                // Set the 'userData' cookie
                 var cookieData = new
                 {
                     response.Data!.UserName,
                     response.Data!.Email
                 };
-                _httpContextAccessor.HttpContext!.Response.Cookies.Append("userData", Newtonsoft.Json.JsonConvert.SerializeObject(cookieData), new CookieOptions
-                {
-                    HttpOnly = false,
-                    Secure = true, // Set to true in production
-                    SameSite = SameSiteMode.None, // Adjust as needed
-                    Expires = DateTime.Now.AddDays(2)
-                }); 
+
+                _httpContextAccessor.HttpContext!.Response.Cookies.Append("userData", Newtonsoft.Json.JsonConvert.SerializeObject(cookieData), commonCookieOptions);
 
 
-            return Ok(new { message = "User signed in successfully", success = true });
+
+                // // Set cookie with token
+                //     _httpContextAccessor.HttpContext!.Response.Cookies.Append("token",Newtonsoft.Json.JsonConvert.SerializeObject(token), new CookieOptions
+                //     {
+                //         HttpOnly = false,
+                //         Secure = true, // Set to true in production
+                //         SameSite = SameSiteMode.None, // Adjust as needed
+                //         Expires = DateTime.Now.AddDays(1)
+                //     });
+
+                // // set cookie with  user data 
+                // var cookieData = new
+                // {
+                //     response.Data!.UserName,
+                //     response.Data!.Email
+                // };
+                // _httpContextAccessor.HttpContext!.Response.Cookies.Append("userData", Newtonsoft.Json.JsonConvert.SerializeObject(cookieData), new CookieOptions
+                // {
+                //     HttpOnly = false,
+                //     Secure = true, // Set to true in production
+                //     SameSite = SameSiteMode.None, // Adjust as needed
+                //     Expires = DateTime.Now.AddDays(1)
+                // }); 
+
+
+            return Ok(new ResponseModel{ Message = "User signed in successfully", StatusCode = 200 });
         }
         #endregion
    

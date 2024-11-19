@@ -1,13 +1,25 @@
-﻿
+﻿@model SignInModel
 
 
     <div class="flex flex-col items-center justify-center h-screen p-3">
         <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6">
             <h1 class="text-3xl block text-center font-semibold"><i class="fa-solid fa-user"></i> Login</h1>
             <hr class="mt-3 mb-4">
-            <form class="flex flex-col">
-                <input type="email" class="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="Email address">
-                <input type="password" class="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="Password">
+            <form asp-action="SignIn" method="post" class="flex flex-col">
+                <div class="mb-2">
+                    <div class="flex">
+                        <label asp-for="Email" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                    </div>
+                    <input asp-for="Email" placeholder="Enter Email" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2  focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="Email address">
+                    <span asp-validation-for="Email" class="text-red-600"></span>
+                </div>
+                <div class="mb-2">
+                    <div class="flex">
+                        <label asp-for="Password" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                    </div>
+                    <input asp-for="Password" placeholder="Enter Password" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2  focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="Email address">
+                    <span asp-validation-for="Password" class="text-red-600"></span>
+                </div>
                 <div class="flex items-center justify-between flex-wrap">
                     <label for="remember-me" class="text-sm text-gray-900 cursor-pointer">
                         <input type="checkbox" id="remember-me" class="mr-2">

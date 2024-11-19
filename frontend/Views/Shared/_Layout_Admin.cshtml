@@ -107,6 +107,9 @@
             @RenderBody()
           
         </div>
+
+        <!-- Include TempData Notifications Partial View -->
+        <partial name="_Notification" />
        
 
     </div>
@@ -236,6 +239,9 @@
     <!--client side Validation-->
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    <!--Notyf Notification Toast-->
+    @await Component.InvokeAsync("Notyf")
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

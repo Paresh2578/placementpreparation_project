@@ -120,7 +120,7 @@ namespace backend.data.Repository
         {
             try{
                 AdminUserModel? adminUser = await _context.AdminUsers.FirstOrDefaultAsync(x => x.AdminUserId == adminUserId);
-                if(adminUser == null){
+                if(adminUser is null){
                     return new ResponseModel { StatusCode= 404, Message = "Admin user not found." };
                 }
                 return new ResponseModel { StatusCode= 200, Data = adminUser };
