@@ -9,6 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Add session services
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromDays(1); // Set session timeout
+    options.Cookie.HttpOnly = false; // Make cookie HTTP-only
+    options.Cookie.IsEssential = true; // Necessary for GDPR compliance
+});
+
+// Add IHttpContextAccessor 
+builder.Services.AddHttpContextAccessor();
 
 // All class 
 builder.Services.AddScoped<AllDropDown>();
@@ -46,6 +56,10 @@ app.UseCors("AllowAll");
 
 // Use the ToastNotification middleware
 app.UseNotyf();
+
+
+// Enable session middleware
+app.UseSession();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -4,6 +4,7 @@ using backend.data.Repository;
 using backend.Constant;
 using System.Net.Http.Json;
 using Newtonsoft.Json;
+using System.Collections;
 
 namespace backend.Controllers
 {
@@ -72,41 +73,24 @@ namespace backend.Controllers
                 _httpContextAccessor.HttpContext!.Response.Cookies.Append("token", Newtonsoft.Json.JsonConvert.SerializeObject(token), commonCookieOptions);
 
                 // Set the 'userData' cookie
-                var cookieData = new
-                {
-                    response.Data!.UserName,
-                    response.Data!.Email
-                };
-
-                _httpContextAccessor.HttpContext!.Response.Cookies.Append("userData", Newtonsoft.Json.JsonConvert.SerializeObject(cookieData), commonCookieOptions);
-
-
-
-                // // Set cookie with token
-                //     _httpContextAccessor.HttpContext!.Response.Cookies.Append("token",Newtonsoft.Json.JsonConvert.SerializeObject(token), new CookieOptions
-                //     {
-                //         HttpOnly = false,
-                //         Secure = true, // Set to true in production
-                //         SameSite = SameSiteMode.None, // Adjust as needed
-                //         Expires = DateTime.Now.AddDays(1)
-                //     });
-
-                // // set cookie with  user data 
                 // var cookieData = new
                 // {
                 //     response.Data!.UserName,
                 //     response.Data!.Email
                 // };
-                // _httpContextAccessor.HttpContext!.Response.Cookies.Append("userData", Newtonsoft.Json.JsonConvert.SerializeObject(cookieData), new CookieOptions
-                // {
-                //     HttpOnly = false,
-                //     Secure = true, // Set to true in production
-                //     SameSite = SameSiteMode.None, // Adjust as needed
-                //     Expires = DateTime.Now.AddDays(1)
-                // }); 
+
+                // _httpContextAccessor.HttpContext!.Response.Cookies.Append("userData", Newtonsoft.Json.JsonConvert.SerializeObject(cookieData), commonCookieOptions);
 
 
-            return Ok(new ResponseModel{ Message = "User signed in successfully", StatusCode = 200 });
+
+                var data = new Hashtable
+                {
+                    { "token", token },
+                    { "userData", cookieData }
+                };
+
+
+            return Ok(new ResponseModel{ Message = "User signed in successfully", StatusCode = 200 , Data = data});
         }
         #endregion
    

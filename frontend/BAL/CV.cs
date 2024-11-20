@@ -1,4 +1,4 @@
-namespace Frontend.BAL
+namespace Placement_Preparation.BAL
 {
     public class CV
     {
@@ -11,12 +11,12 @@ namespace Frontend.BAL
 
           public static string? UserName()
         {
-            string? UserName = null;
-            if (_httpContextAccessor.HttpContext.Session.GetString("UserName") != null)
-            {
-                UserName = _httpContextAccessor.HttpContext.Session.GetString("UserName").ToString();
-            }
-            return UserName;
+            return _httpContextAccessor.HttpContext!.Session.GetString("UserName");
+        }
+
+        public static string? UserEmail()
+        {
+            return _httpContextAccessor.HttpContext!.Session.GetString("Email");
         }
     }
 }
