@@ -12,11 +12,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         {
             List<DifficultyLevelModel> difficultyLevelList = new List<DifficultyLevelModel>
                 {
-
-                 new DifficultyLevelModel { DifficultyLevelId = 1,   DifficultyLevelName = DifficultyLevelName.Easy  },
-                 new DifficultyLevelModel { DifficultyLevelId = 2,   DifficultyLevelName = DifficultyLevelName.Medium  },
-                 new DifficultyLevelModel { DifficultyLevelId = 3,   DifficultyLevelName = DifficultyLevelName.Hard  },
-                };
+    };
             return View(difficultyLevelList);
         }
         #endregion

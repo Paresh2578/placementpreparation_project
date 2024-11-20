@@ -1,50 +1,104 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Frontend.Models;
+using Frontend.Services;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Placement_Preparation.Areas.Admin.Models;
+using Placement_Preparation.BAL;
 
 namespace Placement_Preparation.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [CheckAccess]
     public class BranchController : Controller
     {
+        private readonly ApiClientService _apiClient;
+        private readonly string _apiBaseUrl = "Branch";
+        public BranchController(ApiClientService apiClient)
+        {
+            _apiClient = apiClient;
+        }
+        
 
         #region list of Branch
-        public IActionResult List()
+        public async Task<IActionResult> List()
         {
-            List<BranchModel> branchList = new List<BranchModel>
+                ApiResponseModel response = await _apiClient.GetAsync(_apiBaseUrl);
+                if(response.StatusCode != 200)
                 {
-                    new BranchModel { BranchId = 1, BranchName = "Branch 1 Name" },
-                    new BranchModel { BranchId = 2, BranchName = "Branch 2 Name" },
-                    new BranchModel { BranchId = 3, BranchName = "Branch 3 Name" },
-                    new BranchModel { BranchId = 4, BranchName = "Branch 4 Name" },
-                    new BranchModel { BranchId = 5, BranchName = "Branch 5 Name" },
-                    new BranchModel { BranchId = 6, BranchName = "Branch 6 Name" },
-                    new BranchModel { BranchId = 7, BranchName = "Branch 7 Name" },
-                    new BranchModel { BranchId = 8, BranchName = "Branch 8 Name" },
-                    new BranchModel { BranchId = 9, BranchName = "Branch 9 Name" },
-                    new BranchModel { BranchId = 10, BranchName = "Branch 10 Name" },
+                   TempData["ErrorMessage"] = response.Message;
+                }
+                List<BranchModel>  branchList =  JsonConvert.DeserializeObject<List<BranchModel>>(response.Data!.ToString());
 
-                };
             return View(branchList);
         }
         #endregion
 
 
         #region add or Edit Branch
-        public IActionResult AddOrEditBranch(int? branchId)
+        [HttpGet]
+        public async Task<IActionResult> AddOrEditBranch(string? branchId)
         {
-            return View();
+            if(branchId == null)
+            {
+                return View();
+            }
+           
+                // Call API to get data
+                ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/{branchId}");
+                Console.WriteLine("response data " + response.Data);
+                if(response.StatusCode != 200)
+                {
+                    TempData["ErrorMessage"] = response.Message;
+                    return RedirectToAction("List");
+                }
+                Console.WriteLine(response.Data);
+                BranchModel branch = JsonConvert.DeserializeObject<BranchModel>(response.Data!.ToString());
+                return View(branch);
         }
 
         [HttpPost]
-        public IActionResult AddOrEditBranch(BranchModel branch)
+        public async Task<IActionResult> AddOrEditBranch(BranchModel branch)
         {
+
             //Server side validation
             if (ModelState.IsValid)
             {
-                return RedirectToAction("List");
+                ApiResponseModel response = new ApiResponseModel();
+                if(branch.BranchId != Guid.Empty && branch.BranchId != null)
+                {
+                    // Call API to update data
+                     response = await _apiClient.PutAsync(_apiBaseUrl, branch);
+                }else{
+                     // Call API to save data
+                     branch.BranchId = Guid.NewGuid();
+                      response = await _apiClient.PostAsync(_apiBaseUrl, branch);
+                }
+               
+                if(response.StatusCode == 201 || response.StatusCode == 200)
+                {
+                    TempData["SuccessMessage"] = response.Message;
+                    return RedirectToAction("List");
+                }else {
+                     TempData["ErrorMessage"] = response.Message;
+                }
             }
-            return View();
+            return View(branch);
         }
         #endregion
+         
+        #region Delete Branch
+        [Route("Admin/Branch/DeleteBranch/{branchId}")]
+        public async Task<IActionResult> DeleteBranch(string branchId)
+        {
+            ApiResponseModel response = await _apiClient.DeleteAsync($"{_apiBaseUrl}/{branchId}");
+            if(response.StatusCode == 200)
+            {
+                TempData["SuccessMessage"] = response.Message;
+            }else{
+                TempData["ErrorMessage"] = response.Message;
+            }
+            return RedirectToAction("List");
+        }
+        #endregion 
     }
 }

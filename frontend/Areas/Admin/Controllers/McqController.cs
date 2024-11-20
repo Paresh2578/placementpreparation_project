@@ -12,36 +12,8 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         {
             List<McqModel> mcqList = new List<McqModel>
 {
-    new McqModel
-    {
-        McqId = 1,
-        SubTopicId =1, 
-        SubTopic = new SubTopicModel() {
-            SubTopicId = 1,
-            SubTopicName = "Introduction to Algorithms",
-            TopicId = 1,
-            Topic = new TopicModel
-            {
-                TopicId = 1,
-                TopicName = "Algorithms",
-                CourseId = 1,
-                Content = "This topic covers the basics of algorithms.",
-                DifficultyLevelId = 2
-            }
-        },
-        TopicId = 1, // Assuming you have valid TopicId
-        Topic = new TopicModel(){ 
-            TopicId = 1,
-            TopicName = "abc"
-        },
-        QuestionText = "What is the capital of France?",
-        OptionA = "Paris",
-        OptionB = "London",
-        OptionC = "Berlin",
-        OptionD = "Madrid",
-        CorrectAnswer = "A"
-    },
-};
+   
+   };
 
 
             return View(mcqList);

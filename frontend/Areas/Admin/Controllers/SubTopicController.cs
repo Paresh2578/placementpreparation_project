@@ -12,49 +12,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         {
             List<SubTopicModel> subTopicList = new List<SubTopicModel>
 {
-    new SubTopicModel
-    {
-        SubTopicId = 1,
-        SubTopicName = "Introduction to Algorithms",
-        TopicId = 1, // Assuming it belongs to TopicId 1
-        Topic = new TopicModel
-        {
-            TopicId = 1,
-            TopicName = "Algorithms",
-            CourseId = 1,
-            Content = "This topic covers the basics of algorithms.",
-            DifficultyLevelId = 2
-        }
-    },
-    new SubTopicModel
-    {
-        SubTopicId = 2,
-        SubTopicName = "Data Structures Overview",
-        TopicId = 2, // Assuming it belongs to TopicId 2
-        Topic = new TopicModel
-        {
-            TopicId = 2,
-            TopicName = "Data Structures",
-            CourseId = 1,
-            Content = "This topic includes an overview of common data structures.",
-            DifficultyLevelId = 1
-        }
-    },
-    new SubTopicModel
-    {
-        SubTopicId = 3,
-        SubTopicName = "Advanced Sorting Techniques",
-        TopicId = 1, // Assuming it belongs to TopicId 1
-        Topic = new TopicModel
-        {
-            TopicId = 1,
-            TopicName = "Algorithms",
-            CourseId = 1,
-            Content = "This topic discusses advanced sorting algorithms.",
-            DifficultyLevelId = 3
-        }
-    }
-};
+  };
 
 
             return View(subTopicList);

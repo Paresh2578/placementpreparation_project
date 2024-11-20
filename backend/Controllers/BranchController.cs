@@ -19,7 +19,7 @@ namespace backend.Controllers
         }
 
         #region add Branch
-        [CheckAccess]
+        // [CheckAccess]
         [HttpPost("")]
         public async Task<IActionResult> AddBranch([FromBody] BranchModel branch)
         {
@@ -30,10 +30,12 @@ namespace backend.Controllers
         #endregion
 
         #region delete Branch
-        [CheckAccess]
+        // [CheckAccess]
         [HttpDelete("{branchId}")]
         public async Task<IActionResult> DeleteBranch(Guid branchId)
         {
+
+            Console.WriteLine("branchId " + branchId);
 
             // check if branch exist
             ResponseModel response = await _branchRepo.GetBranchById(branchId);
@@ -66,7 +68,7 @@ namespace backend.Controllers
         #endregion
 
         #region update Branch
-        [CheckAccess]
+        // [CheckAccess]
         [HttpPut("")]
         public async Task<IActionResult> UpdateBranch([FromBody] BranchModel branch)
         {

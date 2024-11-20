@@ -35,16 +35,19 @@
                 </thead>
                 <tbody class="text-gray-700 text-sm font-light">
                     @{
+                        int index = 1;
                         foreach(var branch in Model)
                         {
                             <tr class="border-b text-nowrap  border-gray-200 hover:bg-gray-50">
-                                <td class="py-3 px-6 text-left">@branch.BranchId</td>
+                                <td class="py-3 px-6 text-left">@index</td>
                                 <td class="py-3 px-6 text-left">@branch.BranchName</td>
                                 <td class="py-3 px-6 text-left flex gap-x-4">
-                                    <a class="cursor-pointer"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
-                                    <a class="cursor-pointer"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a>
+                                    <a class="cursor-pointer" asp-action="AddOrEditBranch" asp-route-branchId="@branch.BranchId"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
+                                    <a class="cursor-pointer"  onclick="confirmDelete('DeleteBranch/@branch.BranchId')"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a>
+
                                 </td>
                             </tr>
+                            index++;
                         }
                     }
                 </tbody>

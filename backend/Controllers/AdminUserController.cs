@@ -73,11 +73,11 @@ namespace backend.Controllers
                 _httpContextAccessor.HttpContext!.Response.Cookies.Append("token", Newtonsoft.Json.JsonConvert.SerializeObject(token), commonCookieOptions);
 
                 // Set the 'userData' cookie
-                // var cookieData = new
-                // {
-                //     response.Data!.UserName,
-                //     response.Data!.Email
-                // };
+                var userData = new
+                {
+                    response.Data!.UserName,
+                    response.Data!.Email
+                };
 
                 // _httpContextAccessor.HttpContext!.Response.Cookies.Append("userData", Newtonsoft.Json.JsonConvert.SerializeObject(cookieData), commonCookieOptions);
 
@@ -86,7 +86,7 @@ namespace backend.Controllers
                 var data = new Hashtable
                 {
                     { "token", token },
-                    { "userData", cookieData }
+                    { "userData", userData }
                 };
 
 
