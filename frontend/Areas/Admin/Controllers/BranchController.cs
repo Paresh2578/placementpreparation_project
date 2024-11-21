@@ -38,6 +38,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> AddOrEditBranch(string? branchId)
         {
+            // If branchId is null then it is add branch
             if(branchId == null)
             {
                 return View();
@@ -51,7 +52,6 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                     TempData["ErrorMessage"] = response.Message;
                     return RedirectToAction("List");
                 }
-                Console.WriteLine(response.Data);
                 BranchModel branch = JsonConvert.DeserializeObject<BranchModel>(response.Data!.ToString());
                 return View(branch);
         }

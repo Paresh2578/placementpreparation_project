@@ -16,7 +16,7 @@ namespace backend.Controllers
         }
 
         #region  Get All Course Types
-        [HttpGet("")]
+        [HttpGet]
         public async Task<IActionResult> GetAllCourseTypes()
         {
             ResponseModel response = await _courseTypeRepo.GetAllCourseTypes();
@@ -35,7 +35,7 @@ namespace backend.Controllers
         #endregion
 
         #region  Add Course Type
-        [CheckAccess]
+        // [CheckAccess]
         [HttpPost]
         public async Task<IActionResult> AddCourseType([FromBody] CourseTypeModel courseType)
         {
@@ -45,7 +45,7 @@ namespace backend.Controllers
         #endregion
     
         #region  Delete Course Type
-        [CheckAccess]
+        // [CheckAccess]
         [HttpDelete("{courseTypeId}")]
         public async Task<IActionResult> DeleteCourseType(Guid courseTypeId)
         {
@@ -62,7 +62,7 @@ namespace backend.Controllers
         #endregion
     
         #region  Update Course Type
-        [CheckAccess]
+        // [CheckAccess]
         [HttpPut]
         public async Task<IActionResult> UpdateCourseType([FromBody] CourseTypeModel courseType)
         {

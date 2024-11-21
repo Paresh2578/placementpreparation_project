@@ -1,16 +1,22 @@
 ﻿@model CourseTypeModel
 
+@{
+     string title = Model == null ||  Model.CourseTypeId == null ? "Add" : "Edit";
+}
 
 
 <div class="flex flex-col items-center">
     <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
-        <h2 class="text-xl text-gray-900 mb-4 text-center">Add Course Type</h2>
+        <h2 class="text-xl text-gray-900 mb-4 text-center">@(title) Course Type</h2>
         @*    <h2 class="text-lg sm:text-md md:text-xl lg:text-2xl text-gray-900 mb-4 text-center">
         Add Difficulty Level
         </h2> *@
 
 
         <form asp-action="AddOrEditCourseType" asp-controller="CourseType" method="post" class="flex flex-col">
+            <!-- Hidden Field for CourseTypeId-->
+            <input asp-for="CourseTypeId" type="hidden" /> 
+
             <div class="flex">
                 <label asp-for="CourseTypeName" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
             </div>
@@ -18,7 +24,7 @@
             <span asp-validation-for="CourseTypeName" class="text-red-600"></span>
 
             <div class="flex gap-x-4">
-                <partial name="_Submit_Button" model="@("Add")" />
+                <partial name="_Submit_Button" model="@(title)" />
                 <partial name="_Back_Button" model="@("Back")" />
             </div>
         </form>

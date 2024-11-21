@@ -35,7 +35,7 @@ namespace backend.Controllers
         #endregion
 
         #region Add Course
-        [CheckAccess]
+        // [CheckAccess]
         [HttpPost]
         public async Task<IActionResult> AddCourse([FromBody] CourseModel course)
         {
@@ -45,7 +45,7 @@ namespace backend.Controllers
         #endregion
 
         #region Update Course
-        [CheckAccess]
+        // [CheckAccess]
         [HttpPut]
         public async Task<IActionResult> UpdateCourse([FromBody] CourseModel course)
         { 
@@ -55,7 +55,7 @@ namespace backend.Controllers
         #endregion
 
         #region Delete Course
-        [CheckAccess]
+        // [CheckAccess]
         [HttpDelete("{courseId}")]
         public async Task<IActionResult> DeleteCourse(Guid courseId)
         {

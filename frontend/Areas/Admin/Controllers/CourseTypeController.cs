@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Frontend.Models;
+using Frontend.Services;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Placement_Preparation.Areas.Admin.Models;
 
 namespace Placement_Preparation.Areas.Admin.Controllers
@@ -6,34 +9,91 @@ namespace Placement_Preparation.Areas.Admin.Controllers
     [Area("Admin")]
     public class CourseTypeController : Controller
     {
+        private readonly string _apiBaseUrl = "CourseType";
+        private readonly ApiClientService _apiClient;
+        
+        public CourseTypeController(ApiClientService apiClient)
+        {
+            _apiClient = apiClient;
+        }
 
         #region list of  CourseType 
-        public IActionResult ListCourseType()
+        public async Task<IActionResult> ListCourseType()
         {
-            List<CourseTypeModel> courseTypeList = new List<CourseTypeModel>
-            {
-                 };
+             ApiResponseModel response = await _apiClient.GetAsync(_apiBaseUrl);
+                if(response.StatusCode != 200)
+                {
+                   TempData["ErrorMessage"] = response.Message;
+                }
+                List<CourseTypeModel>  courseTypeList =  JsonConvert.DeserializeObject<List<CourseTypeModel>>(response.Data!.ToString());
 
+           
             return View(courseTypeList);
         }
         #endregion
 
 
         #region add or Edit Branch
-        public IActionResult AddOrEditCourseType(int? courseTypeId)
+        public async Task<IActionResult> AddOrEditCourseType(string? courseTypeId)
         {
-            return View();
+              // If courseTypeId is null then it is add courseType
+            if(courseTypeId == null)
+            {
+                return View();
+            }
+           
+                // Call API to get data
+                ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/{courseTypeId}");
+                if(response.StatusCode != 200)
+                {
+                    TempData["ErrorMessage"] = response.Message;
+                    return RedirectToAction("List");
+                }
+                CourseTypeModel courseType = JsonConvert.DeserializeObject<CourseTypeModel>(response.Data!.ToString());
+                return View(courseType);
         }
 
         [HttpPost]
-        public IActionResult AddOrEditCourseType(CourseTypeModel courseType)
+        public async Task<IActionResult> AddOrEditCourseType(CourseTypeModel courseType)
         {
             //Server side validation
             if (ModelState.IsValid)
             {
-                return RedirectToAction("ListCourseType");
+                 ApiResponseModel response = new ApiResponseModel();
+                if(courseType.CourseTypeId != Guid.Empty && courseType.CourseTypeId != null)
+                {
+                    // Call API to update data
+                     response = await _apiClient.PutAsync(_apiBaseUrl, courseType);
+                }else{
+                     // Call API to save data
+                     courseType.CourseTypeId = Guid.NewGuid();
+                      response = await _apiClient.PostAsync(_apiBaseUrl, courseType);
+                }
+               
+                if(response.StatusCode == 201 || response.StatusCode == 200)
+                {
+                    TempData["SuccessMessage"] = response.Message;
+                    return RedirectToAction("ListCourseType");
+                }else {
+                     TempData["ErrorMessage"] = response.Message;
+                }
             }
             return View(courseType);
+        }
+        #endregion
+    
+        #region delete CourseType
+        [Route("/DeleteCourseType/{courseTypeId}")]
+        public async Task<IActionResult> DeleteCourseType(string courseTypeId)
+        {
+            ApiResponseModel response = await _apiClient.DeleteAsync($"{_apiBaseUrl}/{courseTypeId}");
+            if(response.StatusCode == 200)
+            {
+                TempData["SuccessMessage"] = response.Message;
+            }else {
+                TempData["ErrorMessage"] = response.Message;
+            }
+            return RedirectToAction("ListCourseType");
         }
         #endregion
     }

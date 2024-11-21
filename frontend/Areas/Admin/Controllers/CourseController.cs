@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Frontend.Models;
+using Frontend.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using Placement_Preparation.Areas.Admin.Models;
 using Placement_Preparation.Utils;
 using System.Reflection.Metadata.Ecma335;
@@ -9,14 +12,26 @@ namespace Placement_Preparation.Areas.Admin.Controllers
     [Area("Admin")]
     public class CourseController : Controller
     {
-        #region list of Course
-        public IActionResult ListCourse()
+        private readonly string _apiBaseUrl = "Course";
+        private readonly ApiClientService _apiClient;
+
+        public CourseController(ApiClientService apiClient)
         {
-            List<CourseModel> courseList = new List<CourseModel>
-{
- 
-};
-            return View(courseList);
+            _apiClient = apiClient;
+        }
+        
+        #region list of Course
+        public async Task<IActionResult> ListCourse()
+        {
+            ApiResponseModel response = await _apiClient.GetAsync(_apiBaseUrl);
+                if(response.StatusCode != 200)
+                {
+                   TempData["ErrorMessage"] = response.Message;
+                }
+                List<CourseTypeModel>  courseTypeList =  JsonConvert.DeserializeObject<List<CourseTypeModel>>(response.Data!.ToString());
+
+           
+            return View(courseTypeList);
         }
         #endregion
 

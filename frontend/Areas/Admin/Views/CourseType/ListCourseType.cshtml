@@ -35,16 +35,18 @@
                 </thead>
                 <tbody class="text-gray-700 text-sm font-light">
                     @{
+                        int index = 1;
                         foreach (var courseType in Model)
                         {
                             <tr class="border-b text-nowrap  border-gray-200 hover:bg-gray-50">
-                                <td class="py-3 px-6 text-left">@courseType.CourseTypeId</td>
+                                <td class="py-3 px-6 text-left">@index</td>
                                 <td class="py-3 px-6 text-left">@courseType.CourseTypeName</td>
                                 <td class="py-3 px-6 text-left flex gap-x-4">
-                                    <a class="cursor-pointer"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
-                                    <a class="cursor-pointer"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a>
+                                    <a class="cursor-pointer" asp-action="AddOrEditCourseType" asp-route-courseTypeId="@courseType.CourseTypeId"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
+                                    <a class="cursor-pointer" onclick="confirmDelete('/DeleteCourseType/@courseType.CourseTypeId')"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a>
                                 </td>
                             </tr>
+                            index++;
                         }
                     }
                 </tbody>

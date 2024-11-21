@@ -13,11 +13,12 @@ namespace Placement_Preparation.Areas.Admin.Models
     public class DifficultyLevelModel
     {
         // Primary Key
-        public int DifficultyLevelId { get; set; }
+        public Guid? DifficultyLevelId { get; set; } 
 
         // Name of the Difficulty Level (e.g., Easy, Medium, Hard)
         [Required(ErrorMessage = "Difficulty Level is required.")]
         
-        public DifficultyLevelName DifficultyLevelName { get; set; }
+        // public DifficultyLevelName DifficultyLevelName { get; set; }
+        public required string DifficultyLevelName { get; set; }
     }
 }

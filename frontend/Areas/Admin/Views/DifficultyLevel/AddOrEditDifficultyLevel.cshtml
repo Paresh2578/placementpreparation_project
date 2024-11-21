@@ -1,16 +1,21 @@
 ﻿@model DifficultyLevelModel
 
-
+@{
+     string title = Model == null ||  Model.DifficultyLevelId == null ? "Add" : "Edit";
+}
 
 <div class="flex flex-col items-center">
     <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
-        <h2 class="text-xl text-gray-900 mb-4 text-center">Add Difficulty Level</h2> 
+        <h2 class="text-xl text-gray-900 mb-4 text-center">@(title) Difficulty Level</h2> 
      @*    <h2 class="text-lg sm:text-md md:text-xl lg:text-2xl text-gray-900 mb-4 text-center">
             Add Difficulty Level
         </h2> *@
 
 
+
         <form asp-action="AddOrEditDifficultyLevel" asp-controller="DifficultyLevel" method="post" class="flex flex-col">
+            <!-- Hidden Field for DifficultyLevelId-->
+            <input asp-for="DifficultyLevelId" type="hidden" /> 
             <div class="flex">
                 <label asp-for="DifficultyLevelName" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
             </div>
@@ -18,7 +23,7 @@
             <span asp-validation-for="DifficultyLevelName" class="text-red-600"></span>
 
             <div class="flex gap-x-4">
-                <partial name="_Submit_Button" model="@("Add")" />
+                <partial name="_Submit_Button" model="@(title)" />
                 <partial name="_Back_Button" model="@("Back")" />
             </div>
         </form>
