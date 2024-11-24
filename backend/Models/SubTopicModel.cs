@@ -20,6 +20,9 @@ namespace backend.Models
         [NotEmptyGuid(ErrorMessage = "InValid Topic Id.")]
         public Guid TopicId { get; set; }
 
+        [ForeignKey("TopicId")]
+        public TopicModel? Topic { get; set; }
+
         // Content for the Sub-topic with validation
         [Required(ErrorMessage = "Content is required.")]
         [StringLength(2000, ErrorMessage = "Content can't be longer than 2000 characters.")]

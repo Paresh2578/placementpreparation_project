@@ -36,17 +36,18 @@ namespace backend.data.Repository
        public async Task<ResponseModel> GetAllTopics()
         {
             try{
-                var topics = await _context.Topics.ToListAsync();
+                // var topics = await _context.Topics.ToListAsync();
+                var topics = await _context.Topics.Include(c => c.Course).Include(d => d.DifficultyLevel).ToListAsync();
                 return new ResponseModel{StatusCode = 200,Message = "Successfully Get All Topics",Data = topics};
             }catch(Exception ex){
                 return new ResponseModel{StatusCode = 500,Message = ex.Message};
             }
         }
 
-       public async Task<ResponseModel> GetTopicById(Guid courseId)
+       public async Task<ResponseModel> GetTopicById(Guid topicId)
         {
             try{
-                TopicModel? topic = await _context.Topics.FirstOrDefaultAsync(x => x.CourseId == courseId);
+                TopicModel? topic = await _context.Topics.Include(c => c.Course).Include(d => d.DifficultyLevel).FirstOrDefaultAsync(x => x.TopicId == topicId);
 
                 if(topic is null){
                     return new ResponseModel{StatusCode = 404,Message = "Topic Not Found"};

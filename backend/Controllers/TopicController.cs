@@ -34,7 +34,7 @@ namespace backend.Controllers
         #endregion
 
         #region Add Topic
-        [CheckAccess]
+        // [CheckAccess]
         [HttpPost]
         public async Task<IActionResult> AddTopic([FromBody] TopicModel topic)
         {
@@ -44,7 +44,7 @@ namespace backend.Controllers
         #endregion
 
         #region Update Topic
-        [CheckAccess]
+        // [CheckAccess]
         [HttpPut]
         public async Task<IActionResult> UpdateTopic([FromBody] TopicModel topic)
         {
@@ -54,7 +54,7 @@ namespace backend.Controllers
         #endregion
 
         #region Delete Topic
-        [CheckAccess]
+        // [CheckAccess]
         [HttpDelete("{courseId}")]
         public async Task<IActionResult> DeleteTopic(Guid courseId)
         {

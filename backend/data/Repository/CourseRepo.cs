@@ -38,7 +38,7 @@ namespace backend.data.Repository
        public async Task<ResponseModel> GetAllCourses()
         {
             try{
-                var courses = await _context.Courses.ToListAsync();
+                var courses = await _context.Courses.Include(b => b.Branch).Include(c => c.CourseType).ToListAsync();
                 return new ResponseModel { StatusCode = 200, Data = courses  , Message = "Courses retrieved successfully." };
             }catch(Exception e){
                 return new ResponseModel { StatusCode = 500, Message = e.Message };
@@ -48,7 +48,7 @@ namespace backend.data.Repository
        public async Task<ResponseModel> GetCourseById(Guid courseId)
         {
             try{
-                var course = await _context.Courses.FirstOrDefaultAsync(x => x.CourseId == courseId);
+                var course = await _context.Courses.Include(b => b.Branch).Include(c => c.CourseType).FirstOrDefaultAsync(x => x.CourseId == courseId);
                 if(course is null){
                     return new ResponseModel { StatusCode = 404, Message = "Course not found." };
                 }

@@ -18,12 +18,18 @@ namespace backend.Models
         [NotEmptyGuid(ErrorMessage = "InValid Course Id.")]
         public Guid CourseId { get; set; }
 
+        [ForeignKey("CourseId")]
+        public CourseModel? Course { get; set; }
+
         [StringLength(5000, ErrorMessage = "Content can't be longer than 5000 characters.")]
         public string? Content { get; set; }
 
         [Required(ErrorMessage = "Difficulty Level is required.")]
         [NotEmptyGuid(ErrorMessage = "InValid Difficulty Level Id.")]
         public Guid DifficultyLevelId { get; set; }
+
+        [ForeignKey("DifficultyLevelId")]
+        public DifficultyLevelModel? DifficultyLevel { get; set; }
 
     }
 }

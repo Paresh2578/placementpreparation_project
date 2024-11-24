@@ -34,17 +34,21 @@ namespace backend.Controllers
         #endregion
 
         #region Create SubTopic
-        [CheckAccess]
+        // [CheckAccess]
         [HttpPost]
         public async Task<IActionResult> CreateSubTopic([FromBody] SubTopicModel  subTopic)
         {
-            var response = await _subTopicInterface.CreateSubTopic(subTopic);
+             var response = await _subTopicInterface.CreateSubTopic(subTopic);
             return StatusCode(response.StatusCode, response);
+
+
+
+           // return StatusCode(200 , new ResponseModel() { StatusCode = 201 , Message="Done"});
         }
         #endregion
 
         #region Update SubTopic
-        [CheckAccess]
+        // [CheckAccess]
         [HttpPut]
         public async Task<IActionResult> UpdateSubTopic([FromBody] SubTopicModel subTopic)
         {
@@ -54,7 +58,7 @@ namespace backend.Controllers
         #endregion
 
         #region Delete SubTopic
-        [CheckAccess]
+        // [CheckAccess]
         [HttpDelete("{subTopicId}")]
         public async Task<IActionResult> DeleteSubTopic(Guid subTopicId)
         {

@@ -18,6 +18,9 @@ namespace backend.Models
         [NotEmptyGuid(ErrorMessage = "Please select a valid Branch.")]
         public Guid BranchId { get; set; }
 
+        [ForeignKey("BranchId")]
+        public BranchModel? Branch { get; set; }
+
         [Required(ErrorMessage = "Description is required.")]
         [StringLength(1000, ErrorMessage = "Description can't be longer than 1000 characters.")]
         public required string Description { get; set; }
@@ -29,5 +32,8 @@ namespace backend.Models
         [Required(ErrorMessage = "Course Type is required.")]
         [NotEmptyGuid(ErrorMessage = "Please select a valid Course Type.")]
         public Guid CourseTypeId { get; set; }
+
+        [ForeignKey("CourseTypeId")]
+        public CourseTypeModel? CourseType { get; set; }
     }
 }

@@ -38,8 +38,8 @@ namespace backend.data.Repository
        public async Task<ResponseModel> GetAllSubTopics()
         {
             try{
-                var subTopics = await _context.SubTopics.ToListAsync();
-                return new ResponseModel{ StatusCode = 200, Data = subTopics };
+                var subTopics = await _context.SubTopics.Include(t => t.Topic).ToListAsync();
+                return new ResponseModel{ StatusCode = 200, Data = subTopics , Message = "SubTopics Fetched Successfully" };
             }catch(Exception ex){
                 return new ResponseModel{ StatusCode = 500, Message = ex.Message };
             }
@@ -48,7 +48,7 @@ namespace backend.data.Repository
        public async Task<ResponseModel> GetSubTopicById(Guid subTopicId)
         {
             try{
-                var subTopic = await _context.SubTopics.FirstOrDefaultAsync(x => x.SubTopicId == subTopicId);
+                var subTopic = await _context.SubTopics.Include(t => t.Topic).FirstOrDefaultAsync(x => x.SubTopicId == subTopicId);
                 if(subTopic is null){
                     return new ResponseModel{ StatusCode = 404, Message = "SubTopic Not Found" };
                 }
