@@ -8,18 +8,18 @@ namespace Placement_Preparation.Areas.Admin.Models
     {
         // Primary Key
         [Key]
-        public int QuestionId { get; set; }
+        public Guid? QuestionId { get; set; }
 
         // Foreign Key to SubTopic
-        [Range(1, int.MaxValue, ErrorMessage = "Please select a valid Sub-topic.")]
-        public int? SubTopicId { get; set; }
+        // [Range(1, int.MaxValue, ErrorMessage = "Please select a valid Sub-topic.")]
+        public Guid? SubTopicId { get; set; }
 
         [ForeignKey("SubTopicId")]
         public virtual SubTopicModel? SubTopic { get; set; }
 
         // Foreign Key to Topic
-        [Range(1, int.MaxValue, ErrorMessage = "Please select a valid topic.")]
-        public int? TopicId { get; set; }
+        // [Range(1, int.MaxValue, ErrorMessage = "Please select a valid topic.")]
+        public Guid? TopicId { get; set; }
 
         [ForeignKey("TopicId")]
         public virtual TopicModel? Topic { get; set; }
@@ -27,12 +27,12 @@ namespace Placement_Preparation.Areas.Admin.Models
         // The actual question with validation
         [Required(ErrorMessage = "Question  is required.")]
         [StringLength(500, ErrorMessage = "Question text can't be longer than 500 characters.")]
-        public string Question { get; set; }
+        public required string Question { get; set; }
 
         // The answer to the question with validation
         [Required(ErrorMessage = "Question Answer is required.")]
         [StringLength(1000, ErrorMessage = "Question Answer can't be longer than 1000 characters.")]
-        public string QuestionAnswer { get; set; }
+        public required string QuestionAnswer { get; set; }
     }
 }
 
@@ -50,8 +50,8 @@ public class TopicOrSubTopicRequiredAttribute : ValidationAttribute
             return new ValidationResult("TopicId or SubTopicId fields are Required.");
         }
 
-        var topicIdValue = topicIdProperty.GetValue(validationContext.ObjectInstance) as int?;
-        var subTopicIdValue = subTopicIdProperty.GetValue(validationContext.ObjectInstance) as int?;
+        var topicIdValue = topicIdProperty.GetValue(validationContext.ObjectInstance) as Guid?;
+        var subTopicIdValue = subTopicIdProperty.GetValue(validationContext.ObjectInstance) as Guid?;
 
         if(topicIdValue == null && subTopicIdValue == null)
         {

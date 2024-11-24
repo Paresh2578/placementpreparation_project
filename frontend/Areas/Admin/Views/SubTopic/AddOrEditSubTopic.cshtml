@@ -1,14 +1,22 @@
 ﻿@model SubTopicModel
 
+@{
+     string title = Model == null ||  Model.SubTopicId == null ? "Add" : "Edit";
+}
+
+
 <div class="flex flex-col items-center">
     <div class="w-full  bg-white rounded-lg shadow-lg p-6">
-        <h2 class="text-xl text-gray-900 mb-4 text-center">Add Sub Topic</h2>
+        <h2 class="text-xl text-gray-900 mb-4 text-center">@(title) Sub Topic</h2>
         @*    <h2 class="text-lg sm:text-md md:text-xl lg:text-2xl text-gray-900 mb-4 text-center">
         Add Difficulty Level
         </h2> *@
 
 
         <form asp-action="AddOrEditSubTopic" asp-controller="SubTopic" method="post" class="flex  w-full flex-col">
+            <!-- Sub Topic id -->
+            <input asp-for="SubTopicId" type="hidden" />
+
             <!--Sub Topic Name-->
             <div class="mb-2">
                 <div class="flex">
@@ -42,7 +50,7 @@
 
 
             <div class="flex gap-x-4">
-                <partial name="_Submit_Button" model="@("Add")" />
+                <partial name="_Submit_Button" model="@(title)" />
                 <partial name="_Back_Button" model="@("Back")" />
             </div>
         </form>

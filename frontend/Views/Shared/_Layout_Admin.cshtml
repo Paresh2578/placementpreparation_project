@@ -151,9 +151,10 @@
             }
 
             const screenWidth = window.innerWidth;
+            if (screenWidth >= 600) {
+                mainContent.classList.remove('hidden');
+            }
 
-
-           
         }
 
         // Handle side open and close
@@ -169,6 +170,8 @@
                      // Hide main content if screen width is less than 600px
                     if (screenWidth < 600) {
                         mainContent.classList.add('hidden');
+                    }else{
+                        mainContent.classList.remove('hidden');
                     }
 
                 // Save the sidebar state as 'open' in localStorage so that it persists across page reloads.
@@ -185,6 +188,8 @@
                    //  main content if screen width is less than 600px
                     if (screenWidth >= 600) {
                         mainContent.classList.remove('hidden');
+                    }else{
+                        mainContent.classList.add('hidden');
                     }
 
                 // Save the sidebar state as 'open' in localStorage so that it persists across page reloads.

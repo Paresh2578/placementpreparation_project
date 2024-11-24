@@ -1,10 +1,14 @@
 ﻿@model McqModel
 
+@{
+     string title = Model == null ||  Model.SubTopicId == null ? "Add" : "Edit";
+}
+
 
 
 <div class="flex flex-col items-center">
     <div class="w-full  bg-white rounded-lg shadow-lg p-6">
-        <h2 class="text-xl text-gray-900 mb-4 text-center">Add Mcq</h2>
+        <h2 class="text-xl text-gray-900 mb-4 text-center">@(title) Mcq</h2>
         @*    <h2 class="text-lg sm:text-md md:text-xl lg:text-2xl text-gray-900 mb-4 text-center">
         Add Difficulty Level
         </h2> *@
@@ -14,6 +18,9 @@
 
             <!-- Display validation summary for the entire form -->
             <div asp-validation-summary="ModelOnly" class="text-red-600"></div>
+
+            <!-- Mcq Id -->
+            <input asp-for="McqId" type="hidden"/>
 
             <!--Select Topic and Sub Topic Dropdown -->
             <div class="flex flex-col md:flex-row mb-2 gap-x-4">
@@ -109,7 +116,7 @@
 
 
             <div class="flex gap-x-4">
-                <partial name="_Submit_Button" model="@("Add")" />
+                <partial name="_Submit_Button" model="@(title)" />
                 <partial name="_Back_Button" model="@("Back")" />
             </div>
         </form>

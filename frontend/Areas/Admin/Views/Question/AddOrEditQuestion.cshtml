@@ -1,14 +1,22 @@
 ﻿@model QuestionModel
 
+@{
+     string title = Model == null ||  Model.QuestionId == null ? "Add" : "Edit";
+}
+
+
 <div class="flex flex-col items-center">
     <div class="w-full  bg-white rounded-lg shadow-lg p-6">
-        <h2 class="text-xl text-gray-900 mb-4 text-center">Add Question</h2>
+        <h2 class="text-xl text-gray-900 mb-4 text-center">@(title) Question</h2>
         @*    <h2 class="text-lg sm:text-md md:text-xl lg:text-2xl text-gray-900 mb-4 text-center">
         Add Difficulty Level
         </h2> *@
 
 
         <form asp-action="AddOrEditQuestion" asp-controller="Question" method="post" class="flex  w-full flex-col">
+
+            <!-- Question Id -->
+            <input asp-for="QuestionId" type="hidden"/>
 
             <!-- Display validation summary for the entire form -->
             <div asp-validation-summary="ModelOnly" class="text-red-600"></div>
@@ -57,7 +65,7 @@
 
 
             <div class="flex gap-x-4">
-                <partial name="_Submit_Button" model="@("Add")" />
+                <partial name="_Submit_Button" model="@(title)" />
                 <partial name="_Back_Button" model="@("Back")" />
             </div>
         </form>

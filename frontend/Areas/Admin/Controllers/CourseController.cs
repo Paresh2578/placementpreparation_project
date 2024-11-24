@@ -28,40 +28,118 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                 {
                    TempData["ErrorMessage"] = response.Message;
                 }
-                List<CourseTypeModel>  courseTypeList =  JsonConvert.DeserializeObject<List<CourseTypeModel>>(response.Data!.ToString());
+                List<CourseModel>  courseList =  JsonConvert.DeserializeObject<List<CourseModel>>(response.Data!.ToString());
 
            
-            return View(courseTypeList);
+            return View(courseList);
         }
         #endregion
 
         #region add or Edit Course
-        public IActionResult AddOrEditCourse(int? courseId)
+        public async Task<IActionResult> AddOrEditCourse(string? courseId)
         {
-            setDropDownsValue();
+              // If courseId is null then it is add courseT
+            if(courseId == null)
+            {
+                return View();
+            }
+           
+             // Call API to get data
+            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/{courseId}");
+            if(response.StatusCode != 200)
+                {
+                    TempData["ErrorMessage"] = response.Message;
+                    return RedirectToAction("ListCourse");
+                }
 
-            return View();
+                
+            // set drop down value
+           await setDropDownsValue();
+
+
+            // Convert response data to CourseTypeModel
+            CourseModel course = JsonConvert.DeserializeObject<CourseModel>(response.Data!.ToString());
+            return View(course);
         }
 
         [HttpPost]
-        public IActionResult AddOrEditCourse(CourseModel course)
+        public async Task<IActionResult> AddOrEditCourse(CourseModel course , IFormFile img)
         {
+              // Check if image is not null
+                if(img != null)
+                {
+                    // Call method to upload image
+                    ApiResponseModel apiResponse = await _apiClient.UploadImage(img);
+                    if(apiResponse.StatusCode == 200)
+                    {
+                        course.Img = apiResponse.Data!.ToString();
+                        
+                        // remove img validation error
+                        ModelState.Remove("Img");
+                    }
+                }
+
+                // add img validation error
+                // if(course.Img == null && course.CourseId == null)
+                // {
+                //     ModelState.AddModelError("Img", "Image is required.");
+                // }
+
+
+
             //Server side validation
             if (ModelState.IsValid)
             {
-                return RedirectToAction("ListCourse");
+               ApiResponseModel response = new ApiResponseModel();
+
+                if(course.CourseId != Guid.Empty && course.CourseId != null)
+                {
+                    // Call API to update data
+                     response = await _apiClient.PutAsync(_apiBaseUrl, course);
+                }else{
+                     // Call API to save data
+                     course.CourseId = Guid.NewGuid();
+                      response = await _apiClient.PostAsync(_apiBaseUrl, course);
+                }
+               
+                if(response.StatusCode == 201 || response.StatusCode == 200)
+                {
+                    TempData["SuccessMessage"] = response.Message;
+                    return RedirectToAction("ListCourse");
+                }else {
+                     TempData["ErrorMessage"] = response.Message;
+                }
             }
-            setDropDownsValue();
+
+            // set drop down value
+            await setDropDownsValue();
             return View(course);
         }
         #endregion
 
         #region set Course Type and Branch DropDown Value
         [NonAction]
-        public void setDropDownsValue()
+        public async Task setDropDownsValue()
         {
-            ViewBag.CourseTypeList = AllDropDown.CourseType();
-            ViewBag.BranchList = AllDropDown.Branch();
+            var allDropDown = new AllDropDown(_apiClient);
+            ViewBag.CourseTypeList = await  allDropDown.CourseType();
+            ViewBag.BranchList =await allDropDown.Branch();
+        }
+        #endregion
+
+        
+        #region delete Course
+        [Route("/DeleteCourse/{courseId}")]
+        public async Task<IActionResult> DeleteCourse(string courseId)
+        {
+            ApiResponseModel response = await _apiClient.DeleteAsync($"{_apiBaseUrl}/{courseId}");
+            if(response.StatusCode == 200)
+            {
+                TempData["SuccessMessage"] = response.Message;
+            }else {
+                TempData["ErrorMessage"] = response.Message;
+            }
+            return RedirectToAction("ListCourse");
         }
         #endregion
     }

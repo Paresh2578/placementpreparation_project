@@ -14,8 +14,7 @@ namespace Placement_Preparation.Areas.Admin.Models
         public required string CourseName { get; set; }
 
         [Required(ErrorMessage = "Branch is required.")]
-        [Range(1, int.MaxValue, ErrorMessage = "Please select a valid Branch.")]
-        public int BranchId { get; set; }
+        public Guid BranchId { get; set; }
 
         [ForeignKey("BranchId")]
         public  BranchModel? Branch { get; set; }
@@ -24,13 +23,12 @@ namespace Placement_Preparation.Areas.Admin.Models
         [StringLength(1000, ErrorMessage = "Description can't be longer than 1000 characters.")]
         public required string Description { get; set; }
 
-        [Required(ErrorMessage = "Image is required.")]
-        //[Url(ErrorMessage = "Please provide a valid URL for the image.")]
+        // [Required(ErrorMessage = "")]
+        // [Url(ErrorMessage = "Please provide a valid URL for the image.")]
         public required string Img { get; set; }
 
         [Required(ErrorMessage = "Course Type is required.")]
-        [Range(1, int.MaxValue, ErrorMessage = "Please select a valid Course Type.")]
-        public int CourseTypeId { get; set; }
+        public Guid CourseTypeId { get; set; }
 
         [ForeignKey("CourseTypeId")]
         public CourseTypeModel? CourseType { get; set; }

@@ -1,5 +1,6 @@
 using System.Text;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 using Frontend.Models;
 
 namespace Frontend.Services
@@ -90,6 +91,40 @@ namespace Frontend.Services
                     return new ApiResponseModel {StatusCode = 500,Message = ex.Message};
                 }
       }
-    }
         #endregion
+    
+    
+    #region image upload
+        public async Task<ApiResponseModel> UploadImage(IFormFile file)
+        {
+            try
+            {
+                var content = new MultipartFormDataContent();
+                content.Add(new StreamContent(file.OpenReadStream())
+                {
+                    Headers =
+                    {
+                        ContentLength = file.Length,
+                        ContentType = new MediaTypeHeaderValue(file.ContentType)
+                    }
+                }, "image", file.FileName);
+
+                var response = await _httpClient.PostAsync("ImageUpload", content);
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                ApiResponseModel? apiResponseModel = JsonConvert.DeserializeObject<ApiResponseModel>(responseContent);
+
+                if(apiResponseModel != null && apiResponseModel.StatusCode != 0)
+                {
+                    return apiResponseModel;
+                }
+                   return new ApiResponseModel {StatusCode = (int)response.StatusCode,Message = response.ReasonPhrase};
+            }
+            catch (Exception ex)
+            {
+                  return new ApiResponseModel {StatusCode = 500,Message = ex.Message};
+            }
+        }
+        #endregion
+    }
 }

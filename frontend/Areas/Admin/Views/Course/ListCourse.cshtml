@@ -47,8 +47,8 @@
                                 <td class="py-3 px-6 text-left">@course.CourseType!.CourseTypeName</td>
 
                                 <td class="py-3 px-6 text-left flex gap-x-4">
-                                    <a class="cursor-pointer"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
-                                    <a class="cursor-pointer"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a>
+                                    <a class="cursor-pointer" asp-action="AddOrEditCourse" asp-route-courseId="@course.CourseId"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
+                                    <a class="cursor-pointer"  onclick="confirmDelete('/DeleteCourse/@course.CourseId')"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a>
                                 </td>
                             </tr>
                             index++;

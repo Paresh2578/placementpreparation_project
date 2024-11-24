@@ -1,73 +1,114 @@
 ﻿@model CourseModel
 
+@{
+     string title = Model == null ||  Model.CourseId == null ? "Add" : "Edit";
+}
+
 <div class="flex flex-col items-center">
-    <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
-        <h2 class="text-xl text-gray-900 mb-4 text-center">Add Course</h2>
-        @*    <h2 class="text-lg sm:text-md md:text-xl lg:text-2xl text-gray-900 mb-4 text-center">
-        Add Difficulty Level
-        </h2> *@
+    <div class="w-full bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-xl text-gray-900 mb-4 text-center">@(title) Course</h2>
 
+        <form asp-action="AddOrEditCourse" asp-controller="Course" method="post" enctype="multipart/form-data" class="flex flex-col">
+          <!-- course id hide -->
+            <input asp-for="CourseId" type="hidden" />
 
-        <form asp-action="AddOrEditCourse" asp-controller="Course" method="post" class="flex flex-col">
-            <!--CourseName-->
-            <div class="mb-2">
-                <div class="flex">
-                    <label asp-for="CourseName" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+            <div class="md:flex  gap-x-4 ">
+                <!-- All Inputs -->
+                <div class="w-full md:w-1/2">
+                    <!-- Course Name -->
+                    <div class="mb-2">
+                        <div class="flex">
+                            <label asp-for="CourseName" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                        </div>
+                        <input asp-for="CourseName" placeholder="Enter Course Type Name" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
+                        <span asp-validation-for="CourseName" class="text-red-600"></span>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-2">
+                        <div class="flex">
+                            <label asp-for="Description" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                        </div>
+                        <textarea asp-for="Description" placeholder="Enter Course Description" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"></textarea>
+                        <span asp-validation-for="Description" class="text-red-600"></span>
+                    </div>
+
+                    <!-- Branch -->
+                    <div class="mb-2">
+                        <div class="flex">
+                            <label asp-for="BranchId" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                        </div>
+                        <select asp-for="BranchId" asp-items="@(ViewBag.BranchList as List<SelectListItem>)" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
+                            <option value="">Select Branch</option>
+                        </select>
+                        <span asp-validation-for="BranchId" class="text-red-600"></span>
+                    </div>
+
+                    <!-- Course Type -->
+                    <div class="mb-2">
+                        <div class="flex">
+                            <label asp-for="CourseTypeId" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                        </div>
+                        <select asp-for="CourseTypeId" asp-items="@(ViewBag.CourseTypeList as List<SelectListItem>)" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
+                            <option value="">Select Course Type</option>
+                        </select>
+                        <span asp-validation-for="CourseTypeId" class="text-red-600"></span>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div class="mb-4">
+                        <div class="flex">
+                            <label asp-for="Img" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                        </div>
+
+                        <input type="file"
+                               asp-for="Img"
+                               value=@(Model != null ? Model.Img : null)
+                               accept="image/*"
+                               class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 cursor-pointer"
+                               onchange="previewImage(event)"
+                                />
+                        <span asp-validation-for="Img" class="text-red-600"></span>
+                    </div>
                 </div>
-                <input asp-for="CourseName" placeholder="Enter Course Type Name" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2  focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
-                <span asp-validation-for="CourseName" class="text-red-600"></span>
+
+                <!-- Image Preview -->
+                <div class="w-full md:w-1/2">
+                    @if(Model != null && Model.Img != null)
+                    {
+                        <img id="imagePreview" src="@Model.Img" alt="Course Image" class="w-full   rounded-md" />
+                    }
+                    else
+                    {
+                        <img id="imagePreview" src="#" alt="No Select img" class="w-full  rounded-md" />
+                    }
+                    @* <img id="imagePreview" src="@Model.Img ?? 'https://via.placeholder.com/150'"alt="Course Image" class="w-full h-64 object-cover rounded-md" /> *@
+                </div>
             </div>
 
-            <!--Description-->
-            <div class="mb-2">
-                <div class="flex">
-                    <label asp-for="Description" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
-                </div>
-                <textarea asp-for="Description" placeholder="Enter Course Description" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2  focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"></textarea>
-                <span asp-validation-for="Description" class="text-red-600"></span>
-            </div>
-
-            <!-- Branch -->
-            <div class="mb-2">
-                <div class="flex">
-                    <label asp-for="Branch.BranchName" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
-                </div>
-                <select asp-for="BranchId" asp-items="@(ViewBag.BranchList as List<SelectListItem>)"
-                        class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
-                        <option value="" >Select Branch</option>
-                </select>
-                <span asp-validation-for="BranchId" class="text-red-600"></span>
-            </div>
-
-            <!-- Course Type -->
-            <div class="mb-2">
-                <div class="flex">
-                    <label asp-for="CourseType.CourseTypeName" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
-                </div>
-                <select asp-for="CourseTypeId" asp-items="@(ViewBag.CourseTypeList as List<SelectListItem>)"
-                        class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
-                    <option value="">Select Course Type</option>
-                </select>
-                <span asp-validation-for="CourseTypeId" class="text-red-600"></span>
-            </div>
-
-            <!-- Image Upload -->
-            <div class="mb-4">
-                <div class="flex">
-                    <label asp-for="Img" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
-                </div>
-                <input type="file"
-                       asp-for="Img"
-                       accept="image/*"
-                       class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 cursor-pointer" />
-                <span asp-validation-for="Img" class="text-red-600"></span>
-            </div>
-
-
+            <!-- Submit and Back Buttons -->
             <div class="flex gap-x-4">
-                <partial name="_Submit_Button" model="@("Add")" />
+                <partial name="_Submit_Button" model="@(title)" />
                 <partial name="_Back_Button" model="@("Back")" />
             </div>
         </form>
     </div>
 </div>
+
+<!-- JavaScript for Image Preview -->
+<script type="text/javascript">
+    function previewImage(event) {
+        const imagePreview = document.getElementById('imagePreview');
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        } else {
+            imagePreview.src = '#'; // Fallback if no file is selected
+        }
+    }
+</script>
