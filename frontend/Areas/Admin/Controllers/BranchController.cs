@@ -46,7 +46,6 @@ namespace Placement_Preparation.Areas.Admin.Controllers
            
                 // Call API to get data
                 ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/{branchId}");
-                Console.WriteLine("response data " + response.Data);
                 if(response.StatusCode != 200)
                 {
                     TempData["ErrorMessage"] = response.Message;

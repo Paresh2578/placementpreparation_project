@@ -25,7 +25,7 @@ namespace Placement_Preparation.Areas.Admin.Models
 
         // [Required(ErrorMessage = "")]
         // [Url(ErrorMessage = "Please provide a valid URL for the image.")]
-        public required string Img { get; set; }
+        public  string? Img { get; set; }
 
         [Required(ErrorMessage = "Course Type is required.")]
         public Guid CourseTypeId { get; set; }

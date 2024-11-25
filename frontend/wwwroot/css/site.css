@@ -21,9 +21,15 @@
 .mb-2 {
     margin-bottom: 0.5rem;
 }
-.md:/flex-row {
+.md:flex-row {
     flex-direction: row;
 }
+
+/* Gradient Background */
+.bg-gradient-to-b {
+    background: linear-gradient(to bottom, #F9FAFB, #FFFFFF); /* #F9FAFB is Tailwind's gray-50, #FFFFFF is white */
+  }
+  
 
 
 *, ::before, ::after {

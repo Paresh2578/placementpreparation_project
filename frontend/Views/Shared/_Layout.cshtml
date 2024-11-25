@@ -6,6 +6,8 @@
     <title>@ViewData["Title"] - Placement_Preparation</title>
     <link rel="stylesheet" href="~/css/output.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/student/homePage.css" asp-append-version="true" />
+    
     <link rel="stylesheet" href="~/Placement_Preparation.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
 
@@ -21,7 +23,7 @@
 </head>
 
         @* hader *@
-<body class="font-[Poppins] bg-gradient-to-t from-[#fbc2eb] to-[#a6c1ee] min-h-screen overflow-hidden">
+<body class="font-[Poppins] bg-gradient-to-b  min-h-screen ">
     @* Header *@
     <header class="bg-white">
         <nav class="flex justify-between items-center w-[92%]  mx-auto">
@@ -69,22 +71,22 @@
 
     @* Body *@
         @RenderBody()
-
-         <div>
-             <h2 class="text-xl text-gray-900 mb-4 text-center">Add Course</h2>
-        <!-- Search Bar Section -->
-        <div class="relative md:flex  h-20 md:h-64">
+ 
+ 
+   @* <div class="relative">
             <input class="bg-gray-100 w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-500 shadow-sm focus:shadow-md"
-                   placeholder="Search for Course..." />
+                   placeholder="Search for Branch..." />
             <button class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
                     type="button">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="transparent" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-8 h-8 text-slate-600">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                 </svg>
             </button>
-        </div>
+        </div> *@
 
-        <!-- Table Section -->
+
+
+        @* <!-- Table Section -->
         <div class="mt-6 overflow-x-auto w-full">
             <table class="min-w-full  bg-white border border-gray-200">
                 <thead>
@@ -110,7 +112,7 @@
                             </tr>
                 </tbody>
             </table>
-        </div>
+        </div> *@
     </div>
 
     <!-- Include TempData Notifications Partial View -->
