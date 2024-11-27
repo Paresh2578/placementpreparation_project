@@ -11,9 +11,11 @@ namespace Placement_Preparation.Areas.Admin.Models
 
         [Required(ErrorMessage = "Course Name is required.")]
         [StringLength(100, ErrorMessage = "Course Name can't be longer than 100 characters.")]
+        [Display(Name = "Course Name")]
         public required string CourseName { get; set; }
 
         [Required(ErrorMessage = "Branch is required.")]
+        [Display(Name = "Branch")]
         public Guid BranchId { get; set; }
 
         [ForeignKey("BranchId")]
@@ -28,6 +30,7 @@ namespace Placement_Preparation.Areas.Admin.Models
         public  string? Img { get; set; }
 
         [Required(ErrorMessage = "Course Type is required.")]
+        [Display(Name = "Course Type")]
         public Guid CourseTypeId { get; set; }
 
         [ForeignKey("CourseTypeId")]

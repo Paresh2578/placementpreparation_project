@@ -12,6 +12,7 @@ namespace Placement_Preparation.Areas.Admin.Models
 
         [Required(ErrorMessage = "Branch Name is required.")]
         [StringLength(100, ErrorMessage = "Branch Name can't be longer than 100 characters.")]
+        [Display(Name = "Branch Name")]
         public required string BranchName { get; set; }
     }
 }

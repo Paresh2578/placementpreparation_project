@@ -9,6 +9,7 @@ namespace Placement_Preparation.Areas.Admin.Models
 
         [Required(ErrorMessage = "Course Type  is required.")]
         [StringLength(100, ErrorMessage = "CourseType can't be longer than 100 characters.")]
+        [Display(Name = "Course Type")]
         public required string CourseTypeName { get; set; }
     }
 }

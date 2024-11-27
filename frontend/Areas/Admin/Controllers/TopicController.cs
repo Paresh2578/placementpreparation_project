@@ -34,6 +34,9 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         #region add or Edit Topic
         public async Task<IActionResult> AddOrEditTopic(string? topicId)
         {
+            // Set DropDown Value
+            await setDropDownsValue();
+
          // If topicId is null then it is add Topic
             if(topicId == null)
             {
@@ -49,8 +52,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                 }
                 TopicModel topic = JsonConvert.DeserializeObject<TopicModel>(response.Data!.ToString());
 
-                // Set DropDown Value
-                await setDropDownsValue();
+                
 
                 return View(topic);
         }
@@ -80,6 +82,10 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                      TempData["ErrorMessage"] = response.Message;
                 }
             }
+
+            // Set DropDown Value
+            await setDropDownsValue();
+
             return View(topic);
         }
         #endregion

@@ -23,7 +23,20 @@ namespace backend.Controllers
                 //validation
                 if(image == null || image.Length == 0)
                 {
-                    return BadRequest("Image is required");
+                    ResponseModel response = new ResponseModel(){
+                        StatusCode = 400,
+                        Message = "Image is required",
+                    };
+                    return StatusCode(response.StatusCode , response);
+                }
+                // Validate file size (3MB = 3 * 1024 * 1024 bytes)
+                if (image.Length > 3 * 1024 * 1024)
+                {
+                    return StatusCode(400 , new ResponseModel
+                    {
+                        StatusCode = 400,
+                        Message = "Image size must not exceed 3MB."
+                    });
                 }
 
                 using(var stream = image.OpenReadStream())

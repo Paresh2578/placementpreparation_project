@@ -6,19 +6,19 @@
 
 <div class="flex flex-col items-center">
     <div class="w-full bg-white rounded-lg shadow-lg p-6">
-        <h2 class="text-xl text-gray-900 mb-4 text-center">@(title) Course</h2>
+        <h2 class="responsive-title text-gray-900 mb-4 text-center">@(title) Course</h2>
 
         <form asp-action="AddOrEditCourse" asp-controller="Course" method="post" enctype="multipart/form-data" class="flex flex-col">
           <!-- course id hide -->
             <input asp-for="CourseId" type="hidden" />
 
-            <div class="md:flex  gap-x-4 ">
+            <div class="md-flex  gap-x-4 ">
                 <!-- All Inputs -->
                 <div class="w-full md:w-1/2">
                     <!-- Course Name -->
                     <div class="mb-2">
                         <div class="flex">
-                            <label asp-for="CourseName" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                           <span class="text-red-600">*</span> <label asp-for="CourseName" class="text-gray-700 mb-1"></label>
                         </div>
                         <input asp-for="CourseName" placeholder="Enter Course Type Name" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
                         <span asp-validation-for="CourseName" class="text-red-600"></span>
@@ -27,7 +27,7 @@
                     <!-- Description -->
                     <div class="mb-2">
                         <div class="flex">
-                            <label asp-for="Description" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                            <span class="text-red-600">*</span><label asp-for="Description" class="text-gray-700 mb-1"></label>
                         </div>
                         <textarea asp-for="Description" placeholder="Enter Course Description" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"></textarea>
                         <span asp-validation-for="Description" class="text-red-600"></span>
@@ -36,7 +36,7 @@
                     <!-- Branch -->
                     <div class="mb-2">
                         <div class="flex">
-                            <label asp-for="BranchId" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                            <span class="text-red-600">*</span><label asp-for="BranchId" class="text-gray-700 mb-1"></label>
                         </div>
                         <select asp-for="BranchId" asp-items="@(ViewBag.BranchList as List<SelectListItem>)" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
                             <option value="">Select Branch</option>
@@ -47,7 +47,7 @@
                     <!-- Course Type -->
                     <div class="mb-2">
                         <div class="flex">
-                            <label asp-for="CourseTypeId" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                           <span class="text-red-600">*</span> <label asp-for="CourseTypeId" class="text-gray-700 mb-1"></label>
                         </div>
                         <select asp-for="CourseTypeId" asp-items="@(ViewBag.CourseTypeList as List<SelectListItem>)" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
                             <option value="">Select Course Type</option>
@@ -56,18 +56,20 @@
                     </div>
 
                     <!-- Image Upload -->
+                    <input type="hidden" asp-for="Img"/>
                     <div class="mb-4">
                         <div class="flex">
-                            <label asp-for="Img" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                            <span class="text-red-600">*</span><label asp-for="Img" class="text-gray-700 mb-1"></label>
+                            <label class="note">Note! Max file size: 3 mb</label>
                         </div>
 
                         <input type="file"
                                asp-for="Img"
-                               value=@(Model != null ? Model.Img : null)
                                accept="image/*"
                                class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 cursor-pointer"
                                onchange="previewImage(event)"
                                 />
+                          <span id="fileError" class="text-red-600"></span> <!-- Error message for file size -->
                         <span asp-validation-for="Img" class="text-red-600"></span>
                     </div>
                 </div>
@@ -76,11 +78,11 @@
                 <div class="w-full md:w-1/2">
                     @if(Model != null && Model.Img != null)
                     {
-                        <img id="imagePreview" src="@Model.Img" alt="Course Image" class="w-full   rounded-md" />
+                        <img id="imagePreview" src="@Model.Img" alt="Course Image" class="w-full   rounded-md" style="height: 20vh;"/>
                     }
                     else
                     {
-                        <img id="imagePreview" src="#" alt="No Select img" class="w-full  rounded-md" />
+                        <img id="imagePreview" src="#" alt="No Select img" class="w-full h-72 rounded-md" style="height: 20vh;" />
                     }
                     @* <img id="imagePreview" src="@Model.Img ?? 'https://via.placeholder.com/150'"alt="Course Image" class="w-full h-64 object-cover rounded-md" /> *@
                 </div>

@@ -19,6 +19,7 @@ namespace Placement_Preparation.Areas.Admin.Models
         [Required(ErrorMessage = "Difficulty Level is required.")]
         
         // public DifficultyLevelName DifficultyLevelName { get; set; }
+        [Display(Name = "Difficulty Level")]
         public required string DifficultyLevelName { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Placement_Preparation.Areas.Admin.Models
 {
-    [TopicOrSubTopicRequired(ErrorMessage = "Please select either a  Topic or a Sub-topic, but not both.")]
+    // [TopicOrSubTopicRequired(ErrorMessage = "Please select either a  Topic or a Sub-topic, but not both.")]
     public class QuestionModel
     {
         // Primary Key
@@ -11,27 +11,25 @@ namespace Placement_Preparation.Areas.Admin.Models
         public Guid? QuestionId { get; set; }
 
         // Foreign Key to SubTopic
-        // [Range(1, int.MaxValue, ErrorMessage = "Please select a valid Sub-topic.")]
         public Guid? SubTopicId { get; set; }
 
         [ForeignKey("SubTopicId")]
         public virtual SubTopicModel? SubTopic { get; set; }
 
         // Foreign Key to Topic
-        // [Range(1, int.MaxValue, ErrorMessage = "Please select a valid topic.")]
-        public Guid? TopicId { get; set; }
+        [Required(ErrorMessage = "Topic is required.")]
+        public Guid TopicId { get; set; }
 
         [ForeignKey("TopicId")]
         public virtual TopicModel? Topic { get; set; }
 
-        // The actual question with validation
         [Required(ErrorMessage = "Question  is required.")]
         [StringLength(500, ErrorMessage = "Question text can't be longer than 500 characters.")]
         public required string Question { get; set; }
 
-        // The answer to the question with validation
         [Required(ErrorMessage = "Question Answer is required.")]
         [StringLength(1000, ErrorMessage = "Question Answer can't be longer than 1000 characters.")]
+        [Display(Name = "Question Answer")]
         public required string QuestionAnswer { get; set; }
     }
 }

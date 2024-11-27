@@ -38,6 +38,10 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         #region add or Edit Course
         public async Task<IActionResult> AddOrEditCourse(string? courseId)
         {
+             // set drop down value
+           await setDropDownsValue();
+
+           
               // If courseId is null then it is add courseT
             if(courseId == null)
             {
@@ -53,8 +57,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                 }
 
                 
-            // set drop down value
-           await setDropDownsValue();
+           
 
 
             // Convert response data to CourseTypeModel
@@ -65,26 +68,44 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> AddOrEditCourse(CourseModel course , IFormFile img)
         {
+            // 
+              if (course.CourseId != null)
+            {
+                // remove img validation error
+                ModelState.Remove("Img");
+            }
+
+
               // Check if image is not null
                 if(img != null)
                 {
-                    // Call method to upload image
-                    ApiResponseModel apiResponse = await _apiClient.UploadImage(img);
-                    if(apiResponse.StatusCode == 200)
+                    // Validate image size (3MB = 3 * 1024 * 1024 bytes)
+                    if (img.Length > 3 * 1024 * 1024)
                     {
-                        course.Img = apiResponse.Data!.ToString();
-                        
-                        // remove img validation error
-                        ModelState.Remove("Img");
+                        ModelState.AddModelError("Img", "Image size must be less than 3MB.");
+                    }else{
+                       // Call method to upload image
+                        ApiResponseModel apiResponse = await _apiClient.UploadImage(img);
+                        if(apiResponse.StatusCode == 200)
+                        {
+                            course.Img = apiResponse.Data!.ToString();
+                            
+                            // remove img validation error
+                            ModelState.Remove("Img");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Img", "Failed to upload image. Please try again.");
+                        }
                     }
-                }
 
-                // add img validation error
-                // if(course.Img == null && course.CourseId == null)
-                // {
-                //     ModelState.AddModelError("Img", "Image is required.");
-                // }
+                    
+                }else if (course.Img == null && course.CourseId == null)
+                 {
+                     ModelState.AddModelError("Img", "Image is required.");
+                 }
 
+              
 
 
             //Server side validation

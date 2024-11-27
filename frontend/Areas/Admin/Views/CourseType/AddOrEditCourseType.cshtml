@@ -7,7 +7,7 @@
 
 <div class="flex flex-col items-center">
     <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
-        <h2 class="text-xl text-gray-900 mb-4 text-center">@(title) Course Type</h2>
+        <h2 class="responsive-title text-gray-900 mb-4 text-center">@(title) Course Type</h2>
         @*    <h2 class="text-lg sm:text-md md:text-xl lg:text-2xl text-gray-900 mb-4 text-center">
         Add Difficulty Level
         </h2> *@
@@ -18,7 +18,7 @@
             <input asp-for="CourseTypeId" type="hidden" /> 
 
             <div class="flex">
-                <label asp-for="CourseTypeName" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                <span class="text-red-600">*</span><label asp-for="CourseTypeName" class="text-gray-700 mb-1"></label>
             </div>
             <input asp-for="CourseTypeName" placeholder="Enter Course Type Name" class="bg-gray-100 text-gray-900 border-0 rounded-md p-2  focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
             <span asp-validation-for="CourseTypeName" class="text-red-600"></span>

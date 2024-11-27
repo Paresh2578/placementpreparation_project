@@ -4,7 +4,7 @@ using backend.Constant;
 
 namespace backend.Models
 {
-    [TopicOrSubTopicRequired(ErrorMessage = "Please select either a  Topic or a Sub-topic, but not both.")]
+    // [TopicOrSubTopicRequired(ErrorMessage = "Please select either a  Topic or a Sub-topic, but not both.")]
     public class McqModel
     {
         // Primary Key
@@ -18,7 +18,8 @@ namespace backend.Models
 
         // Foreign Key to Topic
         [NotEmptyGuid(ErrorMessage = "Please select a valid topic.")]
-        public Guid? TopicId { get; set; }
+        [Required]
+        public Guid TopicId { get; set; }
 
         // The actual question text
         [Required(ErrorMessage = "Question text is required.")]

@@ -12,15 +12,29 @@ namespace Placement_Preparation.Areas.Admin.Models
         // Sub-topic Name with validation
         [Required(ErrorMessage = "Sub-topic Name is required.")]
         [StringLength(200, ErrorMessage = "Sub-topic Name can't be longer than 200 characters.")]
+        [Display(Name = "Sub-topic Name")]
         public required string SubTopicName { get; set; }
+
+         // Foreign Key to Course
+        [Required(ErrorMessage = "Course is required.")]
+        public Guid CourseId { get; set; }
+
+        [ForeignKey("CourseId")]
+        public virtual CourseModel? Course { get; set; }
 
         // Foreign Key to Topic
         [Required(ErrorMessage = "Topic is required.")]
         public Guid TopicId { get; set; }
 
-        // Navigation property for related Topic (optional, if you have a Topic model)
         [ForeignKey("TopicId")]
         public virtual TopicModel? Topic { get; set; }
+
+        // Foreign Key to Difficulty Level
+        [Required(ErrorMessage = "Difficulty Level is required.")]
+        public Guid DifficultyLevelId { get; set; }
+
+        [ForeignKey("DifficultyLevelId")]
+        public virtual DifficultyLevelModel? DifficultyLevel { get; set; }
 
         // Content for the Sub-topic with validation
         [Required(ErrorMessage = "Content is required.")]

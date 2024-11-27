@@ -109,7 +109,9 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         public async Task setDropDownsValue()
         {
             AllDropDown AllDropDown = new AllDropDown(_apiClient);
+            ViewBag.courseList = await AllDropDown.Course();
             ViewBag.topicList = await AllDropDown.Topic();
+            ViewBag.difficultyLevelList = await AllDropDown.DifficultyLevel();
         }
         #endregion
     }

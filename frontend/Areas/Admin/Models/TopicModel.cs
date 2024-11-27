@@ -11,9 +11,11 @@ namespace Placement_Preparation.Areas.Admin.Models
 
         [Required(ErrorMessage = "Topic Name is required.")]
         [StringLength(100, ErrorMessage = "Topic Name can't be longer than 100 characters.")]
+        [Display(Name = "Topic Name")]
         public required string TopicName { get; set; }
 
         [Required(ErrorMessage = "Course is required.")]
+        [Display(Name = "Course")]
         // [Range(1, int.MaxValue, ErrorMessage = "Please select a valid Course.")]
         public Guid CourseId { get; set; }
 
