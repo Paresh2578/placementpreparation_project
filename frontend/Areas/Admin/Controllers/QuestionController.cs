@@ -125,10 +125,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         [NonAction]
         public async Task setDropDownsValue()
         {
-            // AllDropDown AllDropDown = new AllDropDown(_apiClient);
             ViewBag.CourseList = await _allDropDown.Course();
-            // ViewBag.TopicList = await _allDropDown.Topic();
-            // ViewBag.SubTopicList =await  _allDropDown.SubTopic();
             ViewBag.DifficultyLevelList =await  _allDropDown.DifficultyLevel();
         }
         #endregion

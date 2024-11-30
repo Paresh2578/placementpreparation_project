@@ -54,6 +54,10 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                 }
                 McqModel mcq = JsonConvert.DeserializeObject<McqModel>(response.Data!.ToString());
 
+                 // set topic and sunTopic dropdown
+                ViewBag.TopicList = await _allDropDown.GetAllTopicsByCourseId(mcq.CourseId.ToString());
+                ViewBag.SubTopicList = await _allDropDown.GetAllSubTopicsByTopicId(mcq.TopicId.ToString());
+
                 return View(mcq);
         }
 
@@ -85,6 +89,18 @@ namespace Placement_Preparation.Areas.Admin.Controllers
 
             // If model state is invalid then set drop down value and return to view
             await setDropDownsValue();
+
+            // set topic dropdown based on course id
+            if(mcq.CourseId != Guid.Empty)
+            {
+                ViewBag.TopicList = await _allDropDown.GetAllTopicsByCourseId(mcq.CourseId.ToString());
+            }
+
+            //set subtopic dropdown based on topic id
+            if(mcq.TopicId != Guid.Empty){
+                ViewBag.SubTopicList = await _allDropDown.GetAllSubTopicsByTopicId(mcq.TopicId.ToString());
+            }
+
             return View(mcq);
         }
         #endregion
@@ -108,10 +124,8 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         [NonAction]
         public async Task setDropDownsValue()
         {
-
-            // AllDropDown AllDropDown = new AllDropDown(_apiClient);
-            ViewBag.TopicList =await _allDropDown.Topic();
-            ViewBag.SubTopicList =await _allDropDown.SubTopic();
+            ViewBag.CourseList = await _allDropDown.Course();
+            ViewBag.DifficultyLevelList =await  _allDropDown.DifficultyLevel();
         }
         #endregion
     }

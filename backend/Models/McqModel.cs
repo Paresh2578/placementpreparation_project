@@ -11,17 +11,7 @@ namespace backend.Models
         [Key]
         public Guid McqId { get; set; }
 
-        // Foreign Key to SubTopic
-        [NotEmptyGuid(ErrorMessage = "Please select a valid sub-topic.")]
-        public Guid? SubTopicId { get; set; }
-
-
-        // Foreign Key to Topic
-        [NotEmptyGuid(ErrorMessage = "Please select a valid topic.")]
-        [Required]
-        public Guid TopicId { get; set; }
-
-        // The actual question text
+        // question text
         [Required(ErrorMessage = "Question text is required.")]
         [StringLength(500, ErrorMessage = "Question text can't be longer than 500 characters.")]
         public required string QuestionText { get; set; }
@@ -46,10 +36,48 @@ namespace backend.Models
         [StringLength(300, ErrorMessage = "Option D can't be longer than 300 characters.")]
         public required string OptionD { get; set; }
 
-        // The correct answer should be one of the options (A, B, C, D)
+         // The correct answer should be one of the options (A, B, C, D)
         [Required(ErrorMessage = "Correct Answer is required.")]
         [RegularExpression("^[A-D]$", ErrorMessage = "Correct Answer must be one of the options: A, B, C, or D.")]
         public required string CorrectAnswer { get; set; }
+
+        //AnswerDescription
+        [Required(ErrorMessage = "Answer Description is required.")]
+        public required string AnswerDescription { get; set; }
+
+        // IsActive
+        public bool IsActive { get; set; } = true;
+
+        // Foreign Key to Course
+        [NotEmptyGuid(ErrorMessage = "Please select a valid course id.")]
+        public Guid CourseId { get; set; }
+        
+        [ForeignKey("CourseId")]
+        public CourseModel? Course { get; set; }
+
+        // Foreign Key to Topic
+        [NotEmptyGuid(ErrorMessage = "Please select a valid topic id.")]
+        [Required]
+        public Guid TopicId { get; set; }
+
+        [ForeignKey("TopicId")]
+        public TopicModel? Topic { get; set; }
+
+        // Foreign Key to SubTopic
+        [NotEmptyGuid(ErrorMessage = "Please select a valid sub-topic id.")]
+        public Guid? SubTopicId { get; set; }
+
+        [ForeignKey("SubTopicId")] 
+        public SubTopicModel? SubTopic { get; set; }
+
+        // Foreign Key to DefaultDifficultyLevel
+        [NotEmptyGuid(ErrorMessage = "Please select a valid difficulty level id.")]
+        public Guid DifficultyLevelId { get; set; }
+
+        [ForeignKey("DifficultyLevelId")]
+        public DifficultyLevelModel? DifficultyLevel { get; set; }
+
+       
     }
 }
 

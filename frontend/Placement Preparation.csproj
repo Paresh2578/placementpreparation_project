@@ -33,9 +33,9 @@
 	  <Folder Include="Areas\Student\Models\" />
 	</ItemGroup>
 
-	<Target Name="Tailwind" BeforeTargets="Build">
+	<!-- <Target Name="Tailwind" BeforeTargets="Build">
 		<Exec Command="npm run tw:dev" />
-	</Target>
+	</Target> -->
 
 
 </Project>

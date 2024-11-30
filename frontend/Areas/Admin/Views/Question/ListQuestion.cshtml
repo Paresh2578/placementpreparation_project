@@ -15,7 +15,7 @@
         <!-- Search Bar Section -->
         <div class="relative">
 
-            <input class="bg-gray-100 w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-500 shadow-sm focus:shadow-md"
+            <input id="questionSearch" class="bg-gray-100 w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-500 shadow-sm focus:shadow-md"
                    placeholder="Search for Question..." />
             <button class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
                     type="button">
@@ -36,7 +36,7 @@
                         <th class="py-3 px-6 text-left">Action</th>
                     </tr>
                 </thead>
-                <tbody class="text-gray-700 text-sm font-light">
+                <tbody id="question" class="text-gray-700 text-sm font-light">
                     @{
                         int index = 1;
                         foreach (var question in Model)
@@ -44,7 +44,7 @@
                             <tr class="border-b text-nowrap  border-gray-200 hover:bg-gray-50">
                                 <td class="py-3 px-6 text-left">@index</td>
                                 <td class="py-3 px-6 text-left">@question.Question</td>
-                                <td class="py-3 px-6 text-left"><span class="@(question.Active ? "yes-btn" : "no-btn")">@(question.Active ? "Yes": "No")</span></td>
+                                <td class="py-3 px-6 text-left"><span class="@(question.IsActive ? "yes-btn" : "no-btn")">@(question.IsActive ? "Yes": "No")</span></td>
 
                                 <td class="py-3 px-6 text-left flex gap-x-4">
                                     <a class="cursor-pointer" asp-action="AddOrEditQuestion" asp-controller="Question" asp-route-questionId="@question.QuestionId"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
@@ -62,4 +62,29 @@
 </div> 
 
 
+@section Scripts{
+   <script>
+       $(document).ready(function () {
+           $('#questionSearch').on("keyup", function () {
+               var value = $(this).val().toLowerCase().toString().trim();
+
+               // Filter table rows based on search input
+               $("#question tr").filter(function () {
+                   $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+               });
+
+               // Check the number of visible rows
+               var visibleRows = $("#question tr:visible").length;
+
+               // Remove existing "No question   Found" row if it exists
+               $("#question .no-question-found").remove();
+
+               // If no rows are visible, add the "No Question Found" row
+               if (visibleRows === 0) {
+                   $("#question").append('<tr class="border-b text-nowrap border-gray-200 hover:bg-gray-50 no-question-found"><td class="py-3 px-6 text-center" colspan="4">No Question  Found</td></tr>');
+               }
+           });
+       });
+   </script>
+}
 

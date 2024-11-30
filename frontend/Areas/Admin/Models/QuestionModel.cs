@@ -21,8 +21,8 @@ namespace Placement_Preparation.Areas.Admin.Models
         [Display(Name = "Question Answer")]
         public required string QuestionAnswer { get; set; }
 
-        // Active
-        public bool Active { get; set; } = true;
+        // Is Active
+        public bool IsActive { get; set; } = true;
 
         // Foreign Key to Course
         [Required(ErrorMessage = "Course is required.")]

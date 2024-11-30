@@ -13,7 +13,7 @@
         <!-- Search Bar Section -->
         <div class="relative">
 
-            <input class="bg-gray-100 w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-500 shadow-sm focus:shadow-md"
+            <input id="subTopicSearch" class="bg-gray-100 w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-500 shadow-sm focus:shadow-md"
                    placeholder="Search for SubTopic..." />
             <button class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
                     type="button">
@@ -34,7 +34,7 @@
                         <th class="py-3 px-6 text-left">Action</th>
                     </tr>
                 </thead>
-                <tbody class="text-gray-700 text-sm font-light">
+                <tbody id="subTopics" class="text-gray-700 text-sm font-light">
                     @{
                         int index=1;
                         foreach (var subTopic in Model)
@@ -57,3 +57,30 @@
         </div>
     </div>
 </div> 
+
+
+@section Scripts{
+   <script>
+       $(document).ready(function () {
+           $('#subTopicSearch').on("keyup", function () {
+               var value = $(this).val().toLowerCase().toString().trim();
+
+               // Filter table rows based on search input
+               $("#subTopics tr").filter(function () {
+                   $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+               });
+
+               // Check the number of visible rows
+               var visibleRows = $("#subTopics tr:visible").length;
+
+               // Remove existing "No Sub Topic  Found" row if it exists
+               $("#subTopics .no-sub-topic-found").remove();
+
+               // If no rows are visible, add the "No sub topic Found" row
+               if (visibleRows === 0) {
+                   $("#subTopics").append('<tr class="border-b text-nowrap border-gray-200 hover:bg-gray-50 no-sub-topic-found"><td class="py-3 px-6 text-center" colspan="4">No sub topic  Found</td></tr>');
+               }
+           });
+       });
+   </script>
+}

@@ -22,8 +22,8 @@ namespace backend.Models
         [StringLength(1000, ErrorMessage = "Question Answer can't be longer than 1000 characters.")]
         public required string QuestionAnswer { get; set; }
 
-        // Active
-        public bool Active { get; set; } = true;
+        // Is Active
+        public bool IsActive { get; set; } = true;
 
 
         // Foreign Key to Course

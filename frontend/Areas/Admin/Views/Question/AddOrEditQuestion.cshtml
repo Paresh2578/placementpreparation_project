@@ -35,7 +35,7 @@
 
                 <!-- Topic -->
                 <div class="mb-2 w-full">
-                        <label asp-for="Topic.TopicName" class=" text-gray-700 mb-1"></label>
+                        <span class="text-red-600">*</span><label asp-for="Topic.TopicName" class=" text-gray-700 mb-1"></label>
                     <select id="topics" asp-for="TopicId" asp-items="@(ViewBag.TopicList as List<SelectListItem>)"
                             class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
                         <option value="">Select Topic</option>
@@ -87,28 +87,22 @@
                 <span asp-validation-for="QuestionAnswer" class="text-red-600"></span>
             </div>
 
-            <!-- Active -->
+            <!--Is Active -->
             <div class="mb-2">
-                @* redio *@
                 <div class="flex">
-                    <span class="text-red-600">*</span><label asp-for="Active" class="text-gray-700 mb-1"></label>
+                    <span class="text-red-600">*</span><label asp-for="IsActive" class="text-gray-700 mb-1"></label>
 
                     <div class="cursor-pointer">
-                        <input asp-for="Active" id="active" type="radio" value="true" class="m-2" checked="@(Model == null ? true : Model.Active)" />
-                        <label asp-for="Active" for="active" >Yes</label>
+                        <input asp-for="IsActive" id="active" type="radio" value="true" class="m-2" checked="@(Model == null ? true : Model.IsActive)" />
+                        <label asp-for="IsActive" for="active" >Yes</label>
                     </div>
                     <div class="cursor-pointer">
-                        <input asp-for="Active" id="inActive" type="radio" value="false" class="m-2" />
-                        <label asp-for="Active" for="inActive">No</label>
+                        <input asp-for="IsActive" id="inActive" type="radio" value="false" class="m-2" />
+                        <label asp-for="IsActive" for="inActive">No</label>
                     </div>
                     
                 </div>
             </div>
-
-            
-
-
-
 
             <div class="flex gap-x-4">
                 <partial name="_Submit_Button" model="@(title)" />
@@ -149,12 +143,10 @@
         @* topic dropdown change *@
         $('#topics').change(function () {
             var topicId = $(this).val();
-            console.log(topicId);
             $.ajax({
                 url: '/GetSubTopicsByTopicId/' + topicId,
                 type: 'GET',
                 success: function (data) {
-                    console.log(data.value);
                     $('#subTopics').empty();
                     $('#subTopics').append('<option value="">Select Sub Topic</option>');
                     $.each(data.value, function (index, item) {

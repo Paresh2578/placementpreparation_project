@@ -13,7 +13,7 @@
     <div>
         <!-- Search Bar Section -->
         <div class="relative">
-            <input class="bg-gray-100 w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-500 shadow-sm focus:shadow-md"
+            <input id="courseSearch" class="bg-gray-100 w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-500 shadow-sm focus:shadow-md"
                    placeholder="Search for Course..." />
             <button class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
                     type="button">
@@ -35,7 +35,7 @@
                         <th class="py-3 px-6 text-left">Action</th>
                     </tr>
                 </thead>
-                <tbody class="text-gray-700 text-sm font-light">
+                <tbody id="courses" class="text-gray-700 text-sm font-light">
                     @{
                         int index=1;
                         foreach (var course in Model)
@@ -59,3 +59,30 @@
         </div>
     </div>
 </div> 
+
+
+@section Scripts{
+   <script>
+       $(document).ready(function () {
+           $('#courseSearch').on("keyup", function () {
+               var value = $(this).val().toLowerCase().toString().trim();
+
+               // Filter table rows based on search input
+               $("#courses tr").filter(function () {
+                   $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+               });
+
+               // Check the number of visible rows
+               var visibleRows = $("#courses tr:visible").length;
+
+               // Remove existing "No course  Found" row if it exists
+               $("#courses .no-course-found").remove();
+
+               // If no rows are visible, add the "No course Found" row
+               if (visibleRows === 0) {
+                   $("#courses").append('<tr class="border-b text-nowrap border-gray-200 hover:bg-gray-50 no-course-found"><td class="py-3 px-6 text-center" colspan="5">No course  Found</td></tr>');
+               }
+           });
+       });
+   </script>
+}
