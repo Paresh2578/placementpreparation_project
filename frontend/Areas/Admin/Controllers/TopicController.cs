@@ -2,6 +2,7 @@
 using Frontend.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Placement_Preparation.Areas.Admin.Data.Interface;
 using Placement_Preparation.Areas.Admin.Models;
 using Placement_Preparation.Utils;
 
@@ -12,9 +13,13 @@ namespace Placement_Preparation.Areas.Admin.Controllers
     {
         private readonly string _apiBaseUrl = "Topic";
         private readonly ApiClientService _apiClient;
-        public TopicController(ApiClientService apiClient)
+        private readonly AllDropDown _allDropDown;
+        private readonly TopicInterface _topicInterface;
+        public TopicController(ApiClientService apiClient , AllDropDown allDropDown , TopicInterface topicInterface)    
         {
             _apiClient = apiClient;
+            _allDropDown = allDropDown;
+            _topicInterface = topicInterface;
         }
 
         #region list of Topic
@@ -109,9 +114,20 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         [NonAction]
         public async Task setDropDownsValue()
         {
-            AllDropDown AllDropDown = new AllDropDown(_apiClient);
-            ViewBag.CourseList = await AllDropDown.Course();
-            ViewBag.difficultyLevelList = await AllDropDown.DifficultyLevel();
+            // AllDropDown AllDropDown = new AllDropDown(_apiClient);
+            ViewBag.CourseList = await _allDropDown.Course();
+            ViewBag.difficultyLevelList = await _allDropDown.DifficultyLevel();
+        }
+        #endregion
+
+                
+        #region Get Topics By CourseId for set Topic DropDown Value
+        [HttpGet]
+        [Route("/GetTopicsByCourseId/{courseId}")]
+        public async Task<JsonResult> GetTopicsByCourseId(string courseId)
+        {
+            JsonResult jsonTopicList = await _topicInterface.GetTopicsByCourseId(courseId:courseId);
+            return Json(jsonTopicList);
         }
         #endregion
     }

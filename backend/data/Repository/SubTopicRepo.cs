@@ -75,5 +75,16 @@ namespace backend.data.Repository
                 return new ResponseModel{ StatusCode = 500, Message = ex.Message };
             }
         }
+   
+      
+      public async Task<ResponseModel> GetSubTopicsByTopicId(Guid topicId)
+        {
+            try{
+                var subTopics = await _context.SubTopics.Where(x => x.TopicId == topicId).ToListAsync();
+                return new ResponseModel{ StatusCode = 200, Data = subTopics , Message = "SubTopics Fetched Successfully" };
+            }catch(Exception ex){
+                return new ResponseModel{ StatusCode = 500, Message = ex.Message };
+            }
+        }
     }
 }

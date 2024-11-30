@@ -9,5 +9,6 @@ namespace backend.data.Interface
         public Task<ResponseModel> AddTopic(TopicModel topic);
         public Task<ResponseModel> UpdateTopic(TopicModel topic);
         public Task<ResponseModel> DeleteTopic(TopicModel topic);
+        public Task<ResponseModel> GetTopicsByCourseId(Guid courseId);
     }
 }

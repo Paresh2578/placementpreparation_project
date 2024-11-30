@@ -14,10 +14,12 @@ namespace Placement_Preparation.Areas.Admin.Controllers
     {
         private readonly string _apiBaseUrl = "Course";
         private readonly ApiClientService _apiClient;
+        private readonly AllDropDown _allDropDown;
 
-        public CourseController(ApiClientService apiClient)
+        public CourseController(ApiClientService apiClient , AllDropDown allDropDown)
         {
             _apiClient = apiClient;
+            _allDropDown = allDropDown;
         }
         
         #region list of Course
@@ -142,9 +144,9 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         [NonAction]
         public async Task setDropDownsValue()
         {
-            var allDropDown = new AllDropDown(_apiClient);
-            ViewBag.CourseTypeList = await  allDropDown.CourseType();
-            ViewBag.BranchList =await allDropDown.Branch();
+            // var allDropDown = new AllDropDown(_apiClient);
+            ViewBag.CourseTypeList = await  _allDropDown.CourseType();
+            ViewBag.BranchList =await _allDropDown.Branch();
         }
         #endregion
 

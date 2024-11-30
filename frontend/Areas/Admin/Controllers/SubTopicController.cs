@@ -1,7 +1,9 @@
 ﻿using Frontend.Models;
 using Frontend.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using Placement_Preparation.Areas.Admin.Data.Interface;
 using Placement_Preparation.Areas.Admin.Models;
 using Placement_Preparation.Utils;
 
@@ -12,20 +14,28 @@ namespace Placement_Preparation.Areas.Admin.Controllers
     {
         private readonly string _apiBaseUrl = "SubTopic";
         private readonly ApiClientService _apiClient;
-        public SubTopicController(ApiClientService apiClient)
+        private readonly TopicInterface _topicInterface;
+        private readonly SubTopicInterface _subTopicInterface;
+        private readonly AllDropDown _allDropDown;
+        public SubTopicController(ApiClientService apiClient , TopicInterface topicInterface , AllDropDown allDropDown , SubTopicInterface subTopicInterface)
         {
             _apiClient = apiClient;
+            _topicInterface = topicInterface;
+            _allDropDown = allDropDown;
+            _subTopicInterface = subTopicInterface;
         }
 
         #region list of Sub Topic
         public async Task<IActionResult> ListSubTopic()
         {
            ApiResponseModel response = await _apiClient.GetAsync(_apiBaseUrl);
-                if(response.StatusCode != 200)
+
+            List<SubTopicModel> subTopicList = new List<SubTopicModel> { };
+                if (response.StatusCode != 200)
                 {
                    TempData["ErrorMessage"] = response.Message;
                 }
-                List<SubTopicModel>  subTopicList =  JsonConvert.DeserializeObject<List<SubTopicModel>>(response.Data!.ToString());
+                  subTopicList =  JsonConvert.DeserializeObject<List<SubTopicModel>>(response.Data!.ToString());
 
             return View(subTopicList);
         }
@@ -51,6 +61,9 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                     return RedirectToAction("ListSubTopic");
                 }
                 SubTopicModel subTopic = JsonConvert.DeserializeObject<SubTopicModel>(response.Data!.ToString());
+
+                // set Topic Dropdown value
+                ViewBag.topicList = await _allDropDown.GetAllTopicsByCourseId(subTopic.CourseId.ToString());
 
               
                 return View(subTopic);
@@ -85,6 +98,12 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             // If model state is invalid then set drop down value and return to view
             await setDropDownsValue();
 
+            // set Topic Dropdown value
+            if(subTopic.CourseId != Guid.Empty && subTopic.CourseId != null)
+            {
+                ViewBag.topicList = await _allDropDown.GetAllTopicsByCourseId(subTopic.CourseId.ToString());
+            }
+
             return View(subTopic);
         }
         #endregion
@@ -104,15 +123,27 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
         #endregion
 
+        #region Get Sub Topics By Topic Id for set Sub Topic DropDown Value
+        [HttpGet]
+        [Route("/GetSubTopicsByTopicId/{topicId}")]
+        public async Task<JsonResult> GetSubTopicsByTopicId(string topicId)
+        {
+            JsonResult jsonSubTopicList = await _subTopicInterface.GetSubTopicsByTopicId(topicId);
+            return Json(jsonSubTopicList);
+        }
+        #endregion
+
         #region set Topic DropDown Value
         [NonAction]
         public async Task setDropDownsValue()
         {
-            AllDropDown AllDropDown = new AllDropDown(_apiClient);
-            ViewBag.courseList = await AllDropDown.Course();
-            ViewBag.topicList = await AllDropDown.Topic();
-            ViewBag.difficultyLevelList = await AllDropDown.DifficultyLevel();
+            ViewBag.courseList = await _allDropDown.Course();
+            // ViewBag.topicList = await AllDropDown.Topic();
+            ViewBag.difficultyLevelList = await _allDropDown.DifficultyLevel();
         }
         #endregion
+
+
+        
     }
 }

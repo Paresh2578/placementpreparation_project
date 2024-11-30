@@ -23,6 +23,23 @@ namespace backend.Models
         [ForeignKey("TopicId")]
         public TopicModel? Topic { get; set; }
 
+        // Foreign Key to Difficulty Level
+        [Required(ErrorMessage = "Difficulty Level is required.")]
+        [NotEmptyGuid(ErrorMessage = "InValid Difficulty Level Id.")]
+        public Guid DifficultyLevelId { get; set; }
+
+        [ForeignKey("DifficultyLevelId")]  
+        public DifficultyLevelModel? DifficultyLevel { get; set; }
+
+        // Foregin Key to Course
+        [Required(ErrorMessage = "Course is required.")]
+        [NotEmptyGuid(ErrorMessage = "InValid Course Id.")]
+        public Guid CourseId { get; set; }
+
+        [ForeignKey("CourseId")]    
+        public CourseModel? Course { get; set; }
+        
+
         // Content for the Sub-topic with validation
         [Required(ErrorMessage = "Content is required.")]
         [StringLength(2000, ErrorMessage = "Content can't be longer than 2000 characters.")]

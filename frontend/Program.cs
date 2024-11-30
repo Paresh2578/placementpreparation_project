@@ -2,6 +2,8 @@ using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
 using Frontend.Services;
 using Microsoft.Extensions.FileSystemGlobbing.Internal;
+using Placement_Preparation.Areas.Admin.Data.Interface;
+using Placement_Preparation.Areas.Admin.Data.Repository;
 using Placement_Preparation.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,11 +19,19 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true; // Necessary for GDPR compliance
 });
 
+
+// Register services
+builder.Services.AddScoped<ApiClientService>();
+builder.Services.AddScoped<TopicInterface, TopicRepo>();
+builder.Services.AddScoped<SubTopicInterface, SubTopicRepo>();
+builder.Services.AddScoped<AllDropDown>();
+
+
+
+
 // Add IHttpContextAccessor 
 builder.Services.AddHttpContextAccessor();
 
-// All class 
-builder.Services.AddScoped<AllDropDown>();
 
 // Register HttpClient with a common BaseAddress
 builder.Services.AddHttpClient<ApiClientService>(client =>

@@ -77,5 +77,15 @@ namespace backend.data.Repository
                 return new ResponseModel{StatusCode = 500,Message = ex.Message};
             }
         }
+   
+       public async Task<ResponseModel> GetTopicsByCourseId(Guid courseId)
+        {
+            try{
+                var topics = await _context.Topics.Where(x => x.CourseId == courseId).ToListAsync();
+                return new ResponseModel{StatusCode = 200,Message = "Successfully Get All Topics",Data = topics};
+            }catch(Exception ex){
+                return new ResponseModel{StatusCode = 500,Message = ex.Message};
+            }
+        }
     }
 }

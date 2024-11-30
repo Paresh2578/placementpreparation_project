@@ -21,28 +21,52 @@
             <!-- Display validation summary for the entire form -->
             <div asp-validation-summary="ModelOnly" class="text-red-600"></div>
 
-            <!--Select Topic and Sub Topic Dropdown -->
+            <!--Select Course and Topic Dropdown -->
             <div class="flex flex-col md:flex-row mb-2 gap-x-4">
+                <!-- Course -->
+                <div class="mb-2 w-full">
+                        <span class="text-red-600">*</span><label asp-for="Course.CourseName" class=" text-gray-700 mb-1"></label>
+                    <select id="courses" asp-for="CourseId" asp-items="@(ViewBag.CourseList as List<SelectListItem>)"
+                            class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
+                        <option value="">Select Course</option>
+                    </select>
+                    <span asp-validation-for="CourseId" class="text-red-600"></span>
+                </div>
+
                 <!-- Topic -->
                 <div class="mb-2 w-full">
-                        <span class="text-red-600">*</span><label asp-for="Topic.TopicName" class=" text-gray-700 mb-1"></label>
-                    <select asp-for="TopicId" asp-items="@(ViewBag.TopicList as List<SelectListItem>)"
+                        <label asp-for="Topic.TopicName" class=" text-gray-700 mb-1"></label>
+                    <select id="topics" asp-for="TopicId" asp-items="@(ViewBag.TopicList as List<SelectListItem>)"
                             class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
                         <option value="">Select Topic</option>
                     </select>
                     <span asp-validation-for="TopicId" class="text-red-600"></span>
                 </div>
+            </div>
 
+            <!--Select DifficultyLevel and  Sub Topic Dropdown -->
+            <div class="flex flex-col md:flex-row mb-2 gap-x-4">
                 <!-- Sub Topic -->
                 <div class="mb-2 w-full">
                         <label asp-for="SubTopic.SubTopicName" class=" text-gray-700 mb-1"></label>
-                    <select asp-for="SubTopicId" asp-items="@(ViewBag.SubTopicList as List<SelectListItem>)"
+                    <select id="subTopics" asp-for="SubTopicId" asp-items="@(ViewBag.SubTopicList as List<SelectListItem>)"
                             class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
                         <option value="">Select Sub Topic</option>
                     </select>
                     <span asp-validation-for="SubTopicId" class="text-red-600"></span>
                 </div>
 
+                <!-- DifficultyLevel -->
+                <div class="mb-2 w-full">
+                        <span class="text-red-600">*</span><label asp-for="DifficultyLevel.DifficultyLevelName" class=" text-gray-700 mb-1"></label>
+                    <select asp-for="DifficultyLevelId" asp-items="@(ViewBag.DifficultyLevelList as List<SelectListItem>)"
+                            class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
+                        <option value="">Select DifficultyLevel</option>
+                    </select>
+                    <span asp-validation-for="DifficultyLevelId" class="text-red-600"></span>
+                </div>
+
+                
             </div>
 
             <!--Question-->
@@ -55,13 +79,35 @@
             </div>
 
             <!-- QuestionAnswer -->
-            <div>
+            <div class="mb-2">
                 <div class="flex">
                    <span class="text-red-600">*</span><label asp-for="QuestionAnswer" class=" text-gray-700 mb-1"></label>
                 </div>
                 <textarea id="my-text-area" asp-for="QuestionAnswer" ></textarea>
                 <span asp-validation-for="QuestionAnswer" class="text-red-600"></span>
             </div>
+
+            <!-- Active -->
+            <div class="mb-2">
+                @* redio *@
+                <div class="flex">
+                    <span class="text-red-600">*</span><label asp-for="Active" class="text-gray-700 mb-1"></label>
+
+                    <div class="cursor-pointer">
+                        <input asp-for="Active" id="active" type="radio" value="true" class="m-2" checked="@(Model == null ? true : Model.Active)" />
+                        <label asp-for="Active" for="active" >Yes</label>
+                    </div>
+                    <div class="cursor-pointer">
+                        <input asp-for="Active" id="inActive" type="radio" value="false" class="m-2" />
+                        <label asp-for="Active" for="inActive">No</label>
+                    </div>
+                    
+                </div>
+            </div>
+
+            
+
+
 
 
             <div class="flex gap-x-4">
@@ -72,9 +118,51 @@
     </div>
 </div>
 
-
+<script src="~/lib/jquery/dist/jquery.min.js"></script> <!-- Local version of jQuery -->
 <script>
     const easymde = new EasyMDE({
         element: document.getElementById('my-text-area'),
+    });
+    
+</script>
+<script  type="text/javascript">
+    $(document).ready(function () {
+       @* course dropdown change *@
+        $('#courses').change(function () {
+            var courseId = $(this).val();
+
+            $.ajax({
+                url: '/GetTopicsByCourseId/'+courseId,
+                type: 'GET',
+                success: function (data) {
+                    $('#topics').empty();
+                    $('#subTopics').empty();
+                    $('#topics').append('<option value="">Select Topic</option>');
+                    $('#subTopics').append('<option value="">Select Sub Topic</option>');
+                    $.each(data.value, function (index, item) {
+                        $('#topics').append('<option value="' + item.topicId + '">' + item.topicName + '</option>');
+                    });
+                }
+            });
+        });
+
+        @* topic dropdown change *@
+        $('#topics').change(function () {
+            var topicId = $(this).val();
+            console.log(topicId);
+            $.ajax({
+                url: '/GetSubTopicsByTopicId/' + topicId,
+                type: 'GET',
+                success: function (data) {
+                    console.log(data.value);
+                    $('#subTopics').empty();
+                    $('#subTopics').append('<option value="">Select Sub Topic</option>');
+                    $.each(data.value, function (index, item) {
+                            $('#subTopics').append('<option value="' + item.subTopicId + '">' + item.subTopicName + '</option>');
+                    });
+                }
+            });
+        });
+
     });
 </script>

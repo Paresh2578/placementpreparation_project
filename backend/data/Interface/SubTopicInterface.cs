@@ -9,5 +9,7 @@ namespace backend.data.Interface
         public Task<ResponseModel> CreateSubTopic(SubTopicModel subTopic);
         public Task<ResponseModel> UpdateSubTopic(SubTopicModel subTopic);
         public Task<ResponseModel> DeleteSubTopic(SubTopicModel subTopic);
+
+        public Task<ResponseModel> GetSubTopicsByTopicId(Guid topicId);
     }
 }

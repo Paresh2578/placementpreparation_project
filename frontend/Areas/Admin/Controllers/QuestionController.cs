@@ -12,9 +12,11 @@ namespace Placement_Preparation.Areas.Admin.Controllers
     {
         private readonly string _apiBaseUrl = "Question";
         private readonly ApiClientService _apiClient;
-        public QuestionController(ApiClientService apiClient)
+        private readonly AllDropDown _allDropDown;
+        public QuestionController(ApiClientService apiClient , AllDropDown allDropDown)
         {
             _apiClient = apiClient;
+            _allDropDown = allDropDown;
         }
 
         #region list of Topic
@@ -52,6 +54,10 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                 }
                 QuestionModel question = JsonConvert.DeserializeObject<QuestionModel>(response.Data!.ToString());
 
+                // set topic and sunTopic dropdown
+                ViewBag.TopicList = await _allDropDown.GetAllTopicsByCourseId(question.CourseId.ToString());
+                ViewBag.SubTopicList = await _allDropDown.GetAllSubTopicsByTopicId(question.TopicId.ToString());
+
                 return View(question);
         }
 
@@ -83,6 +89,18 @@ namespace Placement_Preparation.Areas.Admin.Controllers
 
             // If model state is invalid then set drop down value and return to view
             await setDropDownsValue();
+
+            // set topic dropdown based on course id
+            if(questions.CourseId != Guid.Empty)
+            {
+                ViewBag.TopicList = await _allDropDown.GetAllTopicsByCourseId(questions.CourseId.ToString());
+            }
+
+            //set subtopic dropdown based on topic id
+            if(questions.TopicId != Guid.Empty){
+                ViewBag.SubTopicList = await _allDropDown.GetAllSubTopicsByTopicId(questions.TopicId.ToString());
+            }
+
             return View(questions);
         }
         #endregion
@@ -107,9 +125,11 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         [NonAction]
         public async Task setDropDownsValue()
         {
-            AllDropDown AllDropDown = new AllDropDown(_apiClient);
-            ViewBag.TopicList = await AllDropDown.Topic();
-            ViewBag.SubTopicList =await  AllDropDown.SubTopic();
+            // AllDropDown AllDropDown = new AllDropDown(_apiClient);
+            ViewBag.CourseList = await _allDropDown.Course();
+            // ViewBag.TopicList = await _allDropDown.Topic();
+            // ViewBag.SubTopicList =await  _allDropDown.SubTopic();
+            ViewBag.DifficultyLevelList =await  _allDropDown.DifficultyLevel();
         }
         #endregion
     }

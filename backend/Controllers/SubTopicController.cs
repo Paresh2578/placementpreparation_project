@@ -72,5 +72,15 @@ namespace backend.Controllers
             return StatusCode(response.StatusCode, response);
         }
         #endregion
+
+
+        # region GetSubTopicsByTopicId
+        [HttpGet("GetSubTopicsByTopicId/{topicId}")]
+        public async Task<IActionResult> GetSubTopicsByTopicId(Guid topicId)
+        {
+            var response = await _subTopicInterface.GetSubTopicsByTopicId(topicId);
+            return StatusCode(response.StatusCode, response);
+        }
+        #endregion
     }
 }

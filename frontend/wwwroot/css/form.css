@@ -133,3 +133,25 @@
     border-color: #3b82f6; /* Blue border on focus */
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); /* Focus ring */
 }
+
+/* Match Select2 dropdown with existing styles */
+.select2-container {
+   
+}
+
+.select2-container--classic{
+  
+}
+
+.select2-container--classic .select2-selection--single .select2-selection__rendered {
+   
+}
+
+.select2-container--classic .select2-selection--single .select2-selection__arrow {
+  
+}
+
+.select2-container--classic .select2-dropdown {
+    
+}
+

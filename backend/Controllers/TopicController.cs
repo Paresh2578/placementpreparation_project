@@ -68,5 +68,15 @@ namespace backend.Controllers
             return StatusCode(response.StatusCode,response);
         }
         #endregion
+
+        #region Get Topics By Course Id
+        [HttpGet("GetTopicsByCourseId/{courseId}")]
+        public async Task<IActionResult> GetTopicsByCourseId(Guid courseId)
+        {
+            var response = await _topicInterface.GetTopicsByCourseId(courseId);
+            return StatusCode(response.StatusCode,response);
+        }
+        #endregion
+
     }
 }

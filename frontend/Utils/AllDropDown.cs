@@ -1,7 +1,10 @@
 ﻿using Frontend.Models;
 using Frontend.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using Placement_Preparation.Areas.Admin.Controllers;
+using Placement_Preparation.Areas.Admin.Data.Interface;
 using Placement_Preparation.Areas.Admin.Models;
 
 namespace Placement_Preparation.Utils
@@ -9,10 +12,14 @@ namespace Placement_Preparation.Utils
     public class AllDropDown
     {
         private readonly ApiClientService _apiClient;
+        private readonly TopicInterface _topicInterface;
+        private readonly SubTopicInterface _subTopicInterface;
 
-        public AllDropDown(ApiClientService apiClient)
+        public AllDropDown(ApiClientService apiClient , TopicInterface topicInerface , SubTopicInterface subTopicInterface)
         {
             _apiClient = apiClient;
+            _topicInterface = topicInerface;
+            _subTopicInterface = subTopicInterface;
         }
 
         public async Task<List<SelectListItem>> CourseType()
@@ -121,6 +128,34 @@ namespace Placement_Preparation.Utils
                      }
                 }
             return subTopicList;
+        }
+
+        public async Task<List<SelectListItem>> GetAllTopicsByCourseId(string courseId)
+        {
+           JsonResult jsonResult = await _topicInterface.GetTopicsByCourseId(courseId:courseId);
+
+           // SelectListItems
+           List<SelectListItem> topicSelectLists = new List<SelectListItem>{};
+
+           foreach(TopicModel topic in jsonResult.Value as List<TopicModel>){
+            topicSelectLists.Add(new SelectListItem(){Text=topic.TopicName , Value=topic.TopicId.ToString()});
+           }
+
+           return topicSelectLists;
+        }
+
+        public async Task<List<SelectListItem>> GetAllSubTopicsByTopicId(string topicId)
+        {
+           JsonResult jsonResult = await _subTopicInterface.GetSubTopicsByTopicId(topicId:topicId);
+
+           // SelectListItems
+           List<SelectListItem> subTopicSelectLists = new List<SelectListItem>{};
+
+           foreach(SubTopicModel subTopic in jsonResult.Value as List<SubTopicModel>){
+            subTopicSelectLists.Add(new SelectListItem(){Text=subTopic.SubTopicName , Value=subTopic.SubTopicId.ToString()});
+           }
+
+           return subTopicSelectLists;
         }
     }
 }

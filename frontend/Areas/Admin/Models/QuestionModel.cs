@@ -10,11 +10,26 @@ namespace Placement_Preparation.Areas.Admin.Models
         [Key]
         public Guid? QuestionId { get; set; }
 
-        // Foreign Key to SubTopic
-        public Guid? SubTopicId { get; set; }
+        // Question
+        [Required(ErrorMessage = "Question  is required.")]
+        [StringLength(500, ErrorMessage = "Question text can't be longer than 500 characters.")]
+        public required string Question { get; set; }
 
-        [ForeignKey("SubTopicId")]
-        public virtual SubTopicModel? SubTopic { get; set; }
+        // Question Answer
+        [Required(ErrorMessage = "Question Answer is required.")]
+        [StringLength(1000, ErrorMessage = "Question Answer can't be longer than 1000 characters.")]
+        [Display(Name = "Question Answer")]
+        public required string QuestionAnswer { get; set; }
+
+        // Active
+        public bool Active { get; set; } = true;
+
+        // Foreign Key to Course
+        [Required(ErrorMessage = "Course is required.")]
+        public Guid CourseId { get; set; }
+
+        [ForeignKey("CourseId")]
+        public virtual CourseModel? Course { get; set; }
 
         // Foreign Key to Topic
         [Required(ErrorMessage = "Topic is required.")]
@@ -23,14 +38,23 @@ namespace Placement_Preparation.Areas.Admin.Models
         [ForeignKey("TopicId")]
         public virtual TopicModel? Topic { get; set; }
 
-        [Required(ErrorMessage = "Question  is required.")]
-        [StringLength(500, ErrorMessage = "Question text can't be longer than 500 characters.")]
-        public required string Question { get; set; }
 
-        [Required(ErrorMessage = "Question Answer is required.")]
-        [StringLength(1000, ErrorMessage = "Question Answer can't be longer than 1000 characters.")]
-        [Display(Name = "Question Answer")]
-        public required string QuestionAnswer { get; set; }
+        // Foreign Key to SubTopic
+        public Guid? SubTopicId { get; set; }
+
+        [ForeignKey("SubTopicId")]
+        public virtual SubTopicModel? SubTopic { get; set; }
+
+        //Foreign Key to Difficulty Level
+        [Required(ErrorMessage = "Difficulty Level is required.")]
+        public Guid DifficultyLevelId { get; set; }
+
+        [ForeignKey("DifficultyLevelId")]
+        public virtual DifficultyLevelModel? DifficultyLevel { get; set; }
+
+        
+
+        
     }
 }
 

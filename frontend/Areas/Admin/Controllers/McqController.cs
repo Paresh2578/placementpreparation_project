@@ -12,9 +12,11 @@ namespace Placement_Preparation.Areas.Admin.Controllers
     {
         private readonly string _apiBaseUrl = "Mcq";
         private readonly ApiClientService _apiClient;
-        public McqController(ApiClientService apiClient)
+        private readonly AllDropDown _allDropDown;
+        public McqController(ApiClientService apiClient , AllDropDown allDropDown)
         {
             _apiClient = apiClient;
+            _allDropDown = allDropDown;
         }
 
         #region list of Mcq
@@ -106,9 +108,10 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         [NonAction]
         public async Task setDropDownsValue()
         {
-            AllDropDown AllDropDown = new AllDropDown(_apiClient);
-            ViewBag.TopicList =await AllDropDown.Topic();
-            ViewBag.SubTopicList =await AllDropDown.SubTopic();
+
+            // AllDropDown AllDropDown = new AllDropDown(_apiClient);
+            ViewBag.TopicList =await _allDropDown.Topic();
+            ViewBag.SubTopicList =await _allDropDown.SubTopic();
         }
         #endregion
     }

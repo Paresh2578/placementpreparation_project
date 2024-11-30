@@ -12,25 +12,54 @@ namespace backend.Models
         [Key]
         public Guid QuestionId { get; set; }
 
+        // Question
+        [Required(ErrorMessage = "Question  id  is required.")]
+        [StringLength(500, ErrorMessage = "Question text can't be longer than 500 characters.")]
+        public required string Question { get; set; }
+
+        // Question Answer
+        [Required(ErrorMessage = "Question Answer is required.")]
+        [StringLength(1000, ErrorMessage = "Question Answer can't be longer than 1000 characters.")]
+        public required string QuestionAnswer { get; set; }
+
+        // Active
+        public bool Active { get; set; } = true;
+
+
+        // Foreign Key to Course
+        [Required(ErrorMessage = "Course is required.")]
+        [NotEmptyGuid(ErrorMessage = "Please select a valid course.")]
+        public Guid CourseId { get; set; }
+
+        [ForeignKey("CourseId")]
+        public CourseModel? Course { get; set; }
+
+        // Foreign Key to Topic
+        [NotEmptyGuid(ErrorMessage = "Please select a valid topic.")]
+        [Required(ErrorMessage = "Topic id is required.")]
+        public Guid TopicId { get; set; }
+
+        [ForeignKey("TopicId")]
+        public TopicModel? Topic { get; set; }
+
+
         // Foreign Key to SubTopic
         [NotEmptyGuid(ErrorMessage = "Please select a valid sub-topic.")]
         public Guid? SubTopicId { get; set; }
 
+        [ForeignKey("SubTopicId")]
+        public SubTopicModel? SubTopic { get; set; }
 
-        // Foreign Key to Topic
-        [NotEmptyGuid(ErrorMessage = "Please select a valid topic.")]
-        [Required]
-        public Guid TopicId { get; set; }
 
-        // The actual question with validation
-        [Required(ErrorMessage = "Question  is required.")]
-        [StringLength(500, ErrorMessage = "Question text can't be longer than 500 characters.")]
-        public required string Question { get; set; }
+        // Foreign Key to DifficultyLevel
+        [Required(ErrorMessage = "Difficulty Level id is required.")]
+        [NotEmptyGuid(ErrorMessage = "Please select a valid difficulty level.")]
+        public Guid DifficultyLevelId { get; set; }
 
-        // The answer to the question with validation
-        [Required(ErrorMessage = "Question Answer is required.")]
-        [StringLength(1000, ErrorMessage = "Question Answer can't be longer than 1000 characters.")]
-        public required string QuestionAnswer { get; set; }
+        [ForeignKey("DifficultyLevelId")]
+        public DifficultyLevelModel? DifficultyLevel { get; set; }
+
+
     }
 }
 
