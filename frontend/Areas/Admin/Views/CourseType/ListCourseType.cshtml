@@ -5,7 +5,8 @@
     <!-- Header Section -->
     <div class="flex mb-4 justify-between">
         <h1 class="table-responsive-title">List of Course Type</h1>
-        <div>
+        <div class="flex gap-4" style="gap:0.5rem">
+            <a asp-action="ExportToExcelCourseType" asp-asp-controller="CourseType" class="export-excel-btn">Export in Excel</a>
             <partial name="_My_Button" model='new Placement_Preparation.Models.ButtonModel { Title = "Add Course Type", Url="/Admin/CourseType/AddOrEditCourseType" }' />
         </div>
     </div>

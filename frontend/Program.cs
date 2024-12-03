@@ -4,6 +4,7 @@ using Frontend.Services;
 using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using Placement_Preparation.Areas.Admin.Data.Interface;
 using Placement_Preparation.Areas.Admin.Data.Repository;
+using Placement_Preparation.Services;
 using Placement_Preparation.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,7 @@ builder.Services.AddSession(options =>
 
 // Register services
 builder.Services.AddScoped<ApiClientService>();
+builder.Services.AddScoped<ExportService>();
 builder.Services.AddScoped<TopicInterface, TopicRepo>();
 builder.Services.AddScoped<SubTopicInterface, SubTopicRepo>();
 builder.Services.AddScoped<AllDropDown>();

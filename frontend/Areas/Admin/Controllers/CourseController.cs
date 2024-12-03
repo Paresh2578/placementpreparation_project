@@ -1,11 +1,12 @@
 ﻿using Frontend.Models;
 using Frontend.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Placement_Preparation.Areas.Admin.Models;
+using Placement_Preparation.Services;
 using Placement_Preparation.Utils;
-using System.Reflection.Metadata.Ecma335;
+using System.Reflection;
+using System.Linq;
 
 namespace Placement_Preparation.Areas.Admin.Controllers
 {
@@ -15,11 +16,13 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         private readonly string _apiBaseUrl = "Course";
         private readonly ApiClientService _apiClient;
         private readonly AllDropDown _allDropDown;
+        private readonly ExportService _exportService;
 
-        public CourseController(ApiClientService apiClient , AllDropDown allDropDown)
+        public CourseController(ApiClientService apiClient , AllDropDown allDropDown , ExportService exportService)
         {
             _apiClient = apiClient;
             _allDropDown = allDropDown;
+            _exportService = exportService;
         }
         
         #region list of Course
@@ -57,10 +60,6 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                     TempData["ErrorMessage"] = response.Message;
                     return RedirectToAction("ListCourse");
                 }
-
-                
-           
-
 
             // Convert response data to CourseTypeModel
             CourseModel course = JsonConvert.DeserializeObject<CourseModel>(response.Data!.ToString());
@@ -164,6 +163,58 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             }
             return RedirectToAction("ListCourse");
         }
+        #endregion
+
+        #region Export Course to Excel
+        public async Task<IActionResult> ExportToExcelCourse()
+        {
+            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}");
+            if(response.StatusCode != 200)
+            {
+                TempData["ErrorMessage"] = response.Message;
+                return RedirectToAction("ListCourse");
+            }
+
+            try
+            {
+                // Ensure response.Data is cast to IEnumerable<CourseModel>
+                List<CourseModel> courseList = JsonConvert.DeserializeObject<List<CourseModel>>(response.Data!.ToString());
+
+                //List<string> columns = GetAllColumnNames(typeof(CourseModel));
+                List<string> columns = ["courseId" , "courseName" , "description" , "img", "branchId" , "branchName" , "courseTypeId" , "courseTypeName"];
+
+                List<Dictionary<string,dynamic>> courseObeData = new List<Dictionary<string,dynamic>> { };
+
+                foreach(CourseModel course in courseList)
+                {
+                    // Create a flattened dictionary
+                    var flattenedObject = new Dictionary<string, dynamic>
+                    {
+                        { "courseId", course.CourseId.ToString() ?? "N/A" },
+                        { "courseName", course.CourseName },
+                        { "branchId", course.BranchId },
+                        { "branchName", course.Branch?.BranchName ?? "N/A" }, // Extract branchName from branch
+                        { "description", course.Description },
+                        { "img", course.Img ?? "N/A"},
+                        { "courseTypeId", course.CourseTypeId },
+                        { "courseTypeName", course.CourseType?.CourseTypeName ?? "N/A" } // Extract courseTypeName from courseType
+                    };
+                    courseObeData.Add(flattenedObject);
+                }
+
+                // Call ExportToExcelBySpecificColumn method
+                byte[] fileContents = _exportService.ExportToExcelBySpecificColumn(courseObeData, columns.ToArray());
+
+                // Return as a file to trigger download
+                return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Course.xlsx");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return RedirectToAction("ListCourse");
+            }
+        }
+
         #endregion
     }
 }

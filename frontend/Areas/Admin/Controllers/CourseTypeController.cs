@@ -3,6 +3,7 @@ using Frontend.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Placement_Preparation.Areas.Admin.Models;
+using Placement_Preparation.Services;
 
 namespace Placement_Preparation.Areas.Admin.Controllers
 {
@@ -11,10 +12,12 @@ namespace Placement_Preparation.Areas.Admin.Controllers
     {
         private readonly string _apiBaseUrl = "CourseType";
         private readonly ApiClientService _apiClient;
+        public readonly ExportService _exportService;
         
-        public CourseTypeController(ApiClientService apiClient)
+        public CourseTypeController(ApiClientService apiClient , ExportService exportService)
         {
             _apiClient = apiClient;
+            _exportService = exportService;
         }
 
         #region list of  CourseType 
@@ -94,6 +97,33 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                 TempData["ErrorMessage"] = response.Message;
             }
             return RedirectToAction("ListCourseType");
+        }
+        #endregion
+
+         #region Export CourseType to Excel
+        public async Task<IActionResult> ExportToExcelCourseType()
+        {
+            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}");
+            if(response.StatusCode != 200)
+            {
+                TempData["ErrorMessage"] = response.Message;
+                return RedirectToAction("ListCourseType");
+            }
+
+            try
+            {
+                 // Ensure response.Data is cast to IEnumerable<CourseTypeModel>
+                var courseTypeModelList = JsonConvert.DeserializeObject<List<CourseTypeModel>>(response.Data!.ToString()) as IEnumerable<CourseTypeModel>;
+                byte[] fileContents = _exportService.ExportToExcel(courseTypeModelList, "CourseType");
+
+                // Return as a file to trigger download
+                return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "CourseType.xlsx");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return RedirectToAction("ListCourseType");
+            }
         }
         #endregion
     }

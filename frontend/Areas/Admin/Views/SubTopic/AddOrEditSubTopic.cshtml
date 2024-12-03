@@ -26,7 +26,7 @@
                 <span asp-validation-for="SubTopicName" class="text-red-600"></span>
             </div>
 
-            <!--Course , Topic , DifficultyLevel Dropdown -->
+            <!--Course , Topic  Dropdown -->
             <div class="responsive-div mb-2">
                 <!-- Select Course Dropdown -->
                 <div class="dropdown-container">
@@ -34,9 +34,9 @@
                         <span class="text-red-600">*</span>
                         <label asp-for="Course!.CourseName" class="text-gray-700 mb-1"></label>
                     </div>
-                    <select asp-for="CourseId" asp-items="@(ViewBag.courseList as List<SelectListItem>)"
+                    <select asp-for="CourseId" style="" asp-items="@(ViewBag.courseList as List<SelectListItem>)"
                     id="courseDropdown"
-                            class="input-field courseDropdown">
+                            class="input-field courseDropdown bg-red" style="color:red">
                         <option value="">Select Course</option>
                     </select>
                     <span asp-validation-for="CourseId" class="text-red-600"></span>
@@ -55,21 +55,22 @@
                 </select>
                 <span asp-validation-for="TopicId" class="text-red-600"></span>
             </div>
-
-            <!-- Select Difficulty Level Dropdown -->
-            <div class="dropdown-container">
-                <div class="flex">
-                    <span class="text-red-600">*</span>
-                    <label asp-for="DifficultyLevel!.DifficultyLevelName" class="text-gray-700 mb-1"></label>
-                </div>
-                <select  asp-for="DifficultyLevelId" asp-items="@(ViewBag.difficultyLevelList as List<SelectListItem>)"
-                       id="DifficultyLevelDropdown"
-                        class="input-field">
-                    <option value="">Select Difficulty Level</option>
-                </select>
-                <span asp-validation-for="DifficultyLevelId" class="text-red-600"></span>
             </div>
-</div>
+
+            <!-- difficulty Level radio -->
+                <div class="mb-2">
+                    <span class="text-red-600">*</span><label asp-for="DifficultyLevel.DifficultyLevelName" class="text-gray-700 mb-1"></label>
+                <div class="flex">
+
+                    @foreach(SelectListItem difficultyLevel in @ViewBag.difficultyLevelList as List<SelectListItem> ){
+                        <div class="cursor-pointer">
+                         <input asp-for="DifficultyLevelId" id="@difficultyLevel.Value" type="radio" value="@difficultyLevel.Value" class="m-2"/>
+                        <label for="@difficultyLevel.Value" >@difficultyLevel.Text</label>
+                    </div>
+                        }
+                </div>
+                    <span asp-validation-for="DifficultyLevelId" class="text-red-600"></span>
+            </div>
 
 
             <!--content-->

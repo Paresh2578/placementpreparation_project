@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Placement_Preparation.Areas.Admin.Models;
 using Placement_Preparation.BAL;
+using Placement_Preparation.Services;
 
 namespace Placement_Preparation.Areas.Admin.Controllers
 {
@@ -12,10 +13,12 @@ namespace Placement_Preparation.Areas.Admin.Controllers
     public class BranchController : Controller
     {
         private readonly ApiClientService _apiClient;
+        private readonly ExportService _exportService;
         private readonly string _apiBaseUrl = "Branch";
-        public BranchController(ApiClientService apiClient)
+        public BranchController(ApiClientService apiClient , ExportService exportService)
         {
             _apiClient = apiClient;
+            _exportService = exportService;
         }
         
 
@@ -99,5 +102,25 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             return RedirectToAction("List");
         }
         #endregion 
+    
+        #region Export Branch
+        public async Task<IActionResult> ExportToExcelBranch()
+        {
+            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}");
+            if(response.StatusCode == 200)
+            {
+                // Ensure response.Data is cast to IEnumerable<BranchModel>
+                var branchData = JsonConvert.DeserializeObject<List<BranchModel>>(response.Data!.ToString()) as IEnumerable<BranchModel>;
+
+                var excelFile = _exportService.ExportToExcel(branchData!, "BranchList");
+
+             // Return as a file to trigger download
+                return File(excelFile, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",  "BranchList.xlsx");
+            }else{
+                TempData["ErrorMessage"] = response.Message;
+                return RedirectToAction("List");
+            }
+        }
+        #endregion
     }
 }

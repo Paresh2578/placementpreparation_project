@@ -1,0 +1,50 @@
+
+.table-hader{
+   display: flex;
+   margin-bottom: 1rem;
+   justify-content: space-between;
+}
+
+.table-responsive-title{
+    font-size: 1rem;
+}
+
+.export-excel-btn{
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 16px;
+     border-radius: 5px; 
+     cursor: pointer;
+      display: flex; align-items: center; gap: 8px; transition: background-color 0.3s ease;
+
+}
+
+.export-excel-btn:hover{
+    background-color: #0056b3
+}
+
+@media (max-width: 500px) {
+    .table-hader{
+        display: block;
+        /* justify-content: center; */
+    }
+}
+
+/* Medium screen (md) and above */
+@media (min-width: 768px) {
+    .table-responsive-title{
+        font-size: 1.2rem;
+    }
+
+   
+}
+
+/* Large screen (lg) and above */
+@media (min-width: 1024px) {
+    .table-responsive-title{
+        font-size: 1.3rem;
+    }
+}
+

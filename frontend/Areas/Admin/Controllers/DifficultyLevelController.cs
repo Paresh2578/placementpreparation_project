@@ -3,6 +3,7 @@ using Frontend.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Placement_Preparation.Areas.Admin.Models;
+using Placement_Preparation.Services;
 
 namespace Placement_Preparation.Areas.Admin.Controllers
 {
@@ -11,10 +12,12 @@ namespace Placement_Preparation.Areas.Admin.Controllers
     {
          private readonly string _apiBaseUrl = "DifficultyLevel";
         private readonly ApiClientService _apiClient;
+        private readonly ExportService _exportService;
 
-        public DifficultyLevelController(ApiClientService apiClient)
+        public DifficultyLevelController(ApiClientService apiClient , ExportService exportService)
         {
             _apiClient = apiClient;
+            _exportService = exportService;
         }
 
         #region list of Difficulty Level 
@@ -94,6 +97,31 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                 TempData["ErrorMessage"] = response.Message;
             }
             return RedirectToAction("List");
+        }
+        #endregion
+
+         #region Export DifficultyLevel to Excel
+        public async Task<IActionResult> ExportToExcelDifficultyLevel()
+        {
+            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}");
+            if(response.StatusCode != 200)
+            {
+                TempData["ErrorMessage"] = response.Message;
+                return RedirectToAction("List");
+               
+            }
+
+            try
+            {
+                List<DifficultyLevelModel> difficultyLevelList = JsonConvert.DeserializeObject<List<DifficultyLevelModel>>(response.Data!.ToString());
+                byte[] fileContents = _exportService.ExportToExcel(difficultyLevelList, "DifficultyLevel");
+                return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DifficultyLevel.xlsx");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return RedirectToAction("List");
+            }
         }
         #endregion
     }

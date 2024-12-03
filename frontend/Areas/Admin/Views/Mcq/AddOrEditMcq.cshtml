@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <!--Select DifficultyLevel and  Sub Topic Dropdown -->
+            <!--Select  Sub Topic Dropdown -->
             <div class="flex flex-col md:flex-row mb-2 gap-x-4">
                 <!-- Sub Topic -->
                 <div class="mb-2 w-full">
@@ -56,24 +56,27 @@
                     </select>
                     <span asp-validation-for="SubTopicId" class="text-red-600"></span>
                 </div>
+            </div>
 
-                <!-- DifficultyLevel -->
-                <div class="mb-2 w-full">
-                        <span class="text-red-600">*</span><label asp-for="DifficultyLevel.DifficultyLevelName" class=" text-gray-700 mb-1"></label>
-                    <select asp-for="DifficultyLevelId" asp-items="@(ViewBag.DifficultyLevelList as List<SelectListItem>)"
-                            class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
-                        <option value="">Select DifficultyLevel</option>
-                    </select>
-                    <span asp-validation-for="DifficultyLevelId" class="text-red-600"></span>
+              <!-- difficulty Level radio -->
+                <div class="mb-2">
+                    <span class="text-red-600">*</span><label asp-for="DifficultyLevel.DifficultyLevelName" class="text-gray-700 mb-1"></label>
+                <div class="flex">
+
+                    @foreach(SelectListItem difficultyLevel in @ViewBag.difficultyLevelList as List<SelectListItem> ){
+                        <div class="cursor-pointer">
+                         <input asp-for="DifficultyLevelId" id="@difficultyLevel.Value" type="radio" value="@difficultyLevel.Value" class="m-2"/>
+                        <label for="@difficultyLevel.Value" >@difficultyLevel.Text</label>
+                    </div>
+                        }
                 </div>
-
-                
+                    <span asp-validation-for="DifficultyLevelId" class="text-red-600"></span>
             </div>
 
             <!--Question-->
             <div class="mb-2">
                 <div class="flex">
-                    <label asp-for="QuestionText" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                    <span class="text-red-600">*</span><label asp-for="QuestionText" class="text-gray-700 mb-1"></label>
                 </div>
                 <textarea asp-for="QuestionText" placeholder="Enter Question" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2  focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"></textarea>
                 <span asp-validation-for="QuestionText" class="text-red-600"></span>
@@ -83,7 +86,7 @@
             <!--Option A-->
             <div class="mb-2" >
                 <div class="flex">
-                    <label asp-for="OptionA" class=" text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                    <span class="text-red-600">*</span><label asp-for="OptionA" class=" text-gray-700 mb-1"></label>
                 </div>
                 <textarea rows="5" id="my-text-areaA" asp-for="OptionA" ></textarea>
                 <span asp-validation-for="OptionA" class="text-red-600"></span>
@@ -92,7 +95,7 @@
             <!--Option B-->
             <div class="mb-2">
                 <div class="flex">
-                    <label asp-for="OptionB" class=" text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                    <span class="text-red-600">*</span><label asp-for="OptionB" class=" text-gray-700 mb-1"></label>
                 </div>
                 <textarea rows="5" id="my-text-areaB" asp-for="OptionB"></textarea>
                 <span asp-validation-for="OptionB" class="text-red-600"></span>
@@ -101,7 +104,7 @@
             <!--Option C-->
             <div class="mb-2">
                 <div class="flex">
-                    <label asp-for="OptionC" class=" text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                    <span class="text-red-600">*</span><label asp-for="OptionC" class=" text-gray-700 mb-1"></label>
                 </div>
                 <textarea rows="5" id="my-text-areaC" asp-for="OptionC"></textarea>
                 <span asp-validation-for="OptionC" class="text-red-600"></span>
@@ -110,7 +113,7 @@
             <!--Option D-->
             <div class="mb-2">
                 <div class="flex">
-                    <label asp-for="OptionD" class=" text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                    <span class="text-red-600">*</span><label asp-for="OptionD" class=" text-gray-700 mb-1"></label>
                 </div>
                 <textarea rows="5" id="my-text-areaD" asp-for="OptionD"></textarea>
                 <span asp-validation-for="OptionD" class="text-red-600"></span>
@@ -129,7 +132,7 @@
             }
             <div class="mb-2 w-full">
                 <div class="flex">
-                    <label asp-for="CorrectAnswer" class="text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                    <span class="text-red-600">*</span><label asp-for="CorrectAnswer" class="text-gray-700 mb-1"></label>
                 </div>
                 <select asp-for="CorrectAnswer" asp-items="@(optionList as List<SelectListItem>)"
                         class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
@@ -141,7 +144,7 @@
             <!-- Answer Description -->
             <div class="mb-2">
                 <div class="flex">
-                    <label asp-for="AnswerDescription" class=" text-gray-700 mb-1"></label><span class="text-red-600">*</span>
+                    <span class="text-red-600">*</span><label asp-for="AnswerDescription" class=" text-gray-700 mb-1"></label>
                 </div>
                 <textarea rows="3" id="text-area-easymdeAnswerDescription" asp-for="AnswerDescription"></textarea>
                 <span asp-validation-for="AnswerDescription" class="text-red-600"></span>
