@@ -2,9 +2,10 @@
 
 <div class="bg-white p-4 rounded-md shadow-lg ">
     <!-- Header Section -->
-    <div class="flex mb-4 justify-between">
+    <div class="table-hader">
         <h1 class="table-responsive-title">List of Sub Topic</h1>
-        <div>
+        <div class="flex gap-4" style="gap:0.5rem">
+            <a asp-action="ExportToExcelSubTopic" asp-asp-controller="SubTopic" class="export-excel-btn">Export in Excel</a>
             <partial name="_My_Button" model='new Placement_Preparation.Models.ButtonModel { Title = "Add Sub Topic", Url="/Admin/SubTopic/AddOrEditSubTopic" }' />
         </div>
     </div>

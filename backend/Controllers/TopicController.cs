@@ -78,5 +78,15 @@ namespace backend.Controllers
         }
         #endregion
 
+        #region Topic Dropdown
+        [HttpGet("Dropdown/{courseId?}")]
+        public async Task<IActionResult> TopicDropdown(Guid? courseId)
+        {
+            var response = await _topicInterface.TopicDropdown(courseId);
+            return StatusCode(response.StatusCode,response);
+        }
+        #endregion
+        
+
     }
 }

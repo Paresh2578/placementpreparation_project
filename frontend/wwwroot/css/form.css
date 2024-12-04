@@ -112,7 +112,7 @@
 }
 
 .dropdown-container {
-    flex: 1 1 30%; /* Take up 30% width, adapt if needed */
+    flex: 1 1 10%; /* Take up 30% width, adapt if needed */
     min-width: 250px; /* Ensure a minimum width for dropdowns */
 }
 

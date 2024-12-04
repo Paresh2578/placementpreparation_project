@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Placement_Preparation.Areas.Admin.Data.Interface;
 using Placement_Preparation.Areas.Admin.Models;
+using Placement_Preparation.Services;
 using Placement_Preparation.Utils;
 
 namespace Placement_Preparation.Areas.Admin.Controllers
@@ -17,12 +18,14 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         private readonly TopicInterface _topicInterface;
         private readonly SubTopicInterface _subTopicInterface;
         private readonly AllDropDown _allDropDown;
-        public SubTopicController(ApiClientService apiClient , TopicInterface topicInterface , AllDropDown allDropDown , SubTopicInterface subTopicInterface)
+        private readonly ExportService _exportService;
+        public SubTopicController(ApiClientService apiClient , TopicInterface topicInterface , AllDropDown allDropDown , SubTopicInterface subTopicInterface,ExportService exportService)
         {
             _apiClient = apiClient;
             _topicInterface = topicInterface;
             _allDropDown = allDropDown;
             _subTopicInterface = subTopicInterface;
+            _exportService = exportService;
         }
 
         #region list of Sub Topic
@@ -145,5 +148,54 @@ namespace Placement_Preparation.Areas.Admin.Controllers
 
 
         
+         #region Export Sub Topic to Excel
+        public async Task<IActionResult> ExportToExcelSubTopic()
+        {
+            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}");
+            if(response.StatusCode != 200)
+            {
+                TempData["ErrorMessage"] = response.Message;
+                return RedirectToAction("ListSubTopic");
+            }
+
+            try
+            {
+                // Ensure response.Data is cast to IEnumerable<SubTopicModel>
+                List<SubTopicModel> topicList = JsonConvert.DeserializeObject<List<SubTopicModel>>(response.Data!.ToString());
+
+                List<string> columns = ["subTopicId","subTopicName","content","topicId","topicName"];
+
+                List<Dictionary<string,dynamic>> subTopicObeData = new List<Dictionary<string,dynamic>> { };
+
+                foreach(SubTopicModel subTopic in topicList)
+                {
+
+                    // Create a flattened dictionary
+                    var flattenedObject = new Dictionary<string, dynamic>
+                    {
+                        { "subTopicId", subTopic.SubTopicId.ToString() ?? "N/A" },
+                        { "subTopicName", subTopic.SubTopicName ?? "N/A" },
+                        { "content", subTopic.Content ?? "N/A" },
+                        { "topicId", subTopic.TopicId.ToString() ?? "N/A" },
+                        { "topicName", subTopic.Topic?.TopicName ?? "N/A" }, 
+                    };
+                    subTopicObeData.Add(flattenedObject);
+                }
+
+                // Call ExportToExcelBySpecificColumn method
+                byte[] fileContents = _exportService.ExportToExcelBySpecificColumn(subTopicObeData, columns.ToArray());
+
+                // Return as a file to trigger download
+                return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "SubTopic.xlsx");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return RedirectToAction("ListSubTopic");
+            }
+        }
+
+        #endregion
+   
     }
 }

@@ -69,5 +69,14 @@ namespace backend.Controllers
             return StatusCode(response.StatusCode, response);
         }
         #endregion
+
+        #region Course Dropdown
+        [HttpGet("dropdown")]
+        public async Task<IActionResult> CourseDropdown()
+        {
+            var response = await _courseInterface.CourseDropdown();
+            return StatusCode(response.StatusCode, response);
+        }
+        #endregion
     }
 }

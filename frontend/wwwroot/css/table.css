@@ -5,26 +5,6 @@
    justify-content: space-between;
 }
 
-.table-responsive-title{
-    font-size: 1rem;
-}
-
-.export-excel-btn{
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    font-size: 16px;
-     border-radius: 5px; 
-     cursor: pointer;
-      display: flex; align-items: center; gap: 8px; transition: background-color 0.3s ease;
-
-}
-
-.export-excel-btn:hover{
-    background-color: #0056b3
-}
-
 @media (max-width: 500px) {
     .table-hader{
         display: block;
@@ -32,13 +12,15 @@
     }
 }
 
+.table-responsive-title{
+    font-size: 1rem;
+}
+
 /* Medium screen (md) and above */
 @media (min-width: 768px) {
     .table-responsive-title{
         font-size: 1.2rem;
     }
-
-   
 }
 
 /* Large screen (lg) and above */
@@ -48,3 +30,150 @@
     }
 }
 
+.export-excel-btn{
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #28a745;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(40, 167, 69, 0.2);
+}
+
+.export-excel-btn:hover{
+    background-color: #218838
+}
+
+/* Responsive export-excel-btn Styles */
+@media (max-width: 768px) {
+    .export-excel-btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .export-excel-btn {
+        width: 100%; /* Full width for small screens */
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+
+
+
+
+
+
+
+/* search and clear btn */
+
+/* General Button Styles */
+.search-button,
+.clear-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Responsive Button Styles */
+@media (max-width: 768px) {
+    .search-button,
+    .clear-button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-button,
+    .clear-button {
+        width: 100%; /* Full width for small screens */
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .button-container {
+        flex-direction: column; /* Stack buttons vertically */
+    }
+}
+
+/* Search Button Styles */
+.search-button {
+    background-color: #007bff;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+    box-shadow: 0 6px 10px rgba(0, 123, 255, 0.3);
+}
+
+.search-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
+}
+
+/* Clear Button Styles */
+.clear-button {
+    background-color: #ff4d4f;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(255, 77, 79, 0.2);
+}
+
+.clear-button:hover {
+    background-color: #d43537;
+    box-shadow: 0 6px 10px rgba(255, 77, 79, 0.3);
+}
+
+.clear-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.4);
+}
+
+/* Button Container Styles */
+.button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Responsive Button Container */
+@media (max-width: 480px) {
+    .button-container {
+        gap: 5px; /* Reduce gap between buttons */
+    }
+}
+
+
+@media(max-width : 1150px){
+    /* Container for Buttons */
+.button-container {
+    margin-top: 0;
+}
+}
+
+@media(max-width : 920px){
+    /* Container for Buttons */
+.button-container {
+    margin-top: 20px;
+}
+}
+
+@media(max-width : 540px){
+    /* Container for Buttons */
+.button-container {
+    margin-top: 0;
+}
+}
+
+  

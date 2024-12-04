@@ -9,5 +9,7 @@ namespace backend.data.Interface
         public Task<ResponseModel> AddCourse(CourseModel course);
         public Task<ResponseModel> UpdateCourse(CourseModel course);
         public Task<ResponseModel> DeleteCourse(CourseModel course);
+
+        public Task<ResponseModel> CourseDropdown();
     }
 }

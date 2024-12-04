@@ -3,6 +3,7 @@ using Frontend.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Placement_Preparation.Areas.Admin.Models;
+using Placement_Preparation.Services;
 using Placement_Preparation.Utils;
 
 namespace Placement_Preparation.Areas.Admin.Controllers
@@ -13,10 +14,12 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         private readonly string _apiBaseUrl = "Mcq";
         private readonly ApiClientService _apiClient;
         private readonly AllDropDown _allDropDown;
-        public McqController(ApiClientService apiClient , AllDropDown allDropDown)
+        private readonly ExportService _exportService;
+        public McqController(ApiClientService apiClient , AllDropDown allDropDown , ExportService exportService)
         {
             _apiClient = apiClient;
             _allDropDown = allDropDown;
+            _exportService = exportService;
         }
 
         #region list of Mcq
@@ -128,5 +131,79 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             ViewBag.DifficultyLevelList =await  _allDropDown.DifficultyLevel();
         }
         #endregion
+   
+         #region Export Mcq to Excel
+        public async Task<IActionResult> ExportToExcelMcq()
+        {
+            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}");
+            if(response.StatusCode != 200)
+            {
+                TempData["ErrorMessage"] = response.Message;
+                return RedirectToAction("ListMcq");
+            }
+
+            try
+            {
+                 // Ensure response.Data is cast to IEnumerable<McqModel>
+                var mcqList = JsonConvert.DeserializeObject<List<McqModel>>(response.Data!.ToString()) as IEnumerable<McqModel>;
+                byte[] fileContents = _exportService.ExportToExcel(mcqList, "Mcq");
+
+                // Return as a file to trigger download
+                return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Mcq.xlsx");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return RedirectToAction("ListMCq");
+            }
+
+        //     try
+        //     {
+        //         // Ensure response.Data is cast to IEnumerable<McqModel>
+        //         List<McqModel> mcqList = JsonConvert.DeserializeObject<List<McqModel>>(response.Data!.ToString());
+
+        //         List<string> columns = ["subTopicId","subTopicName","content","topicId","topicName"];
+
+        //         List<Dictionary<string,dynamic>> mcqObeData = new List<Dictionary<string,dynamic>> { };
+
+        //         foreach(McqModel mcq in mcqList)
+        //         {
+
+        //             // Create a flattened dictionary
+        //             var flattenedObject = new Dictionary<string, dynamic>
+        //             {
+        //                 { "mcqId", mcq.McqId.ToString() ?? "N/A" },
+        //                 { "questionText", mcq.QuestionText ?? "N/A" },
+        //                 { "optionA", mcq.OptionA ?? "N/A" },
+        //                 { "optionB", mcq.OptionB ?? "N/A" },
+        //                 { "optionC", mcq.OptionC ?? "N/A" }, 
+        //                 { "optionD", mcq.OptionD ?? "N/A" }, 
+        //                 { "correctAnswer", mcq.CorrectAnswer ?? "N/A" }, 
+        //                 { "answerDescription", mcq.AnswerDescription ?? "N/A" }, 
+        //                 { "isActive", mcq.IsActive.ToString() ?? "N/A" }, 
+        //                 { "courseId", mcq.CourseId.ToString() ?? "N/A" }, 
+        //                 { "topicId", mcq.TopicId.ToString() ?? "N/A" }, 
+        //                 { "subTopicId", mcq.SubTopicId.ToString() ?? "N/A" }, 
+        //                 { "difficultyLevelId", mcq.DifficultyLevelId.ToString() ?? "N/A" },
+        //             };
+        //             mcqObeData.Add(flattenedObject);
+        //         }
+
+        //         // Call ExportToExcelBySpecificColumn method
+        //         byte[] fileContents = _exportService.ExportToExcelBySpecificColumn(mcqObeData, columns.ToArray());
+
+        //         // Return as a file to trigger download
+        //         return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Mcq.xlsx");
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         TempData["ErrorMessage"] = ex.Message;
+        //         return RedirectToAction("ListMcq");
+        //     }
+        // 
+        }
+
+        #endregion
+   
     }
 }

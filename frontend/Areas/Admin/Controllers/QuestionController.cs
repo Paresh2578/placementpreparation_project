@@ -3,6 +3,7 @@ using Frontend.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Placement_Preparation.Areas.Admin.Models;
+using Placement_Preparation.Services;
 using Placement_Preparation.Utils;
 
 namespace Placement_Preparation.Areas.Admin.Controllers
@@ -13,10 +14,12 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         private readonly string _apiBaseUrl = "Question";
         private readonly ApiClientService _apiClient;
         private readonly AllDropDown _allDropDown;
-        public QuestionController(ApiClientService apiClient , AllDropDown allDropDown)
+        private readonly ExportService _exportService;
+        public QuestionController(ApiClientService apiClient , AllDropDown allDropDown , ExportService exportService)
         {
             _apiClient = apiClient;
             _allDropDown = allDropDown;
+            _exportService = exportService;
         }
 
         #region list of Topic
@@ -127,6 +130,33 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         {
             ViewBag.CourseList = await _allDropDown.Course();
             ViewBag.DifficultyLevelList =await  _allDropDown.DifficultyLevel();
+        }
+        #endregion
+   
+        #region Export Question to Excel
+        public async Task<IActionResult> ExportToExcelQuestion()
+        {
+            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}");
+            if(response.StatusCode != 200)
+            {
+                TempData["ErrorMessage"] = response.Message;
+                return RedirectToAction("ListQuestion");
+            }
+
+            try
+            {
+                 // Ensure response.Data is cast to IEnumerable<QuestionModel>
+                var questionList = JsonConvert.DeserializeObject<List<QuestionModel>>(response.Data!.ToString()) as IEnumerable<QuestionModel>;
+                byte[] fileContents = _exportService.ExportToExcel(questionList, "Question");
+
+                // Return as a file to trigger download
+                return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Question.xlsx");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return RedirectToAction("ListQuestion");
+            }
         }
         #endregion
     }

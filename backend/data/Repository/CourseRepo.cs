@@ -1,4 +1,5 @@
-﻿using backend.data.Interface;
+﻿using System.Collections;
+using backend.data.Interface;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -74,5 +75,15 @@ namespace backend.data.Repository
                 return new ResponseModel { StatusCode = 500, Message = ex.Message };
             }
         }
-    }
+
+      public async Task<ResponseModel> CourseDropdown(){
+        try{
+           // Get all Course only name and id
+           var course = await _context.Courses.Select(x => new {CourseId = x.CourseId,CourseName = x.CourseName }).ToListAsync();
+            return new ResponseModel{StatusCode = 200 , Data = course , Message = "Courses  retrieved successfully."};
+        }catch(Exception e){
+            return new ResponseModel{StatusCode = 500 , Message = e.Message};
+        }
+      }
+}
 }
