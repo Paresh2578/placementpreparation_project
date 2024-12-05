@@ -60,7 +60,7 @@ namespace Placement_Preparation.Utils
 
         public async  Task<List<SelectListItem>> Course()
         {
-            ApiResponseModel response = await _apiClient.GetAsync("Course");
+            ApiResponseModel response = await _apiClient.GetAsync("Course/dropdown");
              List<SelectListItem> courseList = [];
                 if(response.StatusCode == 200)
                 {
@@ -70,7 +70,7 @@ namespace Placement_Preparation.Utils
                    // Loop through the list of CourseModel and add each item to the courseList
                      foreach (var item in courses)
                      {
-                          courseList.Add(new SelectListItem { Value = item.CourseId.ToString(), Text = item.CourseName });
+                          courseList.Add(new SelectListItem { Value = item.CourseId.ToString(), Text = item.CourseName.ToString() });
                      }
                 }
             return courseList;

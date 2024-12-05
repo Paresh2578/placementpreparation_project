@@ -11,6 +11,44 @@
     </div>
 
     <div>
+        <!-- Search course name, topic  ,subTopic  dropdown-->
+        <div class="responsive-div mb-4">
+            <!-- Select Course Dropdown -->
+            <div class="dropdown-container">
+                <label class="text-gray-700 mb-1">Course</label>
+                <select style="" asp-items="@(ViewBag.courseList as List<SelectListItem>)" id="courses"        class="input-field bg-red" style="color:red">
+                    <option value="">Select Course</option>
+                </select>
+            </div>
+
+            <!-- Select Course Dropdown -->
+            <div class="dropdown-container">
+                <label class="text-gray-700 mb-1">Topic</label>
+                <select style="" asp-items="@(ViewBag.TopicList as List<SelectListItem>)" id="topics"        class="input-field  bg-red" style="color:red">
+                    <option value="">Select Topic</option>
+                </select>
+            </div>
+
+            <!-- Select Sub Topic Dropdown -->
+            <div class="dropdown-container">
+                <label class="text-gray-700 mb-1">Sub Topic</label>
+                <select style="" asp-items="@(ViewBag.SubTopicList as List<SelectListItem>)" id="subTopics"        class="input-field  bg-red" style="color:red">
+                    <option value="">Select Sub Topic</option>
+                </select>
+            </div>
+
+            <!-- search and clear btn -->
+            <div class="button-container">
+                <!-- Search Button -->
+                <button class="search-button">Search</button>
+                <!-- Clear Button -->
+                <button class="clear-button">Clear</button>
+            </div>
+
+
+
+        </div>
+
         <!-- Search Bar Section -->
         <div class="relative">
 
@@ -67,6 +105,7 @@
 
 
 @section Scripts{
+   @* Input search  bar *@
    <script>
        $(document).ready(function () {
            $('#mcqSearch').on("keyup", function () {
@@ -90,4 +129,60 @@
            });
        });
    </script>
+
+ <!-- Search using Dropdown -->
+   <script src="~/lib/jquery/dist/jquery.min.js"></script> <!-- Local version of jQuery -->
+<script  type="text/javascript">
+    $(document).ready(function () {
+       @* course dropdown change *@
+        $('#courses').change(function () {
+            var courseId = $(this).val();
+
+            //set topic dropdown-- data
+            $.ajax({
+                url: '/GetTopicsByCourseId/'+courseId,
+                type: 'GET',
+                success: function (data) {
+                    $('#topics').empty();
+                    $('#topics').append('<option value="">Select Topic</option>');
+                    $.each(data.value, function (index, item) {
+                        $('#topics').append('<option value="' + item.topicId + '">' + item.topicName + '</option>');
+                    });
+                }
+            });
+
+
+        // set subTopic dropdown data
+         $.ajax({
+                url: '/GetSubTopicsByCourseId/'+courseId,
+                type: 'GET',
+                success: function (data) {
+                    $('#subTopics').empty();
+                    $('#subTopics').append('<option value="">Select Sub Topic</option>');
+                    $.each(data.value, function (index, item) {
+                        $('#subTopics').append('<option value="' + item.subTopicId + '">' + item.subTopicName + '</option>');
+                    });
+                }
+            });
+        });
+
+        @* topic dropdown change *@
+        $('#topics').change(function () {
+            var topicId = $(this).val();
+            $.ajax({
+                url: '/GetSubTopicsByTopicId/' + topicId,
+                type: 'GET',
+                success: function (data) {
+                    $('#subTopics').empty();
+                    $('#subTopics').append('<option value="">Select Sub Topic</option>');
+                    $.each(data.value, function (index, item) {
+                            $('#subTopics').append('<option value="' + item.subTopicId + '">' + item.subTopicName + '</option>');
+                    });
+                }
+            });
+        });
+
+    });
+</script>
+
 }

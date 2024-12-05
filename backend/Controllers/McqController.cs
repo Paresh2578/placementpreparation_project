@@ -41,9 +41,9 @@ namespace backend.Controllers
 
          #region Get All Mcq
         [HttpGet]
-        public async Task<IActionResult> GetAllMcq()
+        public async Task<IActionResult> GetAllMcq([FromQuery] Guid? courseId , [FromQuery] Guid? topicId , [FromQuery] Guid? subTopicId)
         {
-            var response = await _mcqInterface.GetAllMcq();
+            var response = await _mcqInterface.GetAllMcq(courseId:courseId , topicId : topicId , subTopicId : subTopicId);
             return StatusCode(response.StatusCode, response);
         }
         #endregion

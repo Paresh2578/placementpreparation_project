@@ -82,5 +82,22 @@ namespace backend.Controllers
             return StatusCode(response.StatusCode, response);
         }
         #endregion
+
+        #region  Get Sub Topics by Course
+        [HttpGet("GetSubTopicsByCourseId/{courseId}")]
+        public async Task<IActionResult> GetSubTopicsByCourseId(Guid courseId){
+            var response = await _subTopicInterface.GetSubTopicsByCourseId(courseId);
+            return StatusCode(response.StatusCode, response);
+        }
+        #endregion
+
+        #region SubTopicDropdown
+        [HttpGet("Dropdown")]
+        public async Task<IActionResult> SubTopicDropdown([FromQuery] Guid courseId , [FromQuery] Guid topicId)
+        {
+            var response = await _subTopicInterface.SubTopicDropdown(courseId: courseId,topicId: topicId);
+            return StatusCode(response.StatusCode, response);
+        }
+        #endregion
     }
 }

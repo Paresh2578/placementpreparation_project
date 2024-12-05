@@ -126,12 +126,22 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
         #endregion
 
-        #region Get Sub Topics By Topic Id for set Sub Topic DropDown Value
+        #region Get Sub Topics By Topic Id 
         [HttpGet]
         [Route("/GetSubTopicsByTopicId/{topicId}")]
         public async Task<JsonResult> GetSubTopicsByTopicId(string topicId)
         {
             JsonResult jsonSubTopicList = await _subTopicInterface.GetSubTopicsByTopicId(topicId);
+            return Json(jsonSubTopicList);
+        }
+        #endregion
+
+        #region Get Sub Topics By Topic Id 
+        [HttpGet]
+        [Route("/GetSubTopicsByCourseId/{CourseId}")]
+        public async Task<JsonResult> GetSubTopicsByCourseId(string courseId)
+        {
+            JsonResult jsonSubTopicList = await _subTopicInterface.GetSubTopicsByCourseId(courseId);
             return Json(jsonSubTopicList);
         }
         #endregion
@@ -146,8 +156,6 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
         #endregion
 
-
-        
          #region Export Sub Topic to Excel
         public async Task<IActionResult> ExportToExcelSubTopic()
         {

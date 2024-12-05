@@ -1,3 +1,4 @@
+using backend.Constant;
 using backend.Controllers;
 using backend.data;
 using backend.data.Interface;
@@ -36,6 +37,8 @@ builder.Services.AddScoped<SubTopicRepo>();
 builder.Services.AddScoped<QuestionRepo>();
 builder.Services.AddScoped<McqController>();
 
+builder.Services.AddScoped<DbHelper>();
+
 // Interface
 builder.Services.AddScoped<AdminUserInterface, AdminUserRepo>();
 builder.Services.AddScoped<BranchInterface, BranchRepo>();
@@ -46,6 +49,7 @@ builder.Services.AddScoped<TopicInterface, TopicRepo>();
 builder.Services.AddScoped<SubTopicInterface, SubTopicRepo>();
 builder.Services.AddScoped<QuestionInterface, QuestionRepo>();
 builder.Services.AddScoped<McqInterface, McqRepo>();
+
 
 
 // Cloudinary Configuration

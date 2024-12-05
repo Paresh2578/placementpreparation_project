@@ -30,6 +30,20 @@ namespace Placement_Preparation.Areas.Admin.Data.Repository
             subTopicList = JsonConvert.DeserializeObject<List<SubTopicModel>>(response.Data!.ToString());
             return new JsonResult(subTopicList);
         }
+
+        public async Task<JsonResult> GetSubTopicsByCourseId(string courseId)
+        {
+            ApiResponseModel response = await _apiClient.GetAsync($"SubTopic/GetSubTopicsByCourseId/{courseId}");
+            List<SubTopicModel> subTopicList = new List<SubTopicModel> { };
+
+            // If the status code is not 200, return empty 
+            if (response.StatusCode != 200)
+            {
+                return new JsonResult(subTopicList);
+            }
+            subTopicList = JsonConvert.DeserializeObject<List<SubTopicModel>>(response.Data!.ToString());
+            return new JsonResult(subTopicList);
+        }
     }
 }
  

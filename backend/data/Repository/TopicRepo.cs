@@ -91,7 +91,13 @@ namespace backend.data.Repository
         public async Task<ResponseModel> TopicDropdown(Guid? courseId)
         {
             try{
-                var topics = await _context.Topics.Where(x => x.CourseId == courseId).Select(x => new {x.TopicId,x.TopicName}).ToListAsync();
+                // if courseId is null, return all topics
+                var topics = new object();
+                if(courseId is null || courseId == Guid.Empty){
+                     topics = await _context.Topics.Select(x => new {x.TopicId,x.TopicName}).ToListAsync();
+                }else{
+                     topics = await _context.Topics.Where(x => x.CourseId == courseId).Select(x => new {x.TopicId,x.TopicName}).ToListAsync();
+                }
                 return new ResponseModel{StatusCode = 200,Message = "Successfully Get All Topics",Data = topics};
             }catch(Exception ex){
                 return new ResponseModel{StatusCode = 500,Message = ex.Message};

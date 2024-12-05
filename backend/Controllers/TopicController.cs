@@ -2,6 +2,7 @@
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using backend.Constant;
+using System.Web.Http.Routing.Constraints;
 
 namespace backend.Controllers
 {
@@ -79,10 +80,10 @@ namespace backend.Controllers
         #endregion
 
         #region Topic Dropdown
-        [HttpGet("Dropdown/{courseId?}")]
-        public async Task<IActionResult> TopicDropdown(Guid? courseId)
+        [HttpGet("Dropdown")]
+        public async Task<IActionResult> TopicDropdown([FromQuery] Guid courseId)
         {
-            var response = await _topicInterface.TopicDropdown(courseId);
+            var response = await _topicInterface.TopicDropdown(courseId:courseId);
             return StatusCode(response.StatusCode,response);
         }
         #endregion

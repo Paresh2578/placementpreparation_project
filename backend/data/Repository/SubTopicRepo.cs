@@ -86,5 +86,30 @@ namespace backend.data.Repository
                 return new ResponseModel{ StatusCode = 500, Message = ex.Message };
             }
         }
+      public async Task<ResponseModel> GetSubTopicsByCourseId(Guid courseId)
+        {
+            try{
+                var subTopics = await _context.SubTopics.Where(x => x.CourseId == courseId).ToListAsync();
+                return new ResponseModel{ StatusCode = 200, Data = subTopics , Message = "SubTopics Fetched Successfully" };
+            }catch(Exception ex){
+                return new ResponseModel{ StatusCode = 500, Message = ex.Message };
+            }
+        }
+   
+    public async Task<ResponseModel> SubTopicDropdown(Guid? courseId, Guid? topicId)
+        {
+            try{
+                var query = _context.SubTopics
+                    .Where(x => 
+                        (courseId == null || courseId == Guid.Empty || x.CourseId == courseId) &&
+                        (topicId == null || topicId == Guid.Empty || x.TopicId == topicId))
+                    .Select(x => new { SubTopicId = x.SubTopicId, SubTopicName = x.SubTopicName });
+
+             var subTopics = await query.ToListAsync();
+                return new ResponseModel{ StatusCode = 200, Data = subTopics , Message = "SubTopics Fetched Successfully" };
+            }catch(Exception ex){
+                return new ResponseModel{ StatusCode = 500, Message = ex.Message };
+            }
+        }
     }
 }

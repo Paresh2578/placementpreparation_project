@@ -23,14 +23,18 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
 
         #region list of Mcq
-        public async Task<IActionResult> ListMcq()
+        public async Task<IActionResult> ListMcq(Guid? courseId , Guid? topicId , Guid? subTopicId)
         {
-             ApiResponseModel response = await _apiClient.GetAsync(_apiBaseUrl);
+             ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}?courseId={courseId}&topicId={topicId}+&subTopicId="
+             +subTopicId);
                 if(response.StatusCode != 200)
                 {
                    TempData["ErrorMessage"] = response.Message;
                 }
                 List<McqModel>  mcqList =  JsonConvert.DeserializeObject<List<McqModel>>(response.Data!.ToString());
+
+                // set search dropdown value ( course , topic , subTopic)
+                await  setCourseTopicSubTopicDropDownsValues();
 
             return View(mcqList);
         }
@@ -128,7 +132,16 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         public async Task setDropDownsValue()
         {
             ViewBag.CourseList = await _allDropDown.Course();
-            ViewBag.DifficultyLevelList =await  _allDropDown.DifficultyLevel();
+            ViewBag.DifficultyLevelList =await _allDropDown.DifficultyLevel();
+        }
+        #endregion
+
+        #region set Course , Topic and Sub Topic DropDown Value
+        [NonAction]
+        public async Task setCourseTopicSubTopicDropDownsValues(){
+            ViewBag.CourseList = await _allDropDown.Course();
+            ViewBag.TopicList = await _allDropDown.Topic();
+            ViewBag.SubTopicList = await _allDropDown.SubTopic();
         }
         #endregion
    
@@ -202,7 +215,6 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         //     }
         // 
         }
-
         #endregion
    
     }
