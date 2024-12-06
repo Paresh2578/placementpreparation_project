@@ -66,5 +66,13 @@ namespace backend.Controllers
             return StatusCode(response.StatusCode, response);
         }
         #endregion
+
+        #region Delete Multiple Mcq
+        [HttpDelete("DeleteMultiple")]
+        public async Task<IActionResult> DeleteMultipleMcq([FromBody] List<Guid> mcqIds){
+            var response = await _mcqInterface.DeleteMultipleMcq(mcqIds);
+            return StatusCode(response.StatusCode , response);
+        }
+        #endregion
     }
 }

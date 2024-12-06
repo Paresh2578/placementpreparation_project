@@ -1,4 +1,9 @@
 
+/* Apply transition to all elements globally */
+* {
+    transition: all 0.3s ease; /* Apply to all properties */
+}
+
 
 /* CSS to hide the scrollbar */
 .no-scrollbar::-webkit-scrollbar {
@@ -23,6 +28,10 @@
 }
 .md:flex-row {
     flex-direction: row;
+}
+
+.mt-4 {
+    margin-top: 1rem /* 16px */;
 }
 
 .ms-3 {

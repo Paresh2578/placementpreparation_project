@@ -176,4 +176,17 @@
 }
 }
 
-  
+/* Highlighted row background */
+.row-highlight {
+    background-color: #edcbcb; /* Light red */
+}
+
+/* Ensure hover effect remains */
+.mcq-row:hover:not(.row-highlight) {
+    background-color: #f1f1f1;
+}
+
+
+
+
+

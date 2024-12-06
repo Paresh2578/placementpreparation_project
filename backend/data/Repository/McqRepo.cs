@@ -38,6 +38,21 @@ namespace backend.data.Repository
             }
         }
 
+       public async Task<ResponseModel> DeleteMultipleMcq(List<Guid> mcqIds){
+        try{
+           // get all mcq to deleted
+            var mcqsToDelete = await _context.Mcqs.Where(mcq => mcqIds.Contains(mcq.McqId)).ToListAsync();
+
+            _context.Mcqs.RemoveRange(mcqsToDelete);
+            await _context.SaveChangesAsync();
+            
+            return new ResponseModel{StatusCode=200 , Message="Successfully Deleted all Mcqs"};
+
+        }catch(Exception ex){
+            return new ResponseModel {StatusCode=500,Message=ex.Message};
+        }
+       }
+
         public async Task<ResponseModel> GetAllMcq(Guid? courseId, Guid? topicId, Guid? subTopicId)
         {
             try
@@ -113,5 +128,6 @@ namespace backend.data.Repository
                 return new ResponseModel { StatusCode = 500, Message = ex.Message };
             }
         }
+    
     }
 }

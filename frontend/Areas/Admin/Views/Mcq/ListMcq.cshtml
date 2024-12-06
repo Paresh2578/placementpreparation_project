@@ -42,7 +42,7 @@
                 <!-- Search Button -->
                 <button id="handlerSearch" class="search-button">Search</button>
                 <!-- Clear Button -->
-                <button asp-action="ClearSearch" asp-controller="Mcq" class="clear-button">Clear</button>
+                <a asp-action="ClearSearch" asp-controller="Mcq" class="clear-button">Clear</a>
             </div>
 
 
@@ -66,7 +66,8 @@
         <div class="mt-6 overflow-x-auto w-full">
             <table class="min-w-full  bg-white border border-gray-200">
                 <thead>
-                    <tr class="bg-gray-100 text-nowrap text-gray-600  uppercase text-sm leading-normal">
+                    <tr class="bg-gray-100 text-nowrap text-gray-600  uppercase text-sm leading-normal" >
+                        <th><input type="checkbox" id="selectAll" /></th>
                         <th class="py-3 px-6 text-left">#</th>
                         <th class="py-3 px-6 text-left">Question Text</th>
                         <th class="py-3 px-6 text-left">Active</th>
@@ -78,7 +79,8 @@
                         int index = 1;
                         foreach (var mcq in Model)
                         {
-                            <tr class="border-b text-nowrap  border-gray-200 hover:bg-gray-50">
+                            <tr data-id="@mcq.McqId"  class="mcq-row border-b text-nowrap hover:cursor-pointer  border-gray-200 hover:bg-gray-50" onclick="toggleCheckbox(this)">
+                                <th><input type="checkbox"  class="select-mcq" value="@mcq.McqId" onchange="highlightRow(this)" /></th>
                                 <td class="py-3 px-6 text-left">@index</td>
                                 <td class="py-3 px-6 text-left">@mcq.QuestionText</td>
                                  <td class="py-3 px-6 text-left"><span class="@(mcq.IsActive ? "yes-btn" : "no-btn")">@(mcq.IsActive ? "Yes": "No")</span></td>
@@ -92,10 +94,21 @@
                         index++;
 
                         }
+                        // If no mcq found
+                        if (Model.Count == 0)
+                        {
+                            <tr class="border-b text-nowrap border-gray-200 hover:bg-gray-50 no-mcq-found">
+                                <td class="py-3 px-6 text-center" colspan="5">No Mcq  Found</td>
+                            </tr>
+                        }
                     }
+
+                   
                 </tbody>
             </table>
+              
         </div>
+        <button id="handleDelete" class="clear-button m-4" style="margin-top: 20px; display: block;width: fit-content;"><i class="fa-regular fa-trash fa-bounce"></i> Delete </button>
     </div>
 </div> 
 
@@ -120,7 +133,7 @@
 
                // If no rows are visible, add the "No mcq Found" row
                if (visibleRows === 0) {
-                   $("#mcqs").append('<tr class="border-b text-nowrap border-gray-200 hover:bg-gray-50 no-mcq-found"><td class="py-3 px-6 text-center" colspan="4">No Mcq  Found</td></tr>');
+                   $("#mcqs").append('<tr class="border-b text-nowrap border-gray-200 hover:bg-gray-50 no-mcq-found"><td class="py-3 px-6 text-center" colspan="5">No Mcq  Found</td></tr>');
                }
            });
        });
@@ -205,16 +218,17 @@
                     $('#mcqs').empty();
                     if (data && data.length) {
                         let html = '';
-                        $.each(data, function (index, item) {
-                            html += '<tr class="border-b text-nowrap border-gray-200 hover:bg-gray-50">';
+                        $.each(data, function (index, mcq) {
+                            html += '<tr data-id="'+(mcq.mcqId)+'" class="border-b text-nowrap border-gray-200 hover:bg-gray-50"  onclick="toggleCheckbox(this)">';
+                    html += '<th><input type="checkbox" class="select-mcq" value="' + mcq.mcqId + '" onchange="highlightRow(this)" /></th>';
                             html += '<td class="py-3 px-6 text-left">' + (index+1) + '</td>';
-                            html += '<td class="py-3 px-6 text-left">' + item.questionText + '</td>';
-                            html += '<td class="py-3 px-6 text-left"><span class="' + (item.isActive ? "yes-btn" : "no-btn") + '">' + (item.isActive ? "Yes" : "No") + '</span></td>';
+                            html += '<td class="py-3 px-6 text-left">' + mcq.questionText + '</td>';
+                            html += '<td class="py-3 px-6 text-left"><span class="' + (mcq.isActive ? "yes-btn" : "no-btn") + '">' + (mcq.isActive ? "Yes" : "No") + '</span></td>';
                           html += '<td class="py-3 px-6 text-left flex gap-x-4">' +
-                                '<a class="cursor-pointer" onclick="handleRedirect(\'/Admin/Mcq/AddOrEditMcq?mcqId=' + item.mcqId + '\')">' +
+                                '<a class="cursor-pointer" onclick="handleRedirect(\'/Admin/Mcq/AddOrEditMcq?mcqId=' + mcq.mcqId + '\')">' +
                                 '<img src="../../../../../assets/icons/edit.svg" height="20" width="20" />' +
                                 '</a>' +
-                                '<a class="cursor-pointer" onclick="confirmDelete(\'/Admin/Mcq/DeleteMcq/' + item.mcqId + '\')">' +
+                                '<a class="cursor-pointer" onclick="confirmDelete(\'/Admin/Mcq/DeleteMcq/' + mcq.mcqId + '\')">' +
                                 '<img src="../../../../../assets/icons/delete.svg" height="20" width="20" />' +
                                 '</a>' +
                                 '</td>';
@@ -222,16 +236,95 @@
                         });
                         $('#mcqs').append(html);
                     } else {
-                        $('#mcqs').append('<tr><td colspan="4" class="text-center py-4">No MCQs found</td></tr>');
+                        $('#mcqs').append('<tr><td colspan="5" class="text-center py-4">No MCQs found</td></tr>');
                     }
                 },
                 error: function (xhr, status, error) {
                     console.error('Error fetching MCQs:', error);
-                    $('#mcqs').empty().append('<tr><td colspan="4" class="text-center text-red-500 py-4">Failed to load MCQs</td></tr>');
+                    $('#mcqs').empty().append('<tr><td colspan="5" class="text-center text-red-500 py-4">Failed to load MCQs</td></tr>');
                 }
             });
         });
     });
 </script>
 
+<!-- Delete All checkbox Box -->
+<script>
+      function toggleCheckbox(row) {
+        const checkbox = row.querySelector('.select-mcq');
+            checkbox.checked = !checkbox.checked; // Toggle the checkbox state
+             highlightRow(checkbox); // Call highlightRow explicitly
+             updateSelectAllState(); // Update the select all checkbox state
+        }
+        
+
+    // Highlight the row if the checkbox is checked
+    function highlightRow(checkbox) {
+        const row = checkbox.closest('tr');
+        if (checkbox.checked) {
+            row.classList.add('row-highlight');
+        } else {
+            row.classList.remove('row-highlight');
+        }
+    }
+
+   // select All checkbox
+    document.getElementById('selectAll').addEventListener('change', function () {
+        const checkboxes = document.querySelectorAll('.select-mcq');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+            highlightRow(checkbox);
+        });
+    });
+    function updateSelectAllState() {
+    const checkboxes = document.querySelectorAll('.select-mcq');
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+    const noneChecked = Array.from(checkboxes).every(checkbox => !checkbox.checked);
+
+    if (allChecked) {
+        selectAllCheckbox.checked = true;
+        selectAllCheckbox.indeterminate = false; // Not in an indeterminate state
+    } else if (noneChecked) {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = false; // Not in an indeterminate state
+    } else {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = true; // Set indeterminate state
+    }
+}
+
+    // Prevent the row click from triggering when clicking on specific elements like the edit/delete buttons
+    document.querySelectorAll('.mcq-row').forEach(row => {
+        row.addEventListener('click', function (e) {
+            if (e.target.tagName === 'A' || e.target.tagName === 'IMG') {
+                e.stopPropagation();
+            }
+        });
+    });
+
+    // Delete button click
+    document.getElementById('handleDelete').addEventListener('click', function () {
+        const selectedMcqIds = Array.from(document.querySelectorAll('.select-mcq:checked')).map(checkbox => checkbox.value);
+        if (selectedMcqIds.length === 0) {
+            alert('Please select at least one MCQ to delete');
+            return;
+        }
+
+         Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        // If the user confirms, redirect to the delete URL
+        if (result.isConfirmed) {
+            window.location.href = '/Admin/Mcq/DeleteMultipleMcq?mcqIds=' + selectedMcqIds.join(',');
+        }
+    });
+    });
+</script>
 }

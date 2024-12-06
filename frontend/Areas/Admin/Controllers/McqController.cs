@@ -127,6 +127,20 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
         #endregion
 
+        #region  Delete Multiple Mcq
+        public async Task<IActionResult> DeleteMultipleMcq(string  mcqIds)
+        {
+            ApiResponseModel response = await _apiClient.DeleteMultipleAsync($"{_apiBaseUrl}/DeleteMultiple",mcqIds.Split(","));
+            if(response.StatusCode == 200)
+            {
+                TempData["SuccessMessage"] = response.Message;
+            }else {
+                TempData["ErrorMessage"] = response.Message;
+            }
+            return RedirectToAction("ListMcq");
+        }
+        #endregion
+
         #region set Topic and Sub Topic DropDown Value
         [NonAction]
         public async Task setDropDownsValue()

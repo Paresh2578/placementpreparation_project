@@ -93,7 +93,33 @@ namespace Frontend.Services
       }
         #endregion
     
-    
+       
+       #region  Delete Multiple
+        public async Task<ApiResponseModel> DeleteMultipleAsync(string endpoint , object data){
+            try{
+                var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Delete,
+                    RequestUri = new Uri(_httpClient.BaseAddress + endpoint),
+                    Content = content
+                };
+                var response = await _httpClient.SendAsync(request);
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                ApiResponseModel? apiResponseModel = JsonConvert.DeserializeObject<ApiResponseModel>(responseContent);
+
+                if(apiResponseModel != null && apiResponseModel.StatusCode != 0)
+                {
+                    return apiResponseModel;
+                }
+                return new ApiResponseModel {StatusCode = (int)response.StatusCode,Message = response.ReasonPhrase};
+            }catch(Exception ex){
+                return new ApiResponseModel {StatusCode = 500,Message = ex.Message};
+            }
+        }
+        #endregion
+
     #region image upload
         public async Task<ApiResponseModel> UploadImage(IFormFile file)
         {

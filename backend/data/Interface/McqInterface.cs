@@ -10,5 +10,7 @@ namespace backend.data.Interface
         public Task<ResponseModel> UpdateMcq(McqModel mcq);
         public Task<ResponseModel> DeleteMcq(McqModel mcq);
 
+        public Task<ResponseModel> DeleteMultipleMcq(List<Guid> mcqIds);
+
     }
 }
