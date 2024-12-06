@@ -217,5 +217,28 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
         #endregion
    
-    }
+
+        #region Get Mcqs By courseId , topicId and subTopicId
+        [HttpGet]
+        [Route("/Mcq/GetMcqs")]
+        public async Task<JsonResult> GetMcqsByCourseIdTopicIdSubTopicId([FromQuery] Guid? courseId ,[FromQuery] Guid? topicId ,[FromQuery] Guid? subTopicId)
+        {
+            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}?courseId={courseId}&topicId={topicId}&subTopicId={subTopicId}");
+            if(response.StatusCode != 200)
+            {
+                TempData["ErrorMessage"] = response.Message;
+                return new JsonResult(null);
+            }
+            List<McqModel> mcqList = JsonConvert.DeserializeObject<List<McqModel>>(response.Data!.ToString());
+            return new JsonResult(mcqList);
+        }
+        #endregion
+   
+       #region  clear search
+        public IActionResult ClearSearch()
+        {
+            return RedirectToAction("ListMcq");
+        }
+        #endregion
+     }
 }

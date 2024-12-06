@@ -40,9 +40,9 @@
             <!-- search and clear btn -->
             <div class="button-container">
                 <!-- Search Button -->
-                <button class="search-button">Search</button>
+                <button id="handlerSearch" class="search-button">Search</button>
                 <!-- Clear Button -->
-                <button class="clear-button">Clear</button>
+                <button asp-action="ClearSearch" asp-controller="Mcq" class="clear-button">Clear</button>
             </div>
 
 
@@ -69,8 +69,6 @@
                     <tr class="bg-gray-100 text-nowrap text-gray-600  uppercase text-sm leading-normal">
                         <th class="py-3 px-6 text-left">#</th>
                         <th class="py-3 px-6 text-left">Question Text</th>
-                        @* <th class="py-3 px-6 text-left">Topic Name</th> *@
-                        @* <th class="py-3 px-6 text-left">SubTopic Name</th> *@
                         <th class="py-3 px-6 text-left">Active</th>
                         <th class="py-3 px-6 text-left">Action</th>
                     </tr>
@@ -83,8 +81,6 @@
                             <tr class="border-b text-nowrap  border-gray-200 hover:bg-gray-50">
                                 <td class="py-3 px-6 text-left">@index</td>
                                 <td class="py-3 px-6 text-left">@mcq.QuestionText</td>
-                                @* <td class="py-3 px-6 text-left">@mcq.Topic.TopicName</td> *@
-                                @* <td class="py-3 px-6 text-left">@mcq.SubTopic.SubTopicName</td> *@
                                  <td class="py-3 px-6 text-left"><span class="@(mcq.IsActive ? "yes-btn" : "no-btn")">@(mcq.IsActive ? "Yes": "No")</span></td>
 
 
@@ -133,6 +129,11 @@
  <!-- Search using Dropdown -->
    <script src="~/lib/jquery/dist/jquery.min.js"></script> <!-- Local version of jQuery -->
 <script  type="text/javascript">
+ function handleRedirect(url) {
+        window.location = url;
+    }
+
+
     $(document).ready(function () {
        @* course dropdown change *@
         $('#courses').change(function () {
@@ -182,6 +183,54 @@
             });
         });
 
+        
+        //Seach button click
+        $('#handlerSearch').click(function () {
+             let courseId = $('#courses').val();
+            let topicId = $('#topics').val();
+            let subTopicId = $('#subTopics').val();
+
+            // if All  select field are empty then return
+            if (!courseId && !topicId && !subTopicId) {
+                alert('Please select any one field');
+                return;
+            }
+
+            $.ajax({
+                url: '/Mcq/GetMcqs',
+                type: 'GET',
+                data: { courseId: courseId, topicId: topicId, subTopicId: subTopicId },
+                success: function (data) {
+                    console.log(data);
+                    $('#mcqs').empty();
+                    if (data && data.length) {
+                        let html = '';
+                        $.each(data, function (index, item) {
+                            html += '<tr class="border-b text-nowrap border-gray-200 hover:bg-gray-50">';
+                            html += '<td class="py-3 px-6 text-left">' + (index+1) + '</td>';
+                            html += '<td class="py-3 px-6 text-left">' + item.questionText + '</td>';
+                            html += '<td class="py-3 px-6 text-left"><span class="' + (item.isActive ? "yes-btn" : "no-btn") + '">' + (item.isActive ? "Yes" : "No") + '</span></td>';
+                          html += '<td class="py-3 px-6 text-left flex gap-x-4">' +
+                                '<a class="cursor-pointer" onclick="handleRedirect(\'/Admin/Mcq/AddOrEditMcq?mcqId=' + item.mcqId + '\')">' +
+                                '<img src="../../../../../assets/icons/edit.svg" height="20" width="20" />' +
+                                '</a>' +
+                                '<a class="cursor-pointer" onclick="confirmDelete(\'/Admin/Mcq/DeleteMcq/' + item.mcqId + '\')">' +
+                                '<img src="../../../../../assets/icons/delete.svg" height="20" width="20" />' +
+                                '</a>' +
+                                '</td>';
+                            html += '</tr>';
+                        });
+                        $('#mcqs').append(html);
+                    } else {
+                        $('#mcqs').append('<tr><td colspan="4" class="text-center py-4">No MCQs found</td></tr>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching MCQs:', error);
+                    $('#mcqs').empty().append('<tr><td colspan="4" class="text-center text-red-500 py-4">Failed to load MCQs</td></tr>');
+                }
+            });
+        });
     });
 </script>
 
