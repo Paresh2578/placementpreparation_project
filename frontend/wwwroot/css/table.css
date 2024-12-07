@@ -73,7 +73,7 @@
 /* search and clear btn */
 
 /* General Button Styles */
-.search-button,
+.primary-button,
 .clear-button {
     padding: 10px 20px;
     font-size: 16px;
@@ -86,7 +86,7 @@
 
 /* Responsive Button Styles */
 @media (max-width: 768px) {
-    .search-button,
+    .primary-button,
     .clear-button {
         padding: 8px 16px;
         font-size: 14px;
@@ -94,7 +94,7 @@
 }
 
 @media (max-width: 480px) {
-    .search-button,
+    .primary-button,
     .clear-button {
         width: 100%; /* Full width for small screens */
         padding: 10px;
@@ -107,18 +107,18 @@
 }
 
 /* Search Button Styles */
-.search-button {
+.primary-button {
     background-color: #007bff;
     color: #fff;
     box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
 }
 
-.search-button:hover {
+.primary-button:hover {
     background-color: #0056b3;
     box-shadow: 0 6px 10px rgba(0, 123, 255, 0.3);
 }
 
-.search-button:focus {
+.primary-button:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
 }

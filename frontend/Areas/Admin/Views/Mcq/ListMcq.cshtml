@@ -5,8 +5,9 @@
     <div class="table-hader">
         <h1 class="table-responsive-title">List of Mcq</h1>
         <div class="flex gap-4" style="gap:0.5rem">
-             <a asp-action="ExportToExcelMcq" asp-asp-controller="Mcq" class="export-excel-btn">Export in Excel</a>
-            <partial name="_My_Button" model='new Placement_Preparation.Models.ButtonModel { Title = "Add Mcq", Url="/Admin/Mcq/AddOrEditMcq" }' />
+             <a asp-action="ExportToExcelMcq" asp-asp-controller="Mcq" class="export-excel-btn"><i class="fa-solid fa-file-export fa-bounce"></i> Export in Excel</a>
+             <a asp-action="AddOrEditMcq" asp-asp-controller="Mcq" class="primary-button"><i class="fa-solid fa-plus fa-bounce"></i> Add Mcq</a>
+            @* <partial name="_My_Button" model='new Placement_Preparation.Models.ButtonModel { Title = "Add Mcq", Url="/Admin/Mcq/" }' /> *@
         </div>
     </div>
 
@@ -16,7 +17,7 @@
             <!-- Select Course Dropdown -->
             <div class="dropdown-container">
                 <label class="text-gray-700 mb-1">Course</label>
-                <select style="" asp-items="@(ViewBag.courseList as List<SelectListItem>)" id="courses"        class="input-field bg-red" style="color:red">
+                <select style="" asp-items="@(ViewBag.courseList as List<SelectListItem>)" id="courses"      class="input-field bg-red" style="color:red">
                     <option value="">Select Course</option>
                 </select>
             </div>
@@ -40,9 +41,9 @@
             <!-- search and clear btn -->
             <div class="button-container">
                 <!-- Search Button -->
-                <button id="handlerSearch" class="search-button">Search</button>
+                <button id="handlerSearch" class="primary-button"><i class="fa-solid fa-magnifying-glass fa-bounce"></i> Search</button>
                 <!-- Clear Button -->
-                <a asp-action="ClearSearch" asp-controller="Mcq" class="clear-button">Clear</a>
+                <a asp-action="ClearSearch" asp-controller="Mcq" class="clear-button"> <i class="fa-solid fa-xmark fa-bounce"></i> Clear</a>
             </div>
 
 
@@ -80,7 +81,7 @@
                         foreach (var mcq in Model)
                         {
                             <tr data-id="@mcq.McqId"  class="mcq-row border-b text-nowrap hover:cursor-pointer  border-gray-200 hover:bg-gray-50" onclick="toggleCheckbox(this)">
-                                <th><input type="checkbox"  class="select-mcq" value="@mcq.McqId" onchange="highlightRow(this)" /></th>
+                                <th><input type="checkbox"  class="select-mcq" value="@mcq.McqId" onclick="toggleCheckbox(this)" /></th>
                                 <td class="py-3 px-6 text-left">@index</td>
                                 <td class="py-3 px-6 text-left">@mcq.QuestionText</td>
                                  <td class="py-3 px-6 text-left"><span class="@(mcq.IsActive ? "yes-btn" : "no-btn")">@(mcq.IsActive ? "Yes": "No")</span></td>
@@ -108,7 +109,7 @@
             </table>
               
         </div>
-        <button id="handleDelete" class="clear-button m-4" style="margin-top: 20px; display: block;width: fit-content;"><i class="fa-regular fa-trash fa-bounce"></i> Delete </button>
+        <button id="handleDelete" class="clear-button m-4" style="margin-top: 20px; display: block;width: fit-content;"><i class="fa-regular fa-trash-can fa-bounce"></i> Delete </button>
     </div>
 </div> 
 
@@ -145,7 +146,6 @@
  function handleRedirect(url) {
         window.location = url;
     }
-
 
     $(document).ready(function () {
        @* course dropdown change *@
@@ -219,6 +219,7 @@
                     if (data && data.length) {
                         let html = '';
                         $.each(data, function (index, mcq) {
+                            console.log(mcq);
                             html += '<tr data-id="'+(mcq.mcqId)+'" class="border-b text-nowrap border-gray-200 hover:bg-gray-50"  onclick="toggleCheckbox(this)">';
                     html += '<th><input type="checkbox" class="select-mcq" value="' + mcq.mcqId + '" onchange="highlightRow(this)" /></th>';
                             html += '<td class="py-3 px-6 text-left">' + (index+1) + '</td>';
@@ -228,7 +229,7 @@
                                 '<a class="cursor-pointer" onclick="handleRedirect(\'/Admin/Mcq/AddOrEditMcq?mcqId=' + mcq.mcqId + '\')">' +
                                 '<img src="../../../../../assets/icons/edit.svg" height="20" width="20" />' +
                                 '</a>' +
-                                '<a class="cursor-pointer" onclick="confirmDelete(\'/Admin/Mcq/DeleteMcq/' + mcq.mcqId + '\')">' +
+                                '<a class="cursor-pointer" onclick="confirmDelete(\'/DeleteMcq/' + mcq.mcqId + '\')">' +
                                 '<img src="../../../../../assets/icons/delete.svg" height="20" width="20" />' +
                                 '</a>' +
                                 '</td>';
@@ -261,6 +262,7 @@
     // Highlight the row if the checkbox is checked
     function highlightRow(checkbox) {
         const row = checkbox.closest('tr');
+        @* console.log(checkbox.checked); *@
         if (checkbox.checked) {
             row.classList.add('row-highlight');
         } else {

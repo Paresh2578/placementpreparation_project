@@ -91,7 +91,7 @@ namespace backend.data.Repository
 
                 return new ResponseModel { StatusCode = 200, Data = mcqs, Message = "MCQs fetched successfully." };
             }
-            catch (Exception ex)
+            catch
             {
                 // Log the exception
                 return new ResponseModel { StatusCode = 500, Message = "An error occurred while fetching MCQs." };

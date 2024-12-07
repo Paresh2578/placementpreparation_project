@@ -17,9 +17,9 @@ namespace backend.Controllers
 
         #region Get all questions
         [HttpGet]
-        public async Task<IActionResult> GetAllQuestions()
+        public async Task<IActionResult> GetAllQuestions([FromQuery] Guid? courseId , [FromQuery] Guid? topicId , [FromQuery] Guid? subTopicId)
         {
-            var response = await _questionInterface.GetAllQuestions();
+            var response = await _questionInterface.GetAllQuestions(courseId:courseId , topicId : topicId , subTopicId : subTopicId);
             return StatusCode(response.StatusCode, response);
         }
         #endregion
@@ -65,6 +65,14 @@ namespace backend.Controllers
             }
             var response = await _questionInterface.DeleteQuestion(question.Data);
             return StatusCode(response.StatusCode, response);
+        }
+        #endregion
+    
+        #region Delete Multiple Mcq
+        [HttpDelete("DeleteMultiple")]
+        public async Task<IActionResult> DeleteMultipleMcq([FromBody] List<Guid> questionIds){
+            var response = await _questionInterface.DeleteMultipleQuestion(questionIds);
+            return StatusCode(response.StatusCode , response);
         }
         #endregion
     }

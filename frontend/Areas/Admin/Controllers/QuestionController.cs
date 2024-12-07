@@ -32,6 +32,9 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                 }
                 List<QuestionModel>  questionList =  JsonConvert.DeserializeObject<List<QuestionModel>>(response.Data!.ToString());
 
+                 // set search dropdown value ( course , topic , subTopic)
+                await  setCourseTopicSubTopicDropDownsValues();
+
             return View(questionList);
         }
         #endregion
@@ -124,6 +127,20 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
         #endregion
 
+        #region  Delete Multiple Question
+        public async Task<IActionResult> DeleteMultipleQuestion(string  questionIds)
+        {
+            ApiResponseModel response = await _apiClient.DeleteMultipleAsync($"{_apiBaseUrl}/DeleteMultiple",questionIds.Split(","));
+            if(response.StatusCode == 200)
+            {
+                TempData["SuccessMessage"] = response.Message;
+            }else {
+                TempData["ErrorMessage"] = response.Message;
+            }
+            return RedirectToAction("ListQuestion");
+        }
+        #endregion
+
         #region set Topic and Sub Topic DropDown Value
         [NonAction]
         public async Task setDropDownsValue()
@@ -132,7 +149,32 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             ViewBag.DifficultyLevelList =await  _allDropDown.DifficultyLevel();
         }
         #endregion
-   
+        
+         #region set Course , Topic and Sub Topic DropDown Value
+        [NonAction]
+        public async Task setCourseTopicSubTopicDropDownsValues(){
+            ViewBag.CourseList = await _allDropDown.Course();
+            ViewBag.TopicList = await _allDropDown.Topic();
+            ViewBag.SubTopicList = await _allDropDown.SubTopic();
+        }
+        #endregion
+
+          #region Get Questions By courseId , topicId and subTopicId
+        [HttpGet]
+        [Route("/Question/GetQuestions")]
+        public async Task<JsonResult> GetMcqsByCourseIdTopicIdSubTopicId([FromQuery] Guid? courseId ,[FromQuery] Guid? topicId ,[FromQuery] Guid? subTopicId)
+        {
+            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}?courseId={courseId}&topicId={topicId}&subTopicId={subTopicId}");
+            if(response.StatusCode != 200)
+            {
+                TempData["ErrorMessage"] = response.Message;
+                return new JsonResult(null);
+            }
+            List<QuestionModel> questionList = JsonConvert.DeserializeObject<List<QuestionModel>>(response.Data!.ToString());
+            return new JsonResult(questionList);
+        }
+        #endregion
+
         #region Export Question to Excel
         public async Task<IActionResult> ExportToExcelQuestion()
         {
@@ -157,6 +199,13 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                 TempData["ErrorMessage"] = ex.Message;
                 return RedirectToAction("ListQuestion");
             }
+        }
+        #endregion
+   
+        #region  clear search
+        public IActionResult ClearSearch()
+        {
+            return RedirectToAction("ListQuestion");
         }
         #endregion
     }
