@@ -2533,7 +2533,8 @@ section,
 }
 
 .course-read-body{
-  max-width: 56rem ;
+  max-width: 56rem;
+  width: 100%;
   /* margin-left: auto; */
     /* margin-right: auto; */
     padding-top: 1rem /* 16px */;
@@ -2588,7 +2589,24 @@ section,
   scrollbar-color: #aab7cf transparent;
   box-shadow: 0px 0px 20px rgba(1, 41, 112, 0.1);
   background-color: #fff;
-  border-radius: 0px 20px 0px 0px;
+  border-radius: 0px 20px 20px 0px;
+  display: block;
+  transition: all 0.3s;
+}
+
+.sidebar-toggel{
+  /* min-width: 0px; */
+  /* width: 0px; */
+  display: none;
+}
+
+@media (max-width:800px){
+  .sidebar{
+    display: none;
+  }
+  .sidebar-toggel{
+    display: block;
+  }
 }
 
 @media (max-width: 1199px) {
@@ -2733,4 +2751,17 @@ section,
 
 .sidebar-nav .nav-content a.active i {
   background-color: #4154f1;
+}
+
+.menu-icon{
+}
+
+.menu-icon:hover{
+  cursor: pointer;
+}
+
+@media (max-width: 800px) {
+  .menu-icon{
+    position: fixed;
+  }
 }
