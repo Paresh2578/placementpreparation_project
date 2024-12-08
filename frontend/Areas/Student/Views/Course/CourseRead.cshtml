@@ -140,6 +140,8 @@
     <section id="features" class="features section" style="width: 1000000px;padding-top: 40px;">
       <div class="container">
 
+     
+
         <div class="d-flex justify-content-center">
 
           <ul class="nav nav-tabs" data-aos="fade-up" data-aos-delay="100">
@@ -182,15 +184,72 @@
 
           <div class="tab-pane course-read-body container fade" id="features-tab-2">
             <div class="row">
-              <h1>Mcqs</h1>
+              
+              <div class="mcq">
+                <h4>Q1 . What is JavaScript ?</h4>
+                <div class="mcq-option-section" id="mcq-option-section">
+                    <div class="mcq-option" value="true" onclick="clickMcqOption(this)">A . To facilitate the creation of static HTML websites</div>
+                    <div class="mcq-option" value="false" onclick="clickMcqOption(this)">B . To facilitate the creation of static HTML websites</div>
+                    <div class=" mcq-option" value="false" onclick="clickMcqOption(this)">C . To facilitate the creation of static HTML websites</div>
+                    <div class="mcq-option" value="false" onclick="clickMcqOption(this)">D . To facilitate the creation of static HTML websites</div>
+                </div>
+
+                <!-- answer -->
+                <div class="mcq-answer">
+                  <button class="ans-toggel-btn" onclick="togelShowAnswer(this)">Show Answer</button>
+                  <div class="mcq-ans-discription d-none">
+                    <p>Answer : To  facilitate the creation of static HTML websites</p>
+                    <span class="fw-bold">Explanation</span>
+                    <div class="p-2 " style="border-style: dotted; border-color: gray;">
+                      ASP.NET is a web application framework developed by Microsoft that allows programmers to build dynamic websites, web applications, and web services. It uses .NET programming languages like C# and VB.NET.
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div><!-- End tab content item -->
 
           <div class="tab-pane fade course-read-body container" id="features-tab-3">
-            <div class="row">
-               <h1>Question</h1>
+            <div class="row gap-5">
+               <div>
+                  <h4>Q1. What is JavaScript ?</h4>
+                  <span class="fw-bold">Answer :</span>
+                  <div>
+                    <p>JavaScript is a programming language that adds interactivity to your website. This happens in games, in the behavior of responses when buttons are pressed or with data entry on forms; with dynamic styling; with animation, etc.</p>
+                  </div>
+               </div>
+
+               <div>
+                  <h4>Q2. What is JavaScript ?</h4>
+                  <span class="fw-bold">Answer :</span>
+                  <div>
+                    <p>JavaScript is a programming language that adds interactivity to your website. This happens in games, in the behavior of responses when buttons are pressed or with data entry on forms; with dynamic styling; with animation, etc.</p>
+                  </div>
+               </div>
+
+               <div>
+                  <h4>Q3. What is JavaScript ?</h4>
+                  <span class="fw-bold">Answer :</span>
+                  <div>
+                    <p>JavaScript is a programming language that adds interactivity to your website. This happens in games, in the behavior of responses when buttons are pressed or with data entry on forms; with dynamic styling; with animation, etc.</p>
+                  </div>
+               </div>
+
+               <div>
+                  <h4>Q4. What is JavaScript ?</h4>
+                  <span class="fw-bold">Answer :</span>
+                  <div>
+                    <p>JavaScript is a programming language that adds interactivity to your website. This happens in games, in the behavior of responses when buttons are pressed or with data entry on forms; with dynamic styling; with animation, etc.</p>
+                  </div>
+               </div>
             </div>
           </div><!-- End tab content item -->
+
+             @* next ans prev button *@
+        <div class="d-flex justify-content-between">
+          <button class="btn btn-primary"><i class="fa-solid fa-chevron-left"></i> Previous</button>
+          <button class="btn btn-primary"> Next <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
 
         </div>
 
@@ -212,6 +271,7 @@
 
 
 @section Scripts{
+  <!-- side bar -->
   <script>
     document.getElementById('toggel-sidebar').addEventListener('click', function(){
     
@@ -241,5 +301,46 @@
       // if apply toggel-sidebar-sidebar position Technology remove else apply
       
     });
+  </script>
+
+  <!-- mcq answer -->
+  <script>
+    const mcqOptionSection = document.getElementById('mcq-option-section');
+
+    function togelShowAnswer(e){
+      const answer = e.nextElementSibling;
+      answer.classList.toggle('show');
+      if(answer.classList.contains('show')){
+        e.innerHTML = "Hide Answer";
+        answer.classList.remove('d-none');
+      }else{
+        e.innerHTML = "Show Answer";
+        answer.classList.add('d-none');
+      }
+      for(var children of mcqOptionSection.children){
+        if(children.getAttribute('value') == "true"){
+          children.classList.add('true');
+          }else{
+          children.classList.remove('false');
+          children.classList.remove('true');
+          }
+      }
+    }
+
+    @* <!-- click mcq options --> *@
+    function clickMcqOption(e){
+      for(var children of mcqOptionSection.children){
+        children.classList.remove('true');
+        children.classList.remove('false');
+      }
+
+      if(e.getAttribute('value') == "true"){
+        e.classList.add('true');
+      }else{
+        e.classList.add('false');
+      }
+
+
+    }
   </script>
 }  

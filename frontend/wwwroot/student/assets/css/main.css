@@ -64,6 +64,7 @@ body {
   color: var(--default-color);
   background-color: var(--background-color);
   font-family: var(--default-font);
+  transition: all 0.5s ease;
 }
 
 .test{
@@ -2764,4 +2765,114 @@ section,
   .menu-icon{
     position: fixed;
   }
+}
+
+
+
+
+
+
+/*--------------------------------------------------------------
+   # Mcq Section
+   --------------------------------------------------------------*/
+
+.mcq-option-section{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+
+.mcq-option-section  .mcq-option{
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  background-color: #f3f9ff;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.mcq-option-section  .mcq-option:hover{
+  background-color: #e6f0ff;
+}
+
+.mcq-option-section  .mcq-option.true{
+  background-color: #0acf83;
+  color: #ffffff;
+}
+
+.mcq-option-section  .mcq-option.false{
+  background-color: #ff4d4d;
+  color: #fbf9f9;
+}
+
+.mcq .mcq-answer{
+  margin-top: 10px;
+}
+
+.mcq .ans-toggel-btn{
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+  color: var(--contrast-color);
+  background: var(--accent-color);
+  font-size: 14px;
+  padding: 8px 20px;
+  border-radius: 5px;
+}
+
+.mcq .ans-toggel-btn:hover{
+  background: #005bb5;
+}
+
+.mcq .mcq-answer .mcq-ans-discription{
+  margin-top: 10px;
+}
+
+.mcq .mcq-answer .mcq-ans-discription p{
+  color: #0acf83;
+  font-weight: bold;
+}
+
+/* ----------------------
+More Button
+-----------------*/
+.more-button {
+	position:relative;
+	display:inline-block;
+	padding:10px 30px;
+	background-color: var(--accent-color);
+	border: 2px solid transparent;
+	border-radius: 40px;
+	color: #FFF;
+	-webkit-transition:0.2s all;
+	transition:0.2s all;
+}
+
+.more-button:hover , .more-button:focus {
+	background-color:#fff;
+	border: 2px solid var(--accent-color);
+	color:var(--accent-color);
+}
+
+.more-button.icon-button:hover , .more-button.icon-button:focus {
+	padding-right: 45px;
+}
+
+.more-button.icon-button:after {
+	content:"\f178";
+	font-family:FontAwesome;
+	position:absolute;
+	width: 30px;
+	right: 15px;
+	text-align:center;
+	opacity:0;
+	-webkit-transition:0.2s all;
+	transition:0.2s all;
+}
+
+.more-button.icon-button:hover:after , .more-button.icon-button:focus:after {
+	opacity:1;
 }
