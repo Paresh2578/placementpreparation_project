@@ -1,0 +1,88 @@
+﻿
+<!-- Page Title -->
+<div class="page-title light-background">
+    <div class="container">
+        <h1>Java</h1>
+        <h4>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloremque et nam similique cupiditate nostrum. Ipsa rem nam ipsum laudantium voluptas, eius quibusdam asperiores iure, at ex deleniti. Non, modi possimus.</h4>
+        <nav class="breadcrumbs">
+            <ol>
+                <li><a asp-controller="Home" asp-action="Home">Home</a></li>
+                <li><a asp-controller="Course" asp-action="ListAllCourse">Courses</a></li>
+                <li class="current">Java</li>
+            </ol>
+        </nav>
+    </div>
+</div><!-- End Page Title -->
+
+
+<!-- Topic   Section -->
+<section id="topic-section " class=" container courses-section section">
+    <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>All Topics</h2>
+
+    <div class="search-bar-container">
+        <!-- Input field for search -->
+        <input type="text" class="search-input" placeholder="Search Topics...">
+
+        <!-- Dropdown filters -->
+        <div class="filter-container">
+            <select class="filter-dropdown">
+                <option>All Branches</option>
+                <option>Science</option>
+                <option>Arts</option>
+                <option>Commerce</option>
+            </select>
+            <select class="filter-dropdown">
+                <option>All Course Types</option>
+                <option>Online</option>
+                <option>Offline</option>
+            </select>
+            <select class="filter-dropdown">
+                <option>All Difficulty Levels</option>
+                <option>Beginner</option>
+                <option>Intermediate</option>
+                <option>Advanced</option>
+            </select>
+        </div>
+
+        <!-- Search Button -->
+        <button class="search-button">Search</button>
+    </div>
+
+    <!-- List  Subtopic -->
+       <div class="table-container rounded-4 shadow">
+            <table class="topics-table ">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Topic Name</th>
+                        <th>Difficulty Level</th>
+                        <th>Branch</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr onclick='window.location.assign("CourseRead")'>
+                        <td>1</td>
+                        <td>Introduction to Java</td>
+                        <td>Beginner</td>
+                        <td>Science</td>
+                    </tr>
+                    <tr onclick="alert('click')">
+                        <td>2</td>
+                        <td>Object-Oriented Programming</td>
+                        <td>Intermediate</td>
+                        <td>Arts</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Advanced Java Concepts</td>
+                        <td>Advanced</td>
+                        <td>Commerce</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      </div><!-- End Section Title -->
+
+</section>
