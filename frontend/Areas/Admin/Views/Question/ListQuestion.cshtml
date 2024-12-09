@@ -87,7 +87,7 @@
                         int index = 1;
                         foreach (var question in Model)
                         {
-                            <tr data-id="@question.QuestionId" class="question-row border-b text-nowrap hover:cursor-pointer border-gray-200 hover:bg-gray-50" onclick="toggleCheckbox(this)">
+                            <tr data-id="@question.QuestionId" class="question-row border-b text-nowrap hover:cursor-pointer border-gray-200 " onclick="toggleCheckbox(this)">
                                 <th><input type="checkbox"  class="select-question" value="@question.QuestionId" onclick="toggleCheckbox(this)" /></th>
                                 <td class="py-3 px-6 text-left">@index</td>
                                 <td class="py-3 px-6 text-left">@question.Question</td>
@@ -110,7 +110,7 @@
                         // If no questions are found
                         if (Model.Count == 0)
                         {
-                            <tr class="border-b text-nowrap border-gray-200 hover:bg-gray-50 no-question-found">
+                            <tr class="border-b text-nowrap border-gray-200  no-question-found">
                                 <td class="py-3 px-6 text-center" colspan="5">No Question Found</td>
                             </tr>
                         }
@@ -144,7 +144,7 @@
 
                 // If no rows are visible, add the "No Question Found" row
                 if (visibleRows === 0) {
-                    $("#question").append('<tr class="border-b text-nowrap border-gray-200 hover:bg-gray-50 no-question-found"><td class="py-3 px-6 text-center" colspan="4">No Question  Found</td></tr>');
+                    $("#question").append('<tr class="border-b text-nowrap border-gray-200  no-question-found"><td class="py-3 px-6 text-center" colspan="4">No Question  Found</td></tr>');
                 }
             });
         });
@@ -229,7 +229,7 @@
                     if (data && data.length) {
                         let html = '';
                         $.each(data, function (index, question) {
-                            html += '<tr data-id="'+(question.questionId)+'" class="border-b text-nowrap border-gray-200 hover:bg-gray-50"  onclick="toggleCheckbox(this)">';
+                            html += '<tr data-id="'+(question.questionId)+'" class="border-b text-nowrap border-gray-200 "  onclick="toggleCheckbox(this)">';
                     html += '<th><input type="checkbox" class="select-question" value="' + question.questionId + '" onclick="toggleCheckbox(this)"  /></th>';
                             html += '<td class="py-3 px-6 text-left">' + (index+1) + '</td>';
                             html += '<td class="py-3 px-6 text-left">' + question.question + '</td>';

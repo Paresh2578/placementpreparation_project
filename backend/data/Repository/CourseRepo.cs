@@ -36,6 +36,22 @@ namespace backend.data.Repository
             }
         }
 
+        public async Task<ResponseModel> DeleteMultipleCourse(List<Guid> courseIds){
+        try{
+           // get all course to deleted
+            var coursesToDelete = await _context.Courses.Where(course => courseIds.Contains(course.CourseId)).ToListAsync();
+
+            _context.Courses.RemoveRange(coursesToDelete);
+            await _context.SaveChangesAsync();
+            
+            return new ResponseModel{StatusCode=200 , Message="Successfully Deleted all Courses"};
+
+        }catch(Exception ex){
+            return new ResponseModel {StatusCode=500,Message=ex.Message};
+        }
+       }
+
+       
        public async Task<ResponseModel> GetAllCourses()
         {
             try{

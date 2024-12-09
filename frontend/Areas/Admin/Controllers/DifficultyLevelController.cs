@@ -99,6 +99,20 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             return RedirectToAction("List");
         }
         #endregion
+         
+          #region  Delete Multiple  DifficultyLevel
+        public async Task<IActionResult> DeleteMultipleDifficultyLevel(string  courseTypeIds)
+        {
+            ApiResponseModel response = await _apiClient.DeleteMultipleAsync($"{_apiBaseUrl}/DeleteMultiple",courseTypeIds.Split(","));
+            if(response.StatusCode == 200)
+            {
+                TempData["SuccessMessage"] = response.Message;
+            }else {
+                TempData["ErrorMessage"] = response.Message;
+            }
+            return RedirectToAction("List");
+        }
+        #endregion
 
          #region Export DifficultyLevel to Excel
         public async Task<IActionResult> ExportToExcelDifficultyLevel()

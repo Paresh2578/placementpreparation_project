@@ -5,8 +5,8 @@
     <div class="table-hader">
         <h1 class="table-responsive-title">List of Sub Topic</h1>
         <div class="flex gap-4" style="gap:0.5rem">
-            <a asp-action="ExportToExcelSubTopic" asp-asp-controller="SubTopic" class="export-excel-btn">Export in Excel</a>
-            <partial name="_My_Button" model='new Placement_Preparation.Models.ButtonModel { Title = "Add Sub Topic", Url="/Admin/SubTopic/AddOrEditSubTopic" }' />
+            <a asp-action="ExportToExcelSubTopic" asp-asp-controller="SubTopic" class="export-excel-btn"> <i class="fa-solid fa-file-export fa-bounce"></i> Export in Excel</a>
+            <a asp-action="AddOrEditSubTopic" asp-controller="SubTopic" class="primary-button"><i class="fa-solid fa-plus fa-bounce"></i> Add Question</a>
         </div>
     </div>
 
@@ -29,6 +29,7 @@
             <table class="min-w-full  bg-white border border-gray-200">
                 <thead>
                     <tr class="bg-gray-100 text-nowrap text-gray-600  uppercase text-sm leading-normal">
+                        <th><input type="checkbox" id="selectAll" /></th>
                         <th class="py-3 px-6 text-left">#</th>
                         <th class="py-3 px-6 text-left">Sub Topic Name</th>
                         <th class="py-3 px-6 text-left">Topic Name</th>
@@ -40,7 +41,8 @@
                         int index=1;
                         foreach (var subTopic in Model)
                         {
-                            <tr class="border-b text-nowrap  border-gray-200 hover:bg-gray-50">
+                            <tr class="border-b text-nowrap  border-gray-200 "  onclick="toggleCheckbox(this)">
+                                <th><input type="checkbox"  class="select-row" value="@subTopic.SubTopicId" onclick="toggleCheckbox(this)" /></th>
                                 <td class="py-3 px-6 text-left">@index</td>
                                 <td class="py-3 px-6 text-left">@subTopic.SubTopicName</td>
                                 <td class="py-3 px-6 text-left">@subTopic.Topic!.TopicName</td>
@@ -52,15 +54,24 @@
                             </tr>
                             index++;
                         }
+
+                        // If no sub Topic found 
+                        if(Model.Count == 0){
+                            <tr class="border-b text-nowrap border-gray-200  no-subTopic-found">
+                                <td class="py-3 px-6 text-center" colspan="5">No Sub topic  Found</td>
+                            </tr>
+                        }
                     }
                 </tbody>
             </table>
         </div>
+        <button id="handleDelete" class="clear-button m-4" style="margin-top: 20px; display: block;width: fit-content;"><i class="fa-regular fa-trash-can fa-bounce"></i> Delete </button>
     </div>
 </div> 
 
 
 @section Scripts{
+    <!-- Input Search Bar -->
    <script>
        $(document).ready(function () {
            $('#subTopicSearch').on("keyup", function () {
@@ -79,9 +90,90 @@
 
                // If no rows are visible, add the "No sub topic Found" row
                if (visibleRows === 0) {
-                   $("#subTopics").append('<tr class="border-b text-nowrap border-gray-200 hover:bg-gray-50 no-sub-topic-found"><td class="py-3 px-6 text-center" colspan="4">No sub topic  Found</td></tr>');
+                   $("#subTopics").append('<tr class="border-b text-nowrap border-gray-200  no-sub-topic-found"><td class="py-3 px-6 text-center" colspan="5">No sub topic  Found</td></tr>');
                }
            });
        });
    </script>
+
+   <!-- Delete All checkbox Box -->
+<script>
+      function toggleCheckbox(row) {
+        const checkbox = row.querySelector('.select-row');
+            checkbox.checked = !checkbox.checked; // Toggle the checkbox state
+             highlightRow(checkbox); // Call highlightRow explicitly
+             updateSelectAllState(); // Update the select all checkbox state
+        }
+        
+
+    // Highlight the row if the checkbox is checked
+    function highlightRow(checkbox) {
+        const row = checkbox.closest('tr');
+        console.log(checkbox.checked);
+        if (checkbox.checked) {
+            row.classList.add('row-highlight');
+        } else {
+            row.classList.remove('row-highlight');
+        }
+    }
+
+   // select All checkbox
+    document.getElementById('selectAll').addEventListener('change', function () {
+        const checkboxes = document.querySelectorAll('.select-row');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+            highlightRow(checkbox);
+        });
+    });
+    function updateSelectAllState() {
+    const checkboxes = document.querySelectorAll('.select-row');
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+    const noneChecked = Array.from(checkboxes).every(checkbox => !checkbox.checked);
+
+    if (allChecked) {
+        selectAllCheckbox.checked = true;
+        selectAllCheckbox.indeterminate = false; // Not in an indeterminate state
+    } else if (noneChecked) {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = false; // Not in an indeterminate state
+    } else {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = true; // Set indeterminate state
+    }
+}
+
+    // Prevent the row click from triggering when clicking on specific elements like the edit/delete buttons
+    document.querySelectorAll('.mcq-row').forEach(row => {
+        row.addEventListener('click', function (e) {
+            if (e.target.tagName === 'A' || e.target.tagName === 'IMG') {
+                e.stopPropagation();
+            }
+        });
+    });
+
+    // Delete button click
+    document.getElementById('handleDelete').addEventListener('click', function () {
+        const selectedIds = Array.from(document.querySelectorAll('.select-row:checked')).map(checkbox => checkbox.value);
+        if (selectedIds.length === 0) {
+            alert('Please select at least one Sub Topic to delete');
+            return;
+        }
+
+         Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        // If the user confirms, redirect to the delete URL
+        if (result.isConfirmed) {
+            window.location.href = '/Admin/SubTopic/DeleteMultipleSubTopic?subTopicIds=' + selectedIds.join(',');
+        }
+    });
+    });
+</script>
 }

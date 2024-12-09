@@ -39,7 +39,7 @@
                         int index = 1;
                         foreach(var branch in Model)
                         {
-                            <tr class="border-b text-nowrap  border-gray-200 hover:bg-gray-50">
+                            <tr class="border-b text-nowrap  border-gray-200 ">
                                 <td class="py-3 px-6 text-left">@index</td>
                                 <td class="py-3 px-6 text-left">@branch.BranchName</td>
                                 <td class="py-3 px-6 text-left flex gap-x-4">
@@ -74,7 +74,7 @@
 
                // If no rows are visible, add the "No Branch Found" row
                if (visibleRows === 0) {
-                   $("#branchs").append('<tr class="border-b text-nowrap border-gray-200 hover:bg-gray-50 no-branch-found"><td class="py-3 px-6 text-center" colspan="3">No Branch Found</td></tr>');
+                   $("#branchs").append('<tr class="border-b text-nowrap border-gray-200  no-branch-found"><td class="py-3 px-6 text-center" colspan="3">No Branch Found</td></tr>');
                }
            });
        });

@@ -35,6 +35,21 @@ namespace backend.data.Repository
             }   
         }
 
+        public async Task<ResponseModel> DeleteMultipleSubTopic(List<Guid> subTopicIds){
+        try{
+           // get all sub topic to deleted
+            var subTopicsToDelete = await _context.SubTopics.Where(sub => subTopicIds.Contains(sub.SubTopicId)).ToListAsync();
+
+            _context.SubTopics.RemoveRange(subTopicsToDelete);
+            await _context.SaveChangesAsync();
+            
+            return new ResponseModel{StatusCode=200 , Message="Successfully Deleted all Sub Topics"};
+
+        }catch(Exception ex){
+            return new ResponseModel {StatusCode=500,Message=ex.Message};
+        }
+       }
+
        public async Task<ResponseModel> GetAllSubTopics()
         {
             try{

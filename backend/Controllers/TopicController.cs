@@ -87,6 +87,14 @@ namespace backend.Controllers
             return StatusCode(response.StatusCode,response);
         }
         #endregion
+
+        #region Delete Multiple Sub Topic
+        [HttpDelete("DeleteMultiple")]
+        public async Task<IActionResult> DeleteMultipleMcq([FromBody] List<Guid> topicIds){
+            var response = await _topicInterface.DeleteMultipleTopic(topicIds);
+            return StatusCode(response.StatusCode , response);
+        }
+        #endregion
         
 
     }

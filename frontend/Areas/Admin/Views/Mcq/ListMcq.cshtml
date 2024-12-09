@@ -80,7 +80,7 @@
                         int index = 1;
                         foreach (var mcq in Model)
                         {
-                            <tr data-id="@mcq.McqId"  class="mcq-row border-b text-nowrap hover:cursor-pointer  border-gray-200 hover:bg-gray-50" onclick="toggleCheckbox(this)">
+                            <tr data-id="@mcq.McqId"  class="mcq-row border-b text-nowrap hover:cursor-pointer  border-gray-200 " onclick="toggleCheckbox(this)">
                                 <th><input type="checkbox"  class="select-mcq" value="@mcq.McqId" onclick="toggleCheckbox(this)" /></th>
                                 <td class="py-3 px-6 text-left">@index</td>
                                 <td class="py-3 px-6 text-left">@mcq.QuestionText</td>
@@ -98,7 +98,7 @@
                         // If no mcq found
                         if (Model.Count == 0)
                         {
-                            <tr class="border-b text-nowrap border-gray-200 hover:bg-gray-50 no-mcq-found">
+                            <tr class="border-b text-nowrap border-gray-200  no-mcq-found">
                                 <td class="py-3 px-6 text-center" colspan="5">No Mcq  Found</td>
                             </tr>
                         }
@@ -109,7 +109,7 @@
             </table>
               
         </div>
-        <button id="handleDelete" class="clear-button m-4" style="margin-top: 20px; display: block;width: fit-content;"><i class="fa-regular fa-trash-can fa-bounce"></i> Delete </button>
+        <button id="handleDelete" class="mcq-row clear-button m-4" style="margin-top: 20px; display: block;width: fit-content;"><i class="fa-regular fa-trash-can fa-bounce"></i> Delete </button>
     </div>
 </div> 
 
@@ -134,7 +134,7 @@
 
                // If no rows are visible, add the "No mcq Found" row
                if (visibleRows === 0) {
-                   $("#mcqs").append('<tr class="border-b text-nowrap border-gray-200 hover:bg-gray-50 no-mcq-found"><td class="py-3 px-6 text-center" colspan="5">No Mcq  Found</td></tr>');
+                   $("#mcqs").append('<tr class="mcq-row border-b text-nowrap border-gray-200  no-mcq-found"><td class="py-3 px-6 text-center" colspan="5">No Mcq  Found</td></tr>');
                }
            });
        });
@@ -220,7 +220,7 @@
                         let html = '';
                         $.each(data, function (index, mcq) {
                             console.log(mcq);
-                            html += '<tr data-id="'+(mcq.mcqId)+'" class="border-b text-nowrap border-gray-200 hover:bg-gray-50"  onclick="toggleCheckbox(this)">';
+                            html += '<tr data-id="'+(mcq.mcqId)+'" class="border-b mcq-row text-nowrap border-gray-200 "  onclick="toggleCheckbox(this)">';
                     html += '<th><input type="checkbox" class="select-mcq" value="' + mcq.mcqId + '" onchange="highlightRow(this)" /></th>';
                             html += '<td class="py-3 px-6 text-left">' + (index+1) + '</td>';
                             html += '<td class="py-3 px-6 text-left">' + mcq.questionText + '</td>';

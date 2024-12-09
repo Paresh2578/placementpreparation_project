@@ -2876,3 +2876,104 @@ More Button
 .more-button.icon-button:hover:after , .more-button.icon-button:focus:after {
 	opacity:1;
 }
+
+
+/* ----------------------
+Sign Form
+-----------------*/
+/* External CSS equivalent of the Tailwind classes */
+
+/* Container styling */
+.sign-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 0.75rem;
+  background: linear-gradient(90deg, #3a77d9, #a785c6);
+  /* background: #f3f9ff; */
+}
+
+/* Card styling */
+.sign-card {
+  width: 100%;
+  max-width: 24rem; /* Matches max-w-md */
+  background-color: white;
+  border-radius: 0.5rem; /* Rounded-lg */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06); /* Shadow-md */
+  padding: 1.5rem; /* p-6 */
+}
+
+/* Title */
+.sign-card-title {
+  font-size: 1.875rem; /* text-3xl */
+  text-align: center;
+  font-weight: 600; /* font-semibold */
+}
+
+/* Horizontal rule */
+.sign-card-divider {
+  margin-top: 0.75rem;
+  margin-bottom: 1rem; /* mt-3 mb-4 */
+  border: none;
+  border-top: 2px solid #8f95a2; /* Default hr styling */
+}
+
+/* Form styling */
+.sign-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Label styling */
+.sign-label {
+  color: #374151; /* text-gray-700 */
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Input styling */
+.input {
+  width: 100%;
+  background-color: #f3f4f6; /* bg-gray-100 */
+  color: #1f2937; /* text-gray-900 */
+  border: none;
+  border-radius: 0.375rem; /* rounded-md */
+  padding: 0.5rem; /* p-2 */
+  transition: all 0.15s ease-in-out; /* duration-150 */
+}
+
+.input:hover{
+  background-color: #e5e7eb; /* hover:bg-gray-200 */
+  box-shadow:0 0 0 1px #3b82f6; /* hover:ring-1 hover:ring-blue-500 */
+}
+
+.input:focus {
+  background-color: #e5e7eb; /* focus:bg-gray-200 */
+  outline: none;
+  box-shadow: 0 0 0 1.5px #3b82f6; /* focus:ring-1 focus:ring-blue-500 */
+}
+
+/* Validation error message */
+.validation-error {
+  color: #dc2626; /* text-red-600 */
+}
+
+/* Button styling */
+.sign-button {
+  background: linear-gradient(to right, #6366f1, #3b82f6); /* bg-gradient-to-r from-indigo-500 to-blue-500 */
+  color: white;
+  border: none;
+  font-weight: bold;
+  padding: 0.5rem 1rem; /* py-2 px-4 */
+  border-radius: 0.375rem; /* rounded-md */
+  margin-top: 1rem; /* mt-4 */
+  transition: all 0.15s ease-in-out; /* duration-150 */
+}
+
+.sign-button:hover {
+  background: linear-gradient(to right, #4f46e5, #2563eb); /* hover:bg-indigo-600 hover:to-blue-600 */
+}
+

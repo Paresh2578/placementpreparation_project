@@ -125,6 +125,20 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             return RedirectToAction("ListSubTopic");
         }
         #endregion
+         
+           #region  Delete Multiple Sub Topics
+        public async Task<IActionResult> DeleteMultipleSubTopic(string  subTopicIds)
+        {
+            ApiResponseModel response = await _apiClient.DeleteMultipleAsync($"{_apiBaseUrl}/DeleteMultiple",subTopicIds.Split(","));
+            if(response.StatusCode == 200)
+            {
+                TempData["SuccessMessage"] = response.Message;
+            }else {
+                TempData["ErrorMessage"] = response.Message;
+            }
+            return RedirectToAction("ListSubTopic");
+        }
+        #endregion
 
         #region Get Sub Topics By Topic Id 
         [HttpGet]

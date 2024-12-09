@@ -112,6 +112,21 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             return RedirectToAction("ListTopic");
         }
         #endregion
+        
+           
+        #region  Delete Multiple  Topics
+        public async Task<IActionResult> DeleteMultipleTopic(string  topicIds)
+        {
+            ApiResponseModel response = await _apiClient.DeleteMultipleAsync($"{_apiBaseUrl}/DeleteMultiple",topicIds.Split(","));
+            if(response.StatusCode == 200)
+            {
+                TempData["SuccessMessage"] = response.Message;
+            }else {
+                TempData["ErrorMessage"] = response.Message;
+            }
+            return RedirectToAction("ListTopic");
+        }
+        #endregion
 
         #region set Course  and Difficulty Level DropDown Value
         [NonAction]

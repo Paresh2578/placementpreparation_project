@@ -99,6 +99,21 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             return RedirectToAction("ListCourseType");
         }
         #endregion
+        
+
+        #region  Delete Multiple  Courses Type
+        public async Task<IActionResult> DeleteMultipleCourseType(string  courseTypeIds)
+        {
+            ApiResponseModel response = await _apiClient.DeleteMultipleAsync($"{_apiBaseUrl}/DeleteMultiple",courseTypeIds.Split(","));
+            if(response.StatusCode == 200)
+            {
+                TempData["SuccessMessage"] = response.Message;
+            }else {
+                TempData["ErrorMessage"] = response.Message;
+            }
+            return RedirectToAction("ListCourseType");
+        }
+        #endregion
 
          #region Export CourseType to Excel
         public async Task<IActionResult> ExportToExcelCourseType()

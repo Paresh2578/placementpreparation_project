@@ -11,5 +11,7 @@ namespace backend.data.Interface
         public Task<ResponseModel> DeleteCourse(CourseModel course);
 
         public Task<ResponseModel> CourseDropdown();
+
+        public Task<ResponseModel> DeleteMultipleCourse(List<Guid> courseIds);  
     }
 }

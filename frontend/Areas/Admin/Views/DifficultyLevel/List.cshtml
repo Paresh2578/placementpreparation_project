@@ -6,8 +6,8 @@
     <div class="table-hader">
         <h1 class="table-responsive-title">List of Difficulty Level</h1>
         <div  class="flex gap-4" style="gap:0.5rem">
-            <a asp-action="ExportToExcelDifficultyLevel" asp-asp-controller="DifficultyLevel" class="export-excel-btn">Export in Excel</a>
-            <partial name="_My_Button" model='new Placement_Preparation.Models.ButtonModel { Title = "Add DifficultyLevel", Url="/Admin/DifficultyLevel/AddOrEditDifficultyLevel" }' />
+            <a asp-action="ExportToExcelDifficultyLevel" asp-asp-controller="DifficultyLevel" class="export-excel-btn"><i class="fa-solid fa-file-export fa-bounce"></i> Export in Excel</a>
+            <a asp-action="AddOrEditDifficultyLevel" asp-controller="DifficultyLevel" class="primary-button"><i class="fa-solid fa-plus fa-bounce"></i> Add DifficultyLevel</a>
         </div>
     </div>
 
@@ -29,6 +29,7 @@
             <table class="min-w-full  bg-white border border-gray-200">
                 <thead>
                     <tr class="bg-gray-100 text-nowrap text-gray-600  uppercase text-sm leading-normal">
+                        <th><input type="checkbox" id="selectAll" /></th>
                         <th class="py-3 px-6 text-left">#</th>
                         <th class="py-3 px-6 text-left">Difficulty Level Name</th>
                         <th class="py-3 px-6 text-left">Action</th>
@@ -39,7 +40,8 @@
                         int index = 1;
                         foreach (var difficultyLevel in Model)
                         {
-                            <tr class="border-b text-nowrap  border-gray-200 hover:bg-gray-50">
+                            <tr class="border-b text-nowrap  border-gray-200 " onclick="toggleCheckbox(this)" >
+                                <th><input type="checkbox"  class="select-row" value="@difficultyLevel.DifficultyLevelId" onclick="toggleCheckbox(this)" /></th>
                                 <td class="py-3 px-6 text-left">@index</td>
                                 <td class="py-3 px-6 text-left">@difficultyLevel.DifficultyLevelName</td>
                                 <td class="py-3 px-6 text-left flex gap-x-4">
@@ -51,16 +53,25 @@
                             </tr>
                             index++;
                         }
+
+                         // If no Difficulty Level found 
+                        if(Model.Count == 0){
+                            <tr class="border-b text-nowrap border-gray-200  no-course-found">
+                                <td class="py-3 px-6 text-center" colspan="5">No  Difficulty Level  Found</td>
+                            </tr>
+                        }
                     }
                 </tbody>
             </table>
         </div>
+        <button id="handleDelete" class="clear-button m-4" style="margin-top: 20px; display: block;width: fit-content;"><i class="fa-regular fa-trash-can fa-bounce"></i> Delete </button>
     </div>
 </div> 
 
 
 
 @section Scripts{
+    <!-- Input Search Bar -->
    <script>
        $(document).ready(function () {
            $('#difficultyLevelSearch').on("keyup", function () {
@@ -79,9 +90,90 @@
 
                // If no rows are visible, add the "No Branch Found" row
                if (visibleRows === 0) {
-                   $("#difficultyLevels").append('<tr class="border-b text-nowrap border-gray-200 hover:bg-gray-50 no-branch-found"><td class="py-3 px-6 text-center" colspan="3">No Difficulty Level Found</td></tr>');
+                   $("#difficultyLevels").append('<tr class="border-b text-nowrap border-gray-200  no-branch-found"><td class="py-3 px-6 text-center" colspan="3">No Difficulty Level Found</td></tr>');
                }
            });
        });
    </script>
+
+   <!-- Delete All checkbox Box -->
+<script>
+      function toggleCheckbox(row) {
+        const checkbox = row.querySelector('.select-row');
+            checkbox.checked = !checkbox.checked; // Toggle the checkbox state
+             highlightRow(checkbox); // Call highlightRow explicitly
+             updateSelectAllState(); // Update the select all checkbox state
+        }
+        
+
+    // Highlight the row if the checkbox is checked
+    function highlightRow(checkbox) {
+        const row = checkbox.closest('tr');
+        console.log(checkbox.checked);
+        if (checkbox.checked) {
+            row.classList.add('row-highlight');
+        } else {
+            row.classList.remove('row-highlight');
+        }
+    }
+
+   // select All checkbox
+    document.getElementById('selectAll').addEventListener('change', function () {
+        const checkboxes = document.querySelectorAll('.select-row');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+            highlightRow(checkbox);
+        });
+    });
+    function updateSelectAllState() {
+    const checkboxes = document.querySelectorAll('.select-row');
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+    const noneChecked = Array.from(checkboxes).every(checkbox => !checkbox.checked);
+
+    if (allChecked) {
+        selectAllCheckbox.checked = true;
+        selectAllCheckbox.indeterminate = false; // Not in an indeterminate state
+    } else if (noneChecked) {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = false; // Not in an indeterminate state
+    } else {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = true; // Set indeterminate state
+    }
+}
+
+    // Prevent the row click from triggering when clicking on specific elements like the edit/delete buttons
+    document.querySelectorAll('.row').forEach(row => {
+        row.addEventListener('click', function (e) {
+            if (e.target.tagName === 'A' || e.target.tagName === 'IMG') {
+                e.stopPropagation();
+            }
+        });
+    });
+
+    // Delete button click
+    document.getElementById('handleDelete').addEventListener('click', function () {
+        const selectedIds = Array.from(document.querySelectorAll('.select-row:checked')).map(checkbox => checkbox.value);
+        if (selectedIds.length === 0) {
+            alert('Please select at least one Difficulty Level  to delete');
+            return;
+        }
+
+         Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        // If the user confirms, redirect to the delete URL
+        if (result.isConfirmed) {
+            window.location.href = '/Admin/CourseType/DeleteMultipleCourseType?courseTypeIds=' + selectedIds.join(',');
+        }
+    });
+    });
+</script>
 }

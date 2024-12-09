@@ -70,5 +70,13 @@ namespace backend.Controllers
             return StatusCode(response.StatusCode, response);
         }
         #endregion
+
+         #region Delete Multiple Courses Type
+        [HttpDelete("DeleteMultiple")]
+        public async Task<IActionResult> DeleteMultipleMcq([FromBody] List<Guid> courseTypeIds){
+            var response = await _courseTypeRepo.DeleteMultipleCourseType(courseTypeIds);
+            return StatusCode(response.StatusCode , response);
+        }
+        #endregion
     }
 }

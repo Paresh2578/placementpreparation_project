@@ -165,6 +165,20 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
         #endregion
 
+         #region  Delete Multiple  Courses
+        public async Task<IActionResult> DeleteMultipleCourse(string  courseIds)
+        {
+            ApiResponseModel response = await _apiClient.DeleteMultipleAsync($"{_apiBaseUrl}/DeleteMultiple",courseIds.Split(","));
+            if(response.StatusCode == 200)
+            {
+                TempData["SuccessMessage"] = response.Message;
+            }else {
+                TempData["ErrorMessage"] = response.Message;
+            }
+            return RedirectToAction("ListCourse");
+        }
+        #endregion
+
         #region Export Course to Excel
         public async Task<IActionResult> ExportToExcelCourse()
         {

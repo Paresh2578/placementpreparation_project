@@ -9,6 +9,7 @@ namespace backend.data.Interface
         public Task<ResponseModel> DeleteCourseType(CourseTypeModel courseType);
         public Task<ResponseModel> GetCourseTypeById(Guid courseTypeId);
         public Task<ResponseModel> GetAllCourseTypes();
+        public Task<ResponseModel> DeleteMultipleCourseType(List<Guid> courseTypeIds);
 
     }
 }

@@ -186,6 +186,9 @@
     background-color: #f1f1f1;
 }
 
+tr:hover:not(.row-highlight){
+    background-color: #f1f1f1;
+}
 
 
 

@@ -12,5 +12,6 @@ namespace backend.data.Interface
         public Task<ResponseModel> GetSubTopicsByTopicId(Guid topicId);
         public Task<ResponseModel> GetSubTopicsByCourseId(Guid courseId);
         public Task<ResponseModel> SubTopicDropdown(Guid? courseId , Guid? topicId);
+        public Task<ResponseModel> DeleteMultipleSubTopic(List<Guid> subTopicIds); 
     }
 }
