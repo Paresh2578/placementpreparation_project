@@ -171,7 +171,7 @@
     }).then((result) => {
         // If the user confirms, redirect to the delete URL
         if (result.isConfirmed) {
-            window.location.href = '/Admin/CourseType/DeleteMultipleCourseType?courseTypeIds=' + selectedIds.join(',');
+            window.location.href = '/Admin/DifficultyLevel/DeleteMultipleDifficultyLevel?difficultyLevelIds=' + selectedIds.join(',');
         }
     });
     });

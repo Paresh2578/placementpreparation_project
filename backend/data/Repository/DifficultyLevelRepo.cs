@@ -39,6 +39,20 @@ namespace backend.data.Repository
                 return new ResponseModel { StatusCode = 500, Message = "An error occurred while deleting the difficulty level." };
             }
         }
+       public async Task<ResponseModel> DeleteMultipleDifficultyLevel(List<Guid> difficultyLevelIds){
+        try{
+           // get all difficulty to deleted
+            var difficultyLevelToDelete = await _context.DifficultyLevels.Where(difficultyLevel => difficultyLevelIds.Contains(difficultyLevel.DifficultyLevelId)).ToListAsync();
+
+            _context.DifficultyLevels.RemoveRange(difficultyLevelToDelete);
+            await _context.SaveChangesAsync();
+            
+            return new ResponseModel{StatusCode=200 , Message="Successfully Deleted all Difficulty"};
+
+        }catch(Exception ex){
+            return new ResponseModel {StatusCode=500,Message=ex.Message};
+        }
+       }
 
         public async Task<ResponseModel> GetAllDifficultyLevels()
         {

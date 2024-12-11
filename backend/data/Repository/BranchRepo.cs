@@ -53,6 +53,20 @@ namespace backend.data.Repository
             }
         }
 
+       public async Task<ResponseModel> DeleteMultipleBranch(List<Guid> branchIds){
+        try{
+           // get all Branch to deleted
+            var branchToDelete = await _context.Branches.Where(branch => branchIds.Contains(branch.BranchId)).ToListAsync();
+
+            _context.Branches.RemoveRange(branchToDelete);
+            await _context.SaveChangesAsync();
+            
+            return new ResponseModel{StatusCode=200 , Message="Successfully Deleted all Branches"};
+
+        }catch(Exception ex){
+            return new ResponseModel {StatusCode=500,Message=ex.Message};
+        }
+       }
       public async  Task<ResponseModel> GetAllBranches()
         {
             try{

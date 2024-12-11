@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Placement_Preparation.Areas.Admin.Models;
 using Placement_Preparation.BAL;
 using Placement_Preparation.Services;
+using Placement_Preparation.Utils;
 
 namespace Placement_Preparation.Areas.Admin.Controllers
 {
@@ -46,7 +47,8 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             {
                 return View();
             }
-           
+            // decrypt the branchId
+                branchId =  UrlEncryptor.Decrypt(branchId);
                 // Call API to get data
                 ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/{branchId}");
                 if(response.StatusCode != 200)
@@ -103,6 +105,20 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
         #endregion 
     
+        #region  Delete Multiple  Branch
+        public async Task<IActionResult> DeleteMultipleBranch(string  branchIds)
+        {
+            ApiResponseModel response = await _apiClient.DeleteMultipleAsync($"{_apiBaseUrl}/DeleteMultiple",branchIds.Split(","));
+            if(response.StatusCode == 200)
+            {
+                TempData["SuccessMessage"] = response.Message;
+            }else {
+                TempData["ErrorMessage"] = response.Message;
+            }
+            return RedirectToAction("List");
+        }
+        #endregion
+
         #region Export Branch
         public async Task<IActionResult> ExportToExcelBranch()
         {

@@ -9,5 +9,7 @@ namespace backend.data.Interface
         public Task<ResponseModel> GetDifficultyLevelById(Guid difficultyLevelId);
         public Task<ResponseModel> UpdateDifficultyLevel(DifficultyLevelModel difficultyLevelModel);
         public Task<ResponseModel> DeleteDifficultyLevel(Guid difficultyLevelId);
+
+        public Task<ResponseModel> DeleteMultipleDifficultyLevel(List<Guid> difficultyLevelIds);
     }
 }

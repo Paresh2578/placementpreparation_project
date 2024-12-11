@@ -8,7 +8,8 @@ namespace Placement_Preparation.Areas.Admin.Models
     {
         // Primary Key
         // [NotEmptyGuid(ErrorMessage = "Branch Id is required.")]
-        public  Guid? BranchId { get; set; } = Guid.Parse("00000000-0000-0000-0000-000000000000");
+        [Key]
+        public  Guid? BranchId { get; set; }
 
         [Required(ErrorMessage = "Branch Name is required.")]
         [StringLength(100, ErrorMessage = "Branch Name can't be longer than 100 characters.")]

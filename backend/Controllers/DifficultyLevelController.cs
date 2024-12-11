@@ -68,5 +68,13 @@ namespace backend.Controllers
             return StatusCode(response.StatusCode, response);
         }
         #endregion
+
+         #region Delete Multiple Difficulty Level
+        [HttpDelete("DeleteMultiple")]
+        public async Task<IActionResult> DeleteMultipleDifficultyLevel([FromBody] List<Guid> difficultyLevelIds){
+            var response = await _difficultyLevelRepo.DeleteMultipleDifficultyLevel(difficultyLevelIds);
+            return StatusCode(response.StatusCode , response);
+        }
+        #endregion
     }
 }

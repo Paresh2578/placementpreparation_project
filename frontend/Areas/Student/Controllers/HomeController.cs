@@ -1,13 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Frontend.Models;
+using Frontend.Services;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Placement_Preparation.Areas.Admin.Models;
 
 namespace Placement_Preparation.Areas.Student.Controllers
 {
     [Area("Student")]
     public class HomeController : Controller
     {
-        public IActionResult Home()
+        private readonly ApiClientService _apiClient;
+
+        public HomeController(ApiClientService apiClient)
         {
-            return View();
+            _apiClient = apiClient;
+        }
+        public async Task<IActionResult> Home()
+        {
+
+            // get top 5 courses
+            ApiResponseModel responseModel = await _apiClient.GetAsync("Course?limit=5");
+
+            List<CourseModel> courses = new List<CourseModel>();
+            if (responseModel.StatusCode == 200)
+            {
+                courses = JsonConvert.DeserializeObject<List<CourseModel>>(responseModel.Data.ToString());
+            }
+            return View(courses);
         }
     }
 }

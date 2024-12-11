@@ -9,5 +9,7 @@ namespace backend.data.Interface
         Task<ResponseModel> AddBranch(BranchModel branch);
         Task<ResponseModel> UpdateBranch(BranchModel newBranch);
         Task<ResponseModel> DeleteBranch(BranchModel branch);
+
+        Task<ResponseModel> DeleteMultipleBranch(List<Guid> branchIds);
     }
 }

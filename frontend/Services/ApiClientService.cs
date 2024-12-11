@@ -24,7 +24,7 @@ namespace Frontend.Services
                 ApiResponseModel? apiResponseModel = JsonConvert.DeserializeObject<ApiResponseModel>(responseContent);
                 if(apiResponseModel is not null)
                 {
-                    return apiResponseModel;
+                    return apiResponseModel;    
                 }
                 return new ApiResponseModel {StatusCode = (int)response.StatusCode,Message = response.ReasonPhrase};
             }catch(Exception ex){

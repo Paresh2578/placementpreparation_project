@@ -35,8 +35,6 @@ namespace backend.Controllers
         public async Task<IActionResult> DeleteBranch(Guid branchId)
         {
 
-            Console.WriteLine("branchId " + branchId);
-
             // check if branch exist
             ResponseModel response = await _branchRepo.GetBranchById(branchId);
             if (response.StatusCode != 200){
@@ -75,6 +73,14 @@ namespace backend.Controllers
 
            ResponseModel response = await _branchRepo.UpdateBranch(branch);
             return StatusCode(response.StatusCode, response);
+        }
+        #endregion
+
+         #region Delete Multiple Branch
+        [HttpDelete("DeleteMultiple")]
+        public async Task<IActionResult> DeleteMultipleBranch([FromBody] List<Guid> branchIds){
+            var response = await _branchRepo.DeleteMultipleBranch(branchIds);
+            return StatusCode(response.StatusCode , response);
         }
         #endregion
     }

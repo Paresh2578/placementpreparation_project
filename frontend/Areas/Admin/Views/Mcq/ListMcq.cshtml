@@ -6,8 +6,7 @@
         <h1 class="table-responsive-title">List of Mcq</h1>
         <div class="flex gap-4" style="gap:0.5rem">
              <a asp-action="ExportToExcelMcq" asp-asp-controller="Mcq" class="export-excel-btn"><i class="fa-solid fa-file-export fa-bounce"></i> Export in Excel</a>
-             <a asp-action="AddOrEditMcq" asp-asp-controller="Mcq" class="primary-button"><i class="fa-solid fa-plus fa-bounce"></i> Add Mcq</a>
-            @* <partial name="_My_Button" model='new Placement_Preparation.Models.ButtonModel { Title = "Add Mcq", Url="/Admin/Mcq/" }' /> *@
+             <a asp-action="AddOrEditMcq" asp-controller="Mcq" class="primary-button"><i class="fa-solid fa-plus fa-bounce"></i> Add Mcq</a>
         </div>
     </div>
 
@@ -109,7 +108,7 @@
             </table>
               
         </div>
-        <button id="handleDelete" class="mcq-row clear-button m-4" style="margin-top: 20px; display: block;width: fit-content;"><i class="fa-regular fa-trash-can fa-bounce"></i> Delete </button>
+        <button id="handleDelete" class="clear-button m-4" style="margin-top: 20px; display: block;width: fit-content;"><i class="fa-regular fa-trash-can fa-bounce"></i> Delete </button>
     </div>
 </div> 
 

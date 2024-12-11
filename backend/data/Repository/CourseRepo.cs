@@ -52,10 +52,19 @@ namespace backend.data.Repository
        }
 
        
-       public async Task<ResponseModel> GetAllCourses()
+       public async Task<ResponseModel> GetAllCourses(int? limit)
         {
             try{
-                var courses = await _context.Courses.Include(b => b.Branch).Include(c => c.CourseType).ToListAsync();
+                // if limit of data
+                var courses = new List<CourseModel>();
+                if(limit is null){
+                    courses = await _context.Courses.Include(b => b.Branch).Include(c => c.CourseType).ToListAsync();
+                }
+                else
+                {
+                    courses = await _context.Courses.Include(b => b.Branch).Include(c => c.CourseType).Take(Convert.ToInt32(limit)).ToListAsync();
+
+                }
                 return new ResponseModel { StatusCode = 200, Data = courses  , Message = "Courses retrieved successfully." };
             }catch(Exception e){
                 return new ResponseModel { StatusCode = 500, Message = e.Message };

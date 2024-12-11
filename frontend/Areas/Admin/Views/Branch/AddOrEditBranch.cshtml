@@ -1,7 +1,7 @@
 ﻿@model BranchModel
 
 @{
-     string title = Model == null ||  Model.BranchName == null ? "Add" : "Edit";
+     string title = Model == null ||  Model.BranchId == null ? "Add" : "Edit";
 }
 
 <div class="flex flex-col items-center">
@@ -11,6 +11,7 @@
         <form asp-action="AddOrEditBranch" asp-controller="Branch" asp-area="Admin" method="post" class="flex flex-col">
             <!-- Hidden Field for BranchId-->
             <input asp-for="BranchId" type="hidden" /> 
+
             <div class="flex"> 
                 <span class="text-red-600">*</span><label asp-for="BranchName" class="text-gray-700 mb-1"></label>
             </div>

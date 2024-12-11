@@ -101,9 +101,9 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         #endregion
          
           #region  Delete Multiple  DifficultyLevel
-        public async Task<IActionResult> DeleteMultipleDifficultyLevel(string  courseTypeIds)
+        public async Task<IActionResult> DeleteMultipleDifficultyLevel(string  difficultyLevelIds)
         {
-            ApiResponseModel response = await _apiClient.DeleteMultipleAsync($"{_apiBaseUrl}/DeleteMultiple",courseTypeIds.Split(","));
+            ApiResponseModel response = await _apiClient.DeleteMultipleAsync($"{_apiBaseUrl}/DeleteMultiple",difficultyLevelIds.Split(","));
             if(response.StatusCode == 200)
             {
                 TempData["SuccessMessage"] = response.Message;
