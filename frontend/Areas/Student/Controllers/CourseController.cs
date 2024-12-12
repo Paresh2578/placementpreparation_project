@@ -4,6 +4,7 @@ using Markdig;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Placement_Preparation.Areas.Admin.Models;
+using Placement_Preparation.Utils;
 
 namespace Placement_Preparation.Areas.Student.Controllers
 {
@@ -12,10 +13,12 @@ namespace Placement_Preparation.Areas.Student.Controllers
     {
         private readonly ApiClientService _apiClient;
         private readonly string _apiBaseUrl = "Course";
+        private readonly AllDropDown _allDropDown;
 
-        public CourseController(ApiClientService apiClient)
+        public CourseController(ApiClientService apiClient,AllDropDown allDropDown)
         {
             _apiClient = apiClient;
+            _allDropDown = allDropDown;
         }
 
         #region List All Courses
@@ -30,14 +33,34 @@ namespace Placement_Preparation.Areas.Student.Controllers
             {
                 courses = JsonConvert.DeserializeObject<List<CourseModel>>(responseModel.Data.ToString());
             }
+
+            // set DropDown Value
+            await SetBranchCourseDifficultyLevelDropdownValue();
+
             return View(courses);
         }
         #endregion
 
         #region Course Details
-        public IActionResult CourseDetail()
+        public async Task<IActionResult> CourseDetail(string courseId)
         {
-            return View();
+          ApiResponseModel apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}/GetCourseDetailsById/{courseId}");
+          Dictionary<string,dynamic> courseDetails = new Dictionary<string, dynamic>();
+
+          if(apiResponse.StatusCode != 200){
+            TempData["ErrorMessage"] = apiResponse.Message;
+             return View(courseDetails);
+          }
+
+          courseDetails = JsonConvert.DeserializeObject<Dictionary<string,dynamic>>(apiResponse.Data.ToString());
+
+            //Dictionary<string, dynamic> test = new Dictionary<string, dynamic>();
+            //test.Add("course", new Dictionary<string, dynamic> { { "description", "Java is Programing Language" },{ "courseName","Java Pro" } });
+
+          // set difficulty level dropdown
+          ViewBag.DifficultyLevelList =await _allDropDown.DifficultyLevel();
+
+            return View(courseDetails);
         }
         #endregion
 
@@ -87,5 +110,28 @@ var pipeline = new MarkdownPipelineBuilder()
             return View();
         }
         #endregion
+    
+       #region  Set Branchs , Course , DifficultyLevel dropdown list
+       [NonAction]
+       public async Task SetBranchCourseDifficultyLevelDropdownValue(){
+         ViewBag.BranchList =await  _allDropDown.Branch();
+         ViewBag.CourseTypeList = await _allDropDown.CourseType();
+         ViewBag.DifficultyLevelList =await _allDropDown.DifficultyLevel();
+       }
+       #endregion 
+
+       #region Get Courses By Branch And Course Type
+       [Route("/Course/GetCoursesByBranchAndCourseType")]
+         public async Task<List<CourseModel>> GetCoursesByBranchAndCourseType([FromQuery] Guid? branchId,[FromQuery] Guid? courseTypeId)
+         {
+              ApiResponseModel responseModel = await _apiClient.GetAsync($"{_apiBaseUrl}/GetCoursesByBranchAndCourseType?branchId={branchId}&courseTypeId={courseTypeId}");
+              List<CourseModel> courses = new List<CourseModel>();
+              if (responseModel.StatusCode == 200)
+              {
+                courses = JsonConvert.DeserializeObject<List<CourseModel>>(responseModel.Data.ToString());
+              }
+              return courses;
+         }
+         #endregion
     }
 }

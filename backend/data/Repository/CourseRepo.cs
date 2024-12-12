@@ -1,6 +1,10 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using backend.Constant;
 using backend.data.Interface;
 using backend.Models;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.data.Repository
@@ -8,10 +12,13 @@ namespace backend.data.Repository
     public class CourseRepo : CourseInterface
     {
         private readonly ApplicationDbContext _context;
+        private readonly DbHelper _dbHelper;
 
-        public CourseRepo(ApplicationDbContext context)
+
+        public CourseRepo(ApplicationDbContext context,DbHelper dbHelper)
         {
             _context = context;
+            _dbHelper = dbHelper;
         }
        public async  Task<ResponseModel> AddCourse(CourseModel course)
         {
@@ -84,6 +91,54 @@ namespace backend.data.Repository
             }
         }
 
+       public async Task<ResponseModel> GetCourseDetailsById(Guid courseId)
+        {
+            try{
+                var courseDetalis = await _context.Courses.Where(x => x.CourseId == courseId).Select(s=> new {s.Description,s.CourseName}).FirstOrDefaultAsync();
+                if(courseDetalis is null){
+                    return new ResponseModel { StatusCode = 404, Message = "Course not found." };
+                }
+
+                // Get all the topics of the course
+                // var topics = await _context.Topics.Where(x => x.CourseId == courseId).Include(d => d.DifficultyLevel).Select(t => new {t.TopicId,t.TopicName,t.DifficultyLevel!.DifficultyLevelName}).ToListAsync();
+                List<object> topics = new List<Object>{};
+
+                // call procedure
+                using(SqlCommand command = _dbHelper.getSqlCommand("PR_Topic_GetById")){
+                    // add course id parameter
+                    command.Parameters.Add("@courseId",SqlDbType.UniqueIdentifier).Value = (object)courseId;
+
+                    // read all topic
+                    using(SqlDataReader reader =  await command.ExecuteReaderAsync()){
+                        while(await reader.ReadAsync()){
+                            topics.Add(new {TopicId=reader.GetGuid(0),TopicName = reader.GetString(1),DifficultyLevel = reader.GetString(2)});
+                        }
+                    }
+                }
+
+                // combine course detais ans topic list
+                Dictionary<String,dynamic> data = new Dictionary<string, dynamic>();
+                data.Add("course", courseDetalis);
+                data.Add("topicList", topics);
+
+                return new ResponseModel { StatusCode = 200, Data = data, Message = "Course retrieved successfully." };
+            }catch(Exception e){
+                return new ResponseModel { StatusCode = 500, Message = e.Message };
+            }
+        }
+        public async Task<ResponseModel> GetCoursesByBranchAndCourseType(Guid? branchId , Guid? courseTypeId)
+        {
+            try
+            {
+                var course = await _context.Courses.Include(b => b.Branch).Include(c => c.CourseType).Where(c => (c.BranchId.ToString().Trim() == branchId.ToString().Trim() || branchId == null) && (c.CourseTypeId.ToString().Trim() == courseTypeId.ToString().Trim() || courseTypeId== null)).ToListAsync();
+                return new ResponseModel {StatusCode= 200 , Data = course , Message = "Course retrieved successfully"};
+            }
+            catch(Exception e)
+            {
+                return new ResponseModel { StatusCode = 500, Message = e.Message };
+            }
+        }
+
        public async Task<ResponseModel> UpdateCourse(CourseModel course)
         {
             try{
@@ -110,5 +165,5 @@ namespace backend.data.Repository
             return new ResponseModel{StatusCode = 500 , Message = e.Message};
         }
       }
-}
+    }
 }

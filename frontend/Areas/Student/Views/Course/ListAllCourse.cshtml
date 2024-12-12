@@ -1,5 +1,11 @@
 ﻿@model List<CourseModel>
 
+@{
+    ViewData["Title"] = "All Courses";
+
+    List<CourseModel> courses = Model;
+        
+}
 
 <!-- Page Title -->
 <div class="page-title light-background">
@@ -13,48 +19,36 @@
         </nav>
     </div>
 </div><!-- End Page Title -->
-<!-- Starter Section Section -->
 
-<!-- Courses  Section -->
-<section id="courses-section " class=" container courses-section section">
+<!-- Courses Section -->
+<section id="courses-section" class="container courses-section section">
     <div class="search-bar-container">
         <!-- Input field for search -->
-        <input type="text" class="search-input" placeholder="Search courses...">
+        <input type="text" id="course-search-input" class="search-input" placeholder="Search courses...">
 
         <!-- Dropdown filters -->
         <div class="filter-container">
-            <select class="filter-dropdown">
-                <option>All Branches</option>
-                <option>Science</option>
-                <option>Arts</option>
-                <option>Commerce</option>
+            <select asp-items="@ViewBag.BranchList as List<SelectListItem>" id="branch" class="filter-dropdown">
+                <option value="">All Branchs</option>
             </select>
-            <select class="filter-dropdown">
-                <option>All Course Types</option>
-                <option>Online</option>
-                <option>Offline</option>
-            </select>
-            <select class="filter-dropdown">
-                <option>All Difficulty Levels</option>
-                <option>Beginner</option>
-                <option>Intermediate</option>
-                <option>Advanced</option>
+            <select asp-items="@ViewBag.CourseTypeList as List<SelectListItem>" id="courseType" class="filter-dropdown">
+                <option value="">All Course Types</option>
             </select>
         </div>
 
         <!-- Search Button -->
-        <button class="search-button">Search</button>
+        <button  onclick="handleSearch()" class="search-button">Search</button>
     </div>
 
-    <!-- List  Courses -->
-       <div class="">
+    <!-- List of Courses -->
+    <div class="course-list">
         <div class="row gy-4">
-            @foreach(CourseModel course in Model){
-                 <!--course 1-->
-                <a asp-action="CourseDetail" asp-controller="Course" class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                    <div class="course-card" >
+            @foreach (var course in courses)
+            {
+                <a asp-action="CourseDetail" asp-controller="Course" asp-route-courseId="@course.CourseId" class=" col-lg-3 col-md-6 d-flex align-items-stretch course-item" data-aos="fade-up" data-aos-delay="100" data-name="@course.CourseName">
+                    <div class="course-card">
                         <div class="card-img">
-                            <img src="@course.Img" class="img-fluid" alt="Walter White" style="width: 100%; height: 100%; object-fit: cover;">
+                            <img src="@course.Img" class="img-fluid" alt="@course.CourseName" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                         <div class="card-content">
                             <div class="d-flex justify-content-between">
@@ -68,3 +62,87 @@
         </div>
     </div>
 </section>
+
+<!-- jQuery Script -->
+@* <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
+@section Scripts{
+<script>
+    $(document).ready(function () {
+        $('#course-search-input').on("keyup", function () {
+            var searchValue = $(this).val().toLowerCase().trim();
+
+            console.log("Search input:", searchValue); // Debugging
+
+            // All course
+            var courses = document.querySelectorAll(".course-item");
+            for (let course of courses) {
+                var courseName = course.getAttribute("data-name").toLowerCase().trim();
+                console.log("Course Name:", courseName); // Debugging
+                console.log("Course:", course); // Debugging
+                course.style.display = "none";
+                if (courseName.includes(searchValue)) {
+                    course.style.display = "block";
+                } else {
+                    course.style.display = "none";
+                }
+            }
+
+          
+
+            @* // Check the number of visible courses
+            var visibleCourses = $(".course-item:visible").length;
+
+            // Remove existing "No Courses Found" message if it exists
+            $(".no-courses-found").remove();
+
+            // If no courses are visible, add the "No Courses Found" message
+            if (visibleCourses === 0) {
+                $(".course-list .row").append(`
+                    <div class="col-12 no-courses-found">
+                        <p class="text-center text-muted">No Courses Found</p>
+                    </div>
+                `);
+            } *@
+        });
+    });
+</script>
+
+ <!-- DropDown Search -->
+ <script>
+    function handleSearch() {
+        var branchId = $("#branch").val();
+        var courseTypeId = $("#courseType").val();
+
+        $.ajax({
+            url: "/Course/GetCoursesByBranchAndCourseType",
+            type: "GET",
+                data: { branchId: branchId, courseTypeId: courseTypeId },
+            success: function (response) {
+                console.log(response);
+                $("#course-list .row").empty();
+                    // Append each course dynamically
+                    response.forEach(course => {
+                        $("#course-list .row").append(`
+                        <a href="/Course/CourseDetail/${course.CourseId}" class="col-lg-3 col-md-6 d-flex align-items-stretch course-item" data-aos="fade-up" data-aos-delay="100" data-name="${course.CourseName}">
+                            <div class="course-card">
+                                <div class="card-img">
+                                    <img src="${course.Img}" class="img-fluid" alt="${course.CourseName}" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div class="card-content">
+                                    <div class="d-flex justify-content-between">
+                                                @* <span class="type">${course.CourseType.courseTypeName}</span> *@
+                                    </div>
+                                    <h4 class="name">${course.CourseName}</h4>
+                                </div>
+                            </div>
+                        </a>
+                    `);
+                    });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+ </script>
+}

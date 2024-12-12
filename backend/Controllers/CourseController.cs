@@ -18,7 +18,7 @@ namespace backend.Controllers
         
         #region  Get All Courses
         [HttpGet]
-        public async Task<IActionResult> GetAllCourses([FromQuery] int limit)
+        public async Task<IActionResult> GetAllCourses([FromQuery] int? limit)
         {
             var response = await _courseInterface.GetAllCourses(limit);
             return StatusCode(response.StatusCode, response);
@@ -33,7 +33,15 @@ namespace backend.Controllers
             return StatusCode(response.StatusCode, response);
         }
         #endregion
-
+         
+        #region Get Course detais with all subTopic List By Course Id
+        [HttpGet("GetCourseDetailsById/{courseId}")]
+        public async Task<IActionResult> GetCourseDetailsById(Guid courseId)
+        {
+            var response = await _courseInterface.GetCourseDetailsById(courseId);
+            return StatusCode(response.StatusCode, response);
+        }
+        #endregion
 
         #region Add Course
         // [CheckAccess]
@@ -87,5 +95,16 @@ namespace backend.Controllers
             return StatusCode(response.StatusCode , response);
         }
         #endregion
+
+        #region Get Course By Branch , Course Type
+        [HttpGet("GetCoursesByBranchAndCourseType")]
+        public async Task<IActionResult> GetCoursesByBranchAndCourseType([FromQuery] Guid? branchId , [FromQuery] Guid? courseTypeId)
+        {
+            var response = await _courseInterface.GetCoursesByBranchAndCourseType(branchId , courseTypeId);
+            return StatusCode(response.StatusCode , response);
+        }
+        #endregion
+
+        
     }
 }

@@ -38,7 +38,6 @@ namespace Placement_Preparation.Areas.Admin.Models
 
         // Content for the Sub-topic with validation
         [Required(ErrorMessage = "Content is required.")]
-        [StringLength(2000, ErrorMessage = "Content can't be longer than 2000 characters.")]
         [MinLength(10, ErrorMessage = "Content must be at least 10 characters long.")]
         public required string Content { get; set; }
 

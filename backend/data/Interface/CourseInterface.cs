@@ -9,9 +9,9 @@ namespace backend.data.Interface
         public Task<ResponseModel> AddCourse(CourseModel course);
         public Task<ResponseModel> UpdateCourse(CourseModel course);
         public Task<ResponseModel> DeleteCourse(CourseModel course);
-
         public Task<ResponseModel> CourseDropdown();
-
-        public Task<ResponseModel> DeleteMultipleCourse(List<Guid> courseIds);  
+        public Task<ResponseModel> DeleteMultipleCourse(List<Guid> courseIds);
+        public Task<ResponseModel> GetCoursesByBranchAndCourseType(Guid? branchId, Guid? courseTypeId);
+        public Task<ResponseModel> GetCourseDetailsById(Guid courseId);
     }
 }

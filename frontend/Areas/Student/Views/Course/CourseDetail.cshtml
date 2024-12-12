@@ -1,9 +1,11 @@
-﻿
+﻿@model Dictionary<string, dynamic>
+
+
 <!-- Page Title -->
 <div class="page-title light-background">
-    <div class="container">
-        <h1>Java</h1>
-        <h4>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloremque et nam similique cupiditate nostrum. Ipsa rem nam ipsum laudantium voluptas, eius quibusdam asperiores iure, at ex deleniti. Non, modi possimus.</h4>
+    <div class="course">
+        <h1>@Model["course"]["courseName"]</h1>
+        <h4>@Model["course"]["description"]</h4>
         <nav class="breadcrumbs">
             <ol>
                 <li><a asp-controller="Home" asp-action="Home">Home</a></li>
@@ -21,33 +23,21 @@
       <div class="container section-title" data-aos="fade-up">
         <h2>All Topics</h2>
 
-    <div class="search-bar-container">
+    <div class="row">
         <!-- Input field for search -->
-        <input type="text" class="search-input" placeholder="Search Topics...">
+        <div class="col-9" style="width: 100%;">
+         <input type="text" id="input-search" class="search-input col" placeholder="Search Topics...">
+        </div>
 
         <!-- Dropdown filters -->
-        <div class="filter-container">
-            <select class="filter-dropdown">
-                <option>All Branches</option>
-                <option>Science</option>
-                <option>Arts</option>
-                <option>Commerce</option>
-            </select>
-            <select class="filter-dropdown">
-                <option>All Course Types</option>
-                <option>Online</option>
-                <option>Offline</option>
-            </select>
-            <select class="filter-dropdown">
-                <option>All Difficulty Levels</option>
-                <option>Beginner</option>
-                <option>Intermediate</option>
-                <option>Advanced</option>
+        <div class="filter-container col-2 col-span-4" style="flex: 0 0% 20%;">
+            <select asp-items="@ViewBag.difficultyLevelList as List<SelectListItem>" class="filter-dropdown">
+                <option value="">All Difficulty Levels</option>
             </select>
         </div>
 
         <!-- Search Button -->
-        <button class="search-button">Search</button>
+        <button id="search-btn" class="search-button col-1">Search</button>
     </div>
 
     <!-- List  Subtopic -->
@@ -58,31 +48,76 @@
                         <th>#</th>
                         <th>Topic Name</th>
                         <th>Difficulty Level</th>
-                        <th>Branch</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr onclick='window.location.assign("CourseRead")'>
-                        <td>1</td>
-                        <td>Introduction to Java</td>
-                        <td>Beginner</td>
-                        <td>Science</td>
-                    </tr>
-                    <tr onclick="alert('click')">
-                        <td>2</td>
-                        <td>Object-Oriented Programming</td>
-                        <td>Intermediate</td>
-                        <td>Arts</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Advanced Java Concepts</td>
-                        <td>Advanced</td>
-                        <td>Commerce</td>
-                    </tr>
+                <tbody class="table-body" id="topicListBody">
+                    @{
+                        var index = 1;
+                        foreach (var topic in Model["topicList"])
+                    {
+                        <tr onclick='window.location.assign("CourseRead")'>
+                            <td>@index</td>
+                            <td>@topic["topicName"]</td>
+                            <td>@topic["difficultyLevel"]</td>
+                            </tr>
+                            index++;
+                        }
+                    }
                 </tbody>
             </table>
         </div>
       </div><!-- End Section Title -->
 
 </section>
+
+@section Scripts{
+    <!-- Input Search Bar -->
+   <script>
+       $(document).ready(function () {
+           $('#input-search').on("keyup", function () {
+               var value = $(this).val().toLowerCase().toString().trim();
+               $("#topicListBody tr").filter(function () {
+                   $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+               });
+
+                // Check the number of visible rows
+               var visibleRows = $("#topicListBody tr:visible").length;
+
+               // Remove existing "No Topic Found" row if it exists
+               $("#topicListBody .no-topic-found").remove();
+
+               // If no rows are visible, add the "No Topic Found" row
+               if (visibleRows === 0) {
+                   $("#topicListBody").append('<tr class="border-b text-nowrap border-gray-200  no-topic-found"><td class="py-3 px-6 text-center" colspan="3">No Topic Found</td></tr>');
+               }
+           });
+       });
+   </script>
+
+   <!-- Dropdown Search -->
+   <script>
+         $(document).ready(function () {
+              $('.filter-dropdown').on("change", function () {
+                var value = $(this).find("option:selected").text().toLowerCase().toString().trim();
+
+                // pass empty value when select all difficulty levels
+                value = value == "all difficulty levels" ? "" : value;
+                console.log(value);
+                $("#topicListBody tr").filter(function () {
+                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+    
+                // Check the number of visible rows
+                var visibleRows = $("#topicListBody tr:visible").length;
+    
+                // Remove existing "No Topic Found" row if it exists
+                $("#topicListBody .no-topic-found").remove();
+    
+                // If no rows are visible, add the "No Topic Found" row
+                if (visibleRows === 0) {
+                     $("#topicListBody").append('<tr class="border-b text-nowrap border-gray-200  no-topic-found"><td class="py-3 px-6 text-center" colspan="3">No Topic Found</td></tr>');
+                }
+              });
+         });
+   </script>
+}   
