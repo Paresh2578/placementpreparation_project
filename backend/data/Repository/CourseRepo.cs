@@ -94,7 +94,7 @@ namespace backend.data.Repository
        public async Task<ResponseModel> GetCourseDetailsById(Guid courseId)
         {
             try{
-                var courseDetalis = await _context.Courses.Where(x => x.CourseId == courseId).Select(s=> new {s.Description,s.CourseName}).FirstOrDefaultAsync();
+                var courseDetalis = await _context.Courses.Where(x => x.CourseId == courseId).Select(s=> new {s.CourseId,s.Description,s.CourseName}).FirstOrDefaultAsync();
                 if(courseDetalis is null){
                     return new ResponseModel { StatusCode = 404, Message = "Course not found." };
                 }
@@ -165,5 +165,8 @@ namespace backend.data.Repository
             return new ResponseModel{StatusCode = 500 , Message = e.Message};
         }
       }
+
+
+     
     }
 }

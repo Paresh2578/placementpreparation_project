@@ -2418,6 +2418,26 @@ section,
     margin-bottom: 5px;
 }
 
+.search-section{
+  /* display: flex;
+    flex-wrap: wrap; 
+    gap: 1rem; 
+    margin: 0 auto;
+    max-width: 1200px; 
+    padding: 1rem;
+    width: 100%; */
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    border-radius: 10px;
+    /* width: 100%; */
+    margin-bottom: 5px;
+}
+
 /* Input field styling */
 .search-input {
   flex: 1 1 100%;

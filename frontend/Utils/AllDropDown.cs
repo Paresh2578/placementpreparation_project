@@ -157,5 +157,36 @@ namespace Placement_Preparation.Utils
 
            return subTopicSelectLists;
         }
+   
+       public async Task<List<SelectListItem>> GetTopicLengthByCourseId(string courseId){
+        JsonResult jsonResult = await _topicInterface.GetTopicsLengthByCourseId(courseId:courseId);
+
+        dynamic jsonValue = jsonResult.Value;
+
+        int length = jsonValue.length;
+
+        List<SelectListItem> topicLevel = new List<SelectListItem>{};
+       
+        for(int i=1;i<=length;i++){
+            topicLevel.Add(new SelectListItem(){Text=i.ToString(),Value=i.ToString()});
+        }
+
+        return topicLevel;
+       }
+        public async Task<List<SelectListItem>> GetSubTopicLengthByTopicId(string topicId){
+        JsonResult jsonResult = await _subTopicInterface.GetSubTopicLengthByTopicId(topicId:topicId);
+
+        dynamic jsonValue = jsonResult.Value;
+
+        int length = jsonValue.length;
+
+        List<SelectListItem> topicLevel = new List<SelectListItem>{};
+       
+        for(int i=1;i<=length;i++){
+            topicLevel.Add(new SelectListItem(){Text=i.ToString(),Value=i.ToString()});
+        }
+
+        return topicLevel;
+       }
     }
 }

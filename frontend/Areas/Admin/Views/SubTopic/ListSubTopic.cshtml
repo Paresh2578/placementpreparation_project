@@ -33,6 +33,7 @@
                         <th class="py-3 px-6 text-left">#</th>
                         <th class="py-3 px-6 text-left">Sub Topic Name</th>
                         <th class="py-3 px-6 text-left">Topic Name</th>
+                        <th class="py-3 px-6 text-left">Level</th>
                         <th class="py-3 px-6 text-left">Action</th>
                     </tr>
                 </thead>
@@ -46,6 +47,7 @@
                                 <td class="py-3 px-6 text-left">@index</td>
                                 <td class="py-3 px-6 text-left">@subTopic.SubTopicName</td>
                                 <td class="py-3 px-6 text-left">@subTopic.Topic!.TopicName</td>
+                                <td class="py-3 px-6 text-left">@subTopic.Level</td>
 
                                 <td class="py-3 px-6 text-left flex gap-x-4">
                                     <a class="cursor-pointer" asp-action="AddOrEditSubTopic" asp-controller="SubTopic" asp-route-subTopicId="@subTopic.SubTopicId"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>

@@ -65,7 +65,7 @@ namespace Placement_Preparation.Areas.Student.Controllers
         #endregion
 
         #region CourseRead
-        public IActionResult CourseRead()
+        public async Task<IActionResult> CourseRead(string courseId,string topicId , string? subTopicId)
         {
            
             string markdown = @"# Introduction to JavaScript
@@ -101,13 +101,26 @@ function greet(name) {
 }
 ```";
 
-var pipeline = new MarkdownPipelineBuilder()
-    .UseAdvancedExtensions() // Enables advanced Markdown features
-    .Build();
+            var pipeline = new MarkdownPipelineBuilder()
+            .UseAdvancedExtensions() // Enables advanced Markdown features
+            .Build();
 
             string htmlContent = Markdown.ToHtml(markdown , pipeline);
             ViewData["Content"] = htmlContent;
-            return View();
+
+            // call api to fetch sidebar with documention
+            ApiResponseModel apiResponse = await _apiClient.GetAsync($"Topic/GetSidebarDataByCourseIdAndTopicDocumentionByTopicId/{courseId}/{topicId}");
+            Dictionary<string,dynamic> sidebarData = new Dictionary<string, dynamic>();
+
+            // check successfully fetch data or not
+            if(apiResponse.StatusCode != 200){
+              TempData["ErrorMessage"] = apiResponse.Message;
+              return View(sidebarData);
+            }
+
+            sidebarData = JsonConvert.DeserializeObject<Dictionary<string,dynamic>>(apiResponse.Data!.ToString());
+
+            return View(sidebarData);
         }
         #endregion
     

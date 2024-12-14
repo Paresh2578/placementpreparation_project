@@ -6,5 +6,7 @@ namespace Placement_Preparation.Areas.Admin.Data.Interface
     {
         public Task<JsonResult> GetSubTopicsByTopicId(string topicId);  
         public Task<JsonResult> GetSubTopicsByCourseId(string courseId);  
+        public Task<JsonResult> GetSubTopicLengthByTopicId(string topicId);
+        
     }
 }

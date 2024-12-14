@@ -1,25 +1,46 @@
-﻿using backend.data.Interface;
+﻿using backend.Constant;
+using backend.data.Interface;
 using backend.Models;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace backend.data.Repository
 {
     public class SubTopicRepo : SubTopicInterface
     {
         private readonly ApplicationDbContext _context;
-        public SubTopicRepo(ApplicationDbContext context)
+        private readonly DbHelper _dbHelper;
+        public SubTopicRepo(ApplicationDbContext context , DbHelper dbHelper)
         {
             _context = context;
+            _dbHelper = dbHelper;
         }
        public async Task<ResponseModel> CreateSubTopic(SubTopicModel subTopic)
         {
-            try{
-                await _context.SubTopics.AddAsync(subTopic);
-                await _context.SaveChangesAsync();
+            try
+            {
+                using (SqlCommand cmd = _dbHelper.getSqlCommand("PR_SubTopic_AddSubTopic"))
+                {
+                    cmd.Parameters.Add("@SubTopicId", SqlDbType.UniqueIdentifier).Value = subTopic.SubTopicId;
+                    cmd.Parameters.Add("@SubTopicName", SqlDbType.VarChar).Value = subTopic.SubTopicName;
+                    cmd.Parameters.Add("@Content", SqlDbType.VarChar).Value = subTopic.Content;
+                    cmd.Parameters.Add("@CourseId", SqlDbType.UniqueIdentifier).Value = subTopic.CourseId;
+                    cmd.Parameters.Add("@TopicId", SqlDbType.UniqueIdentifier).Value = subTopic.TopicId;
+                    cmd.Parameters.Add("@DifficultyLevelId", SqlDbType.UniqueIdentifier).Value = subTopic.DifficultyLevelId;
 
-                return new ResponseModel{ StatusCode = 201, Message = "SubTopic Created Successfully" };
-            }catch(Exception ex){
-                return new ResponseModel{ StatusCode = 500, Message = ex.Message };
+                    var rowsAffected = await cmd.ExecuteNonQueryAsync();
+
+                    if (rowsAffected < 0)
+                    {
+                        return new ResponseModel { StatusCode = 201, Message = "Sub Topic Added Successfully" };
+                    }
+                }
+                return new ResponseModel { StatusCode = 500, Message = "Sub Topic insertion failed." };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel { StatusCode = 500, Message = ex.Message };
             }
         }
 
@@ -53,7 +74,7 @@ namespace backend.data.Repository
        public async Task<ResponseModel> GetAllSubTopics()
         {
             try{
-                var subTopics = await _context.SubTopics.Include(t => t.Topic).ToListAsync();
+                var subTopics = await _context.SubTopics.Include(t => t.Topic).OrderBy(s => s.Level).ToListAsync();
                 return new ResponseModel{ StatusCode = 200, Data = subTopics , Message = "SubTopics Fetched Successfully" };
             }catch(Exception ex){
                 return new ResponseModel{ StatusCode = 500, Message = ex.Message };
@@ -124,6 +145,19 @@ namespace backend.data.Repository
                 return new ResponseModel{ StatusCode = 200, Data = subTopics , Message = "SubTopics Fetched Successfully" };
             }catch(Exception ex){
                 return new ResponseModel{ StatusCode = 500, Message = ex.Message };
+            }
+        }
+
+        public async Task<ResponseModel> GetSubTopicsLengthByTopicId(Guid topicId)
+        {
+            try
+            {
+                var subTopics = await _context.SubTopics.Where(x => x.TopicId == topicId).ToListAsync();
+                return new ResponseModel { StatusCode = 200, Message = "Successfully Get Sub Topic Length", Data = new { length = subTopics.Count } };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel { StatusCode = 500, Message = ex.Message };
             }
         }
     }

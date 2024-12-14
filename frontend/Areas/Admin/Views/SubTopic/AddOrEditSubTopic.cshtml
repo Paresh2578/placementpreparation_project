@@ -72,6 +72,17 @@
                     <span asp-validation-for="DifficultyLevelId" class="text-red-600"></span>
             </div>
 
+            <!-- Level Dropdown -->
+            <div class="mb-2 w-full">
+                <div class="flex">
+                    <label asp-for="Level" class=" text-gray-700 mb-1"></label>
+                </div>
+                <select id="LevelDropdown" asp-for="Level" asp-items="@(ViewBag.LevelList as List<SelectListItem>)"
+                        class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
+                    <option value="0">Select Level</option>
+                </select>
+            </div>
+
 
             <!--content-->
             <div>
@@ -93,17 +104,19 @@
 </div>
 
 
-<script>
+@section Scripts{
+    <!-- conten text area -->
+    <script>
     const easymde = new EasyMDE({
         element: document.getElementById('my-text-area'),
     });
-
-    
-</script>
+    </script>
 
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script> <!-- Local version of jQuery -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script> <!-- Select2 script -->
+
+<!-- dropdown -->
 <script type="text/javascript">
     $(document).ready(function() {
         // Initialize Select2 for searchable dropdowns
@@ -133,8 +146,30 @@
                     success: function(response) {
                         $('#TopicDropdown').empty();
                         $('#TopicDropdown').append('<option value="">Select Topic</option>');
+                        $("LevelDropdown").empty();
+                        $("LevelDropdown").append('<option value="0">Select Level</option>');
                         $.each(response.value, function(key, value) {
                             $('#TopicDropdown').append('<option value="' + value.topicId + '">' + value.topicName + '</option>'); 
+                        });
+                    }
+                });
+            }
+        });
+
+        // change Level Dropdown by Topic
+        $('#TopicDropdown').change(function() {
+            var topicId = $(this).val();
+            if (topicId) {
+                $.ajax({
+                    url: '/SubTopic/GetLevelsListByTopicId',
+                    type: 'GET',
+                    data: { topicId: topicId },
+                    success: function(response) {
+                        $('#LevelDropdown').empty();
+                        $('#LevelDropdown').append('<option value="0">Select Level</option>');
+                        console.log(response);
+                        $.each(response, function(key, value) {
+                            $('#LevelDropdown').append('<option value="' + value + '">' + value + '</option>');
                         });
                     }
                 });
@@ -143,4 +178,5 @@
     
     });
 </script>
+}
 

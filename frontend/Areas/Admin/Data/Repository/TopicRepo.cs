@@ -30,6 +30,12 @@ namespace Placement_Preparation.Areas.Admin.Data.Repository
             topicList = JsonConvert.DeserializeObject<List<TopicModel>>(response.Data!.ToString());
             return new JsonResult(topicList);
         }
+
+        public async Task<JsonResult> GetTopicsLengthByCourseId(string courseId)
+        {
+            ApiResponseModel response = await _apiClient.GetAsync($"Topic/GetTopicsLengthByCourseId/{courseId}");
+            return new JsonResult(response.Data);
+        }
     }
 }
  

@@ -1,4 +1,5 @@
-﻿
+﻿@model Dictionary<string, dynamic>;
+
 
   <div class="course-read-main " style="">
       <!-- ======= Sidebar ======= -->
@@ -6,13 +7,13 @@
       <ul class="sidebar-nav" id="sidebar-nav">
         <li class="nav-heading">All Topics</li>
         <li class="nav-item">
-          <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <a class="nav-link " data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
             <span>Introduction</span><i class="bi bi-chevron-down ms-auto"></i>
           </a>
-          <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <ul id="components-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
             
             <li>
-              <a href="components-alerts.html">
+              <a href="components-alerts.html" class="active">
                 <i class="bi bi-circle"></i><span>Loop</span>
               </a>
             </li>
@@ -62,70 +63,35 @@
           </ul>
         </li><!-- End Forms Nav -->
 
+        @foreach(var topic in Model["sidebar"]){
         <li class="nav-item">
-          <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-            <span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
+          <a class="nav-link collapsed" data-bs-target="#(@topic["topicId"])" data-bs-toggle="collapse" href="#">
+            <span>@topic["topicName"]</span><i class="bi bi-chevron-down ms-auto"></i>
           </a>
-          <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <ul id="#(@topic["topicId"])" class="nav-content collapse " data-bs-parent="#sidebar-nav">
             <li>
-              <a href="tables-general.html">
-                <i class="bi bi-circle"></i><span>General Tables</span>
+              <a href="forms-elements.html">
+                <i class="bi bi-circle"></i><span>Form Elements</span>
               </a>
             </li>
             <li>
-              <a href="tables-data.html">
-                <i class="bi bi-circle"></i><span>Data Tables</span>
+              <a href="forms-layouts.html">
+                <i class="bi bi-circle"></i><span>Form Layouts</span>
+              </a>
+            </li>
+            <li>
+              <a href="forms-editors.html">
+                <i class="bi bi-circle"></i><span>Form Editors</span>
+              </a>
+            </li>
+            <li>
+              <a href="forms-validation.html">
+                <i class="bi bi-circle"></i><span>Form Validation</span>
               </a>
             </li>
           </ul>
-        </li><!-- End Tables Nav -->
-
-        <li class="nav-item">
-          <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
-            <span>Charts</span><i class="bi bi-chevron-down ms-auto"></i>
-          </a>
-          <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-            <li>
-              <a href="charts-chartjs.html">
-                <i class="bi bi-circle"></i><span>Chart.js</span>
-              </a>
-            </li>
-            <li>
-              <a href="charts-apexcharts.html">
-                <i class="bi bi-circle"></i><span>ApexCharts</span>
-              </a>
-            </li>
-            <li>
-              <a href="charts-echarts.html">
-                <i class="bi bi-circle"></i><span>ECharts</span>
-              </a>
-            </li>
-          </ul>
-        </li><!-- End Charts Nav -->
-
-        <li class="nav-item">
-          <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
-            <span>Icons</span><i class="bi bi-chevron-down ms-auto"></i>
-          </a>
-          <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-            <li>
-              <a href="icons-bootstrap.html">
-                <i class="bi bi-circle"></i><span>Bootstrap Icons</span>
-              </a>
-            </li>
-            <li>
-              <a href="icons-remix.html">
-                <i class="bi bi-circle"></i><span>Remix Icons</span>
-              </a>
-            </li>
-            <li>
-              <a href="icons-boxicons.html">
-                <i class="bi bi-circle"></i><span>Boxicons</span>
-              </a>
-            </li>
-          </ul>
-        </li><!-- End Icons Nav -->
-
+        </li><!-- End Forms Nav -->
+          }
 
       </ul>
 

@@ -68,6 +68,9 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                 // set Topic Dropdown value
                 ViewBag.topicList = await _allDropDown.GetAllTopicsByCourseId(subTopic.CourseId.ToString());
 
+                //set Level Dropdown value
+                ViewBag.LevelList = await _allDropDown.GetSubTopicLengthByTopicId(subTopic.TopicId.ToString());
+
               
                 return View(subTopic);
         }
@@ -218,6 +221,22 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
 
         #endregion
-   
+        
+         #region Get LevelList by courseId
+        [Route("/SubTopic/GetLevelsListByTopicId")]
+        public async Task<List<int>> GetLevelsListByTopicId([FromQuery] string topicId){
+            JsonResult jsonResult = await _subTopicInterface.GetSubTopicLengthByTopicId(topicId:topicId);
+
+            dynamic jsonValue = jsonResult.Value;
+            int n = jsonValue.length;
+
+            List<int> levelList = new List<int>{};
+            for(int i=1;i<=n;i++){
+                levelList.Add(i);
+            }
+
+            return levelList;
+        }
+        #endregion
     }
 }

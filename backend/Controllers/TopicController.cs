@@ -96,6 +96,22 @@ namespace backend.Controllers
         }
         #endregion
         
+        #region  Get Topics Length By Course Id
+        [HttpGet("GetTopicsLengthByCourseId/{courseId}")]
+        public async Task<IActionResult> GetTopicsLengthByCourseId(Guid courseId)
+        {
+            var response = await _topicInterface.GetTopicsLengthByCourseId(courseId);
+            return StatusCode(response.StatusCode,response);
+        }
+        #endregion
 
+        #region Get All Topic With SubTopic List By CourseId
+        [HttpGet("GetSidebarDataByCourseIdAndTopicDocumentionByTopicId/{courseId}/{topicId}")]
+        public async Task<IActionResult> GetSidebarDataByCourseIdAndTopicDocumentionByTopicId(Guid courseId , Guid topicId)
+        {
+            ResponseModel response = await _topicInterface.GetSidebarDataByCourseIdAndTopicDocumentionByTopicId(courseId: courseId  , topicId:topicId);
+            return StatusCode(response.StatusCode, response);
+        }
+        #endregion
     }
 }

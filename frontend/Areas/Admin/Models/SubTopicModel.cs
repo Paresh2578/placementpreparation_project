@@ -19,6 +19,18 @@ namespace Placement_Preparation.Areas.Admin.Models
         [Required(ErrorMessage = "Course is required.")]
         public Guid CourseId { get; set; }
 
+        // Content for the Sub-topic with validation
+        [Required(ErrorMessage = "Content is required.")]
+        [MinLength(10, ErrorMessage = "Content must be at least 10 characters long.")]
+        public required string Content { get; set; }
+
+        
+        //Level
+         [Display(Name = "Level")]
+        public int? Level { get; set; }
+
+
+
         [ForeignKey("CourseId")]
         public virtual CourseModel? Course { get; set; }
 
@@ -36,10 +48,7 @@ namespace Placement_Preparation.Areas.Admin.Models
         [ForeignKey("DifficultyLevelId")]
         public virtual DifficultyLevelModel? DifficultyLevel { get; set; }
 
-        // Content for the Sub-topic with validation
-        [Required(ErrorMessage = "Content is required.")]
-        [MinLength(10, ErrorMessage = "Content must be at least 10 characters long.")]
-        public required string Content { get; set; }
+        
 
        
     }

@@ -107,5 +107,14 @@ namespace backend.Controllers
             return StatusCode(response.StatusCode , response);
         }
         #endregion
+
+        #region  Get Sub Topics Length By TopicId Id
+        [HttpGet("GetSubTopicsLengthByTopicId/{topicId}")]
+        public async Task<IActionResult> GetSubTopicsLengthByTopicId(Guid topicId)
+        {
+            var response = await _subTopicInterface.GetSubTopicsLengthByTopicId(topicId);
+            return StatusCode(response.StatusCode, response);
+        }
+        #endregion
     }
 }

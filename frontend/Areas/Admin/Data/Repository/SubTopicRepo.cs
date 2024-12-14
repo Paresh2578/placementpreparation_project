@@ -44,6 +44,12 @@ namespace Placement_Preparation.Areas.Admin.Data.Repository
             subTopicList = JsonConvert.DeserializeObject<List<SubTopicModel>>(response.Data!.ToString());
             return new JsonResult(subTopicList);
         }
+
+         public async Task<JsonResult> GetSubTopicLengthByTopicId(string topicId)
+        {
+            ApiResponseModel response = await _apiClient.GetAsync($"SubTopic/GetSubTopicsLengthByTopicId/{topicId}");
+            return new JsonResult(response.Data);
+        }
     }
 }
  

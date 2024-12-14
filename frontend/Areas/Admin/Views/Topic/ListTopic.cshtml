@@ -34,6 +34,7 @@
                         <th class="py-3 px-6 text-left">Topic Name</th>
                         <th class="py-3 px-6 text-left">Difficulty Level Name</th>
                         <th class="py-3 px-6 text-left">Course Name</th>
+                        <th class="py-3 px-6 text-left">Level</th>
                         <th class="py-3 px-6 text-left">Action</th>
                     </tr>
                 </thead>
@@ -48,6 +49,7 @@
                                 <td class="py-3 px-6 text-left">@topic.TopicName</td>
                                 <td class="py-3 px-6 text-left">@topic.DifficultyLevel!.DifficultyLevelName</td>
                                 <td class="py-3 px-6 text-left">@topic.Course!.CourseName</td>
+                                <td class="py-3 px-6 text-left">@topic.Level</td>
 
                                 <td class="py-3 px-6 text-left flex gap-x-4">
                                     <a class="cursor-pointer" asp-action="AddOrEditTopic" asp-controller="Topic" asp-route-topicId="@topic.TopicId"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>

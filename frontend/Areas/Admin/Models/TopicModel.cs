@@ -19,6 +19,9 @@ namespace Placement_Preparation.Areas.Admin.Models
         // [Range(1, int.MaxValue, ErrorMessage = "Please select a valid Course.")]
         public Guid CourseId { get; set; }
 
+        [Display(Name = "Level")]
+        public int? Level { get; set; }
+
         [ForeignKey("CourseId")]
         public CourseModel? Course { get; set; }
 

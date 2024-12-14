@@ -26,16 +26,16 @@
             </div>
 
             <!-- Course Dropdown -->
-                <div class="mb-2 w-full">
-                    <div class="flex">
-                        <span class="text-red-600">*</span><label asp-for="Course!.CourseName" class=" text-gray-700 mb-1"></label>
-                    </div>
-                    <select asp-for="CourseId" asp-items="@(ViewBag.CourseList as List<SelectListItem>)"
-                            class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
-                        <option value="">Select Course</option>
-                    </select>
-                    <span asp-validation-for="CourseId" class="text-red-600"></span>
+            <div class="mb-2 w-full">
+                <div class="flex">
+                    <span class="text-red-600">*</span><label asp-for="Course!.CourseName" class=" text-gray-700 mb-1"></label>
                 </div>
+                <select  id="CourseDropdown"asp-for="CourseId" asp-items="@(ViewBag.CourseList as List<SelectListItem>)"
+                        class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
+                    <option value="">Select Course</option>
+                </select>
+                <span asp-validation-for="CourseId" class="text-red-600"></span>
+            </div>
 
                 <!-- difficulty Level radio -->
                 <div class="mb-2">
@@ -50,6 +50,17 @@
                         }
                 </div>
                     <span asp-validation-for="DifficultyLevelId" class="text-red-600"></span>
+            </div>
+
+            <!-- Level Dropdown -->
+            <div class="mb-2 w-full">
+                <div class="flex">
+                    <label asp-for="Level" class=" text-gray-700 mb-1"></label>
+                </div>
+                <select id="LevelDropdown" asp-for="Level" asp-items="@(ViewBag.LevelList as List<SelectListItem>)"
+                        class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150">
+                    <option value="0">Select Level</option>
+                </select>
             </div>
             
             <!--content-->
@@ -70,8 +81,38 @@
 </div>
 
 
+
+
+@section Scripts{
+<!-- Text area -->
 <script>
     const easymde = new EasyMDE({
         element: document.getElementById('my-text-area'),
     });
 </script>
+
+<!-- Level change by course Name -->
+<script>
+    $(document).ready(function () {
+        $('#CourseDropdown').change(function () {
+            var courseId = $(this).val();
+            if (courseId) {
+                $.ajax({
+                    type: "GET",
+                    url: "/Topic/GetLevelsListByCourseId",
+                    data: { courseId: courseId },
+                    success: function (res) {
+                        if (res) {
+                            $("#LevelDropdown").empty();
+                            $("#LevelDropdown").append('<option value="">Select Level</option>');
+                            $.each(res, function (key, value) {
+                                $("#LevelDropdown").append('<option value="' + key + '">' + value + '</option>');
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+}
