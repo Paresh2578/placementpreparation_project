@@ -16,6 +16,6 @@ namespace backend.data.Interface
         public Task<ResponseModel> DeleteMultipleTopic(List<Guid> topicIds); 
         public Task<ResponseModel> GetTopicsLengthByCourseId(Guid courseId);
 
-        public Task<ResponseModel> GetSidebarDataByCourseIdAndTopicDocumentionByTopicId(Guid courseId,Guid topicId);
+        public Task<ResponseModel> GetSidebarDataByCourseIdAndTopicDocumentionByTopicId(Guid courseId,Guid topicId , Guid? subTopicId);
     }
 }

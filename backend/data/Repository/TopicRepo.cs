@@ -149,7 +149,7 @@ namespace backend.data.Repository
                 }
           }
 
-        public async Task<ResponseModel> GetSidebarDataByCourseIdAndTopicDocumentionByTopicId(Guid courseId,Guid topicId)
+        public async Task<ResponseModel> GetSidebarDataByCourseIdAndTopicDocumentionByTopicId(Guid courseId,Guid topicId,Guid? subTopicId)
         {
             try
             {
@@ -205,10 +205,14 @@ namespace backend.data.Repository
                 // Get documention by topic Id
                 //first check subTopic
                 dynamic documention = null;
-                documention = await _context.SubTopics.Select(s => new { s.Content,s.Level,s.TopicId}).OrderBy(s=>s.Level).FirstOrDefaultAsync(x => x.TopicId == topicId);
+               //// documention = await _context.SubTopics.Select(s => new { s.Content,s.Level,s.TopicId}).OrderBy(s=>s.Level).FirstOrDefaultAsync(x => x.TopicId == topicId);
+
+                // If subTopicId Not then documention get by subtopic id else get topicId ,first
+               documention = await _context.SubTopics.Select(s => new { s.Content, s.Level, s.TopicId, s.SubTopicId }).OrderBy(s => s.Level).FirstOrDefaultAsync(x => subTopicId != null ? x.SubTopicId == subTopicId : x.TopicId == topicId);
+
 
                 // check documention is null then get by topic
-                if(documention == null)
+                if (documention == null)
                 {
                     documention = await _context.Topics.Select(s=> new {s.Content,s.Level,s.TopicId}).OrderBy(s => s.Level).FirstOrDefaultAsync(x => x.TopicId == topicId);
                 }

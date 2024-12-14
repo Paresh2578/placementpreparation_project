@@ -106,10 +106,10 @@ namespace backend.Controllers
         #endregion
 
         #region Get All Topic With SubTopic List By CourseId
-        [HttpGet("GetSidebarDataByCourseIdAndTopicDocumentionByTopicId/{courseId}/{topicId}")]
-        public async Task<IActionResult> GetSidebarDataByCourseIdAndTopicDocumentionByTopicId(Guid courseId , Guid topicId)
+        [HttpGet("GetSidebarDataByCourseIdAndTopicDocumentionByTopicId/{courseId}/{topicId}/{subTopicId?}")]
+        public async Task<IActionResult> GetSidebarDataByCourseIdAndTopicDocumentionByTopicId(Guid courseId , Guid topicId , Guid? subTopicId)
         {
-            ResponseModel response = await _topicInterface.GetSidebarDataByCourseIdAndTopicDocumentionByTopicId(courseId: courseId  , topicId:topicId);
+            ResponseModel response = await _topicInterface.GetSidebarDataByCourseIdAndTopicDocumentionByTopicId(courseId: courseId  , topicId:topicId , subTopicId : subTopicId);
             return StatusCode(response.StatusCode, response);
         }
         #endregion
