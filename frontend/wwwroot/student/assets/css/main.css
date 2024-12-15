@@ -2789,7 +2789,30 @@ section,
 
 
 
+/* ----------------------------------------
+ content  read section
+ -------------------------------------*/ 
+.content-section{
+  max-width: 90%;
+  margin: 0 auto;
+}
 
+.content {
+  /* font-size: 16px; */
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .content {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    font-size: 12px;
+  }
+}
 
 
 /*--------------------------------------------------------------
@@ -2797,8 +2820,8 @@ section,
    --------------------------------------------------------------*/
 
 .mcq-option-section{
-  display: flex;
-  flex-wrap: wrap;
+  /* display: flex; */
+  /* flex-wrap: wrap; */
   gap: 8px;
 }
 
@@ -2824,6 +2847,10 @@ section,
 .mcq-option-section  .mcq-option.false{
   background-color: #ff4d4d;
   color: #fbf9f9;
+}
+
+.mcq{
+  margin-bottom: 1rem;
 }
 
 .mcq .mcq-answer{
@@ -2855,6 +2882,13 @@ section,
   color: #0acf83;
   font-weight: bold;
 }
+
+/* -------------
+  Questions
+*/
+.question{
+  margin-bottom: 1rem;
+}  
 
 /* ----------------------
 More Button

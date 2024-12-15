@@ -254,5 +254,6 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             return RedirectToAction("ListMcq");
         }
         #endregion
+     
      }
 }

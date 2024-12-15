@@ -74,5 +74,15 @@ namespace backend.Controllers
             return StatusCode(response.StatusCode , response);
         }
         #endregion
+
+       /* #region Get Mcqs by topic or subTopic Id
+        [HttpGet("GetMcqsByTopicOrSubTopicId/{topicId}/{subTopicId?}")]
+        public async Task<IActionResult> GetMcqsByTopicOrSubTopicId([FromRoute] Guid topicId ,[FromRoute] Guid? subTopicId=null)
+        {
+            ResponseModel response = await _mcqInterface.GetMcqsByTopicOrSubTopicId(topicId: topicId, subTopicId: subTopicId);
+            return StatusCode(response.StatusCode, response);
+        }
+        #endregion
+       */
     }
 }

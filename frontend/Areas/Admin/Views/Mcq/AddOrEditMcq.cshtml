@@ -78,7 +78,7 @@
                 <div class="flex">
                     <span class="text-red-600">*</span><label asp-for="QuestionText" class="text-gray-700 mb-1"></label>
                 </div>
-                <textarea asp-for="QuestionText" placeholder="Enter Question" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2  focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"></textarea>
+                <textarea asp-for="QuestionText" id="easymdeQuestion" placeholder="Enter Question" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2  focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"></textarea>
                 <span asp-validation-for="QuestionText" class="text-red-600"></span>
             </div>
 
@@ -88,16 +88,16 @@
                 <div class="flex">
                     <span class="text-red-600">*</span><label asp-for="OptionA" class=" text-gray-700 mb-1"></label>
                 </div>
-                <textarea rows="5" id="my-text-areaA" asp-for="OptionA" ></textarea>
+                <textarea rows="5" id="my-text-areaA" asp-for="OptionA"  placeholder="Enter option A"></textarea>
                 <span asp-validation-for="OptionA" class="text-red-600"></span>
             </div>
 
             <!--Option B-->
             <div class="mb-2">
                 <div class="flex">
-                    <span class="text-red-600">*</span><label asp-for="OptionB" class=" text-gray-700 mb-1"></label>
+                    <span class="text-red-600">*</span><label asp-for="OptionB"  class=" text-gray-700 mb-1"></label>
                 </div>
-                <textarea rows="5" id="my-text-areaB" asp-for="OptionB"></textarea>
+                <textarea rows="5" id="my-text-areaB" asp-for="OptionB" placeholder="Enter option B"></textarea>
                 <span asp-validation-for="OptionB" class="text-red-600"></span>
             </div>
 
@@ -106,7 +106,7 @@
                 <div class="flex">
                     <span class="text-red-600">*</span><label asp-for="OptionC" class=" text-gray-700 mb-1"></label>
                 </div>
-                <textarea rows="5" id="my-text-areaC" asp-for="OptionC"></textarea>
+                <textarea rows="5" id="my-text-areaC" placeholder="Enter option C" asp-for="OptionC"></textarea>
                 <span asp-validation-for="OptionC" class="text-red-600"></span>
             </div>
 
@@ -115,7 +115,7 @@
                 <div class="flex">
                     <span class="text-red-600">*</span><label asp-for="OptionD" class=" text-gray-700 mb-1"></label>
                 </div>
-                <textarea rows="5" id="my-text-areaD" asp-for="OptionD"></textarea>
+                <textarea rows="5" id="my-text-areaD" asp-for="OptionD" placeholder="Enter option D"></textarea>
                 <span asp-validation-for="OptionD" class="text-red-600"></span>
             </div>
 
@@ -146,7 +146,7 @@
                 <div class="flex">
                     <span class="text-red-600">*</span><label asp-for="AnswerDescription" class=" text-gray-700 mb-1"></label>
                 </div>
-                <textarea rows="3" id="text-area-easymdeAnswerDescription" asp-for="AnswerDescription"></textarea>
+                <textarea rows="3" id="text-area-easymdeAnswerDescription" placeholder="Enter  Answer Description" asp-for="AnswerDescription"></textarea>
                 <span asp-validation-for="AnswerDescription" class="text-red-600"></span>
             </div>
 
@@ -180,6 +180,10 @@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script> <!-- Local version of jQuery -->
 <script>
+    const easymdeQuestion = new EasyMDE({
+        element: document.getElementById('easymdeQuestion'),
+    });
+
     const easymdeA = new EasyMDE({
         element: document.getElementById('my-text-areaA'),
     });

@@ -11,6 +11,7 @@ namespace backend.data.Interface
         public Task<ResponseModel> DeleteMcq(McqModel mcq);
 
         public Task<ResponseModel> DeleteMultipleMcq(List<Guid> mcqIds);
+        public Task<ResponseModel> GetMcqsByTopicOrSubTopicId(Guid topicId, Guid? subTopicId);
 
     }
 }

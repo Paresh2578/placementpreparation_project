@@ -1,98 +1,97 @@
-﻿@model Dictionary<string, dynamic>;
+﻿@using Markdig
+@model Dictionary<string, dynamic>;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor  
 
+
+
+@{
+  var pipeline = new MarkdownPipelineBuilder()
+            .UseAdvancedExtensions() // Enables advanced Markdown features
+            .Build();
+
+     var query = HttpContextAccessor.HttpContext!.Request.Query;
+     var activetopicId = query["topicId"]; // Retrieves the topicId from the query string
+     var activeSubtopicId = query["subTopicId"]; // Retrieves the topicId from the query string
+
+     var activeTopicTitle = "";
+     var nextSubTopicId = "";
+     var nextTopicId = "";
+}
 
   <div class="course-read-main " style="">
       <!-- ======= Sidebar ======= -->
     <aside id="sidebar" class="sidebar " style="">
       <ul class="sidebar-nav" id="sidebar-nav">
         <li class="nav-heading">All Topics</li>
-        <li class="nav-item">
-          <a class="nav-link " data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-            <span>Introduction</span><i class="bi bi-chevron-down ms-auto"></i>
-          </a>
-          <ul id="components-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
-            
-            <li>
-              <a href="components-alerts.html" class="active">
-                <i class="bi bi-circle"></i><span>Loop</span>
-              </a>
-            </li>
-            <li>
-              <a href="components-accordion.html">
-                <i class="bi bi-circle"></i><span>Condition</span>
-              </a>
-            </li>
-            <li>
-              <a href="components-badges.html">
-                <i class="bi bi-circle"></i><span>Array</span>
-              </a>
-            </li>
-            <li>
-              <a href="components-breadcrumbs.html">
-                <i class="bi bi-circle"></i><span>Collection</span>
-              </a>
-            </li>  
-          </ul>
-        </li><!-- End Components Nav -->
+    
+        @{
+      
+        bool setNextTopicId = false;
+        foreach (var topic in (Newtonsoft.Json.Linq.JArray)Model["sidebar"])
+              {
+                bool isCurrentTopic =  activetopicId.ToString().Trim() == topic["topicId"].ToString().Trim() ? true : false;
+                var subTopicList = ((Newtonsoft.Json.Linq.JArray)topic["subTopicList"]).ToObject<List<Dictionary<string, dynamic>>>();
 
-        <li class="nav-item">
-          <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-            <span>Basic</span><i class="bi bi-chevron-down ms-auto"></i>
-          </a>
-          <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-            <li>
-              <a href="forms-elements.html">
-                <i class="bi bi-circle"></i><span>Form Elements</span>
-              </a>
-            </li>
-            <li>
-              <a href="forms-layouts.html">
-                <i class="bi bi-circle"></i><span>Form Layouts</span>
-              </a>
-            </li>
-            <li>
-              <a href="forms-editors.html">
-                <i class="bi bi-circle"></i><span>Form Editors</span>
-              </a>
-            </li>
-            <li>
-              <a href="forms-validation.html">
-                <i class="bi bi-circle"></i><span>Form Validation</span>
-              </a>
-            </li>
-          </ul>
-        </li><!-- End Forms Nav -->
+                if(setNextTopicId){
+                  nextTopicId = topic["topicId"].ToString();
+                }
 
-        @foreach(var topic in Model["sidebar"]){
-        <li class="nav-item">
-          <a class="nav-link collapsed" data-bs-target="#(@topic["topicId"])" data-bs-toggle="collapse" href="#">
-            <span>@topic["topicName"]</span><i class="bi bi-chevron-down ms-auto"></i>
-          </a>
-          <ul id="#(@topic["topicId"])" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-            <li>
-              <a href="forms-elements.html">
-                <i class="bi bi-circle"></i><span>Form Elements</span>
-              </a>
-            </li>
-            <li>
-              <a href="forms-layouts.html">
-                <i class="bi bi-circle"></i><span>Form Layouts</span>
-              </a>
-            </li>
-            <li>
-              <a href="forms-editors.html">
-                <i class="bi bi-circle"></i><span>Form Editors</span>
-              </a>
-            </li>
-            <li>
-              <a href="forms-validation.html">
-                <i class="bi bi-circle"></i><span>Form Validation</span>
-              </a>
-            </li>
-          </ul>
-        </li><!-- End Forms Nav -->
+                if(isCurrentTopic){
+                  setNextTopicId = true;
+                }else{
+                  setNextTopicId = false;
+                }
+                
+
+                @* <li  @(subTopicList.Count <= 0 ? $"onclick='selectTopic(\"{topic["subTopicId"]}\")'" : "") class="nav-item"> *@
+                @* <li  onclick='selectTopic("@topic["topicId"]")' class="nav-item"> *@
+                <li  onclick='selectTopic("@(subTopicList.Count == 0 ? topic["topicId"] : "")")' class="nav-item">
+                  <a class="nav-link @(isCurrentTopic ? "" : "collapsed")" data-bs-target="#(@topic["topicId"])" data-bs-toggle="collapse" href="#">
+                    <span>@topic["topicName"]</span>
+                    <!--check if subTopic are avalible or not-->
+                    @if (subTopicList.Count != 0)
+                    {
+                      <i class="bi bi-chevron-down ms-auto"></i>
+                    }
+                  </a>
+                <ul id="(@topic["topicId"])" class="nav-content collapse  @(isCurrentTopic ? "show" : "")" data-bs-parent="#sidebar-nav">
+
+                 <!--Sub Topics-->
+                  @{
+                      int index = 0;
+                      bool setNextSubTopic=false;
+                      foreach(var subTopic in subTopicList)
+                      {
+                        // set default active subTopic Id
+                        activeSubtopicId = activeSubtopicId.ToString().Trim() == "" && index == 0 && isCurrentTopic ? subTopic["subTopicId"] : activeSubtopicId;
+                        bool isCurrentSubTopic = activeSubtopicId == subTopic["subTopicId"] ? true :  false;
+
+                        if(setNextSubTopic){
+                          nextSubTopicId = subTopic["subTopicId"];
+                        }
+
+                        // change active topic title
+                        if(isCurrentSubTopic){
+                          activeTopicTitle = subTopic["subTopicName"];
+                          setNextSubTopic = true;
+                        }else{
+                          setNextSubTopic = false;
+                        }
+
+                        @* bool isCurrentSubTopic = activeSubtopicId == subTopic["subTopicId"] ? true : activeSubtopicId.ToString().Trim() == "" && index == 0 && isCurrentTopic? true : false; *@
+                        <li onclick='selectSubTopic("@topic["topicId"]","@subTopic["subTopicId"]")'>
+                          <a  class="@(isCurrentSubTopic ? "active":  "")">
+                            <i class="bi bi-circle"></i><span>@subTopic["subTopicName"]</span>
+                          </a>
+                        </li>
+                       index++;
+                      }
+                    }
+              </ul>
+               </li>
+               <!-- End Forms Nav -->
           }
-
+        }
       </ul>
 
     </aside><!-- End Sidebar-->
@@ -102,119 +101,72 @@
       <i class="bi bi-list"></i>
     </span>
 
- <!-- Features Section -->
+ <!-- body Section -->
     <section id="features" class="features section" style="width: 1000000px;padding-top: 40px;">
       <div class="container">
 
-     
-
+        <!-- Tabs -->
         <div class="d-flex justify-content-center">
 
           <ul class="nav nav-tabs" data-aos="fade-up" data-aos-delay="100">
-
+            <!-- documention tab -->
             <li class="nav-item">
               <a class="nav-link active show" data-bs-toggle="tab" data-bs-target="#features-tab-1">
                 <h4>Documention</h4>
               </a>
-            </li><!-- End tab nav item -->
+            </li><!-- End tab documention -->
 
-            <li class="nav-item">
+            <!-- MCq tab -->
+            <li onclick='getMcqs("@activetopicId","@activeSubtopicId")' class="nav-item">
               <a class="nav-link" data-bs-toggle="tab" data-bs-target="#features-tab-2">
                 <h4>Mcq</h4>
-              </a><!-- End tab nav item -->
-
+              </a><!-- End tab Mcq -->
             </li>
-            <li class="nav-item">
+
+            <!-- Question tab -->
+            <li onclick='getQuestions("@activetopicId","@activeSubtopicId")' class="nav-item">
               <a class="nav-link" data-bs-toggle="tab" data-bs-target="#features-tab-3">
                 <h4>Question</h4>
               </a>
-            </li><!-- End tab nav item -->
+            </li><!-- End tab Question tab -->
 
           </ul>
 
         </div>
 
         <div class="tab-content  container" style="width: 100wv;" data-aos="fade-up" data-aos-delay="200">
-
-          <div class="tab-pane course-read-body fade container active show" id="features-tab-1">
-            <div class="row ">
+          <!-- Documention body -->
+          <div class=" tab-pane course-read-body fade container active show" id="features-tab-1">
+            <div class="content-section">
               <div class="topic-title-main">
-                <p class="title" style="">Java Introduction</p>
+                <p class="title" style="">@activeTopicTitle</p>
+                <p>@nextSubTopicId</p>
               </div>
 
-            <div class="prose prose-sm sm:prose lg:prose-lg max-w-none">
-              @Html.Raw(ViewData["Content"] as string)
+            <div class="content prose prose-sm sm:prose lg:prose-lg max-w-none">
+              @Html.Raw(Markdown.ToHtml(Model["documention"]["content"].ToString() , pipeline))
             </div>
             </div>
-          </div><!-- End tab content item -->
+          </div><!-- End documention body -->
 
-          <div class="tab-pane course-read-body container fade" id="features-tab-2">
-            <div class="row">
-              
-              <div class="mcq">
-                <h4>Q1 . What is JavaScript ?</h4>
-                <div class="mcq-option-section" id="mcq-option-section">
-                    <div class="mcq-option" value="true" onclick="clickMcqOption(this)">A . To facilitate the creation of static HTML websites</div>
-                    <div class="mcq-option" value="false" onclick="clickMcqOption(this)">B . To facilitate the creation of static HTML websites</div>
-                    <div class=" mcq-option" value="false" onclick="clickMcqOption(this)">C . To facilitate the creation of static HTML websites</div>
-                    <div class="mcq-option" value="false" onclick="clickMcqOption(this)">D . To facilitate the creation of static HTML websites</div>
-                </div>
-
-                <!-- answer -->
-                <div class="mcq-answer">
-                  <button class="ans-toggel-btn" onclick="togelShowAnswer(this)">Show Answer</button>
-                  <div class="mcq-ans-discription d-none">
-                    <p>Answer : To  facilitate the creation of static HTML websites</p>
-                    <span class="fw-bold">Explanation</span>
-                    <div class="p-2 " style="border-style: dotted; border-color: gray;">
-                      ASP.NET is a web application framework developed by Microsoft that allows programmers to build dynamic websites, web applications, and web services. It uses .NET programming languages like C# and VB.NET.
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <!-- Mcq body -->
+          <div  class="tab-pane course-read-body container fade" id="features-tab-2">
+            <div class="mcq-list-container gap-2">
+               
             </div>
-          </div><!-- End tab content item -->
+          </div><!-- End Mcq Body -->
 
+          <!-- Question Body -->
           <div class="tab-pane fade course-read-body container" id="features-tab-3">
-            <div class="row gap-5">
-               <div>
-                  <h4>Q1. What is JavaScript ?</h4>
-                  <span class="fw-bold">Answer :</span>
-                  <div>
-                    <p>JavaScript is a programming language that adds interactivity to your website. This happens in games, in the behavior of responses when buttons are pressed or with data entry on forms; with dynamic styling; with animation, etc.</p>
-                  </div>
-               </div>
-
-               <div>
-                  <h4>Q2. What is JavaScript ?</h4>
-                  <span class="fw-bold">Answer :</span>
-                  <div>
-                    <p>JavaScript is a programming language that adds interactivity to your website. This happens in games, in the behavior of responses when buttons are pressed or with data entry on forms; with dynamic styling; with animation, etc.</p>
-                  </div>
-               </div>
-
-               <div>
-                  <h4>Q3. What is JavaScript ?</h4>
-                  <span class="fw-bold">Answer :</span>
-                  <div>
-                    <p>JavaScript is a programming language that adds interactivity to your website. This happens in games, in the behavior of responses when buttons are pressed or with data entry on forms; with dynamic styling; with animation, etc.</p>
-                  </div>
-               </div>
-
-               <div>
-                  <h4>Q4. What is JavaScript ?</h4>
-                  <span class="fw-bold">Answer :</span>
-                  <div>
-                    <p>JavaScript is a programming language that adds interactivity to your website. This happens in games, in the behavior of responses when buttons are pressed or with data entry on forms; with dynamic styling; with animation, etc.</p>
-                  </div>
-               </div>
+            <div class="question-list-container gap-5">
+               
             </div>
-          </div><!-- End tab content item -->
+          </div><!-- End Question Body -->
 
              @* next ans prev button *@
         <div class="d-flex justify-content-between">
           <button class="btn btn-primary"><i class="fa-solid fa-chevron-left"></i> Previous</button>
-          <button class="btn btn-primary"> Next <i class="fa-solid fa-chevron-right"></i></button>
+          <button class="btn btn-primary" onclick='selectSubTopic("@(nextSubTopicId.ToString().ToLower().Trim() == "" ? nextTopicId :  activetopicId)" , "@nextSubTopicId")'> Next <i class="fa-solid fa-chevron-right"></i></button>
         </div>
 
         </div>
@@ -271,18 +223,13 @@
 
   <!-- mcq answer -->
   <script>
-    const mcqOptionSection = document.getElementById('mcq-option-section');
+    
 
-    function togelShowAnswer(e){
+    function togelShowAnswer(e,mcqId){
       const answer = e.nextElementSibling;
-      answer.classList.toggle('show');
-      if(answer.classList.contains('show')){
-        e.innerHTML = "Hide Answer";
-        answer.classList.remove('d-none');
-      }else{
-        e.innerHTML = "Show Answer";
-        answer.classList.add('d-none');
-      }
+      const mcqOptionSection = document.getElementById('mcq-option-section'+mcqId);
+
+      // <!-- set color in options --> 
       for(var children of mcqOptionSection.children){
         if(children.getAttribute('value') == "true"){
           children.classList.add('true');
@@ -291,10 +238,33 @@
           children.classList.remove('true');
           }
       }
+
+      // Hide and show Answer
+      answer.classList.toggle('show');
+      if(answer.classList.contains('show')){
+        e.innerHTML = "Hide Answer";
+        answer.classList.remove('d-none');
+      }else{
+        e.innerHTML = "Show Answer";
+        answer.classList.add('d-none');
+      // <!-- hide right answer when click hide answer -->
+        hideRightOption(mcqOptionSection);
+      }
+      
+    }
+    function hideRightOption(mcqOptionSection){
+      
+      for(var children of mcqOptionSection.children){
+          children.classList.remove('true');
+          children.classList.remove('false');
+       
+    }
     }
 
+
     @* <!-- click mcq options --> *@
-    function clickMcqOption(e){
+    function clickMcqOption(e,mcqId){
+       const mcqOptionSection = document.getElementById('mcq-option-section'+mcqId);
       for(var children of mcqOptionSection.children){
         children.classList.remove('true');
         children.classList.remove('false');
@@ -306,6 +276,143 @@
         e.classList.add('false');
       }
 
+
+    }
+  </script>
+
+  <!-- Sidebar selection -->
+  <script>
+    function selectSubTopic(topicId,subTopicId){
+      const url = new URL(window.location.href);
+      url.searchParams.set('topicId', topicId);
+      url.searchParams.set('subTopicId', subTopicId);
+      window.location.href = url;
+    }
+
+    function selectTopic(topicId){
+      //check if topicId is empty then return
+      if(topicId.toString().trim() == "") return;
+      const url = new URL(window.location.href);
+      url.searchParams.set("topicId" , topicId);
+      url.searchParams.set("subTopicId" , "");
+      window.location.href = url;
+    }
+  </script>
+
+  <!-- content get and show -->
+   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+   <!-- Mcq -->
+  <script>
+    async  function getMcqs(topicId , subTopicId){
+      let mcqList = []
+      // fetch mcq data from database
+        try {
+            // Fetch MCQ data from the database using AJAX
+            mcqList = await $.ajax({
+                url: `/Mcq/GetMcqs`,
+                type: "GET",
+                data: {
+                    topicId: topicId,
+                    subTopicId: subTopicId
+                }
+            });
+       @*
+         *@
+        } catch (err) {
+            console.error("Error fetching MCQs:", err);
+            return; // Exit if there was an error
+        }
+
+      // Find the container
+     const mcqContainer = document.querySelector(".mcq-list-container");
+
+     // Clear existing content
+      mcqContainer.innerHTML = "";
+
+      // Loop over the mcqList
+      mcqList.forEach((mcq , index) => {
+        
+         const mcqHtml =`
+              <div class="mcq">
+                <h4>Q${index+1}.  ${mcq.questionText} ?</h4>
+                <div id="mcq-option-section${mcq.mcqId}" class="mcq-option-section">
+                    <div class="mcq-option" value="${mcq.correctAnswer.toLocaleLowerCase().trim() =="a" }" onclick='clickMcqOption(this,"${mcq.mcqId.toString()}")'>A . ${mcq.optionA}</div>
+                    <div class="mcq-option" value="${mcq.correctAnswer.toLocaleLowerCase().trim() =="b" }" onclick='clickMcqOption(this,"${mcq.mcqId}")'>B . ${mcq.optionB}</div>
+                    <div class=" mcq-option" value="${mcq.correctAnswer.toLocaleLowerCase().trim() =="c" }" onclick='clickMcqOption(this,"${mcq.mcqId}")'>C . ${mcq.optionC}</div>
+                    <div class="mcq-option" value="${mcq.correctAnswer.toLocaleLowerCase().trim() =="d" }" onclick='clickMcqOption(this,"${mcq.mcqId}")'>D . ${mcq.optionD}</div>
+                </div>
+
+                <!-- answer -->
+                <div class="mcq-answer">
+                  <button class="ans-toggel-btn" onclick='togelShowAnswer(this,"${mcq.mcqId.toString()}")'>Show Answer</button>
+                  <div class="mcq-ans-discription d-none">
+                    <p>Answer : ${mcq.correctAnswer.toLocaleLowerCase() == 'a' ? mcq.optionA : mcq.correctAnswer.toLocaleLowerCase() == 'b' ? mcq.optionB : mcq.correctAnswer.toLocaleLowerCase() == 'c' ? mcq.optionC : mcq.optionD }</p>
+                    <span class="fw-bold">Explanation</span>
+                    <div class="p-2 " style="border-style: dotted; border-color: gray;">
+                      ${mcq.answerDescription}
+                    </div>
+                  </div>
+                </div>
+              </div>
+         `;
+
+        // Append the mcqHtml to the mcqContainer
+        mcqContainer.innerHTML += mcqHtml;
+      });
+
+      // if mcq data are not avalible then show text
+      if(mcqList.length == 0){
+        mcqContainer.innerHTML += `<p class="text-center">No data available</p>`
+      }
+    }
+  </script>
+
+  <!-- Questions -->
+  <script>
+    async function getQuestions(topicId , subTopicId){
+       let questionList = []
+      // fetch question data from database
+        try {
+            // Fetch Question data from the database using AJAX
+            questionList = await $.ajax({
+                url: `/Question/GetQuestions`,
+                type: "GET",
+                data: {
+                    topicId: topicId,
+                    subTopicId: subTopicId
+                }
+            });
+        } catch (err) {
+            console.error("Error fetching Question:", err);
+            return; // Exit if there was an error
+        }
+
+      // Find the container
+     const questionContainer = document.querySelector(".question-list-container");
+
+      // Clear existing content
+      questionContainer.innerHTML= "";
+      // Loop over the questionList
+      questionList.forEach((question, index)=>{
+        const questionHtml =`
+                <div class="question">
+                  <h4>Q${index+1}. ${question.question} ?</h4>
+                  <span class="fw-bold">Answer :</span>
+                  <div>
+                    <p>${question.questionAnswer}</p>
+                  </div>
+               </div>
+        `
+
+        //add
+        questionContainer.innerHTML += questionHtml; 
+      })
+
+       // if quesiton data are not avalible then show text
+      if(questionList.length == 0){
+        questionContainer.innerHTML += `<p class="text-center">No data available</p>`
+      }
 
     }
   </script>

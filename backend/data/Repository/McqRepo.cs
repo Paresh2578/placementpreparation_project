@@ -128,6 +128,19 @@ namespace backend.data.Repository
                 return new ResponseModel { StatusCode = 500, Message = ex.Message };
             }
         }
-    
+
+        public async Task<ResponseModel> GetMcqsByTopicOrSubTopicId(Guid topicId , Guid? subTopicId)
+        {
+            try
+            {
+                List<McqModel> mcqs = await _context.Mcqs.Where(m => (m.TopicId == topicId) && (m.SubTopicId == subTopicId || subTopicId == null) && m.IsActive).ToListAsync();
+                return new ResponseModel { StatusCode = 200, Message = "Successfully Get Mcqs", Data = mcqs };
+            }catch(Exception ex)
+            {
+                return new ResponseModel { StatusCode = 500, Message = ex.Message };
+            }
+        }
+
+
     }
 }
