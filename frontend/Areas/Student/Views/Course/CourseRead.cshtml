@@ -16,6 +16,9 @@
      var activeTopicTitle = "";
      var nextSubTopicId = "";
      var nextTopicId = "";
+
+     var preSubTopicId = "";
+    var preTopicId = "";
 }
 
   <div class="course-read-main " style="">
@@ -27,25 +30,25 @@
         @{
       
         bool setNextTopicId = false;
+        int topicIdx = 0;
         foreach (var topic in (Newtonsoft.Json.Linq.JArray)Model["sidebar"])
               {
-                bool isCurrentTopic =  activetopicId.ToString().Trim() == topic["topicId"].ToString().Trim() ? true : false;
-                var subTopicList = ((Newtonsoft.Json.Linq.JArray)topic["subTopicList"]).ToObject<List<Dictionary<string, dynamic>>>();
+                bool isCurrentTopic =  activetopicId.ToString().Trim() == topic["topicId"]!.ToString().Trim() ? true : false;
+                var subTopicList = ((Newtonsoft.Json.Linq.JArray)topic["subTopicList"]!).ToObject<List<Dictionary<string, dynamic>>>();
 
                 if(setNextTopicId){
-                  nextTopicId = topic["topicId"].ToString();
+                  nextTopicId = topic["topicId"]!.ToString();
                 }
 
                 if(isCurrentTopic){
                   setNextTopicId = true;
+                  preTopicId = topicIdx == 0 ? "" : ((Newtonsoft.Json.Linq.JArray)Model["sidebar"])[topicIdx-1]["topicId"]!.ToString();
                 }else{
                   setNextTopicId = false;
                 }
                 
 
-                @* <li  @(subTopicList.Count <= 0 ? $"onclick='selectTopic(\"{topic["subTopicId"]}\")'" : "") class="nav-item"> *@
-                @* <li  onclick='selectTopic("@topic["topicId"]")' class="nav-item"> *@
-                <li  onclick='selectTopic("@(subTopicList.Count == 0 ? topic["topicId"] : "")")' class="nav-item">
+                <li  onclick='selectTopic("@(subTopicList!.Count == 0 ? topic["topicId"] : "")")' class="nav-item">
                   <a class="nav-link @(isCurrentTopic ? "" : "collapsed")" data-bs-target="#(@topic["topicId"])" data-bs-toggle="collapse" href="#">
                     <span>@topic["topicName"]</span>
                     <!--check if subTopic are avalible or not-->
@@ -74,6 +77,7 @@
                         if(isCurrentSubTopic){
                           activeTopicTitle = subTopic["subTopicName"];
                           setNextSubTopic = true;
+                          preSubTopicId = index == 0 ? "" : subTopicList[index-1]["subTopicId"];
                         }else{
                           setNextSubTopic = false;
                         }
@@ -90,6 +94,7 @@
               </ul>
                </li>
                <!-- End Forms Nav -->
+          topicIdx++;
           }
         }
       </ul>
@@ -141,6 +146,8 @@
               <div class="topic-title-main">
                 <p class="title" style="">@activeTopicTitle</p>
                 <p>@nextSubTopicId</p>
+                <p>@preSubTopicId</p>
+                <p>@preTopicId</p>
               </div>
 
             <div class="content prose prose-sm sm:prose lg:prose-lg max-w-none">
@@ -165,9 +172,9 @@
 
              @* next ans prev button *@
         <div class="d-flex justify-content-between">
-          <button class="btn btn-primary"><i class="fa-solid fa-chevron-left"></i> Previous</button>
-          <button class="btn btn-primary" onclick='selectSubTopic("@(nextSubTopicId.ToString().ToLower().Trim() == "" ? nextTopicId :  activetopicId)" , "@nextSubTopicId")'> Next <i class="fa-solid fa-chevron-right"></i></button>
-        </div>
+          <button class="btn btn-primary" onclick='selectSubTopic("@(string.IsNullOrEmpty(preTopicId) ? activetopicId : preTopicId)", "@(!string.IsNullOrEmpty(preTopicId) ?"" : string.IsNullOrEmpty(preSubTopicId) ? activeSubtopicId : preSubTopicId)")' @(string.IsNullOrEmpty(preTopicId?.Trim()) && string.IsNullOrEmpty(preSubTopicId?.Trim()) ? "disabled" : "")><i class="fa-solid fa-chevron-left"></i> Previous</button>
+            <button class="btn btn-primary" onclick='selectSubTopic("@(nextSubTopicId.ToString().ToLower().Trim() == "" ? nextTopicId :  activetopicId)" , "@nextSubTopicId")'  @(string.IsNullOrEmpty(nextTopicId?.Trim()) && string.IsNullOrEmpty(nextSubTopicId?.Trim()) ? "disabled" : "")> Next <i class="fa-solid fa-chevron-right"></i></button>
+          </div>
 
         </div>
 
