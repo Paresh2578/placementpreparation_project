@@ -14,6 +14,7 @@
      var activeSubtopicId = query["subTopicId"]; // Retrieves the topicId from the query string
 
      var activeTopicTitle = "";
+     var activeSubtopicTitle = "";
      var nextSubTopicId = "";
      var nextTopicId = "";
 
@@ -43,6 +44,7 @@
                 if(isCurrentTopic){
                   setNextTopicId = true;
                   preTopicId = topicIdx == 0 ? "" : ((Newtonsoft.Json.Linq.JArray)Model["sidebar"])[topicIdx-1]["topicId"]!.ToString();
+                  activeTopicTitle = topic["topicName"]!.ToString();
                 }else{
                   setNextTopicId = false;
                 }
@@ -78,6 +80,7 @@
                           activeTopicTitle = subTopic["subTopicName"];
                           setNextSubTopic = true;
                           preSubTopicId = index == 0 ? "" : subTopicList[index-1]["subTopicId"];
+                          activeSubtopicTitle = subTopic["subTopicName"];
                         }else{
                           setNextSubTopic = false;
                         }
@@ -139,15 +142,13 @@
 
         </div>
 
-        <div class="tab-content  container" style="width: 100wv;" data-aos="fade-up" data-aos-delay="200">
+        <div class="tab-content container" style="width: 100wv;" data-aos="fade-up" data-aos-delay="200">
           <!-- Documention body -->
           <div class=" tab-pane course-read-body fade container active show" id="features-tab-1">
             <div class="content-section">
-              <div class="topic-title-main">
-                <p class="title" style="">@activeTopicTitle</p>
-                <p>@nextSubTopicId</p>
-                <p>@preSubTopicId</p>
-                <p>@preTopicId</p>
+              <div class="topic-title-main" style="border-bottom: 2px green;">
+                <p class="title" >@(string.IsNullOrEmpty(activeSubtopicTitle) ? activeTopicTitle : activeSubtopicTitle)</p>
+                <hr/>
               </div>
 
             <div class="content prose prose-sm sm:prose lg:prose-lg max-w-none">
@@ -158,6 +159,11 @@
 
           <!-- Mcq body -->
           <div  class="tab-pane course-read-body container fade" id="features-tab-2">
+            <div class="topic-title-main" style="border-bottom: 2px green;">
+                <p class="title" >@(string.IsNullOrEmpty(activeSubtopicTitle) ? activeTopicTitle : activeSubtopicTitle)</p>
+                <hr/>
+              </div>
+
             <div class="mcq-list-container gap-2">
                
             </div>
@@ -165,6 +171,11 @@
 
           <!-- Question Body -->
           <div class="tab-pane fade course-read-body container" id="features-tab-3">
+            <div class="topic-title-main" style="border-bottom: 2px green;">
+                <p class="title" >@(string.IsNullOrEmpty(activeSubtopicTitle) ? activeTopicTitle : activeSubtopicTitle)</p>
+                <hr/>
+              </div>
+
             <div class="question-list-container gap-5">
                
             </div>
@@ -311,6 +322,14 @@
 
    <!-- Mcq -->
   <script>
+     // Initialize Showdown Converter
+    var converter = new showdown.Converter({
+      tables: true,
+      strikethrough: true,
+      tasklists: true,
+      simplifiedAutoLink: true,
+      ghCodeBlocks: true,
+    });
     async  function getMcqs(topicId , subTopicId){
       let mcqList = []
       // fetch mcq data from database
@@ -339,10 +358,11 @@
 
       // Loop over the mcqList
       mcqList.forEach((mcq , index) => {
-        
+        // Convert Markdown to HTML
+        var html = converter.makeHtml(mcq.questionText);
          const mcqHtml =`
               <div class="mcq">
-                <h4>Q${index+1}.  ${mcq.questionText} ?</h4>
+                <h4 >Q${index+1}.  ${html} ?</h4>
                 <div id="mcq-option-section${mcq.mcqId}" class="mcq-option-section">
                     <div class="mcq-option" value="${mcq.correctAnswer.toLocaleLowerCase().trim() =="a" }" onclick='clickMcqOption(this,"${mcq.mcqId.toString()}")'>A . ${mcq.optionA}</div>
                     <div class="mcq-option" value="${mcq.correctAnswer.toLocaleLowerCase().trim() =="b" }" onclick='clickMcqOption(this,"${mcq.mcqId}")'>B . ${mcq.optionB}</div>
@@ -373,6 +393,10 @@
         mcqContainer.innerHTML += `<p class="text-center">No data available</p>`
       }
     }
+     // Apply Syntax Highlighting
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
   </script>
 
   <!-- Questions -->

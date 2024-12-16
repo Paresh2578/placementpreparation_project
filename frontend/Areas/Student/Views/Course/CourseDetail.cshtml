@@ -1,6 +1,7 @@
 ﻿@model Dictionary<string, dynamic>
 
 
+
 <!-- Page Title -->
 <div class="page-title light-background">
     <div class="course">
@@ -68,6 +69,13 @@
                             <td>@topic["difficultyLevel"]</td>
                             </tr>
                             index++;
+                        }
+
+                        if(Model["topicList"].Count == 0)
+                        {
+                            <tr class="border-b text-nowrap border-gray-200  no-topic-found">
+                                <td class="py-3 px-6 text-center" colspan="3">No Topic Found</td>
+                            </tr>
                         }
                     }
                 </tbody>

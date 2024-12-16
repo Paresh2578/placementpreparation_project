@@ -1,16 +1,23 @@
 ﻿@model List<CourseModel>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor  
+
 
 @{
     ViewData["Title"] = "All Courses";
 
     List<CourseModel> courses = Model;
-        
+     var serializedCourses = System.Text.Json.JsonSerializer.Serialize(courses);
+
+    var query = HttpContextAccessor.HttpContext!.Request.Query;
+    var courseType = query["courseType"].ToString();
+
+    var pageTitle = string.IsNullOrEmpty(courseType.Trim()) ? "All" : courseType.Substring(0,1).ToString().ToUpper() + courseType.Substring(1).ToString().ToLower();
 }
 
 <!-- Page Title -->
 <div class="page-title light-background">
     <div class="container">
-        <h1>All Courses</h1>
+        <h1>@pageTitle Courses</h1>
         <nav class="breadcrumbs">
             <ol>
                 <li><a asp-controller="Home" asp-action="Home">Home</a></li>
@@ -24,7 +31,7 @@
 <section id="courses-section" class="container courses-section section">
     <div class="search-bar-container">
         <!-- Input field for search -->
-        <input type="text" id="course-search-input" class="search-input" placeholder="Search courses...">
+        <input type="text" oninput="onSearch(this)" id="course-search-input" class="search-input" placeholder="Search courses...">
 
         <!-- Dropdown filters -->
         <div class="filter-container">
@@ -42,7 +49,7 @@
 
     <!-- List of Courses -->
     <div class="course-list">
-        <div class="row gy-4">
+        <div class="row gy-4" id="course-list">
             @foreach (var course in courses)
             {
                 <a asp-action="CourseDetail" asp-controller="Course" asp-route-courseId="@course.CourseId" class=" col-lg-3 col-md-6 d-flex align-items-stretch course-item" data-aos="fade-up" data-aos-delay="100" data-name="@course.CourseName">
@@ -66,46 +73,48 @@
 <!-- jQuery Script -->
 @* <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
 @section Scripts{
-<script>
-    $(document).ready(function () {
-        $('#course-search-input').on("keyup", function () {
-            var searchValue = $(this).val().toLowerCase().trim();
+    <!-- input search -->
+  <script>
+        // Inject serialized courses from Razor into JavaScript
+        const courses = @Html.Raw(@serializedCourses);
 
-            console.log("Search input:", searchValue); // Debugging
+        function onSearch(e) {
+            const searchTerm = e.value.toLowerCase();
 
-            // All course
-            var courses = document.querySelectorAll(".course-item");
-            for (let course of courses) {
-                var courseName = course.getAttribute("data-name").toLowerCase().trim();
-                console.log("Course Name:", courseName); // Debugging
-                console.log("Course:", course); // Debugging
-                course.style.display = "none";
-                if (courseName.includes(searchValue)) {
-                    course.style.display = "block";
-                } else {
-                    course.style.display = "none";
-                }
+            // Filter courses based on search term
+            const filteredCourses = courses.filter(course =>
+                course.CourseName.toLowerCase().includes(searchTerm)
+            );
+
+            // Update UI
+            const courseList = document.getElementById("course-list");
+            courseList.innerHTML = ""; // Clear current courses
+
+            filteredCourses.forEach(course => {
+                const courseCard = `
+                    <a href="/Course/CourseDetail/${course.CourseId}" class="col-lg-3 col-md-6 d-flex align-items-stretch course-item" data-aos="fade-up" data-aos-delay="100" data-name="${course.CourseName}">
+                        <div class="course-card">
+                            <div class="card-img">
+                                <img src="${course.Img}" class="img-fluid" alt="${course.CourseName}" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <div class="card-content">
+                                <div class="d-flex justify-content-between">
+                                    <span class="type">${course.CourseType.CourseTypeName}</span>
+                                </div>
+                                <h4 class="name">${course.CourseName}</h4>
+                            </div>
+                        </div>
+                    </a>
+                `;
+                courseList.insertAdjacentHTML("beforeend", courseCard);
+            });
+
+            // Add no found message
+            if(filteredCourses.length ==0){
+                courseList.innerHTML = `<h3 class="text-center">No Course Found</h3>`;
             }
-
-          
-
-            @* // Check the number of visible courses
-            var visibleCourses = $(".course-item:visible").length;
-
-            // Remove existing "No Courses Found" message if it exists
-            $(".no-courses-found").remove();
-
-            // If no courses are visible, add the "No Courses Found" message
-            if (visibleCourses === 0) {
-                $(".course-list .row").append(`
-                    <div class="col-12 no-courses-found">
-                        <p class="text-center text-muted">No Courses Found</p>
-                    </div>
-                `);
-            } *@
-        });
-    });
-</script>
+        }
+    </script>
 
  <!-- DropDown Search -->
  <script>
@@ -113,36 +122,47 @@
         var branchId = $("#branch").val();
         var courseTypeId = $("#courseType").val();
 
-        $.ajax({
-            url: "/Course/GetCoursesByBranchAndCourseType",
-            type: "GET",
-                data: { branchId: branchId, courseTypeId: courseTypeId },
-            success: function (response) {
-                console.log(response);
-                $("#course-list .row").empty();
-                    // Append each course dynamically
-                    response.forEach(course => {
-                        $("#course-list .row").append(`
-                        <a href="/Course/CourseDetail/${course.CourseId}" class="col-lg-3 col-md-6 d-flex align-items-stretch course-item" data-aos="fade-up" data-aos-delay="100" data-name="${course.CourseName}">
-                            <div class="course-card">
-                                <div class="card-img">
-                                    <img src="${course.Img}" class="img-fluid" alt="${course.CourseName}" style="width: 100%; height: 100%; object-fit: cover;">
-                                </div>
-                                <div class="card-content">
-                                    <div class="d-flex justify-content-between">
-                                                @* <span class="type">${course.CourseType.courseTypeName}</span> *@
-                                    </div>
-                                    <h4 class="name">${course.CourseName}</h4>
-                                </div>
-                            </div>
-                        </a>
-                    `);
+        console.log(branchId ,courseTypeId);
+
+         // Filter courses based on brachId , courseId
+            const filteredCourses = courses.filter(course => {
+                        if (
+                            (branchId === "" || course.BranchId === branchId) &&
+                            (courseTypeId === "" || course.CourseTypeId === courseTypeId) // Corrected comparison
+                        ) {
+                            return true;
+                        } else {
+                            return false;
+                        }
                     });
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
+
+        // Update UI
+           const courseList = document.getElementById("course-list");
+            courseList.innerHTML = ""; // Clear current courses
+
+            filteredCourses.forEach(course => {
+                const courseCard = `
+                    <a href="/Course/CourseDetail/${course.CourseId}" class="col-lg-3 col-md-6 d-flex align-items-stretch course-item" data-aos="fade-up" data-aos-delay="100" data-name="${course.CourseName}">
+                        <div class="course-card">
+                            <div class="card-img">
+                                <img src="${course.Img}" class="img-fluid" alt="${course.CourseName}" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <div class="card-content">
+                                <div class="d-flex justify-content-between">
+                                    <span class="type">${course.CourseType.CourseTypeName}</span>
+                                </div>
+                                <h4 class="name">${course.CourseName}</h4>
+                            </div>
+                        </div>
+                    </a>
+                `;
+                courseList.insertAdjacentHTML("beforeend", courseCard);
+            });
+
+            // Add no found message
+            if(filteredCourses.length ==0){
+                courseList.innerHTML = `<h3 class="text-center">No Course Found</h3>`;
+            } 
     }
  </script>
 }

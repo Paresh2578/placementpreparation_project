@@ -22,11 +22,11 @@ namespace Placement_Preparation.Areas.Student.Controllers
         }
 
         #region List All Courses
-        public async Task<IActionResult> ListAllCourse()
+        public async Task<IActionResult> ListAllCourse([FromQuery] string? courseType)
         {
             
             // get top 5 courses
-            ApiResponseModel responseModel = await _apiClient.GetAsync($"{_apiBaseUrl}");
+            ApiResponseModel responseModel = await _apiClient.GetAsync($"{_apiBaseUrl}?courseType={courseType}");
 
             List<CourseModel> courses = new List<CourseModel>();
             if (responseModel.StatusCode == 200)

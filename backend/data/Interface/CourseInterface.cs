@@ -4,7 +4,7 @@ namespace backend.data.Interface
 {
     public interface CourseInterface
     {
-        public  Task<ResponseModel> GetAllCourses(int? limit);
+        public  Task<ResponseModel> GetAllCourses(int? limit , string? courseType);
         public Task<ResponseModel> GetCourseById(Guid courseId);
         public Task<ResponseModel> AddCourse(CourseModel course);
         public Task<ResponseModel> UpdateCourse(CourseModel course);

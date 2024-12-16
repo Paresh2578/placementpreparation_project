@@ -59,18 +59,22 @@ namespace backend.data.Repository
        }
 
        
-       public async Task<ResponseModel> GetAllCourses(int? limit)
+       public async Task<ResponseModel> GetAllCourses(int? limit , string? courseType)
         {
+            // remove spce in courseType Name
+            if(courseType != null)
+            {
+                courseType = courseType.Trim();
+            }
             try{
                 // if limit of data
                 var courses = new List<CourseModel>();
                 if(limit is null){
-                    courses = await _context.Courses.Include(b => b.Branch).Include(c => c.CourseType).ToListAsync();
+                    courses = await _context.Courses.Include(b => b.Branch).Include(c => c.CourseType).Where(c => (c.CourseType.CourseTypeName == courseType || string.IsNullOrEmpty(courseType))).ToListAsync();
                 }
                 else
                 {
-                    courses = await _context.Courses.Include(b => b.Branch).Include(c => c.CourseType).Take(Convert.ToInt32(limit)).ToListAsync();
-
+                    courses = await _context.Courses.Include(b => b.Branch).Include(c => c.CourseType).Take(Convert.ToInt32(limit)).Where(c => (c.CourseType.CourseTypeName == courseType || string.IsNullOrEmpty(courseType))).ToListAsync();
                 }
                 return new ResponseModel { StatusCode = 200, Data = courses  , Message = "Courses retrieved successfully." };
             }catch(Exception e){

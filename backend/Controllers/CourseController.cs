@@ -18,9 +18,9 @@ namespace backend.Controllers
         
         #region  Get All Courses
         [HttpGet]
-        public async Task<IActionResult> GetAllCourses([FromQuery] int? limit)
+        public async Task<IActionResult> GetAllCourses([FromQuery] int? limit , [FromQuery] string? courseType)
         {
-            var response = await _courseInterface.GetAllCourses(limit);
+            var response = await _courseInterface.GetAllCourses(limit , courseType);
             return StatusCode(response.StatusCode, response);
         }
         #endregion

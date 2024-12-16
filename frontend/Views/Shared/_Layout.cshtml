@@ -28,14 +28,17 @@
     <link href="~/student/assets/css/main.css" rel="stylesheet">
     <link href="~/student/assets/css/card.css" rel="stylesheet"/>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
-    <!-- marked cdn -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Showdown Library for Markdown Conversion -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
+
+  <!-- Highlight.js Library and Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
    
 
 </head>
@@ -57,14 +60,15 @@
             <nav id="navmenu" class="navmenu">
                 <ul>
                     <li><a asp-action="Home" asp-controller="Home" asp-area="Student" class="active">Home</a></li>
-                    <li><a href="#">Programing</a></li>
-                    <li class="dropdown">
+                   <li><a href="/Student/Course/ListAllCourse?courseType=programing">Programing</a></li>
+                   <li><a href="/Student/Course/ListAllCourse?courseType=Aptitude">Aptitude</a></li>
+                    @* <li class="dropdown">
                         <a href="#"><span>Aptitude</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
                         <ul>
                             <li><a href="#">Quantitative</a></li>
                             <li><a href="#">Reasoning</a></li>
                         </ul>
-                    </li>
+                    </li> *@
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
@@ -110,6 +114,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             hljs.highlightAll();
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
         });
     </script>
 
