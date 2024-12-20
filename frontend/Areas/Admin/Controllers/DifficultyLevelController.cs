@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Placement_Preparation.Areas.Admin.Models;
 using Placement_Preparation.Services;
+using Placement_Preparation.Utils;
 
 namespace Placement_Preparation.Areas.Admin.Controllers
 {
@@ -37,16 +38,19 @@ namespace Placement_Preparation.Areas.Admin.Controllers
 
 
         #region add or Edit Branch
-        public async Task<IActionResult> AddOrEditDifficultyLevel(string? difficultyLevelId)
+        public async Task<IActionResult> AddOrEditDifficultyLevel(string? difficultyLevelIdStr)
         {
             // If DifficultyLevelId is null then it is add DifficultyLevel
-            if(difficultyLevelId == null)
+            if(difficultyLevelIdStr == null)
             {
                 return View();
             }
+
+            // decrypt the DifficultyLevel Id
+                difficultyLevelIdStr =  UrlEncryptor.Decrypt(difficultyLevelIdStr);
            
                 // Call API to get data
-                ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/{difficultyLevelId}");
+                ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/{difficultyLevelIdStr}");
                 if(response.StatusCode != 200)
                 {
                     TempData["ErrorMessage"] = response.Message;

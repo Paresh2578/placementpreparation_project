@@ -23,8 +23,14 @@
 }
 
   <div class="course-read-main " style="">
+    <!-- Loading -->
+    <div id="model-loading" class="d-none">
+       <partial name="_Loading_Dialong" />
+    </div>
+</div>
+
       <!-- ======= Sidebar ======= -->
-    <aside id="sidebar" class="sidebar " style="">
+    <aside id="sidebar" class="sidebar  " style="">
       <ul class="sidebar-nav" id="sidebar-nav">
         <li class="nav-heading">All Topics</li>
     
@@ -110,8 +116,8 @@
     </span>
 
  <!-- body Section -->
-    <section id="features" class="features section" style="width: 1000000px;padding-top: 40px;">
-      <div class="container">
+    <section id="features" class="features section shadow rounded rounded-4 me-2 ms-2" style="width: 100vw;padding-top: 40px;background-color: #fff;">
+      <div class="">
 
         <!-- Tabs -->
         <div class="d-flex justify-content-center">
@@ -142,17 +148,23 @@
 
         </div>
 
-        <div class="tab-content container" style="width: 100wv;" data-aos="fade-up" data-aos-delay="200">
+        <div class="tab-content "  data-aos="fade-up" data-aos-delay="200">
           <!-- Documention body -->
-          <div class=" tab-pane course-read-body fade container active show" id="features-tab-1">
+          <div class=" tab-pane container course-read-body fade  active show" id="features-tab-1">
             <div class="content-section">
-              <div class="topic-title-main" style="border-bottom: 2px green;">
+              <div class="topic-title-main">
                 <p class="title" >@(string.IsNullOrEmpty(activeSubtopicTitle) ? activeTopicTitle : activeSubtopicTitle)</p>
                 <hr/>
               </div>
 
             <div class="content prose prose-sm sm:prose lg:prose-lg max-w-none">
-              @Html.Raw(Markdown.ToHtml(Model["documention"]["content"].ToString() , pipeline))
+              @if(string.IsNullOrEmpty(Model["documention"]["content"].ToString()))
+              {
+                <p class="text-center">No data available</p>
+              }else{
+                 @Html.Raw(Markdown.ToHtml(Model["documention"]["content"].ToString() , pipeline))
+              }
+             
             </div>
             </div>
           </div><!-- End documention body -->
@@ -207,6 +219,7 @@
 
 
 @section Scripts{
+  
   <!-- side bar -->
   <script>
     document.getElementById('toggel-sidebar').addEventListener('click', function(){
@@ -241,7 +254,7 @@
 
   <!-- mcq answer -->
   <script>
-    
+   
 
     function togelShowAnswer(e,mcqId){
       const answer = e.nextElementSibling;
@@ -322,6 +335,7 @@
 
    <!-- Mcq -->
   <script>
+     const modelLoading = document.getElementById('model-loading');
      // Initialize Showdown Converter
     var converter = new showdown.Converter({
       tables: true,
@@ -330,7 +344,13 @@
       simplifiedAutoLink: true,
       ghCodeBlocks: true,
     });
+
+   
+
     async  function getMcqs(topicId , subTopicId){
+       // show loading
+       modelLoading.classList.remove('d-none');
+
       let mcqList = []
       // fetch mcq data from database
         try {
@@ -362,7 +382,8 @@
         var html = converter.makeHtml(mcq.questionText);
          const mcqHtml =`
               <div class="mcq">
-                <h4 >Q${index+1}.  ${html} ?</h4>
+                @* <h4 >Q${index+1}.  ${html} ?</h4> *@
+                <h4 >Q${index+1}.  ${mcq.questionText} ?</h4>
                 <div id="mcq-option-section${mcq.mcqId}" class="mcq-option-section">
                     <div class="mcq-option" value="${mcq.correctAnswer.toLocaleLowerCase().trim() =="a" }" onclick='clickMcqOption(this,"${mcq.mcqId.toString()}")'>A . ${mcq.optionA}</div>
                     <div class="mcq-option" value="${mcq.correctAnswer.toLocaleLowerCase().trim() =="b" }" onclick='clickMcqOption(this,"${mcq.mcqId}")'>B . ${mcq.optionB}</div>
@@ -386,22 +407,33 @@
 
         // Append the mcqHtml to the mcqContainer
         mcqContainer.innerHTML += mcqHtml;
+      
       });
 
       // if mcq data are not avalible then show text
       if(mcqList.length == 0){
         mcqContainer.innerHTML += `<p class="text-center">No data available</p>`
       }
+
+      // hide loading
+      modelLoading.classList.add('d-none');
     }
      // Apply Syntax Highlighting
     document.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightElement(block);
     });
+
+    
   </script>
 
   <!-- Questions -->
   <script>
+    @* const modelLoading = document.getElementById('model-loading'); *@
+
     async function getQuestions(topicId , subTopicId){
+      // show loading
+      modelLoading.classList.remove('d-none');
+
        let questionList = []
       // fetch question data from database
         try {
@@ -438,6 +470,8 @@
 
         //add
         questionContainer.innerHTML += questionHtml; 
+
+        
       })
 
        // if quesiton data are not avalible then show text
@@ -445,6 +479,18 @@
         questionContainer.innerHTML += `<p class="text-center">No data available</p>`
       }
 
+      //# hide loading
+        modelLoading.classList.add('d-none');
+
     }
+  </script>
+
+
+
+  <!-- loading -->
+  <script>
+    $(function(){
+  $('#modal-loading').modal('show');
+});
   </script>
 }  

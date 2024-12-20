@@ -1,4 +1,5 @@
 ﻿@model List<CourseTypeModel>
+@using Placement_Preparation.Utils;
 
 
 <div class="bg-white p-4 rounded-md shadow-lg ">
@@ -45,7 +46,8 @@
                                 <td class="py-3 px-6 text-left">@index</td>
                                 <td class="py-3 px-6 text-left">@courseType.CourseTypeName</td>
                                 <td class="py-3 px-6 text-left flex gap-x-4">
-                                    <a class="cursor-pointer" asp-action="AddOrEditCourseType" asp-route-courseTypeId="@courseType.CourseTypeId"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
+                                    @* <a class="cursor-pointer" asp-action="AddOrEditCourseType" asp-route-courseTypeId="@courseType.CourseTypeId"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a> *@
+                                    <a class="cursor-pointer" asp-action="AddOrEditCourseType" asp-route-courseTypeIdEncrypt="@UrlEncryptor.Encrypt(courseType.CourseTypeId!.ToString())"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
                                     <a class="cursor-pointer" onclick="confirmDelete('/DeleteCourseType/@courseType.CourseTypeId')"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a>
                                 </td>
                             </tr>

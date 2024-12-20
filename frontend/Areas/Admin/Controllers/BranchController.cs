@@ -40,17 +40,17 @@ namespace Placement_Preparation.Areas.Admin.Controllers
 
         #region add or Edit Branch
         [HttpGet]
-        public async Task<IActionResult> AddOrEditBranch(string? branchId)
+        public async Task<IActionResult> AddOrEditBranch(string? branchIdStr)
         {
             // If branchId is null then it is add branch
-            if(branchId == null)
+            if(branchIdStr == null)
             {
                 return View();
             }
             // decrypt the branchId
-                branchId =  UrlEncryptor.Decrypt(branchId);
+                branchIdStr =  UrlEncryptor.Decrypt(branchIdStr);
                 // Call API to get data
-                ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/{branchId}");
+                ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/{branchIdStr}");
                 if(response.StatusCode != 200)
                 {
                     TempData["ErrorMessage"] = response.Message;
@@ -67,6 +67,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             //Server side validation
             if (ModelState.IsValid)
             {
+
                 ApiResponseModel response = new ApiResponseModel();
                 if(branch.BranchId != Guid.Empty && branch.BranchId != null)
                 {

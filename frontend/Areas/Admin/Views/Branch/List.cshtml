@@ -1,36 +1,41 @@
 ﻿@model List<BranchModel>
 @using Placement_Preparation.Utils;
 
-
-<div class="bg-white p-4 rounded-md shadow-lg ">
+<div class="bg-white p-4 rounded-md shadow-lg">
     <!-- Header Section -->
     <div class="table-hader">
         <h1 class="table-responsive-title mb-2">List of Branch</h1>
-       <div class="flex gap-4" style="gap:0.5rem">
-            <a asp-action="ExportToExcelBranch" asp-asp-controller="Branch" class="export-excel-btn"><i class="fa-solid fa-file-export fa-bounce"></i> Export in Excel</a>
-            <a asp-action="AddOrEditBranch" asp-controller="Branch" class="primary-button"><i class="fa-solid fa-plus fa-bounce"></i> Add Branch</a>
-       </div>
+        <div class="flex gap-4" style="gap:0.5rem">
+            <a asp-action="ExportToExcelBranch" asp-controller="Branch" class="export-excel-btn">
+                <i class="fa-solid fa-file-export fa-bounce"></i> Export in Excel
+            </a>
+            <a asp-action="AddOrEditBranch" asp-controller="Branch" class="primary-button">
+                <i class="fa-solid fa-plus fa-bounce"></i> Add Branch
+            </a>
+        </div>
     </div>
 
     <div>
         <!-- Search Bar Section -->
         <div class="relative">
-            <input id="branchSearch" class="bg-gray-100 w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-500 shadow-sm focus:shadow-md"
-                   placeholder="Search for Branch..." />
-            <button class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
-                    type="button">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="transparent" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-8 h-8 text-slate-600">
-    using Placement_Preparation.Utils;
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            <input id="branchSearch"
+                class="bg-gray-100 w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-500 shadow-sm focus:shadow-md"
+                placeholder="Search for Branch..." />
+            <button class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded"
+                type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="transparent" viewBox="0 0 24 24" stroke-width="3"
+                    stroke="currentColor" class="w-8 h-8 text-slate-600">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                 </svg>
             </button>
         </div>
 
         <!-- Table Section -->
         <div class="mt-6 overflow-x-auto w-full">
-            <table class="min-w-full  bg-white border border-gray-200">
+            <table class="min-w-full bg-white border border-gray-200">
                 <thead>
-                    <tr class="bg-gray-100 text-nowrap text-gray-600  uppercase text-sm leading-normal">
+                    <tr class="bg-gray-100 text-nowrap text-gray-600 uppercase text-sm leading-normal">
                         <th><input type="checkbox" id="selectAll" /></th>
                         <th class="py-3 px-6 text-left">#</th>
                         <th class="py-3 px-6 text-left">Branch Name</th>
@@ -40,138 +45,132 @@
                 <tbody id="branchs" class="text-gray-700 text-sm font-light">
                     @{
                         int index = 1;
-                        foreach(var branch in Model)
+                        foreach (var branch in Model)
                         {
-                            <tr class="border-b text-nowrap  border-gray-200 " onclick="toggleCheckbox(this)">
-                                <th><input type="checkbox"  class="select-row" value="@branch.BranchId" onclick="toggleCheckbox(this)" /></th>
+                            <tr class="border-b text-nowrap border-gray-200">
+                                <th>
+                                    <input type="checkbox" class="select-row" value="@branch.BranchId"
+                                        onclick="toggleCheckbox(this)" />
+                                </th>
                                 <td class="py-3 px-6 text-left">@index</td>
                                 <td class="py-3 px-6 text-left">@branch.BranchName</td>
                                 <td class="py-3 px-6 text-left flex gap-x-4">
-                                    <a class="cursor-pointer" asp-action="AddOrEditBranch" asp-route-branchId="@UrlEncryptor.Encrypt(branch!.BranchId!.ToString())"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
-                                    <a class="cursor-pointer"  onclick="confirmDelete('DeleteBranch/@branch.BranchId')"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a>
-
+                                    <a class="cursor-pointer" asp-action="AddOrEditBranch"
+                                        asp-route-branchIdStr="@UrlEncryptor.Encrypt(branch.BranchId.ToString())">
+                                        <img src="~/assets/icons/edit.svg" height="20" width="20" />
+                                    </a>
+                                    <a class="cursor-pointer"
+                                        onclick="confirmDelete('DeleteBranch/@branch.BranchId')">
+                                        <img src="~/assets/icons/delete.svg" height="20" width="20" />
+                                    </a>
                                 </td>
                             </tr>
                             index++;
                         }
 
-                          // If no Branch found
                         if (Model.Count == 0)
                         {
-                            <tr class="border-b text-nowrap border-gray-200  no-branch-found">
-                                <td class="py-3 px-6 text-center" colspan="5">No Branch  Found</td>
+                            <tr class="border-b text-nowrap border-gray-200 no-branch-found">
+                                <td class="py-3 px-6 text-center" colspan="5">No Branch Found</td>
                             </tr>
                         }
                     }
                 </tbody>
             </table>
         </div>
-        <button id="handleDelete" class="clear-button m-4" style="margin-top: 20px; display: block;width: fit-content;"><i class="fa-regular fa-trash-can fa-bounce"></i> Delete </button>
+        <button id="handleDelete" class="clear-button m-4"
+            style="margin-top: 20px; display: block;width: fit-content;">
+            <i class="fa-regular fa-trash-can fa-bounce"></i> Delete
+        </button>
     </div>
-</div> 
+</div>
 
-@section Scripts{
-    <!-- Input Search Bar -->
-   <script>
-       $(document).ready(function () {
-           $('#branchSearch').on("keyup", function () {
-               var value = $(this).val().toLowerCase().toString().trim();
-               $("#branchs tr").filter(function () {
-                   $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-               });
+@section Scripts {
+    <script>
+        // Search functionality
+        $(document).ready(function () {
+            $('#branchSearch').on("keyup", function () {
+                var value = $(this).val().toLowerCase().trim();
+                $("#branchs tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
 
-                // Check the number of visible rows
-               var visibleRows = $("#branchs tr:visible").length;
+                // Check visible rows
+                var visibleRows = $("#branchs tr:visible").length;
 
-               // Remove existing "No Branch Found" row if it exists
-               $("#branchs .no-branch-found").remove();
+                // Remove "No Branch Found" row if exists
+                $("#branchs .no-branch-found").remove();
 
-               // If no rows are visible, add the "No Branch Found" row
-               if (visibleRows === 0) {
-                   $("#branchs").append('<tr class="border-b text-nowrap border-gray-200  no-branch-found"><td class="py-3 px-6 text-center" colspan="3">No Branch Found</td></tr>');
-               }
-           });
-       });
-   </script>
+                // Add "No Branch Found" row if none are visible
+                if (visibleRows === 0) {
+                    $("#branchs").append('<tr class="border-b text-nowrap border-gray-200 no-branch-found"><td class="py-3 px-6 text-center" colspan="3">No Branch Found</td></tr>');
+                }
+            });
+        });
 
-   
-}<!-- Delete All checkbox Box -->
-<script>
-      function toggleCheckbox(row) {
-        const checkbox = row.querySelector('.select-row');
-            checkbox.checked = !checkbox.checked; // Toggle the checkbox state
-             highlightRow(checkbox); // Call highlightRow explicitly
-             updateSelectAllState(); // Update the select all checkbox state
-        }
-        
-
-    // Highlight the row if the checkbox is checked
-    function highlightRow(checkbox) {
-        const row = checkbox.closest('tr');
-        console.log(checkbox.checked);
-        if (checkbox.checked) {
-            row.classList.add('row-highlight');
-        } else {
-            row.classList.remove('row-highlight');
-        }
-    }
-
-   // select All checkbox
-    document.getElementById('selectAll').addEventListener('change', function () {
-        const checkboxes = document.querySelectorAll('.select-row');
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = this.checked;
+        // Toggle checkbox and row highlighting
+        function toggleCheckbox(checkbox) {
             highlightRow(checkbox);
-        });
-    });
-    function updateSelectAllState() {
-    const checkboxes = document.querySelectorAll('.select-row');
-    const selectAllCheckbox = document.getElementById('selectAll');
-    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
-    const noneChecked = Array.from(checkboxes).every(checkbox => !checkbox.checked);
+            updateSelectAllState();
+        }
 
-    if (allChecked) {
-        selectAllCheckbox.checked = true;
-        selectAllCheckbox.indeterminate = false; // Not in an indeterminate state
-    } else if (noneChecked) {
-        selectAllCheckbox.checked = false;
-        selectAllCheckbox.indeterminate = false; // Not in an indeterminate state
-    } else {
-        selectAllCheckbox.checked = false;
-        selectAllCheckbox.indeterminate = true; // Set indeterminate state
-    }
-}
-
-    // Prevent the row click from triggering when clicking on specific elements like the edit/delete buttons
-    document.querySelectorAll('.row').forEach(row => {
-        row.addEventListener('click', function (e) {
-            if (e.target.tagName === 'A' || e.target.tagName === 'IMG') {
-                e.stopPropagation();
+        function highlightRow(checkbox) {
+            const row = checkbox.closest('tr');
+            if (checkbox.checked) {
+                row.classList.add('row-highlight');
+            } else {
+                row.classList.remove('row-highlight');
             }
+        }
+
+        // Select All functionality
+        document.getElementById('selectAll').addEventListener('change', function () {
+            const checkboxes = document.querySelectorAll('.select-row');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+                highlightRow(checkbox);
+            });
         });
-    });
 
-    // Delete button click
-    document.getElementById('handleDelete').addEventListener('click', function () {
-        const selectedIds = Array.from(document.querySelectorAll('.select-row:checked')).map(checkbox => checkbox.value);
-        if (selectedIds.length === 0) {
-            alert('Please select at least one Course Type to delete');
-            return;
+        function updateSelectAllState() {
+            const checkboxes = document.querySelectorAll('.select-row');
+            const selectAllCheckbox = document.getElementById('selectAll');
+            const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+            const noneChecked = Array.from(checkboxes).every(checkbox => !checkbox.checked);
+
+            if (allChecked) {
+                selectAllCheckbox.checked = true;
+                selectAllCheckbox.indeterminate = false;
+            } else if (noneChecked) {
+                selectAllCheckbox.checked = false;
+                selectAllCheckbox.indeterminate = false;
+            } else {
+                selectAllCheckbox.checked = false;
+                selectAllCheckbox.indeterminate = true;
+            }
         }
 
-         Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
-    }).then((result) => {
-        // If the user confirms, redirect to the delete URL
-        if (result.isConfirmed) {
-            window.location.href = '/Admin/Branch/DeleteMultipleBranch?branchIds=' + selectedIds.join(',');
-        }
-    });
-    });
-</script>
+        // Handle delete
+        document.getElementById('handleDelete').addEventListener('click', function () {
+            const selectedIds = Array.from(document.querySelectorAll('.select-row:checked')).map(checkbox => checkbox.value);
+            if (selectedIds.length === 0) {
+                alert('Please select at least one Branch to delete');
+                return;
+            }
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/Admin/Branch/DeleteMultipleBranch?branchIds=' + selectedIds.join(',');
+                }
+            });
+        });
+    </script>
+}

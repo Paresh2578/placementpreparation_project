@@ -1,4 +1,5 @@
 ﻿@model List<DifficultyLevelModel>
+@using Placement_Preparation.Utils;
 
 
 <div class="bg-white p-4 rounded-md shadow-lg ">
@@ -36,7 +37,7 @@
                     </tr>
                 </thead>
                 <tbody id="difficultyLevels" class="text-gray-700 text-sm font-light">
-                    @{
+                    @{  
                         int index = 1;
                         foreach (var difficultyLevel in Model)
                         {
@@ -46,7 +47,8 @@
                                 <td class="py-3 px-6 text-left">@difficultyLevel.DifficultyLevelName</td>
                                 <td class="py-3 px-6 text-left flex gap-x-4">
                                     @* <a class="cursor-pointer"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a> *@
-                                     <a class="cursor-pointer" asp-action="AddOrEditDifficultyLevel" asp-route-difficultyLevelId="@difficultyLevel.DifficultyLevelId"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
+                                     @* <a class="cursor-pointer" asp-action="AddOrEditDifficultyLevel" asp-route-difficultyLevelId="@difficultyLevel.DifficultyLevelId"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a> *@
+                                     <a class="cursor-pointer" asp-action="AddOrEditDifficultyLevel" asp-route-difficultyLevelIdStr="@UrlEncryptor.Encrypt(difficultyLevel.DifficultyLevelId!.ToString())"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
                                     <a class="cursor-pointer"  onclick="confirmDelete('/DeleteDifficultyLevel/@difficultyLevel.DifficultyLevelId')"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a>
 
                                 </td>
