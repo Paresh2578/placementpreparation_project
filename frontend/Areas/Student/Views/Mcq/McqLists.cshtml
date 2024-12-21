@@ -1,0 +1,122 @@
+@model List<McqModel>;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor  
+
+@{
+    ViewData["Title"] = "McqLists";
+    var query = HttpContextAccessor.HttpContext!.Request.Query;
+}
+
+<!-- Page Title -->
+<div class="page-title light-background">
+    <div class="course">
+        <h1>@(query["courseName"])  Mcqs</h1>
+        <nav class="breadcrumbs">
+            <ol>
+                <li><a asp-controller="Home" asp-action="Home">Home</a></li>
+                <li><a asp-controller="Mcq" asp-action="ListAllCourses">Courses</a></li>
+                <li class="current">Mcqs</li>
+            </ol>
+        </nav>
+    </div>
+</div><!-- End Page Title -->
+
+
+<!-- Topic   Section -->
+<section id="courses-section " class=" container courses-section section">
+    <!-- Section Title -->
+      <div class="container section-title p-0" data-aos="fade-up">
+        <h2>All Mcqs</h2>
+      </div><!-- End Section Title -->  
+
+    <!-- mcq list -->
+    @{
+        int index = 1;
+    foreach(McqModel mcq in Model){
+         <div class="mcq shadow p-3 mb-5 bg-white rounded" id="mcq@(mcq.McqId)" >
+                <h4>Q@(index) @(mcq.QuestionText)</h4>
+                <div id="mcq-option-section@(mcq.McqId)" class="mcq-option-section">
+                    <div class="mcq-option" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="a" )" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'>A . @(mcq.OptionA)</div>
+                    <div class="mcq-option" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="b")" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'>B . @(mcq.OptionB)</div>
+                    <div class="mcq-option" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="c")" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'>C . @(mcq.OptionC)</div>
+                    <div class="mcq-option" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="d")" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'>D . @(mcq.OptionD)</div>
+                </div>
+
+                <!-- answer -->
+                <div class="mcq-answer">
+                  <button class="ans-toggel-btn shadow" onclick='togelShowAnswer(this,"@(mcq.McqId.ToString())")'>Show Answer</button>
+                  <div class="mcq-ans-discription d-none">
+                    <p>Answer : @(mcq.CorrectAnswer.ToLower() == "a" ? mcq.OptionA : mcq.CorrectAnswer.ToLower() == "b" ? mcq.OptionB : mcq.CorrectAnswer.ToLower() == "c" ? mcq.OptionC : mcq.OptionD )</p>
+                    <span class="fw-bold">Explanation</span>
+                    <div class="p-2 " style="border-style: dotted; border-color: gray;">
+                      @(mcq.AnswerDescription)
+                    </div>
+                  </div>
+                </div>
+              </div>
+              index++;
+    }     
+    }
+
+</section>
+
+@section Scripts{
+      <!-- mcq answer -->
+  <script>
+   
+
+    function togelShowAnswer(e,mcqId){
+      const answer = e.nextElementSibling;
+      const mcqOptionSection = document.getElementById('mcq-option-section'+mcqId);
+
+      // <!-- set color in options --> 
+      for(var children of mcqOptionSection.children){
+        if(children.dataset.value == "True"){
+          children.classList.add('true');
+          }else{
+          children.classList.remove('false');
+          children.classList.remove('true');
+          }
+      }
+
+      // Hide and show Answer
+      answer.classList.toggle('show');
+      if(answer.classList.contains('show')){
+        e.innerHTML = "Hide Answer";
+        answer.classList.remove('d-none');
+      }else{
+        e.innerHTML = "Show Answer";
+        answer.classList.add('d-none');
+      // <!-- hide right answer when click hide answer -->
+        hideRightOption(mcqOptionSection);
+      }
+      
+    }
+    function hideRightOption(mcqOptionSection){
+      
+      for(var children of mcqOptionSection.children){
+          children.classList.remove('true');
+          children.classList.remove('false');
+       
+    }
+    }
+
+
+    @* <!-- click mcq options --> *@
+    function clickMcqOption(e,mcqId){
+       const mcqOptionSection = document.getElementById('mcq-option-section'+mcqId);
+       console.log(mcqOptionSection);
+      for(var children of mcqOptionSection.children){
+        children.classList.remove('true');
+        children.classList.remove('false');
+      }
+
+      if(e.dataset.value == "True"){
+        e.classList.add('true');
+      }else{
+        e.classList.add('false');
+      }
+
+
+    }
+  </script>
+}

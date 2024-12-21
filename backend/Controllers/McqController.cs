@@ -41,12 +41,21 @@ namespace backend.Controllers
 
          #region Get All Mcq
         [HttpGet]
-        public async Task<IActionResult> GetAllMcq([FromQuery] Guid? courseId , [FromQuery] Guid? topicId , [FromQuery] Guid? subTopicId)
+        public async Task<IActionResult> GetAllMcq([FromQuery] Guid? courseId , [FromQuery] Guid? topicId , [FromQuery] Guid? subTopicId , [FromQuery] bool onlyActiveMcqs = false)
         {
-            var response = await _mcqInterface.GetAllMcq(courseId:courseId , topicId : topicId , subTopicId : subTopicId);
+            var response = await _mcqInterface.GetAllMcq(courseId:courseId , topicId : topicId , subTopicId : subTopicId , onlyActiveMcqs: onlyActiveMcqs);
             return StatusCode(response.StatusCode, response);
         }
         #endregion
+
+        //#region Get All Active Mcq 
+        //[HttpGet("Active")]
+        //public async Task<IActionResult> GetAllActiveMcq([FromQuery] Guid? courseId, [FromQuery] Guid? topicId, [FromQuery] Guid? subTopicId)
+        //{
+        //    var response = await _mcqInterface.GetAllActiveMcq(courseId: courseId, topicId: topicId, subTopicId: subTopicId);
+        //    return StatusCode(response.StatusCode, response);
+        //}
+        //#endregion
 
         #region Get Mcq By Id
         [HttpGet("{mcqId}")]

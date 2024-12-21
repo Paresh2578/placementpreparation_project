@@ -104,7 +104,6 @@ namespace backend.data.Repository
                 }
 
                 // Get all the topics of the course
-                // var topics = await _context.Topics.Where(x => x.CourseId == courseId).Include(d => d.DifficultyLevel).Select(t => new {t.TopicId,t.TopicName,t.DifficultyLevel!.DifficultyLevelName}).ToListAsync();
                 List<object> topics = new List<Object>{};
 
                 // call procedure
@@ -130,6 +129,55 @@ namespace backend.data.Repository
                 return new ResponseModel { StatusCode = 500, Message = e.Message };
             }
         }
+
+        public async Task<ResponseModel> GetCoursesNameListThatMcqIsAvalible()
+        {
+            try
+            {
+                List<dynamic> courseList = new List<dynamic>();
+                // get all courses
+                using(SqlCommand command = _dbHelper.getSqlCommand("PR_Course_GetAllCourse_Mcq_Avalible"))
+                {
+                    using(SqlDataReader reader =await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            courseList.Add(new {courseId = reader.GetGuid(0) , courseName=reader.GetString(1) });
+                        }
+                    }
+                }
+                return new ResponseModel { StatusCode = 200, Data = courseList, Message = "Course retrieved successfully" };
+            }
+            catch (Exception e)
+            {
+                return new ResponseModel { StatusCode = 500, Message = e.Message };
+            }
+        }
+
+        public async Task<ResponseModel> GetCoursesNameListThatQuestionIsAvalible()
+        {
+            try
+            {
+                List<dynamic> courseList = new List<dynamic>();
+                // get all courses
+                using (SqlCommand command = _dbHelper.getSqlCommand("PR_Course_GetAllCourse_Question_Avalible"))
+                {
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            courseList.Add(new { courseId = reader.GetGuid(0), courseName = reader.GetString(1) });
+                        }
+                    }
+                }
+                return new ResponseModel { StatusCode = 200, Data = courseList, Message = "Course retrieved successfully" };
+            }
+            catch (Exception e)
+            {
+                return new ResponseModel { StatusCode = 500, Message = e.Message };
+            }
+        }
+
         public async Task<ResponseModel> GetCoursesByBranchAndCourseType(Guid? branchId , Guid? courseTypeId)
         {
             try

@@ -51,10 +51,10 @@ namespace backend.data.Repository
         }
        }
 
-       public async Task<ResponseModel> GetAllQuestions(Guid? courseId, Guid? topicId, Guid? subTopicId)
+       public async Task<ResponseModel> GetAllQuestions(Guid? courseId, Guid? topicId, Guid? subTopicId , bool onlyActiveQuestions)
         {
             try{
-                var questions = await _context.Questions.Where(q => (q.CourseId == courseId || courseId == null) && (q.TopicId == topicId || topicId == null) && (q.SubTopicId == subTopicId || subTopicId == null)).ToListAsync();
+                var questions = await _context.Questions.Where(q => (q.CourseId == courseId || courseId == null) && (q.TopicId == topicId || topicId == null) && (q.SubTopicId == subTopicId || subTopicId == null) && (onlyActiveQuestions ? q.IsActive : true)).ToListAsync();
                 return new ResponseModel { StatusCode = 200, Data = questions  , Message = "Questions retrieved successfully" };
             }catch(Exception ex)
             {

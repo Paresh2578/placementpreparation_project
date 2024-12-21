@@ -4,7 +4,7 @@ namespace backend.data.Interface
 {
     public interface QuestionInterface
     {
-      public Task<ResponseModel> GetAllQuestions(Guid? courseId , Guid? topicId , Guid? subTopicId);
+      public Task<ResponseModel> GetAllQuestions(Guid? courseId , Guid? topicId , Guid? subTopicId , bool onlyActiveQuestions);
       public Task<ResponseModel> GetQuestionById(Guid id);
       public Task<ResponseModel> AddQuestion(QuestionModel question);
       public Task<ResponseModel> UpdateQuestion(QuestionModel question);

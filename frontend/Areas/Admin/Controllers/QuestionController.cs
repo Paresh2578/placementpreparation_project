@@ -162,10 +162,10 @@ namespace Placement_Preparation.Areas.Admin.Controllers
           #region Get Questions By courseId , topicId and subTopicId
         [HttpGet]
         [Route("/Question/GetQuestions")]
-        public async Task<JsonResult> GetMcqsByCourseIdTopicIdSubTopicId([FromQuery] Guid? courseId ,[FromQuery] Guid? topicId ,[FromQuery] Guid? subTopicId)
+        public async Task<JsonResult> GetMcqsByCourseIdTopicIdSubTopicId([FromQuery] Guid? courseId ,[FromQuery] Guid? topicId ,[FromQuery] Guid? subTopicId , [FromQuery] bool? onlyActiveQuestions=false)
         {
-            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}?courseId={courseId}&topicId={topicId}&subTopicId={subTopicId}");
-            if(response.StatusCode != 200)
+             string url = onlyActiveQuestions == true ? $"{_apiBaseUrl}?courseId={courseId}&topicId={topicId}&subTopicId={subTopicId}&onlyActiveQuestions=true" : $"{_apiBaseUrl}?courseId={courseId}&topicId={topicId}&subTopicId={subTopicId}";
+            ApiResponseModel response = await _apiClient.GetAsync(url);if(response.StatusCode != 200)
             {
                 TempData["ErrorMessage"] = response.Message;
                 return new JsonResult(null);

@@ -1,0 +1,85 @@
+@model List<Dictionary<string, dynamic>>;
+
+@{
+    TempData["Title"] = "Select Courses for Qestions";
+}
+
+<!-- Page Title -->
+<div class="page-title light-background">
+    <div class="course">
+        <h1>Select Courses for Mcqs</h1>
+        <nav class="breadcrumbs">
+            <ol>
+                <li><a asp-controller="Home" asp-action="Home">Home</a></li>
+                <li class="current">Mcqs</li>
+            </ol>
+        </nav>
+    </div>
+</div><!-- End Page Title -->
+
+
+<!-- Topic   Section -->
+<section id="courses-section " class=" container courses-section section">
+    <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        @* <h2>All Courses</h2> *@
+
+     <div class="search-section">
+        <!-- Input field for search -->
+       <input type="text" id="input-search" style="flex: 1 1 40%;" class="search-input" placeholder="Search Courses...">
+     </div>     
+
+    <!-- List  Subtopic -->
+       <div class="table-container rounded-4 shadow">
+            <table class="table-body">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Courses Name</th>
+                    </tr>
+                </thead>
+                <tbody class="table-body" id="courseListBody">
+                    @{
+                        var index = 1;
+                        foreach (var course in Model)
+                          {
+                            <tr onclick='window.location.assign("QuestionLists?courseName=@course["courseName"]&courseId=@course["courseId"]")'>
+                             <td>@index</td>
+                            <td>@course["courseName"]</td>
+                            </tr>
+                            index++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+      </div><!-- End Section Title -->
+
+</section>
+
+
+@section Scripts{
+    <!-- Input Search Bar -->
+   <script>
+       $(document).ready(function () {
+           $('#input-search').on("keyup", function () {
+               var value = $(this).val().toLowerCase().toString().trim();
+               $("#courseListBody tr").filter(function () {
+                   $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+               });
+
+                // Check the number of visible rows
+               var visibleRows = $("#courseListBody tr:visible").length;
+
+               // Remove existing "No Courses Found" row if it exists
+               $("#courseListBody .no-topic-found").remove();
+
+               // If no rows are visible, add the "No Courses Found" row
+               if (visibleRows === 0) {
+                   $("#courseListBody").append('<tr class="border-b text-nowrap border-gray-200  no-topic-found"><td class="py-3 px-6 text-center" colspan="3">No Course Found</td></tr>');
+               }
+           });
+       });
+   </script>
+
+}  

@@ -53,42 +53,56 @@ namespace backend.data.Repository
         }
        }
 
-        public async Task<ResponseModel> GetAllMcq(Guid? courseId, Guid? topicId, Guid? subTopicId)
+        //public async Task<ResponseModel> GetAllMcq(Guid? courseId, Guid? topicId, Guid? subTopicId)
+        //{
+        //    try
+        //    {
+        //        List<McqModel> mcqs = new List<McqModel>();
+
+        //        using (SqlCommand command = _dbHelper.getSqlCommand("PR_Mcq_GetAll"))
+        //        {
+        //            command.Parameters.Add("@CourseId", SqlDbType.UniqueIdentifier).Value = (object?)courseId ?? DBNull.Value;
+        //            command.Parameters.Add("@TopicId", SqlDbType.UniqueIdentifier).Value = (object?)topicId ?? DBNull.Value;
+        //            command.Parameters.Add("@SubTopicId", SqlDbType.UniqueIdentifier).Value = (object?)subTopicId ?? DBNull.Value;
+
+        //            using (SqlDataReader reader = await command.ExecuteReaderAsync())
+        //            {
+        //                while (await reader.ReadAsync())
+        //                {
+        //                    mcqs.Add(new McqModel
+        //                    {
+        //                        McqId = reader.GetGuid(0),
+        //                        QuestionText = reader.GetString(1),
+        //                        OptionA = reader.GetString(2),
+        //                        OptionB = reader.GetString(3),
+        //                        OptionC = reader.GetString(4),
+        //                        OptionD = reader.GetString(5),
+        //                        CorrectAnswer = reader.GetString(6),
+        //                        AnswerDescription = reader.GetString(7),
+        //                        IsActive = reader.GetBoolean(8),
+        //                        CourseId = reader.GetGuid(9),
+        //                        TopicId = reader.GetGuid(10),
+        //                        SubTopicId =await  reader.IsDBNullAsync(11) ? (Guid?)null : reader.GetGuid(11),
+        //                        DifficultyLevelId = reader.GetGuid(12),
+        //                    });
+        //                }
+        //            }
+        //        }
+
+        //        return new ResponseModel { StatusCode = 200, Data = mcqs, Message = "MCQs fetched successfully." };
+        //    }
+        //    catch
+        //    {
+        //        // Log the exception
+        //        return new ResponseModel { StatusCode = 500, Message = "An error occurred while fetching MCQs." };
+        //    }
+        //}
+
+        public async Task<ResponseModel> GetAllMcq(Guid? courseId, Guid? topicId, Guid? subTopicId , bool onlyActiveMcqs)
         {
             try
             {
-                List<McqModel> mcqs = new List<McqModel>();
-
-                using (SqlCommand command = _dbHelper.getSqlCommand("PR_Mcq_GetAll"))
-                {
-                    command.Parameters.Add("@CourseId", SqlDbType.UniqueIdentifier).Value = (object?)courseId ?? DBNull.Value;
-                    command.Parameters.Add("@TopicId", SqlDbType.UniqueIdentifier).Value = (object?)topicId ?? DBNull.Value;
-                    command.Parameters.Add("@SubTopicId", SqlDbType.UniqueIdentifier).Value = (object?)subTopicId ?? DBNull.Value;
-
-                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
-                    {
-                        while (await reader.ReadAsync())
-                        {
-                            mcqs.Add(new McqModel
-                            {
-                                McqId = reader.GetGuid(0),
-                                QuestionText = reader.GetString(1),
-                                OptionA = reader.GetString(2),
-                                OptionB = reader.GetString(3),
-                                OptionC = reader.GetString(4),
-                                OptionD = reader.GetString(5),
-                                CorrectAnswer = reader.GetString(6),
-                                AnswerDescription = reader.GetString(7),
-                                IsActive = reader.GetBoolean(8),
-                                CourseId = reader.GetGuid(9),
-                                TopicId = reader.GetGuid(10),
-                                SubTopicId =await  reader.IsDBNullAsync(11) ? (Guid?)null : reader.GetGuid(11),
-                                DifficultyLevelId = reader.GetGuid(12),
-                            });
-                        }
-                    }
-                }
-
+                List<McqModel> mcqs = await _context.Mcqs.Where(m => (m.CourseId == courseId || courseId == null) && (m.TopicId == topicId || topicId == null) && (m.SubTopicId == subTopicId || subTopicId == null) && (onlyActiveMcqs ? m.IsActive : true)).ToListAsync();
                 return new ResponseModel { StatusCode = 200, Data = mcqs, Message = "MCQs fetched successfully." };
             }
             catch
@@ -97,6 +111,8 @@ namespace backend.data.Repository
                 return new ResponseModel { StatusCode = 500, Message = "An error occurred while fetching MCQs." };
             }
         }
+
+
 
         public async Task<ResponseModel> GetMcqById(Guid mcqId)
         {

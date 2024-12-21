@@ -17,9 +17,9 @@ namespace backend.Controllers
 
         #region Get all questions
         [HttpGet]
-        public async Task<IActionResult> GetAllQuestions([FromQuery] Guid? courseId , [FromQuery] Guid? topicId , [FromQuery] Guid? subTopicId)
+        public async Task<IActionResult> GetAllQuestions([FromQuery] Guid? courseId , [FromQuery] Guid? topicId , [FromQuery] Guid? subTopicId, [FromQuery] bool onlyActiveQuestions= false)
         {
-            var response = await _questionInterface.GetAllQuestions(courseId:courseId , topicId : topicId , subTopicId : subTopicId);
+            var response = await _questionInterface.GetAllQuestions(courseId:courseId , topicId : topicId , subTopicId : subTopicId , onlyActiveQuestions: onlyActiveQuestions);
             return StatusCode(response.StatusCode, response);
         }
         #endregion

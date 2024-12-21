@@ -13,5 +13,8 @@ namespace backend.data.Interface
         public Task<ResponseModel> DeleteMultipleCourse(List<Guid> courseIds);
         public Task<ResponseModel> GetCoursesByBranchAndCourseType(Guid? branchId, Guid? courseTypeId);
         public Task<ResponseModel> GetCourseDetailsById(Guid courseId);
+        public Task<ResponseModel> GetCoursesNameListThatMcqIsAvalible();
+        public Task<ResponseModel> GetCoursesNameListThatQuestionIsAvalible();
+
     }
 }

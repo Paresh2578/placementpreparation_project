@@ -2530,25 +2530,25 @@ section,
   overflow-x: auto;
 }
 
-.topics-table {
+.table-body {
   width: 100%;
   border: 1px solid #ddd;
   overflow: hidden;
 }
 
-.topics-table th,
-.topics-table td {
+.table-body th,
+.table-body td {
   padding: 0.75rem;
   text-align: left;
   border: 1px solid #ddd;
 }
 
-.topics-table th {
+.table-body th {
   background-color: var(--accent-color);
   color: white;
 }
 
-.topics-table tr:hover {
+.table-body tr:hover {
   background-color: #f1f1f1;
 }
 
@@ -2562,8 +2562,8 @@ section,
 }
 
 .course-read-body{
-  max-width: 56rem;
-  width: 100%;
+  /* max-width: 56rem; */
+  /* width: 100%; */
   /* margin-left: auto; */
     /* margin-right: auto; */
     padding-top: 1rem /* 16px */;

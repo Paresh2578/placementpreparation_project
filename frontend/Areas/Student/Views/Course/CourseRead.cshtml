@@ -150,7 +150,7 @@
 
         <div class="tab-content "  data-aos="fade-up" data-aos-delay="200">
           <!-- Documention body -->
-          <div class=" tab-pane container course-read-body fade  active show" id="features-tab-1">
+          <div class=" tab-pane p-0 course-read-body fade  active show" id="features-tab-1">
             <div class="content-section">
               <div class="topic-title-main">
                 <p class="title" >@(string.IsNullOrEmpty(activeSubtopicTitle) ? activeTopicTitle : activeSubtopicTitle)</p>
@@ -171,7 +171,7 @@
 
           <!-- Mcq body -->
           <div  class="tab-pane course-read-body container fade" id="features-tab-2">
-            <div class="topic-title-main" style="border-bottom: 2px green;">
+            <div class="topic-title-main">
                 <p class="title" >@(string.IsNullOrEmpty(activeSubtopicTitle) ? activeTopicTitle : activeSubtopicTitle)</p>
                 <hr/>
               </div>
@@ -183,7 +183,7 @@
 
           <!-- Question Body -->
           <div class="tab-pane fade course-read-body container" id="features-tab-3">
-            <div class="topic-title-main" style="border-bottom: 2px green;">
+            <div class="topic-title-main" >
                 <p class="title" >@(string.IsNullOrEmpty(activeSubtopicTitle) ? activeTopicTitle : activeSubtopicTitle)</p>
                 <hr/>
               </div>
@@ -194,9 +194,9 @@
           </div><!-- End Question Body -->
 
              @* next ans prev button *@
-        <div class="d-flex justify-content-between">
-          <button class="btn btn-primary" onclick='selectSubTopic("@(string.IsNullOrEmpty(preTopicId) ? activetopicId : preTopicId)", "@(!string.IsNullOrEmpty(preTopicId) ?"" : string.IsNullOrEmpty(preSubTopicId) ? activeSubtopicId : preSubTopicId)")' @(string.IsNullOrEmpty(preTopicId?.Trim()) && string.IsNullOrEmpty(preSubTopicId?.Trim()) ? "disabled" : "")><i class="fa-solid fa-chevron-left"></i> Previous</button>
-            <button class="btn btn-primary" onclick='selectSubTopic("@(nextSubTopicId.ToString().ToLower().Trim() == "" ? nextTopicId :  activetopicId)" , "@nextSubTopicId")'  @(string.IsNullOrEmpty(nextTopicId?.Trim()) && string.IsNullOrEmpty(nextSubTopicId?.Trim()) ? "disabled" : "")> Next <i class="fa-solid fa-chevron-right"></i></button>
+        <div class="d-flex justify-content-between p-3">
+          <button class="btn btn-primary shadow" onclick='selectSubTopic("@(string.IsNullOrEmpty(preTopicId) ? activetopicId : preTopicId)", "@(!string.IsNullOrEmpty(preTopicId) ?"" : string.IsNullOrEmpty(preSubTopicId) ? activeSubtopicId : preSubTopicId)")' @(string.IsNullOrEmpty(preTopicId?.Trim()) && string.IsNullOrEmpty(preSubTopicId?.Trim()) ? "disabled" : "")><i class="fa-solid fa-chevron-left"></i> Previous</button>
+            <button class="btn btn-primary shadow" onclick='selectSubTopic("@(nextSubTopicId.ToString().ToLower().Trim() == "" ? nextTopicId :  activetopicId)" , "@nextSubTopicId")'  @(string.IsNullOrEmpty(nextTopicId?.Trim()) && string.IsNullOrEmpty(nextSubTopicId?.Trim()) ? "disabled" : "")> Next <i class="fa-solid fa-chevron-right"></i></button>
           </div>
 
         </div>
@@ -222,7 +222,9 @@
   
   <!-- side bar -->
   <script>
+    
     document.getElementById('toggel-sidebar').addEventListener('click', function(){
+
     
 
       let sidebar = document.getElementById('sidebar');
@@ -241,6 +243,7 @@
           document.getElementById('features').style.display = "none";
         }else{
            document.getElementById('features').style.display = "block";
+           document.getElementById('toggel-sidebar').style.position = "fixed";
         }
 
         //add Sidebar toggel class
@@ -360,7 +363,8 @@
                 type: "GET",
                 data: {
                     topicId: topicId,
-                    subTopicId: subTopicId
+                    subTopicId: subTopicId,
+                    activeMcqs :true
                 }
             });
        @*
@@ -443,7 +447,8 @@
                 type: "GET",
                 data: {
                     topicId: topicId,
-                    subTopicId: subTopicId
+                    subTopicId: subTopicId,
+                    onlyActiveQuestions : true
                 }
             });
         } catch (err) {

@@ -24,18 +24,6 @@
       <div class="container section-title" data-aos="fade-up">
         <h2>All Topics</h2>
 
-    @* <div class="search-section">
-        <!-- Input field for search -->
-         <input type="text" id="input-search" class="search-input" placeholder="Search Topics...">
-
-        <!-- Dropdown filters -->
-        <div class="filter-container col">
-            <select asp-items="@ViewBag.difficultyLevelList as List<SelectListItem>" class="filter-dropdown">
-                <option value="">All Difficulty Levels</option>
-            </select>
-        </div>
-    </div> *@
-
      <div class="search-section">
         <!-- Input field for search -->
        <input type="text" id="input-search" style="flex: 1 1 40%;" class="search-input" placeholder="Search Topics...">
@@ -50,7 +38,7 @@
 
     <!-- List  Subtopic -->
        <div class="table-container rounded-4 shadow">
-            <table class="topics-table ">
+            <table class="table-body">
                 <thead>
                     <tr>
                         <th>#</th>

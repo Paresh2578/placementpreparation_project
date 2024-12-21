@@ -18,7 +18,7 @@ namespace backend.Controllers
         
         #region  Get All Courses
         [HttpGet]
-        public async Task<IActionResult> GetAllCourses([FromQuery] int? limit , [FromQuery] string? courseType)
+        public async Task<IActionResult> GetAllCourses([FromQuery] int? limit , [FromQuery] string? courseType )
         {
             var response = await _courseInterface.GetAllCourses(limit , courseType);
             return StatusCode(response.StatusCode, response);
@@ -105,6 +105,23 @@ namespace backend.Controllers
         }
         #endregion
 
-        
+        #region Get All CourseName that Mcq is avalible
+        [HttpGet("GetCoursesNameListThatMcqIsAvalible")]
+        public async Task<IActionResult> GetCoursesNameListThatMcqIsAvalible()
+        {
+            var response = await _courseInterface.GetCoursesNameListThatMcqIsAvalible();
+            return StatusCode(response.StatusCode, response);
+        }
+        #endregion
+
+        #region Get All CourseName that Question is avalible
+        [HttpGet("GetCoursesNameListThatQuestionIsAvalible")]
+        public async Task<IActionResult> GetCoursesNameListThatQuestionIsAvalible()
+        {
+            var response = await _courseInterface.GetCoursesNameListThatQuestionIsAvalible();
+            return StatusCode(response.StatusCode, response);
+        }
+        #endregion
+
     }
 }

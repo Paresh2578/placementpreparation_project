@@ -235,9 +235,10 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         #region Get Mcqs By courseId , topicId and subTopicId
         [HttpGet]
         [Route("/Mcq/GetMcqs")]
-        public async Task<JsonResult> GetMcqsByCourseIdTopicIdSubTopicId([FromQuery] Guid? courseId ,[FromQuery] Guid? topicId ,[FromQuery] Guid? subTopicId)
+        public async Task<JsonResult> GetMcqsByCourseIdTopicIdSubTopicId([FromQuery] Guid? courseId ,[FromQuery] Guid? topicId ,[FromQuery] Guid? subTopicId,[FromQuery] bool? activeMcqs = false)
         {
-            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}?courseId={courseId}&topicId={topicId}&subTopicId={subTopicId}");
+            string url = activeMcqs == true ? $"{_apiBaseUrl}?courseId={courseId}&topicId={topicId}&subTopicId={subTopicId}&onlyActiveMcqs=true" : $"{_apiBaseUrl}?courseId={courseId}&topicId={topicId}&subTopicId={subTopicId}";
+            ApiResponseModel response = await _apiClient.GetAsync(url);
             if(response.StatusCode != 200)
             {
                 TempData["ErrorMessage"] = response.Message;
@@ -247,6 +248,8 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             return new JsonResult(mcqList);
         }
         #endregion
+
+
    
        #region  clear search
         public IActionResult ClearSearch()
