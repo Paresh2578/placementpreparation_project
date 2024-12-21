@@ -87,7 +87,7 @@
                         int index = 1;
                         foreach (var question in Model)
                         {
-                            <tr data-id="@question.QuestionId" class="question-row border-b text-nowrap hover:cursor-pointer border-gray-200 " onclick="toggleCheckbox(this)">
+                            <tr data-id="@question.QuestionId" class="question-row border-b text-nowrap hover:cursor-pointer border-gray-200 ">
                                 <th><input type="checkbox"  class="select-question" value="@question.QuestionId" onclick="toggleCheckbox(this)" /></th>
                                 <td class="py-3 px-6 text-left">@index</td>
                                 <td class="py-3 px-6 text-left">@question.Question</td>
@@ -260,10 +260,7 @@
 
 <!-- Delete All checkbox Box -->
 <script>
-      function toggleCheckbox(row) {
-        const checkbox = row.querySelector('.select-question');
-        console.log(checkbox);
-            checkbox.checked = !checkbox.checked; // Toggle the checkbox state
+      function toggleCheckbox(checkbox) {
              highlightRow(checkbox); // Call highlightRow explicitly
              updateSelectAllState(); // Update the select all checkbox state
         }

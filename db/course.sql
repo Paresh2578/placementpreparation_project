@@ -15,13 +15,13 @@ alter procedure PR_Course_GetAllCourse_Mcq_Avalible
 as
 begin
     select c.CourseId , c.CourseName from Courses  as c
-	where (select count(*) from dbo.Questions as q where q.CourseId = c.CourseId and q.IsActive = 'true') > 0
+	where (select count(*) from dbo.Mcqs as m where m.CourseId = c.CourseId and m.IsActive = 'true') > 0
 end
 
 -- Get All Course that Question are avalible
-alter procedure PR_Course_GetAllCourse_Question_Avalible
+create procedure PR_Course_GetAllCourse_Question_Avalible
 as
 begin
     select c.CourseId , c.CourseName from Courses  as c
-	where (select count(*) from dbo.Mcqs as m where m.CourseId = c.CourseId and m.IsActive = 'true') > 0
+	where (select count(*) from dbo.Questions as q where q.CourseId = c.CourseId and q.IsActive = 'true') > 0
 end

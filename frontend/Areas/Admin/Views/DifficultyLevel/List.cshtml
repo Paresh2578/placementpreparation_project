@@ -41,7 +41,7 @@
                         int index = 1;
                         foreach (var difficultyLevel in Model)
                         {
-                            <tr class="border-b text-nowrap  border-gray-200 " onclick="toggleCheckbox(this)" >
+                            <tr class="border-b text-nowrap  border-gray-200 "  >
                                 <th><input type="checkbox"  class="select-row" value="@difficultyLevel.DifficultyLevelId" onclick="toggleCheckbox(this)" /></th>
                                 <td class="py-3 px-6 text-left">@index</td>
                                 <td class="py-3 px-6 text-left">@difficultyLevel.DifficultyLevelName</td>
@@ -100,9 +100,7 @@
 
    <!-- Delete All checkbox Box -->
 <script>
-      function toggleCheckbox(row) {
-        const checkbox = row.querySelector('.select-row');
-            checkbox.checked = !checkbox.checked; // Toggle the checkbox state
+      function toggleCheckbox(checkbox) {
              highlightRow(checkbox); // Call highlightRow explicitly
              updateSelectAllState(); // Update the select all checkbox state
         }
@@ -111,7 +109,6 @@
     // Highlight the row if the checkbox is checked
     function highlightRow(checkbox) {
         const row = checkbox.closest('tr');
-        console.log(checkbox.checked);
         if (checkbox.checked) {
             row.classList.add('row-highlight');
         } else {

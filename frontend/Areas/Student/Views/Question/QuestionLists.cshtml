@@ -29,11 +29,10 @@
       </div><!-- End Section Title -->  
 
     <!-- mcq list -->
-    <div data-aos="fade-up">
-      @{
+    @{
         int index = 1;
     foreach(QuestionModel question in Model){
-         <div class="mcq shadow p-3 mb-5 bg-white rounded" id="mcq@(question.Question)" >
+         <div data-aos="fade-up" class="mcq shadow p-3 mb-3 ms-2 me-2 bg-white rounded" id="mcq@(question.Question)" >
                  <div class="question">
                   <h4>Q@(index). @(question.Question) ?</h4>
                   <span class="fw-bold">Answer :</span>
@@ -43,9 +42,8 @@
                </div>
               </div>
               index++;
-    }     
+      }     
     }
-    </div>
 
 </section>
 

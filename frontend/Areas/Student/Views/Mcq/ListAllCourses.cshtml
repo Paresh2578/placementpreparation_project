@@ -15,7 +15,7 @@
 
 
 <!-- Topic   Section -->
-<section id="courses-section " class=" container courses-section section">
+<section id="courses-section " class=" container courses-section section p-3">
     <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         @* <h2>All Courses</h2> *@
@@ -44,6 +44,13 @@
                             <td>@course["courseName"]</td>
                             </tr>
                             index++;
+                        }
+
+                        if (Model.Count == 0)
+                        {
+                            <tr class="border-b text-nowrap border-gray-200  no-topic-found">
+                                <td class="py-3 px-6 text-center" colspan="3">No Course Found</td>
+                            </tr>
                         }
                     }
                 </tbody>

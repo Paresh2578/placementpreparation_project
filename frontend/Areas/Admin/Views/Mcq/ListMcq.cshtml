@@ -79,13 +79,13 @@
                         int index = 1;
                         foreach (var mcq in Model)
                         {
-                            <tr data-id="@mcq.McqId"  class="mcq-row border-b text-nowrap hover:cursor-pointer  border-gray-200 " onclick="toggleCheckbox(this)">
+                            <tr data-id="@mcq.McqId"  class="mcq-row border-b text-nowrap hover:cursor-pointer  border-gray-200 " >
                                 <th><input type="checkbox"  class="select-mcq" value="@mcq.McqId" onclick="toggleCheckbox(this)" /></th>
                                 <td class="py-3 px-6 text-left">@index</td>
-                                <td class="py-3 px-6 text-left">@mcq.QuestionText</td>
+                                <td class="py-3 px-6 text-left" style="max-width: 500px; overflow-x: hidden; white-space: normal; "> @mcq.QuestionText </td>
+                                @* <td class="py-3 px-6 text-left text-wrap" style="max-width: 500px;overflow-wrap: break-word;">@mcq.QuestionText</td> *@
                                  <td class="py-3 px-6 text-left"><span class="@(mcq.IsActive ? "yes-btn" : "no-btn")">@(mcq.IsActive ? "Yes": "No")</span></td>
-
-
+        
                                 <td class="py-3 px-6 text-left flex gap-x-4">
                                     <a class="cursor-pointer" asp-action="AddOrEditMcq" asp-controller="Mcq" asp-route-mcqId="@mcq.McqId"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
                                     <a class="cursor-pointer" onclick="confirmDelete('/DeleteMcq/@mcq.McqId')"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a>
@@ -250,9 +250,7 @@
 
 <!-- Delete All checkbox Box -->
 <script>
-      function toggleCheckbox(row) {
-        const checkbox = row.querySelector('.select-mcq');
-            checkbox.checked = !checkbox.checked; // Toggle the checkbox state
+      function toggleCheckbox(checkbox) {
              highlightRow(checkbox); // Call highlightRow explicitly
              updateSelectAllState(); // Update the select all checkbox state
         }

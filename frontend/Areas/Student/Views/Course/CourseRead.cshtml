@@ -383,11 +383,11 @@
       // Loop over the mcqList
       mcqList.forEach((mcq , index) => {
         // Convert Markdown to HTML
-        var html = converter.makeHtml(mcq.questionText);
+        var html = marked.parse(mcq.questionText);
          const mcqHtml =`
               <div class="mcq">
-                @* <h4 >Q${index+1}.  ${html} ?</h4> *@
-                <h4 >Q${index+1}.  ${mcq.questionText} ?</h4>
+                <h4 >Q${index+1}.  ${html}</h4>
+                @* <h4 >Q${index+1}.  ${mcq.questionText} ?</h4> *@
                 <div id="mcq-option-section${mcq.mcqId}" class="mcq-option-section">
                     <div class="mcq-option" value="${mcq.correctAnswer.toLocaleLowerCase().trim() =="a" }" onclick='clickMcqOption(this,"${mcq.mcqId.toString()}")'>A . ${mcq.optionA}</div>
                     <div class="mcq-option" value="${mcq.correctAnswer.toLocaleLowerCase().trim() =="b" }" onclick='clickMcqOption(this,"${mcq.mcqId}")'>B . ${mcq.optionB}</div>
@@ -397,7 +397,7 @@
 
                 <!-- answer -->
                 <div class="mcq-answer">
-                  <button class="ans-toggel-btn" onclick='togelShowAnswer(this,"${mcq.mcqId.toString()}")'>Show Answer</button>
+                  <button class="ans-toggel-btn shadow" onclick='togelShowAnswer(this,"${mcq.mcqId.toString()}")'>Show Answer</button>
                   <div class="mcq-ans-discription d-none">
                     <p>Answer : ${mcq.correctAnswer.toLocaleLowerCase() == 'a' ? mcq.optionA : mcq.correctAnswer.toLocaleLowerCase() == 'b' ? mcq.optionB : mcq.correctAnswer.toLocaleLowerCase() == 'c' ? mcq.optionC : mcq.optionD }</p>
                     <span class="fw-bold">Explanation</span>
