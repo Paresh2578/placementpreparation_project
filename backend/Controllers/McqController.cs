@@ -16,7 +16,7 @@ namespace backend.Controllers
         }
 
          #region  Add Mcq
-        //  [CheckAccess]
+        [CheckAccess]
         [HttpPost]
         public async Task<IActionResult> AddMcq(McqModel mcq)
         {
@@ -26,7 +26,7 @@ namespace backend.Controllers
         #endregion
 
          #region Delete Mcq
-        //  [CheckAccess]
+        [CheckAccess]
         [HttpDelete("{mcqId}")]
         public async Task<IActionResult> DeleteMcq(Guid mcqId)
         {
@@ -67,7 +67,7 @@ namespace backend.Controllers
         #endregion
 
         #region Update Mcq
-        // [CheckAccess]
+        [CheckAccess]
         [HttpPut]
         public async Task<IActionResult> UpdateMcq(McqModel mcq)
         {
@@ -78,6 +78,7 @@ namespace backend.Controllers
 
         #region Delete Multiple Mcq
         [HttpDelete("DeleteMultiple")]
+        [CheckAccess]
         public async Task<IActionResult> DeleteMultipleMcq([FromBody] List<Guid> mcqIds){
             var response = await _mcqInterface.DeleteMultipleMcq(mcqIds);
             return StatusCode(response.StatusCode , response);

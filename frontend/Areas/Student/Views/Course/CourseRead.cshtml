@@ -24,7 +24,7 @@
 
   <div class="course-read-main " style="">
     <!-- Loading -->
-    <div id="model-loading" class="d-noe">
+    <div id="model-loading" class="d-none">
        <partial name="_Loading_Dialong" />
     </div>
 </div>
@@ -170,26 +170,26 @@
           </div><!-- End documention body -->
 
           <!-- Mcq body -->
-          <div  class="tab-pane course-read-body container fade" id="features-tab-2">
-            <div class="topic-title-main">
+          <div  class="tab-pane p-0 course-read-body  fade" id="features-tab-2">
+            <div class="content-section">
+              <div class="topic-title-main">
                 <p class="title" >@(string.IsNullOrEmpty(activeSubtopicTitle) ? activeTopicTitle : activeSubtopicTitle)</p>
                 <hr/>
               </div>
 
-            <div class="mcq-list-container gap-2">
-               
+            <div class="mcq-list-container gap-2"></div>
             </div>
           </div><!-- End Mcq Body -->
 
           <!-- Question Body -->
-          <div class="tab-pane fade course-read-body container" id="features-tab-3">
-            <div class="topic-title-main" >
+          <div class="tab-pane p-0 fade course-read-body " id="features-tab-3">
+            <div class="content-section">
+              <div class="topic-title-main" >
                 <p class="title" >@(string.IsNullOrEmpty(activeSubtopicTitle) ? activeTopicTitle : activeSubtopicTitle)</p>
                 <hr/>
               </div>
 
-            <div class="question-list-container gap-5">
-               
+            <div class="question-list-container gap-5"></div>
             </div>
           </div><!-- End Question Body -->
 

@@ -66,7 +66,8 @@ namespace backend.Controllers
                     HttpOnly = false,
                     Secure = true, // Set to true in production
                     SameSite = SameSiteMode.None, // Adjust as needed
-                    Expires = DateTime.Now.AddDays(1)
+                    //Expires = DateTime.Now.AddDays(1)
+                    Expires = DateTime.Now.AddHours(1)
                 };
 
                 // Set the 'token' cookie

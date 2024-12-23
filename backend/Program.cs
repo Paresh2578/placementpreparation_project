@@ -75,6 +75,12 @@ var cloudinary = new Cloudinary(cloudinaryAccount);
 // Register Cloudinary as a service
 builder.Services.AddSingleton(cloudinary);
 
+// Fetch the SecretKey from appsettings.json
+var secretKey = builder.Configuration["JWT:SecretKey"];
+
+// Initialize the TokenGenerator with the secret key
+TokenGenerator.Initialize(secretKey);
+
 
 // Add services to the container.
 builder.Services.AddControllers();

@@ -34,7 +34,7 @@ namespace backend.Controllers
         #endregion
         
         #region Add Difficulty Level
-        // [CheckAccess]
+        [CheckAccess]
         [HttpPost]
         public async Task<IActionResult> AddDifficultyLevel([FromBody] DifficultyLevelModel difficultyLevelModel)
         {
@@ -44,7 +44,7 @@ namespace backend.Controllers
         #endregion
         
         #region Update Difficulty Level
-        // [CheckAccess]
+        [CheckAccess]
         [HttpPut()]
         public async Task<IActionResult> UpdateDifficultyLevel([FromBody] DifficultyLevelModel difficultyLevelModel)
         {
@@ -54,7 +54,7 @@ namespace backend.Controllers
         #endregion
    
         #region Delete Difficulty Level
-        // [CheckAccess]
+        [CheckAccess]
         [HttpDelete("{difficultyLevelId}")]
         public async Task<IActionResult> DeleteDifficultyLevel(Guid difficultyLevelId)
         {
@@ -71,6 +71,7 @@ namespace backend.Controllers
 
          #region Delete Multiple Difficulty Level
         [HttpDelete("DeleteMultiple")]
+        [CheckAccess]
         public async Task<IActionResult> DeleteMultipleDifficultyLevel([FromBody] List<Guid> difficultyLevelIds){
             var response = await _difficultyLevelRepo.DeleteMultipleDifficultyLevel(difficultyLevelIds);
             return StatusCode(response.StatusCode , response);

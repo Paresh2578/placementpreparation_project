@@ -13,6 +13,17 @@ namespace backend.Constant
             {
                 // If not, return a forbidden result
                 context.Result = new UnauthorizedResult();
+            }else
+            {
+                // Retrieve the token from the cookie
+                var token = context.HttpContext.Request.Cookies["Token"];
+
+                // Validate the token
+                if (string.IsNullOrEmpty(token) || !TokenGenerator.ValidateToken(token))
+                {
+                    // If token is invalid, return unauthorized result
+                    context.Result = new UnauthorizedResult();
+                }
             }
 
             base.OnActionExecuting(context);

@@ -5,10 +5,13 @@ using Newtonsoft.Json;
 using Placement_Preparation.Areas.Admin.Models;
 using Placement_Preparation.Services;
 using Placement_Preparation.Utils;
+using Placement_Preparation.BAL;
 
 namespace Placement_Preparation.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [CheckAccess]
+    
     public class DifficultyLevelController : Controller
     {
          private readonly string _apiBaseUrl = "DifficultyLevel";

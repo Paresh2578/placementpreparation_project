@@ -328,7 +328,7 @@
     const noneChecked = Array.from(checkboxes).every(checkbox => !checkbox.checked);
 
     if (allChecked) {
-        selectAllCheckbox.checked = true;
+        selectAllCheckbox.checked = true;             
         selectAllCheckbox.indeterminate = false; // Not in an indeterminate state
     } else if (noneChecked) {
         selectAllCheckbox.checked = false;

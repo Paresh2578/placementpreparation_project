@@ -34,7 +34,7 @@ namespace backend.Controllers
         #endregion
 
         #region Add Question
-        // [CheckAccess]
+        [CheckAccess]
         [HttpPost]
         public async Task<IActionResult> AddQuestion([FromBody] QuestionModel question)
         {
@@ -44,7 +44,7 @@ namespace backend.Controllers
         #endregion
 
         #region Update Question
-        // [CheckAccess]
+        [CheckAccess]
         [HttpPut]
         public async Task<IActionResult> UpdateQuestion([FromBody] QuestionModel question)
         {
@@ -54,7 +54,7 @@ namespace backend.Controllers
         #endregion
 
         #region Delete Question
-        // [CheckAccess]
+        [CheckAccess]
         [HttpDelete("{questionId}")]
         public async Task<IActionResult> DeleteQuestion(Guid questionId)
         {
@@ -70,6 +70,7 @@ namespace backend.Controllers
     
         #region Delete Multiple Mcq
         [HttpDelete("DeleteMultiple")]
+        [CheckAccess]
         public async Task<IActionResult> DeleteMultipleMcq([FromBody] List<Guid> questionIds){
             var response = await _questionInterface.DeleteMultipleQuestion(questionIds);
             return StatusCode(response.StatusCode , response);

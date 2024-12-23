@@ -34,7 +34,7 @@ namespace backend.Controllers
         #endregion
 
         #region Create SubTopic
-        // [CheckAccess]
+        [CheckAccess]
         [HttpPost]
         public async Task<IActionResult> CreateSubTopic([FromBody] SubTopicModel  subTopic)
         {
@@ -48,7 +48,7 @@ namespace backend.Controllers
         #endregion
 
         #region Update SubTopic
-        // [CheckAccess]
+        [CheckAccess]
         [HttpPut]
         public async Task<IActionResult> UpdateSubTopic([FromBody] SubTopicModel subTopic)
         {
@@ -58,7 +58,7 @@ namespace backend.Controllers
         #endregion
 
         #region Delete SubTopic
-        // [CheckAccess]
+        [CheckAccess]
         [HttpDelete("{subTopicId}")]
         public async Task<IActionResult> DeleteSubTopic(Guid subTopicId)
         {
@@ -72,7 +72,6 @@ namespace backend.Controllers
             return StatusCode(response.StatusCode, response);
         }
         #endregion
-
 
         # region GetSubTopicsByTopicId
         [HttpGet("GetSubTopicsByTopicId/{topicId}")]
@@ -102,6 +101,7 @@ namespace backend.Controllers
 
          #region Delete Multiple Sub Topic
         [HttpDelete("DeleteMultiple")]
+        [CheckAccess]
         public async Task<IActionResult> DeleteMultipleMcq([FromBody] List<Guid> subTopicIds){
             var response = await _subTopicInterface.DeleteMultipleSubTopic(subTopicIds);
             return StatusCode(response.StatusCode , response);

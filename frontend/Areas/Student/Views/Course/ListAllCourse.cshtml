@@ -38,17 +38,20 @@
             <select asp-items="@ViewBag.BranchList as List<SelectListItem>" id="branch" class="filter-dropdown shadow-sm">
                 <option value="">All Branchs</option>
             </select>
-            <select asp-items="@ViewBag.CourseTypeList as List<SelectListItem>" id="courseType" class="filter-dropdown shadow-sm">
-                <option value="">All Course Types</option>
-            </select>
+            <!-- hide when bg-gray-100 default show data in particular courseType  -->
+            @if(string.IsNullOrEmpty(courseType)){
+                <select asp-items="@ViewBag.CourseTypeList as List<SelectListItem>" id="courseType" class="filter-dropdown shadow-sm">
+                    <option value="">All Course Types</option>
+                </select>
+            }
         </div>
 
         <!-- Search Button -->
-        <button  onclick="handleSearch()" class="primary-button"><i class="fa-solid fa-magnifying-glass fa-bounce"></i> Search</button>
+        <button  onclick="handleSearch()" class="btn btn-primary shadow"><i class="fa-solid fa-magnifying-glass fa-bounce"></i> Search</button>
     </div>
 
     <!-- List of Courses -->
-    <div class="course-list">
+    <div class="course-list p-2">
         <div class="row gy-4" id="course-list">
             @foreach (var course in courses)
             {
@@ -79,7 +82,7 @@
         const courses = @Html.Raw(@serializedCourses);
 
         function onSearch(e) {
-            const searchTerm = e.value.toLowerCase();
+            const searchTerm = e.value.trim().toLowerCase();
 
             // Filter courses based on search term
             const filteredCourses = courses.filter(course =>
@@ -92,7 +95,7 @@
 
             filteredCourses.forEach(course => {
                 const courseCard = `
-                    <a href="Student/Course/CourseDetail?courseId=${course.CourseId}" class="col-lg-3 col-md-6 d-flex align-items-stretch course-item" data-aos="fade-up" data-aos-delay="100" data-name="${course.CourseName}">
+                    <a href="CourseDetail?courseId=${course.CourseId}" class="col-lg-3 col-md-6 d-flex align-items-stretch course-item" data-aos="fade-up" data-aos-delay="100" data-name="${course.CourseName}">
                         <div class="course-card">
                             <div class="card-img" style="position: relative;">
                                 <img src="${course.Img}" class="img-fluid" alt="${course.CourseName}" style="width: 100%; height: 100%; object-fit: cover;">
@@ -124,12 +127,17 @@
         var courseTypeId = $("#courseType").val();
 
         console.log(branchId ,courseTypeId);
+        //set empty string if value is null
+        branchId = branchId === undefined ? "" : branchId;
+        courseTypeId = courseTypeId === undefined ? "" : courseTypeId;
 
          // Filter courses based on brachId , courseId
             const filteredCourses = courses.filter(course => {
                         if (
-                            (branchId === "" || course.BranchId === branchId) &&
-                            (courseTypeId === "" || course.CourseTypeId === courseTypeId) // Corrected comparison
+                            @* (branchId ==undefined || branchId === "" || course.BranchId === branchId) && *@
+                            ( branchId === "" || course.BranchId === branchId) &&
+                            ( courseTypeId === "" || course.CourseTypeId === courseTypeId) // Corrected comparison
+                            @* (courseTypeId =undefined|| courseTypeId === "" || course.CourseTypeId === courseTypeId) // Corrected comparison *@
                         ) {
                             return true;
                         } else {
@@ -143,7 +151,7 @@
 
             filteredCourses.forEach(course => {
                 const courseCard = `
-                    <a href="Student/Course/CourseDetail?courseId=${course.CourseId}" class="col-lg-3 col-md-6 d-flex align-items-stretch course-item" data-aos="fade-up" data-aos-delay="100" data-name="${course.CourseName}">
+                    <a href="CourseDetail?courseId=${course.CourseId}" class="col-lg-3 col-md-6 d-flex align-items-stretch course-item" data-aos="fade-up" data-aos-delay="100" data-name="${course.CourseName}">
                         <div class="course-card">
                             <div class="card-img" style="position: relative;">
                                 <img src="${course.Img}" class="img-fluid" alt="${course.CourseName}" style="width: 100%; height: 100%; object-fit: cover;">

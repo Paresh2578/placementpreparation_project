@@ -7,10 +7,12 @@ using Placement_Preparation.Services;
 using Placement_Preparation.Utils;
 using System.Reflection;
 using System.Linq;
+using Placement_Preparation.BAL;
 
 namespace Placement_Preparation.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [CheckAccess]
     public class CourseController : Controller
     {
         private readonly string _apiBaseUrl = "Course";
