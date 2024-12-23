@@ -1,6 +1,12 @@
 ﻿@model List<McqModel>
 
 <div class="bg-white p-4 rounded-md shadow-lg ">
+     <!-- Loading -->
+    <div id="model-loading" style="display: none;" >
+         <partial name="_Loading_Dialong"/>
+    </div>
+</div>
+
     <!-- Header Section -->
     <div class="table-hader">
         <h1 class="table-responsive-title">List of Mcq</h1>
@@ -146,9 +152,25 @@
         window.location = url;
     }
 
+    // Loading
+   const loading = document.getElementById("model-loading");
+
+   //show loading dialong
+   function showLoadingDialong(){
+     loading.style.display = "block";
+   }
+
+   //hide loading dialong
+   function hideLoadingDialong(){
+     loading.style.display = "none";
+   }
+
     $(document).ready(function () {
        @* course dropdown change *@
         $('#courses').change(function () {
+            // show loading 
+            showLoadingDialong();
+
             var courseId = $(this).val();
 
             //set topic dropdown-- data
@@ -161,6 +183,9 @@
                     $.each(data.value, function (index, item) {
                         $('#topics').append('<option value="' + item.topicId + '">' + item.topicName + '</option>');
                     });
+
+                     //Hide loading dialong
+                    hideLoadingDialong();
                 }
             });
 
@@ -175,17 +200,25 @@
                     $.each(data.value, function (index, item) {
                         $('#subTopics').append('<option value="' + item.subTopicId + '">' + item.subTopicName + '</option>');
                     });
+                     //Hide loading dialong
+                    hideLoadingDialong();
                 }
             });
         });
 
         @* topic dropdown change *@
         $('#topics').change(function () {
+            // show loading 
+            showLoadingDialong();
+
             var topicId = $(this).val();
             $.ajax({
                 url: '/GetSubTopicsByTopicId/' + topicId,
                 type: 'GET',
                 success: function (data) {
+                    //Hide loading dialong
+                    hideLoadingDialong();
+
                     $('#subTopics').empty();
                     $('#subTopics').append('<option value="">Select Sub Topic</option>');
                     $.each(data.value, function (index, item) {
@@ -198,6 +231,9 @@
         
         //Seach button click
         $('#handlerSearch').click(function () {
+            // show loading 
+            showLoadingDialong();
+
              let courseId = $('#courses').val();
             let topicId = $('#topics').val();
             let subTopicId = $('#subTopics').val();
@@ -213,7 +249,9 @@
                 type: 'GET',
                 data: { courseId: courseId, topicId: topicId, subTopicId: subTopicId },
                 success: function (data) {
-                    console.log(data);
+                    // show loading 
+                         showLoadingDialong();
+                    
                     $('#mcqs').empty();
                     if (data && data.length) {
                         let html = '';
@@ -238,10 +276,15 @@
                     } else {
                         $('#mcqs').append('<tr><td colspan="5" class="text-center py-4">No MCQs found</td></tr>');
                     }
+
+                    //Hide loading dialong
+                    hideLoadingDialong();
                 },
                 error: function (xhr, status, error) {
-                    console.error('Error fetching MCQs:', error);
                     $('#mcqs').empty().append('<tr><td colspan="5" class="text-center text-red-500 py-4">Failed to load MCQs</td></tr>');
+
+                    // hide loading dialong
+                    hideLoadingDialong();
                 }
             });
         });

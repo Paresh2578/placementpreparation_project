@@ -6,6 +6,11 @@
 
 
 <div class="flex flex-col items-center">
+      <!-- Loading -->
+    <div id="model-loading" style="display: none;" >
+         <partial name="_Loading_Dialong"/>
+    </div>
+    </div>
     <div class="w-full  bg-white rounded-lg shadow-lg p-6">
         <h2 class="responsive-title text-gray-900 mb-4 text-center">@(title) Sub Topic</h2>
         @*    <h2 class="text-lg sm:text-md md:text-xl lg:text-2xl text-gray-900 mb-4 text-center">
@@ -118,6 +123,19 @@
 
 <!-- dropdown -->
 <script type="text/javascript">
+   // Loading
+   const loading = document.getElementById("model-loading");
+
+   //show loading dialong
+   function showLoadingDialong(){
+     loading.style.display = "block";
+   }
+
+   //hide loading dialong
+   function hideLoadingDialong(){
+     loading.style.display = "none";
+   }
+
     $(document).ready(function() {
         // Initialize Select2 for searchable dropdowns
         $('.courseDropdown').select2({
@@ -133,10 +151,16 @@
             allowClear: true, // Allows clearing the selection,
             // theme: 'classic',
         });
+
+        // 
         
 
         //course drowpdown 
         $('#courseDropdown').change(function() {
+            // show loading 
+            showLoadingDialong();
+
+            //call api
             var courseId = $(this).val();
             if (courseId) {
                 $.ajax({
@@ -151,13 +175,27 @@
                         $.each(response.value, function(key, value) {
                             $('#TopicDropdown').append('<option value="' + value.topicId + '">' + value.topicName + '</option>'); 
                         });
+
+                        //Hide loading dialong
+                        hideLoadingDialong();
+                    },
+                    error:function(response){
+                        //Hide loading dialong
+                        hideLoadingDialong();
                     }
                 });
+            }else{
+                //Hide loading dialong
+                hideLoadingDialong();
             }
+            
         });
 
         // change Level Dropdown by Topic
         $('#TopicDropdown').change(function() {
+            // show loading 
+            showLoadingDialong();
+
             var topicId = $(this).val();
             if (topicId) {
                 $.ajax({
@@ -167,12 +205,20 @@
                     success: function(response) {
                         $('#LevelDropdown').empty();
                         $('#LevelDropdown').append('<option value="0">Select Level</option>');
-                        console.log(response);
                         $.each(response, function(key, value) {
                             $('#LevelDropdown').append('<option value="' + value + '">' + value + '</option>');
                         });
+                        //Hide loading dialong
+                        hideLoadingDialong();
+                    },
+                    error:function(){
+                        //Hide loading dialong
+                        hideLoadingDialong();
                     }
                 });
+            }else{
+                //Hide loading dialong
+                hideLoadingDialong();
             }
         });
     
