@@ -42,28 +42,29 @@ namespace Placement_Preparation.Areas.Student.Controllers
         #endregion
 
         #region  List All Question by courses 
-        public async Task<IActionResult> QuestionList(string courseName , string courseId,int? pageNumber,int? pageSize=5){
-          // ApiResponseModel apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}?courseId={courseId}&onlyActiveQuestions=true&pageNumber={pageNumber}&pageSize={pageSize}");
-          ApiResponseModel apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}?courseId={courseId}&onlyActiveQuestions=true&pageSize={pageSize}");
-          // Dictionary<string,dynamic> questionData = JsonConvert.DeserializeObject<Dictionary<string,dynamic>>(apiResponse.Data.ToString());
+        public async Task<IActionResult> QuestionList(string courseName , string courseId,int? pageNumber=1,int? pageSize=10){
+          ApiResponseModel apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}?courseId={courseId}&onlyActiveQuestions=true&pageNumber={pageNumber}&pageSize={pageSize}");
+          Dictionary<string,dynamic> questionData = JsonConvert.DeserializeObject<Dictionary<string,dynamic>>(apiResponse.Data.ToString());
           
 
           List<QuestionModel> questions = new List<QuestionModel>();
 
-          // add empty data
-          // questions.AddRange(Enumerable.Repeat(new QuestionModel { Question = string.Empty, QuestionAnswer = string.Empty }, questionData["totalQuestions"]));
-
-
-          // check api response is success or not
+           // check api response is success or not
           if(apiResponse.StatusCode != 200){
             TempData["ErrorMessage"] = apiResponse.Message;
             return View(questions);
           }
 
-          // convert api response data to list of QuestionModel
-          // questions = JsonConvert.DeserializeObject<List<QuestionModel>>(questionData["questions"].ToString());
-          questions = JsonConvert.DeserializeObject<List<QuestionModel>>(apiResponse.Data.ToString());
+          // add empty data for pagination
+          questions.AddRange(Enumerable.Repeat(new QuestionModel { Question = string.Empty, QuestionAnswer = string.Empty }, Convert.ToInt32(questionData["totalQuestions"])));
 
+          // fill current page data only. Other data will be empty
+          int j=0;
+          for(int i=(pageNumber-1)*pageSize??1;i<=(pageNumber*pageSize) && j < questionData["questions"].Count;i++){
+            questions[i] = JsonConvert.DeserializeObject<QuestionModel>(questionData["questions"][j].ToString());
+            j++;
+          }
+         
           // convert list of QuestionModel to list of paged QuestionModel
           var pagedQuestions = questions.ToPagedList(pageNumber ?? 1, pageSize??1);
           

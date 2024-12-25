@@ -1,6 +1,8 @@
-@model List<McqModel>;
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor  
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
 @using Markdig
+@model IPagedList<McqModel>;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor  
 
 @{
     ViewData["Title"] = "McqLists";
@@ -38,7 +40,7 @@
 
     <!-- mcq list -->
     @{
-        int index = 1;
+        int index =  (Model.PageNumber - 1) * Model.PageSize + 1;
     foreach(McqModel mcq in Model){
       <!-- convert markdown to html -->
            var optionA = Html.Raw(Markdown.ToHtml("A . "+mcq.OptionA , pipeline));
@@ -48,7 +50,7 @@
            var answerDescription = Html.Raw(Markdown.ToHtml(mcq.AnswerDescription , pipeline));
 
          <div data-aos="fade-up" class="mcq shadow p-3 mb-3 ms-2  me-2 bg-white rounded" id="mcq@(mcq.McqId)" >
-                <h4>@(Html.Raw(Markdown.ToHtml("Q" + (index+1)+ ". "+ mcq.QuestionText , pipeline)))</h4>
+                <h4>@(Html.Raw(Markdown.ToHtml("Q" + (index)+ ". "+ mcq.QuestionText , pipeline)))</h4>
                 <div id="mcq-option-section@(mcq.McqId)" class="mcq-option-section">
                     <div class="mcq-option " style="padding-bottom: 1px;" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="a" )" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'>@(optionA)</div>
                     <div class="mcq-option" style="padding-bottom: 1px;" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="b")" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'> @(optionB)</div>
@@ -70,6 +72,27 @@
               index++;
     }     
     }
+
+    <!-- Pagination -->
+    <div class="pagination-container mt-4 text-center">
+        @Html.PagedListPager(
+            Model,
+            page => Url.Action("McqLists", new { pageNumber = page }),
+            new PagedListRenderOptions
+            {
+                DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                MaximumPageNumbersToDisplay = 5,
+                DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+                UlElementClasses = new List<string> { "pagination" },
+                LiElementClasses = new List<string> { "page-item" },
+                PageClasses = new List<string> { "page-link" }
+            }
+        )
+    </div>
+    <!-- End Pagination -->
 
 </section>
 

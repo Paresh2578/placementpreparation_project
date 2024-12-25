@@ -39,7 +39,7 @@
 
     <!-- mcq list -->
     @{
-        int index =  (Model.PageNumber - 1) * Model.PageSize + 1;;
+        int index =  (Model.PageNumber - 1) * Model.PageSize + 1;
     foreach(QuestionModel question in Model){
          <div data-aos="fade-up" class=" shadow p-3 mb-3 ms-2 me-2 bg-white rounded" >
                  <div class="question">
@@ -54,7 +54,6 @@
       }     
     }
 
-    <!-- Pagination -->
    <!-- Pagination -->
     <div class="pagination-container mt-4 text-center">
         @Html.PagedListPager(

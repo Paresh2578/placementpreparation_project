@@ -67,7 +67,7 @@ namespace backend.data.Repository
                 {
                     // get all questions
                     questions = await _context.Questions.Where(q => (q.CourseId == courseId || courseId == null) && (q.TopicId == topicId || topicId == null) && (q.SubTopicId == subTopicId || subTopicId == null) && (onlyActiveQuestions ? q.IsActive : true)).ToListAsync();
-                    // return new ResponseModel { StatusCode = 200, Data = questions, Message = "Questions retrieved successfully" };
+                    return new ResponseModel { StatusCode = 200, Data = questions, Message = "Questions retrieved successfully" };
 
                 }
                 else
@@ -89,7 +89,7 @@ namespace backend.data.Repository
                         }
                     }
                 }
-                return new ResponseModel { StatusCode = 200, Data = questions , Message = "Questions retrieved successfully" };
+                return new ResponseModel { StatusCode = 200, Data = new {totalQuestions,questions} , Message = "Questions retrieved successfully" };
             }catch(Exception ex)
             {
                 return new ResponseModel { StatusCode = 500, Message = ex.Message };

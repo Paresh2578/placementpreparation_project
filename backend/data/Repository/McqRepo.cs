@@ -104,19 +104,36 @@ namespace backend.data.Repository
             try
             {
                 List<McqModel> mcqs = new List<McqModel>();
+                int totalMcqs = 0;
 
                 //check pagination is use or not
                 if(pageNumber == null)
                 {
                     // Get All Mcqs
                     mcqs = await _context.Mcqs.Where(m => (m.CourseId == courseId || courseId == null) && (m.TopicId == topicId || topicId == null) && (m.SubTopicId == subTopicId || subTopicId == null) && (onlyActiveMcqs ? m.IsActive : true)).ToListAsync();
+
+                    return new ResponseModel { StatusCode = 200, Data = mcqs, Message = "MCQs fetched successfully." };
                 }
                 else
                 {
                     // apply pagination
                     mcqs = await _context.Mcqs.Where(m => (m.CourseId == courseId || courseId == null) && (m.TopicId == topicId || topicId == null) && (m.SubTopicId == subTopicId || subTopicId == null) && (onlyActiveMcqs ? m.IsActive : true)).Skip((pageNumber - 1) * pageSize??1).Take(pageSize??1).ToListAsync();
+
+                    // total count
+                    using (SqlCommand command = _dbHelper.getSqlCommand("PR_Mcq_COUNT"))
+                    {
+                        command.Parameters.Add("@onlyActiveGets", SqlDbType.Bit).Value = onlyActiveMcqs ? 1 : 0;
+
+                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                        {
+                            while (reader.Read())
+                            {
+                                totalMcqs = reader.GetInt32(0);
+                            }
+                        }
+                    }
                 }
-                return new ResponseModel { StatusCode = 200, Data = mcqs, Message = "MCQs fetched successfully." };
+                return new ResponseModel { StatusCode = 200, Data = new { totalMcqs, mcqs }, Message = "MCQs fetched successfully." };
             }
             catch
             {
