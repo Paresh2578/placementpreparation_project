@@ -43,7 +43,7 @@
                         var index = 1;
                         foreach (var course in Model)
                           {
-                            <tr onclick='window.location.assign("QuestionLists?courseName=@course["courseName"]&courseId=@course["courseId"]")'>
+                            <tr onclick='window.location.assign("QuestionList?courseName=@course["courseName"]&courseId=@course["courseId"]")'>
                              <td>@index</td>
                             <td>@course["courseName"]</td>
                             </tr>

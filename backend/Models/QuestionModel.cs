@@ -14,12 +14,12 @@ namespace backend.Models
 
         // Question
         [Required(ErrorMessage = "Question  id  is required.")]
-        [StringLength(500, ErrorMessage = "Question text can't be longer than 500 characters.")]
+        // [StringLength(500, ErrorMessage = "Question text can't be longer than 500 characters.")]
         public required string Question { get; set; }
 
         // Question Answer
         [Required(ErrorMessage = "Question Answer is required.")]
-        [StringLength(1000, ErrorMessage = "Question Answer can't be longer than 1000 characters.")]
+        // [StringLength(1000, ErrorMessage = "Question Answer can't be longer than 1000 characters.")]
         public required string QuestionAnswer { get; set; }
 
         // Is Active

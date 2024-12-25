@@ -65,7 +65,7 @@
             <!-- difficulty Level radio -->
                 <div class="mb-2">
                     <span class="text-red-600">*</span><label asp-for="DifficultyLevel.DifficultyLevelName" class="text-gray-700 mb-1"></label>
-                <div class="flex">
+                <div class="difficultyLevel-section">
 
                     @foreach(SelectListItem difficultyLevel in @ViewBag.difficultyLevelList as List<SelectListItem> ){
                         <div class="cursor-pointer">
@@ -82,7 +82,7 @@
                 <div class="flex">
                     <span class="text-red-600">*</span><label asp-for="Question" class="text-gray-700 mb-1"></label>
                 </div>
-                <textarea asp-for="Question" placeholder="Enter Question" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2  focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"></textarea>
+                <textarea id="question-area" asp-for="Question" placeholder="Enter Question" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2  focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"></textarea>
                 <span asp-validation-for="Question" class="text-red-600"></span>
             </div>
 
@@ -91,7 +91,7 @@
                 <div class="flex">
                    <span class="text-red-600">*</span><label asp-for="QuestionAnswer" class=" text-gray-700 mb-1"></label>
                 </div>
-                <textarea id="my-text-area" asp-for="QuestionAnswer" ></textarea>
+                <textarea id="my-text-area" asp-for="QuestionAnswer" placeholder="Enter Question Answer" ></textarea>
                 <span asp-validation-for="QuestionAnswer" class="text-red-600"></span>
             </div>
 
@@ -124,6 +124,10 @@
 <script>
     const easymde = new EasyMDE({
         element: document.getElementById('my-text-area'),
+    });
+    
+    const questionArea = new EasyMDE({
+        element: document.getElementById('question-area'),
     });
     
 </script>

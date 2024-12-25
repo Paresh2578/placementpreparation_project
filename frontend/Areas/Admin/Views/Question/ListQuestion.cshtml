@@ -93,7 +93,7 @@
                             <tr data-id="@question.QuestionId" class="question-row border-b text-nowrap hover:cursor-pointer border-gray-200 ">
                                 <th><input type="checkbox"  class="select-question" value="@question.QuestionId" onclick="toggleCheckbox(this)" /></th>
                                 <td class="py-3 px-6 text-left">@index</td>
-                                <td class="py-3 px-6 text-left">@question.Question</td>
+                                <td class="py-3 px-6 text-left" style="max-width: 500px; overflow-x: hidden; white-space: normal; ">@question.Question</td>
                                 <td class="py-3 px-6 text-left"><span
                                         class="@(question.IsActive ? "yes-btn" : "no-btn")">@(question.IsActive ? "Yes" :
                                 "No")</span></td>

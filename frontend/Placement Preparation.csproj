@@ -14,6 +14,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.6" />
     <PackageReference Include="Tailwind.Extensions.AspNetCore" Version="1.0.0" />
     <PackageReference Include="TailwindMerge" Version="1.0.4" />
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="10.5.7" />
   </ItemGroup>
 
 

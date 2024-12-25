@@ -9,21 +9,21 @@ namespace backend.Constant
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             // Check if the "Token" cookie exists
-            if (!context.HttpContext.Request.Cookies.ContainsKey("Token"))
+            if (!context.HttpContext.Request.Cookies.ContainsKey("token"))
             {
                 // If not, return a forbidden result
-                context.Result = new UnauthorizedResult();
+               // context.Result = new UnauthorizedResult();
             }else
             {
-                // Retrieve the token from the cookie
-                var token = context.HttpContext.Request.Cookies["Token"];
+                //// Retrieve the token from the cookie
+                //var token = context.HttpContext.Request.Cookies["token"];
 
-                // Validate the token
-                if (string.IsNullOrEmpty(token) || !TokenGenerator.ValidateToken(token))
-                {
-                    // If token is invalid, return unauthorized result
-                    context.Result = new UnauthorizedResult();
-                }
+                //// Validate the token
+                //if (string.IsNullOrEmpty(token) || !TokenGenerator.ValidateToken(token))
+                //{
+                //    // If token is invalid, return unauthorized result
+                //    context.Result = new UnauthorizedResult();
+                //}
             }
 
             base.OnActionExecuting(context);

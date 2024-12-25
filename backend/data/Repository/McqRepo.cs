@@ -4,6 +4,7 @@ using backend.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Linq;
 
 namespace backend.data.Repository
 {
@@ -98,11 +99,23 @@ namespace backend.data.Repository
         //    }
         //}
 
-        public async Task<ResponseModel> GetAllMcq(Guid? courseId, Guid? topicId, Guid? subTopicId , bool onlyActiveMcqs)
+        public async Task<ResponseModel> GetAllMcq(Guid? courseId, Guid? topicId, Guid? subTopicId , int? pageSize, int? pageNumber, bool onlyActiveMcqs )
         {
             try
             {
-                List<McqModel> mcqs = await _context.Mcqs.Where(m => (m.CourseId == courseId || courseId == null) && (m.TopicId == topicId || topicId == null) && (m.SubTopicId == subTopicId || subTopicId == null) && (onlyActiveMcqs ? m.IsActive : true)).ToListAsync();
+                List<McqModel> mcqs = new List<McqModel>();
+
+                //check pagination is use or not
+                if(pageNumber == null)
+                {
+                    // Get All Mcqs
+                    mcqs = await _context.Mcqs.Where(m => (m.CourseId == courseId || courseId == null) && (m.TopicId == topicId || topicId == null) && (m.SubTopicId == subTopicId || subTopicId == null) && (onlyActiveMcqs ? m.IsActive : true)).ToListAsync();
+                }
+                else
+                {
+                    // apply pagination
+                    mcqs = await _context.Mcqs.Where(m => (m.CourseId == courseId || courseId == null) && (m.TopicId == topicId || topicId == null) && (m.SubTopicId == subTopicId || subTopicId == null) && (onlyActiveMcqs ? m.IsActive : true)).Skip((pageNumber - 1) * pageSize??1).Take(pageSize??1).ToListAsync();
+                }
                 return new ResponseModel { StatusCode = 200, Data = mcqs, Message = "MCQs fetched successfully." };
             }
             catch

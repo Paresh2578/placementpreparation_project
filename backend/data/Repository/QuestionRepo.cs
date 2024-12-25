@@ -1,16 +1,21 @@
-﻿using backend.data.Interface;
+﻿using backend.Constant;
+using backend.data.Interface;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace backend.data.Repository
 {
     public class QuestionRepo : QuestionInterface
     {
         private readonly ApplicationDbContext _context;
-        public QuestionRepo(ApplicationDbContext context)
+        private readonly DbHelper _dbHelper;
+        public QuestionRepo(ApplicationDbContext context, DbHelper dbHelper)
         {
             _context = context;
+            _dbHelper = dbHelper;
         }
        public async Task<ResponseModel> AddQuestion(QuestionModel question)
         {
@@ -51,11 +56,40 @@ namespace backend.data.Repository
         }
        }
 
-       public async Task<ResponseModel> GetAllQuestions(Guid? courseId, Guid? topicId, Guid? subTopicId , bool onlyActiveQuestions)
+       public async Task<ResponseModel> GetAllQuestions(Guid? courseId, Guid? topicId, Guid? subTopicId,int? pageNumber , int? pageSize , bool onlyActiveQuestions)
         {
             try{
-                var questions = await _context.Questions.Where(q => (q.CourseId == courseId || courseId == null) && (q.TopicId == topicId || topicId == null) && (q.SubTopicId == subTopicId || subTopicId == null) && (onlyActiveQuestions ? q.IsActive : true)).ToListAsync();
-                return new ResponseModel { StatusCode = 200, Data = questions  , Message = "Questions retrieved successfully" };
+                List<QuestionModel> questions = new List<QuestionModel>();
+                int totalQuestions = 0;
+
+                //check pagination apply or not
+                if (pageNumber == null)
+                {
+                    // get all questions
+                    questions = await _context.Questions.Where(q => (q.CourseId == courseId || courseId == null) && (q.TopicId == topicId || topicId == null) && (q.SubTopicId == subTopicId || subTopicId == null) && (onlyActiveQuestions ? q.IsActive : true)).ToListAsync();
+                    // return new ResponseModel { StatusCode = 200, Data = questions, Message = "Questions retrieved successfully" };
+
+                }
+                else
+                {
+                    // use pagination
+                    questions = await _context.Questions.Where(q => (q.CourseId == courseId || courseId == null) && (q.TopicId == topicId || topicId == null) && (q.SubTopicId == subTopicId || subTopicId == null) && (onlyActiveQuestions ? q.IsActive : true)).Skip((pageNumber-1)*pageSize??1).Take(pageSize??5).ToListAsync();
+
+                    // count total 
+                    using(SqlCommand command = _dbHelper.getSqlCommand("PR_Question_COUNT"))
+                    {
+                        command.Parameters.Add("@onlyActiveGets", SqlDbType.Bit).Value = onlyActiveQuestions ? 1 : 0;
+
+                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                        {
+                            while (reader.Read())
+                            {
+                                totalQuestions = reader.GetInt32(0);
+                            }
+                        }
+                    }
+                }
+                return new ResponseModel { StatusCode = 200, Data = questions , Message = "Questions retrieved successfully" };
             }catch(Exception ex)
             {
                 return new ResponseModel { StatusCode = 500, Message = ex.Message };

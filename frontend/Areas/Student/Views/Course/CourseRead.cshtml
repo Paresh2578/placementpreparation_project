@@ -7,6 +7,7 @@
 @{
   var pipeline = new MarkdownPipelineBuilder()
             .UseAdvancedExtensions() // Enables advanced Markdown features
+             .UseMathematics() // Enable math support
             .Build();
 
      var query = HttpContextAccessor.HttpContext!.Request.Query;
@@ -380,29 +381,30 @@
      // Clear existing content
       mcqContainer.innerHTML = "";
 
+
       // Loop over the mcqList
       mcqList.forEach((mcq , index) => {
         // Convert Markdown to HTML
-        var html = marked.parse(mcq.questionText);
          const mcqHtml =`
               <div class="mcq">
-                <h4 >Q${index+1}.  ${html}</h4>
+                <h4 >${marked.parse("Q"+ (index+1) + ". " +mcq.questionText)}</h4>
                 @* <h4 >Q${index+1}.  ${mcq.questionText} ?</h4> *@
                 <div id="mcq-option-section${mcq.mcqId}" class="mcq-option-section">
-                    <div class="mcq-option" value="${mcq.correctAnswer.toLocaleLowerCase().trim() =="a" }" onclick='clickMcqOption(this,"${mcq.mcqId.toString()}")'>A . ${mcq.optionA}</div>
-                    <div class="mcq-option" value="${mcq.correctAnswer.toLocaleLowerCase().trim() =="b" }" onclick='clickMcqOption(this,"${mcq.mcqId}")'>B . ${mcq.optionB}</div>
-                    <div class=" mcq-option" value="${mcq.correctAnswer.toLocaleLowerCase().trim() =="c" }" onclick='clickMcqOption(this,"${mcq.mcqId}")'>C . ${mcq.optionC}</div>
-                    <div class="mcq-option" value="${mcq.correctAnswer.toLocaleLowerCase().trim() =="d" }" onclick='clickMcqOption(this,"${mcq.mcqId}")'>D . ${mcq.optionD}</div>
+                    <div class="mcq-option" value="${mcq.correctAnswer.toLocaleLowerCase().trim() =="a" }" onclick='clickMcqOption(this,"${mcq.mcqId.toString()}")'>${marked.parse("A . "+mcq.optionA)}</div>
+                    <div class="mcq-option" value="${mcq.correctAnswer.toLocaleLowerCase().trim() =="b" }" onclick='clickMcqOption(this,"${mcq.mcqId}")'>${marked.parse("B . "+mcq.optionB)}</div>
+                    <div class=" mcq-option" value="${mcq.correctAnswer.toLocaleLowerCase().trim() =="c" }" onclick='clickMcqOption(this,"${mcq.mcqId}")'>${marked.parse("C . "+mcq.optionC)}</div>
+                    <div class="mcq-option" value="${mcq.correctAnswer.toLocaleLowerCase().trim() =="d" }" onclick='clickMcqOption(this,"${mcq.mcqId}")'>${marked.parse("D . "+mcq.optionD)}</div>
                 </div>
 
                 <!-- answer -->
                 <div class="mcq-answer">
                   <button class="ans-toggel-btn shadow" onclick='togelShowAnswer(this,"${mcq.mcqId.toString()}")'>Show Answer</button>
                   <div class="mcq-ans-discription d-none">
-                    <p>Answer : ${mcq.correctAnswer.toLocaleLowerCase() == 'a' ? mcq.optionA : mcq.correctAnswer.toLocaleLowerCase() == 'b' ? mcq.optionB : mcq.correctAnswer.toLocaleLowerCase() == 'c' ? mcq.optionC : mcq.optionD }</p>
+                    <span class="fw-bold">Answer : ${mcq.correctAnswer}</span>
+                    <p>${mcq.correctAnswer.toLocaleLowerCase() == 'a' ? marked.parse(mcq.optionA) : mcq.correctAnswer.toLocaleLowerCase() == 'b' ? marked.parse(mcq.optionB) : mcq.correctAnswer.toLocaleLowerCase() == 'c' ? marked.parse(mcq.optionC) : marked.parse(mcq.optionD) }</p>
                     <span class="fw-bold">Explanation</span>
                     <div class="p-2 " style="border-style: dotted; border-color: gray;">
-                      ${mcq.answerDescription}
+                      ${marked.parse(mcq.answerDescription)}
                     </div>
                   </div>
                 </div>
@@ -433,6 +435,15 @@
   <!-- Questions -->
   <script>
     @* const modelLoading = document.getElementById('model-loading'); *@
+      // Initialize Showdown Converter
+    var converter = new showdown.Converter({
+      tables: true,
+      strikethrough: true,
+      tasklists: true,
+      simplifiedAutoLink: true,
+      ghCodeBlocks: true,
+    });
+
 
     async function getQuestions(topicId , subTopicId){
       // show loading
@@ -465,10 +476,10 @@
       questionList.forEach((question, index)=>{
         const questionHtml =`
                 <div class="question">
-                  <h4>Q${index+1}. ${question.question} ?</h4>
+                  <h4>${marked.parse("Q"+(index+1)+". "+question.question)}</h4>
                   <span class="fw-bold">Answer :</span>
                   <div>
-                    <p>${question.questionAnswer}</p>
+                    <p>${marked.parse(question.questionAnswer)}</p>
                   </div>
                </div>
         `

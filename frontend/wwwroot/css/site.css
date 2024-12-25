@@ -165,7 +165,39 @@
 }
 
 
+/* ------------
+   difficultyLevel-section 
+------------*/   
+.difficultyLevel-section{
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
 
+/* ------------
+   Side bar 
+------------*/   
+/* .sidebar{
+    width: 18rem;
+}
+
+.mobile-sidebar{
+    width:18rem ;
+} */
+
+
+@media (max-width: 860px) {
+    /* .sidebar{
+        width: 3rem;
+    }
+
+    .menu-items{
+        display: none;
+    } */
+    
+}
   
   
 

@@ -40,16 +40,21 @@
     @{
         int index = 1;
     foreach(McqModel mcq in Model){
-           
-         <div data-aos="fade-up" class="mcq shadow p-3 mb-3 ms-2  me-2 bg-white rounded" id="mcq@(mcq.McqId)" >
-                <h4>Q@(index) @(Html.Raw(Markdown.ToHtml(mcq.QuestionText , pipeline)))</h4>
-                <div id="mcq-option-section@(mcq.McqId)" class="mcq-option-section">
-                    <div class="mcq-option" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="a" )" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'>A . @(mcq.OptionA)</div>
-                    <div class="mcq-option" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="b")" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'>B . @(mcq.OptionB)</div>
-                    <div class="mcq-option" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="c")" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'>C . @(mcq.OptionC)</div>
-                    <div class="mcq-option" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="d")" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'>D . @(mcq.OptionD)</div>
-                </div>
+      <!-- convert markdown to html -->
+           var optionA = Html.Raw(Markdown.ToHtml("A . "+mcq.OptionA , pipeline));
+           var optionB = Html.Raw(Markdown.ToHtml("B . "+mcq.OptionB , pipeline));
+           var optionC = Html.Raw(Markdown.ToHtml("C . "+mcq.OptionC , pipeline));
+           var optionD = Html.Raw(Markdown.ToHtml("D . "+mcq.OptionD , pipeline));
+           var answerDescription = Html.Raw(Markdown.ToHtml(mcq.AnswerDescription , pipeline));
 
+         <div data-aos="fade-up" class="mcq shadow p-3 mb-3 ms-2  me-2 bg-white rounded" id="mcq@(mcq.McqId)" >
+                <h4>@(Html.Raw(Markdown.ToHtml("Q" + (index+1)+ ". "+ mcq.QuestionText , pipeline)))</h4>
+                <div id="mcq-option-section@(mcq.McqId)" class="mcq-option-section">
+                    <div class="mcq-option " style="padding-bottom: 1px;" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="a" )" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'>@(optionA)</div>
+                    <div class="mcq-option" style="padding-bottom: 1px;" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="b")" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'> @(optionB)</div>
+                    <div class="mcq-option" style="padding-bottom: 1px;" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="c")" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'> @(optionC)</div>
+                    <div class="mcq-option" style="padding-bottom: 1px;" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="d")" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'>@(optionD)</div>
+                </div>
                 <!-- answer -->
                 <div class="mcq-answer">
                   <button class="ans-toggel-btn shadow" onclick='togelShowAnswer(this,"@(mcq.McqId.ToString())")'>Show Answer</button>
@@ -57,7 +62,7 @@
                     <p>Answer : @(mcq.CorrectAnswer.ToLower() == "a" ? mcq.OptionA : mcq.CorrectAnswer.ToLower() == "b" ? mcq.OptionB : mcq.CorrectAnswer.ToLower() == "c" ? mcq.OptionC : mcq.OptionD )</p>
                     <span class="fw-bold">Explanation</span>
                     <div class="p-2 " style="border-style: dotted; border-color: gray;">
-                      @(mcq.AnswerDescription)
+                      @(answerDescription)
                     </div>
                   </div>
                 </div>

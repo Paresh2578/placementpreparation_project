@@ -3042,6 +3042,53 @@ Sign Form
 }
 
 
+/* ------------------
+ Pagination
+------------------*/
+/* Pagination Styling */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+.pagination {
+    /* display: flex;
+    list-style: none;
+    padding: 0; */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.pagination .page-item {
+    /* margin: 0 5px; */
+}
+
+.pagination .page-item a.page-link {
+    /* display: inline-block;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease; */
+}
+
+.pagination .page-item a.page-link:hover {
+    /* background-color: #007bff;
+    color: #fff;
+    border-color: #007bff; */
+}
+
+.pagination .page-item.active a.page-link {
+    /* background-color: #007bff;
+    color: #fff;
+    border-color: #007bff; */
+}
+
+
+
 /* ----------------------
    Loading
 -----------------*/

@@ -30,6 +30,10 @@
     <link href="~/css/table.css" rel="stylesheet"/>
     <link rel="stylesheet" href="~/css/comman.css" asp-append-version="true" />
 
+    <!-- Math Markdown script -->
+     @* <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script> *@
+
+
 
     
 
@@ -131,6 +135,7 @@
     <!--client side Validation-->
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    
 
     <!--Notyf Notification Toast-->
     @await Component.InvokeAsync("Notyf")
@@ -138,6 +143,8 @@
     @* <script src="https://cdn.jsdelivr.net/npm/notyf/notyf.min.js"></script> *@
 
     @await RenderSectionAsync("Scripts", required: false)
+
+
 
 
 

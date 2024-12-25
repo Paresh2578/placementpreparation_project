@@ -1,0 +1,82 @@
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@using Markdig;
+@model IPagedList<QuestionModel>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor  
+
+@{
+    ViewData["Title"] = "Question List";
+    var query = HttpContextAccessor.HttpContext!.Request.Query;
+
+      
+  var pipeline = new MarkdownPipelineBuilder()
+            .UseAdvancedExtensions() // Enables advanced Markdown features
+             .UseMathematics() // Enable math support
+            .Build();
+}
+
+<!-- Page Title -->
+<div class="page-title light-background">
+    <div class="course">
+        <h1>@(query["courseName"]) Questions</h1>
+        <nav class="breadcrumbs">
+            <ol>
+                <li><a asp-controller="Home" asp-action="Home">Home</a></li>
+                <li><a asp-controller="Mcq" asp-action="ListAllCourses">Courses</a></li>
+                <li class="current">Quesitons</li>
+            </ol>
+        </nav>
+    </div>
+</div><!-- End Page Title -->
+
+
+<!-- Topic   Section -->
+<section id="courses-section " class=" container courses-section section">
+    <!-- Section Title -->
+      <div class="container section-title p-0" data-aos="fade-up">
+        <h2>All Questions</h2>
+      </div><!-- End Section Title -->  
+
+    <!-- mcq list -->
+    @{
+        int index =  (Model.PageNumber - 1) * Model.PageSize + 1;;
+    foreach(QuestionModel question in Model){
+         <div data-aos="fade-up" class=" shadow p-3 mb-3 ms-2 me-2 bg-white rounded" >
+                 <div class="question">
+                  <h4>@(Html.Raw(Markdown.ToHtml("Q"+(index)+". "+question.Question)))</h4>
+                  <span class="fw-bold">Answer :</span>
+                  <div>
+                    <p>@(Html.Raw(Markdown.ToHtml(question.QuestionAnswer)))</p>
+                  </div>
+               </div>
+              </div>
+              index++;
+      }     
+    }
+
+    <!-- Pagination -->
+   <!-- Pagination -->
+    <div class="pagination-container mt-4 text-center">
+        @Html.PagedListPager(
+            Model,
+            page => Url.Action("QuestionList", new { pageNumber = page }),
+            new PagedListRenderOptions
+            {
+                DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                MaximumPageNumbersToDisplay = 5,
+                DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+                UlElementClasses = new List<string> { "pagination" },
+                LiElementClasses = new List<string> { "page-item" },
+                PageClasses = new List<string> { "page-link" }
+            }
+        )
+    </div>
+    <!-- End Pagination -->
+</section>
+
+@section Scripts{
+  
+}

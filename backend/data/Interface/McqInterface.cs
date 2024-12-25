@@ -4,7 +4,7 @@ namespace backend.data.Interface
 {
     public interface McqInterface
     {
-        public Task<ResponseModel> GetAllMcq(Guid? courseId , Guid? topicId , Guid? subTopicId,bool onlyActiveMcqs);
+        public Task<ResponseModel> GetAllMcq(Guid? courseId , Guid? topicId , Guid? subTopicId, int? pageSize, int? pageNumber, bool onlyActiveMcqs);
       //  public Task<ResponseModel> GetAllActiveMcq(Guid? courseId, Guid? topicId, Guid? subTopicId);
         public Task<ResponseModel> GetMcqById(Guid mcqId);
         public Task<ResponseModel> AddMcq(McqModel mcq);

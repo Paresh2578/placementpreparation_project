@@ -10,7 +10,6 @@ using Placement_Preparation.BAL;
 namespace Placement_Preparation.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [CheckAccess]
     public class QuestionController : Controller
     {
         private readonly string _apiBaseUrl = "Question";
@@ -25,6 +24,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
 
         #region list of Topic
+        [CheckAccess]
         public async Task<IActionResult> ListQuestion()
         {
             ApiResponseModel response = await _apiClient.GetAsync(_apiBaseUrl);
@@ -42,6 +42,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         #endregion
 
         #region add or Edit Question
+        [CheckAccess]
         public async Task<IActionResult> AddOrEditQuestion(string? questionId)
         {
             // Set DropDown Value
@@ -116,6 +117,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         
         #region delete Question
         [Route("/DeleteQuestion/{questionId}")]
+        [CheckAccess]
         public async Task<IActionResult> DeleteTopic(string questionId)
         {
             ApiResponseModel response = await _apiClient.DeleteAsync($"{_apiBaseUrl}/{questionId}");
@@ -130,6 +132,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         #endregion
 
         #region  Delete Multiple Question
+        [CheckAccess]
         public async Task<IActionResult> DeleteMultipleQuestion(string  questionIds)
         {
             ApiResponseModel response = await _apiClient.DeleteMultipleAsync($"{_apiBaseUrl}/DeleteMultiple",questionIds.Split(","));

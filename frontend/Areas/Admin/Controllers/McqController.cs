@@ -10,7 +10,6 @@ using Placement_Preparation.BAL;
 namespace Placement_Preparation.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [CheckAccess]
     public class McqController : Controller
     {
         private readonly string _apiBaseUrl = "Mcq";
@@ -25,10 +24,10 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
 
         #region list of Mcq
+    [CheckAccess]
         public async Task<IActionResult> ListMcq(Guid? courseId , Guid? topicId , Guid? subTopicId)
         {
-             ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}?courseId={courseId}&topicId={topicId}+&subTopicId="
-             +subTopicId);
+             ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}?courseId={courseId}&topicId={topicId}&subTopicId="+subTopicId);
                 if(response.StatusCode != 200)
                 {
                    TempData["ErrorMessage"] = response.Message;
@@ -43,6 +42,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         #endregion
 
         #region add or Edit Mcq
+        [CheckAccess]
         public async Task<IActionResult> AddOrEditMcq(string? mcqId)
         {
            // Set DropDown Value
@@ -71,6 +71,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [CheckAccess]
         public async Task<IActionResult> AddOrEditMcq(McqModel mcq)
         {
             //Server side validation
@@ -116,6 +117,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
 
         #region delete Mcq
         [Route("/DeleteMcq/{mcqId}")]
+        [CheckAccess]
         public async Task<IActionResult> DeleteTopic(string mcqId)
         {
             ApiResponseModel response = await _apiClient.DeleteAsync($"{_apiBaseUrl}/{mcqId}");
@@ -130,6 +132,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         #endregion
 
         #region  Delete Multiple Mcq
+        [CheckAccess]
         public async Task<IActionResult> DeleteMultipleMcq(string  mcqIds)
         {
             ApiResponseModel response = await _apiClient.DeleteMultipleAsync($"{_apiBaseUrl}/DeleteMultiple",mcqIds.Split(","));
@@ -162,6 +165,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         #endregion
    
          #region Export Mcq to Excel
+         [CheckAccess]
         public async Task<IActionResult> ExportToExcelMcq()
         {
             ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}");
