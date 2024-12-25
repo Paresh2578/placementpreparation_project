@@ -63,15 +63,15 @@ namespace backend.Controllers
 
                 var commonCookieOptions = new CookieOptions
                 {
-                    HttpOnly = false,
-                    Secure = true, // Set to true in production
+                    HttpOnly = true,
+                    Secure = false, // Set to true in production
                     SameSite = SameSiteMode.None, // Adjust as needed
                     //Expires = DateTime.Now.AddDays(1)
                     Expires = DateTime.Now.AddHours(1)
                 };
 
                 // Set the 'token' cookie
-                _httpContextAccessor.HttpContext!.Response.Cookies.Append("token", Newtonsoft.Json.JsonConvert.SerializeObject(token), commonCookieOptions);
+                _httpContextAccessor.HttpContext!.Response.Cookies.Append("token", token, commonCookieOptions);
 
                 // Set the 'userData' cookie
                 var userData = new

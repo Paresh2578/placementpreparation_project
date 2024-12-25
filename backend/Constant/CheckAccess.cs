@@ -12,18 +12,18 @@ namespace backend.Constant
             if (!context.HttpContext.Request.Cookies.ContainsKey("token"))
             {
                 // If not, return a forbidden result
-               // context.Result = new UnauthorizedResult();
+               context.Result = new UnauthorizedResult();
             }else
             {
-                //// Retrieve the token from the cookie
-                //var token = context.HttpContext.Request.Cookies["token"];
+                // Retrieve the token from the cookie
+                var token = context.HttpContext.Request.Cookies["token"];
 
-                //// Validate the token
-                //if (string.IsNullOrEmpty(token) || !TokenGenerator.ValidateToken(token))
-                //{
-                //    // If token is invalid, return unauthorized result
-                //    context.Result = new UnauthorizedResult();
-                //}
+                // Validate the token
+                if (string.IsNullOrEmpty(token) || !TokenGenerator.ValidateToken(token))
+                {
+                    // If token is invalid, return unauthorized result
+                    context.Result = new UnauthorizedResult();
+                }
             }
 
             base.OnActionExecuting(context);

@@ -35,6 +35,19 @@ builder.Services.AddControllers()
         fv.DisableDataAnnotationsValidation = true;
     });
 
+// add cors
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", builder =>
+    {
+        builder.WithOrigins("http://localhost:5033") // Replace with your MVC app's URL
+               .AllowCredentials()
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
+
+
 
 // Register services
 builder.Services.AddHttpContextAccessor();

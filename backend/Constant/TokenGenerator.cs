@@ -38,13 +38,13 @@ namespace backend.Constant
             if (string.IsNullOrEmpty(_secret))
                 throw new InvalidOperationException("Secret key is not initialized. Call Initialize() first.");
 
-            token = token.Substring(2,token.Length-3);
 
             if (string.IsNullOrEmpty(token))
                 return false;
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_secret);
+
 
             try
             {
