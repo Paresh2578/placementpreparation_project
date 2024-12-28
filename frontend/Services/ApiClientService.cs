@@ -46,6 +46,11 @@ namespace Frontend.Services
                 {
                     return apiResponseModel;
                 }
+
+                if(apiResponseModel.StatusCode == 403){
+                    //  RerectToUrl("LogIn");
+                }
+
                 return new ApiResponseModel {StatusCode = (int)response.StatusCode,Message = response.ReasonPhrase};
             }catch(Exception ex){
                 return new ApiResponseModel {StatusCode = 500,Message = ex.Message};

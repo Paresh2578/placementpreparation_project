@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="~/css/form.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/table.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/comman.css" asp-append-version="true" />
+    <link rel="stylesheet" href="./_Layout_Admin.cshtml.css"/>
 
 
     <!-- fontawesome -->
@@ -39,7 +40,7 @@
     <header class="bg-white">
         <nav class="flex justify-between items-center w-[92%]  mx-auto">
             <div>
-                <img class="w-16 cursor-pointer" src="https://cdn-icons-png.flaticon.com/512/5968/5968204.png" alt="...">
+                <img class="w-16 cursor-pointer" src="~/assets/icons/logo.svg" alt="Logo" style="margin-top: 10px; height:50px" />
             </div>
             @* <div style="z-index:10" class="nav-links duration-500 md:static absolute bg-white md:min-h-fit  left-0 top-[-100%] md:w-auto  w-full flex justify-center items-center ">
                 <ul class="flex md:flex-row flex-col items-center md:gap-[4vw] gap-8">
@@ -85,8 +86,8 @@
 
     <div class="flex w-full">
         <!-- Side bar-->
-       <div id="sidebar" style="z-index:1; transition-duration: 300ms;" class="shadow-lg w-72 bg-white  duration-300  relative">
-            <img style="position:absolute;right:-10px;top:-5px; " onclick="onToggleSideBar()" src="~/assets/icons/control.png" id="sidebarButton" class="duration-300 absolute right-0 cursor-pointer rounded-full top-9 w-8 border-2" />
+       <div id="sidebar" style="z-index:1; transition-duration: 300ms;" class="isDestopSize shadow-lg  bg-white  duration-300  relative">
+            <img style="position:absolute;right:-10px;top:-5px; " onclick="onToggleSideBar()" src="~/assets/icons/control.png" id="sidebar-menu-icon" class="sidebar-menu-icon duration-300 absolute right-0 cursor-pointer rounded-full top-9 w-8 border-2" />
 
             <ul class="flex-col justify-center gap-x-4 mt-5 rounded-md ">
                 @{
@@ -115,7 +116,7 @@
 
 
         <!--body-->
-        <div id="mainContent" class="p-4 w-[92%] transition-all duration-300 md:block hidden no-scrollbar" style="overflow-x: scroll;">
+        <div id="mainContent" class="p-4  transition-all duration-300  no-scrollbar" style="overflow-x: scroll;width:100%">
             @RenderBody()
           
         </div>
@@ -128,123 +129,59 @@
 
 
     <script>
-        const navLinks = document.querySelector('.nav-links');
-        const dropdownList = document.getElementById('dropdownlist');
-        const dropdownButton = document.getElementById('dropdown-button');
         const mainContent = document.getElementById('mainContent');
-        const sidebarButton = document.getElementById('sidebarButton');
         const sidebar = document.getElementById('sidebar');
         const menuItems = document.querySelectorAll('.menu-items');
-
-        function onToggleDropdown() {
-            dropdownList.classList.toggle('hidden');
-        }
-
-        function onToggleMenu(e) {
-            e.src = e.src.includes("assets/icons/menu.png") ? '/assets/icons/close.png' : '/assets/icons/menu.png'
-            navLinks.classList.toggle('top-[7%]');
-        }
-
-        // Close dropdown if clicking outside
-        document.addEventListener('click', function (event) {
-            const isClickInside = dropdownButton.contains(event.target) || dropdownList.contains(event.target);
-
-            if (!isClickInside) {
-                dropdownList.classList.add('hidden');
-            }
-        });
+        const sidebarMenuIcon = document.getElementById('sidebar-menu-icon');
 
         // Sidebar control
         function onToggleSideBar() {
-            if (sidebar.classList.contains('w-72')) {
-                handleSideBarState(true);
+            sidebar.classList.toggle("isMobileSize");
+            sidebar.classList.toggle("isDestopSize");
+
+            const screenWidth = window.innerWidth;
+
+            // check if sidebar is open and screen width is less than 950px
+            if (sidebar.classList.contains("isDestopSize") && screenWidth <= 950) {
+                mainContent.style.display = "none";
             } else {
-               handleSideBarState(false);
+                mainContent.style.display = "block";
             }
 
-            const screenWidth = window.innerWidth;
-            if (screenWidth >= 600) {
-                mainContent.classList.remove('hidden');
-            }
-
-        }
-
-        // Handle side open and close
-        function  handleSideBarState(state){
-            const screenWidth = window.innerWidth;
-            if(state){
-                sidebar.classList.replace('w-72', 'w-15');
-                sidebarButton.classList.add("rotate-180");
-
-                // Toggle visibility of menu items and sidebar width
-                menuItems.forEach(item => item.classList.add("hidden"));
-
-                     // Hide main content if screen width is less than 600px
-                    if (screenWidth < 600) {
-                        mainContent.classList.add('hidden');
-                    }else{
-                        mainContent.classList.remove('hidden');
-                    }
-
-                // Save the sidebar state as 'open' in localStorage so that it persists across page reloads.
-                // Using "true" to indicate that the sidebar is currently open.
-                localStorage.setItem("sidebar-open", false);
+            // chnage sidebar icon
+            if(sidebar.classList.contains("isMobileSize")){
+                sidebarMenuIcon.classList.add("rotate-180");
             }else{
-                 sidebar.classList.replace('w-15', 'w-72');
-                sidebarButton.classList.remove("rotate-180");
-
-                // Toggle visibility of menu items and sidebar width
-                 menuItems.forEach(item => item.classList.remove("hidden"));
-
-
-                   //  main content if screen width is less than 600px
-                    if (screenWidth >= 600) {
-                        mainContent.classList.remove('hidden');
-                    }else{
-                        mainContent.classList.add('hidden');
-                    }
-
-                // Save the sidebar state as 'open' in localStorage so that it persists across page reloads.
-                // Using "true" to indicate that the  is currently open.
-                localStorage.setItem("sidebar-open", true);
-            }
+                sidebarMenuIcon.classList.remove("rotate-180");
+            }    
         }
+
 
         // Adjust visibility based on screen resize
         window.addEventListener('resize', function () {
             const screenWidth = window.innerWidth;
-            if (screenWidth >= 600) {
-                mainContent.classList.remove('hidden');
+            if (screenWidth <= 950) {
+                sidebar.classList.add("isMobileSize");
+                 sidebarMenuIcon.classList.add("rotate-180");
+                sidebar.classList.remove("isDestopSize");
+                 sidebarMenuIcon.classList.remove("rotate-180");
+            } else {
+                sidebar.classList.remove("isMobileSize");
+                sidebar.classList.add("isDestopSize");
             }
         });
 
         // Load page when set sidebar width
         function handleOnLoad(){
-            const sidebarStatus = localStorage.getItem("sidebar-open");
             const screenWidth = window.innerWidth;
-
-            if(sidebarStatus == "true"){
-                 sidebar.classList.replace('w-15', 'w-72');
-                 sidebarButton.classList.remove("rotate-180");
-
-                // Toggle visibility of menu items and sidebar width
-                menuItems.forEach(item => item.classList.remove("hidden"));
-
-                // Hide main content if screen width is less than 600px
-                if (screenWidth < 600) {
-                    mainContent.classList.add('hidden');
-                }
-
-            }else{
-                sidebar.classList.replace('w-72', 'w-15');
-               sidebarButton.classList.add("rotate-180");
-
-                // Toggle visibility of menu items and sidebar width
-                menuItems.forEach(item => item.classList.add("hidden"));
-
-                if (screenWidth < 600) {
-                    mainContent.classList.remove('hidden');
-                }
+             if (screenWidth <= 950) {
+                sidebar.classList.add("isMobileSize");
+                sidebar.classList.remove("isDestopSize");
+                 sidebarMenuIcon.classList.add("rotate-180");
+            } else {
+                sidebar.classList.remove("isMobileSize");
+                sidebar.classList.add("isDestopSize");
+                 sidebarMenuIcon.classList.add("rotate-180");
             }
         }
     </script>

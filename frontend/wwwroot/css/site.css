@@ -10,6 +10,8 @@
   }
 
 
+
+
 /* CSS to hide the scrollbar */
 .no-scrollbar::-webkit-scrollbar {
     display: none; /* Hide scrollbar on Chrome, Safari, and Edge */
@@ -179,13 +181,31 @@
 /* ------------
    Side bar 
 ------------*/   
-/* .sidebar{
-    width: 18rem;
+.sidebar{
+    /* width: 18rem; */
 }
 
-.mobile-sidebar{
-    width:18rem ;
-} */
+.isMobileSize{
+    width: 3.2rem;
+}
+
+.isMobileSize span{
+    display: none;
+}
+
+.isDestopSize{
+    width: 15rem;
+}
+
+.isDestopSize span{
+    display: block;
+}
+
+.sidebar-menu-icon:hover ~ .menu-items {
+    display: none; /* REMOVE THIS RULE */
+}
+
+
 
 
 @media (max-width: 860px) {

@@ -49,8 +49,10 @@
    
 
 </head>
+<style>
+</style>    
 
-<body class="index-page toggle-sidebar">
+<body class="index-page demo toggle-sidebar" style="scrollbar-color: hotpink blue">
 
      <!-- Include TempData Notifications Partial View -->
         <partial name="_Notification" />
@@ -61,7 +63,9 @@
             <a asp-action="Home" asp-controller="Home" asp-area="Student" class="logo d-flex align-items-center me-auto me-xl-0">
                 <!-- Uncomment the line below if you also wish to use an image logo -->
                 <!-- <img src="assets/img/logo.png" alt=""> -->
-                <h1 class="sitename">PP</h1>
+                <h1 class="sitename">
+                <img src="~/assets/icons/logo.png" height="200px"  style="font-size:200px"/>
+                </h1>
             </a>
 
             <nav id="navmenu" class="navmenu">
