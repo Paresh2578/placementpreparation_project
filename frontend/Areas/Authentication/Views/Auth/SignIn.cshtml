@@ -1,5 +1,8 @@
 ﻿@model SignInModel
 
+@{
+    ViewData["Title"] = "Login";
+}
 
 <div class="sign-container">
   <div class="sign-card">
@@ -22,6 +25,14 @@
         <input asp-for="Password" class="input" placeholder="Enter Password">
         <span asp-validation-for="Password" class="validation-error"></span>
       </div>
+
+       <!-- Links for Forgot Password and Register -->
+    <div class="sign-links d-flex justify-between" style="margin-top: 10px; justify-content: space-between;">
+      <a class="sign-link">Forgot Password?</a>
+      <br>
+      <a asp-action="SignUp" class="sign-link">Don't have an account?</a>
+    </div>
+
       <button type="submit" class="sign-button">Login</button>
     </form>
   </div>

@@ -1,0 +1,130 @@
+    
+    /**
+      Dashboard
+    ***/  
+    .widgets {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .widget {
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        width: 100%;
+        max-width: 300px;
+        padding: 15px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .widget:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .icon-container {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 8px;
+    }
+
+    .icon-container i {
+        font-size: 24px;
+        color: #ffffff;
+    }
+
+    .widget-title {
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+        margin: 0;
+    }
+
+    .widget-value {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 0 0 5px;
+    }
+
+    table tbody .action-button {
+        padding-left: 1.5rem /* 24px */;
+        padding-right: 1.5rem /* 24px */;
+        padding-top: 0.75rem /* 12px */;
+        padding-bottom: 0.75rem /* 12px */;
+        text-align: left;
+        gap: 10px;
+    }
+
+    
+
+    table tbody .action-button button.reject {
+        background-color: #ef4444;
+        color: #ffff;
+        padding: 0.5em 1rem /* 16px */;
+        border-radius: 5px;
+    }
+
+    table tbody .action-button button.accept {
+        background-color: #22c55e;
+        color: #fff;
+        padding: 0.5em 1rem /* 16px */;
+        border-radius: 5px;
+    }
+
+    table tbody .action-button button {
+        border: none;
+        cursor: pointer;
+    }
+
+    table tbody .action-button button:hover {
+        opacity: 0.8;
+    }
+
+    table tbody .action-button button:active {
+        transform: translateY(1px);
+    }
+
+    table tbody .action-button button:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+
+    table tbody .status.success{
+        color: #22c55e;
+    }
+
+    table tbody .status.pending{
+        color: #f59e0b;
+        
+    }
+
+    table tbody .status.rejected{
+        color: #ef4444;
+    }
+
+    
+
+    @media (max-width: 768px) {
+        .widgets {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .widget {
+            max-width: 90%;
+        }
+
+        .action-button {
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+    } 

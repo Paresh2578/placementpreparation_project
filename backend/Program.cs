@@ -6,8 +6,10 @@ using backend.data.Repository;
 using backend.Models;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Models.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,14 +28,10 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddControllers()
-    .AddFluentValidation(fv =>
-    {
-        // Automatically register validators from the assembly
-        fv.RegisterValidatorsFromAssemblyContaining<BranchModel>();
-        // Optional: Disable automatic ModelState validation
-        fv.DisableDataAnnotationsValidation = true;
-    });
+// Configure FluentValidation
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<BranchValidation>();
 
 // add cors
 builder.Services.AddCors(options =>

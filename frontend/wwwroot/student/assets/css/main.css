@@ -2956,6 +2956,7 @@ Sign Form
   height: 100vh;
   padding: 0.75rem;
   background: linear-gradient(90deg, #3a77d9, #a785c6);
+  padding-top: 100px;
   /* background: #f3f9ff; */
 }
 

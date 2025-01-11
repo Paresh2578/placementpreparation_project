@@ -1,8 +1,167 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewBag.Title = "Dashboard";
 }
 
+<div class="dashboard">
+    <!-- Widgets count -->
+    <div class="widgets">
+        <!-- Course -->
+        <div class="widget">
+            <div class="icon-container" style="background-color: #6C63FF;">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <div>
+                <p class="widget-value" style="color: #6C63FF;">5</p>
+                <p class="widget-title">Total Courses</p>
+            </div>    
+        </div>
 
-admin home 
+        <!-- Question -->
+        <div class="widget">
+            <div class="icon-container" style="background-color: #4CAF50;">
+                <i class="fa-solid fa-circle-question"></i>
+            </div>
+            <div>
+                <p class="widget-value" style="color: #4CAF50;">20</p>
+                <p class="widget-title">Total Questions</p>
+            </div>
+        </div>
+
+        <!-- Mcq -->
+        <div class="widget">
+            <div class="icon-container" style="background-color: #FFC107;">
+                <i class="fa-solid fa-check-double"></i>
+            </div>
+            <div>
+                <p class="widget-value" style="color: #FFC107;">20</p>
+                <p class="widget-title">Total MCQs</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- New Student Padding Request-->
+    <div class="bg-white p-4 rounded-md shadow-lg mt-5  ">
+       <!-- Header Section -->
+        <div class="table-hader">
+            <h1 class="table-responsive-title">List of New Student Padding Request</h1>
+        </div>
+
+       <!-- Table Section -->
+        <div class="mt-6 overflow-x-auto w-full">
+            <table class="min-w-full  bg-white border border-gray-200">
+                <thead>
+                    <tr class="bg-gray-100 text-nowrap text-gray-600  uppercase text-sm leading-normal">
+                        <th class="py-3 px-6 text-left">#</th>
+                        <th class="py-3 px-6 text-left">Name</th>
+                        <th class="py-3 px-6 text-left">Email </th>
+                        <th class="py-3 px-6 text-left">Details</th>
+                        <th class="py-3 px-6 text-left">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="courses" class="text-gray-700 text-sm font-light">
+                    <tr class="border-b text-nowrap  border-gray-200 ">
+                        <td class="py-3 px-6 text-left">1</td>
+                        <td class="py-3 px-6 text-left">John Doe</td>
+                        <td class="py-3 px-6 text-left">abc@gmail.com</td>
+                        <td class="py-3 px-6 text-left">
+                            <a href="#" class="text-blue-500">View Details</a>
+                        </td>
+                        <td class="action-button">
+                            <button class="reject"><i class="fa-solid fa-times-circle"></i> Reject</button>
+                            @* <button class="accept text-white px-4 py-2 rounded-md shadow" style="background:#22c55e"><i class="fa-solid fa-check-circle"></i> Accept</button> *@
+                            <button class="accept " style="background:#22c55e"><i class="fa-solid fa-check-circle"></i> Accept</button>
+                        </td>
+                    </tr>    
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+     <!-- New Mcq Padding Request-->
+    <div class="bg-white p-4 rounded-md shadow-lg mt-5  ">
+       <!-- Header Section -->
+        <div class="table-hader">
+            <h1 class="table-responsive-title">List of New Mcq Padding Request</h1>
+        </div>
+
+       <!-- Table Section -->
+        <div class="mt-6 overflow-x-auto w-full">
+            <table class="min-w-full  bg-white border border-gray-200">
+                <thead>
+                    <tr class="bg-gray-100 text-nowrap text-gray-600  uppercase text-sm leading-normal">
+                        <th class="py-3 px-6 text-left">#</th>
+                        <th class="py-3 px-6 text-left">Mcq</th>
+                        <th class="py-3 px-6 text-left">Details</th>
+                            <th class="py-3 px-6 text-left">Status</th>
+                        <th class="py-3 px-6 text-left">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="courses" class="text-gray-700 text-sm font-light">
+                    <tr class="border-b text-nowrap  border-gray-200 ">
+                        <td class="py-3 px-6 text-left">1</td>
+                        <td class="py-3 px-6 text-left">John Doe</td>
+                        <td class="py-3 px-6 text-left">
+                            <a href="#" class="text-blue-500">View Details</a>
+                        </td>
+                         <td class="py-3 px-6 text-left">
+                            <span class="status pending">Pending</span>
+                        </td>
+                        <td class="action-button">
+                            <button class="reject"><i class="fa-solid fa-times-circle"></i> Reject</button>
+                            @* <button class="accept text-white px-4 py-2 rounded-md shadow" style="background:#22c55e"><i class="fa-solid fa-check-circle"></i> Accept</button> *@
+                            <button class="accept " style="background:#22c55e"><i class="fa-solid fa-check-circle"></i> Accept</button>
+                        </td>
+                    </tr>    
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+     <!-- New Question Padding Request-->
+    <div class="bg-white p-4 rounded-md shadow-lg mt-5  ">
+       <!-- Header Section -->
+        <div class="table-hader">
+            <h1 class="table-responsive-title">List of New Question Padding Request</h1>
+        </div>
+
+       <!-- Table Section -->
+        <div class="mt-6 overflow-x-auto w-full">
+            <table class="min-w-full  bg-white border border-gray-200">
+                <thead>
+                    <tr class="bg-gray-100 text-nowrap text-gray-600  uppercase text-sm leading-normal">
+                        <th class="py-3 px-6 text-left">#</th>
+                        <th class="py-3 px-6 text-left">Question</th>
+                        <th class="py-3 px-6 text-left">Details</th>
+                        <th class="py-3 px-6 text-left">Status</th>
+                        <th class="py-3 px-6 text-left">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="courses" class="text-gray-700 text-sm font-light">
+                    <tr class="border-b text-nowrap  border-gray-200 ">
+                        <td class="py-3 px-6 text-left">1</td>
+                        <td class="py-3 px-6 text-left">John Doe</td>
+                        <td class="py-3 px-6 text-left">
+                            <a href="#" class="text-blue-500">View Details</a>
+                        </td>
+                        <td class="py-3 px-6 text-left">
+                            <span class="status pending">Pending</span>
+                        </td>
+
+                        <td class="action-button">
+                            <button class="reject"><i class="fa-solid fa-times-circle"></i> Reject</button>
+                            @* <button class="accept text-white px-4 py-2 rounded-md shadow" style="background:#22c55e"><i class="fa-solid fa-check-circle"></i> Accept</button> *@
+                            <button class="accept " style="background:#22c55e"><i class="fa-solid fa-check-circle"></i> Accept</button>
+                        </td>
+                    </tr>    
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+

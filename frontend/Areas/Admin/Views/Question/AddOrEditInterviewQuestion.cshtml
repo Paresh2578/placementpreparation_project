@@ -1,0 +1,109 @@
+@model QuestionModel
+
+@{
+     string title = Model == null ||  Model.QuestionId == null ? "Add" : "Edit";
+     ViewBag.Title = title + " Question";
+}
+
+
+
+<div class="flex flex-col items-center">
+     <!-- Loading -->
+    <div id="model-loading" style="display: none;" >
+         <partial name="_Loading_Dialong"/>
+    </div>
+</div>
+    <div class="w-full  bg-white rounded-lg shadow-lg p-6">
+        <h2 class="responsive-title text-gray-900 mb-4 text-center">@(title) Question</h2>
+        @*    <h2 class="text-lg sm:text-md md:text-xl lg:text-2xl text-gray-900 mb-4 text-center">
+        Add Difficulty Level
+        </h2> *@
+
+
+        <form asp-action="AddOrEditQuestion" asp-controller="Question" method="post" class="flex  w-full flex-col">
+
+            <!-- Question Id -->
+            <input asp-for="QuestionId" type="hidden"/>
+
+            <!-- Display validation summary for the entire form -->
+            <div asp-validation-summary="ModelOnly" class="text-red-600"></div>
+
+
+            
+
+
+            <!--Question-->
+            <div class="mb-2">
+                <div class="flex">
+                    <span class="text-red-600">*</span><label asp-for="Question" class="text-gray-700 mb-1"></label>
+                </div>
+                <textarea id="question-area" asp-for="Question" placeholder="Enter Question" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2  focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"></textarea>
+                <span asp-validation-for="Question" class="text-red-600"></span>
+            </div>
+
+            <!-- QuestionAnswer -->
+            <div class="mb-2">
+                <div class="flex">
+                   <span class="text-red-600">*</span><label asp-for="QuestionAnswer" class=" text-gray-700 mb-1"></label>
+                </div>
+                <textarea id="my-text-area" asp-for="QuestionAnswer" placeholder="Enter Question Answer" ></textarea>
+                <span asp-validation-for="QuestionAnswer" class="text-red-600"></span>
+            </div>
+
+            <!--Is Active -->
+            <div class="mb-2">
+                <div class="flex">
+                    <span class="text-red-600">*</span><label asp-for="IsActive" class="text-gray-700 mb-1"></label>
+
+                    <div class="cursor-pointer">
+                        <input asp-for="IsActive" id="active" type="radio" value="true" class="m-2" checked="@(Model == null ? true : Model.IsActive)" />
+                        <label asp-for="IsActive" for="active" >Yes</label>
+                    </div>
+                    <div class="cursor-pointer">
+                        <input asp-for="IsActive" id="inActive" type="radio" value="false" class="m-2" />
+                        <label asp-for="IsActive" for="inActive">No</label>
+                    </div>
+                    
+                </div>
+            </div>
+
+             <!-- Company Name  -->
+            <div class="mb-2">
+                <div class="flex">
+                    <span class="text-red-600">*</span><label asp-for="CompanyName" class="text-gray-700 mb-1"></label>
+                </div>
+                <input  asp-for="CompanyName" placeholder="Enter Company Name" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2  focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"></input>
+                <span asp-validation-for="CompanyName" class="text-red-600"></span>
+            </div>
+            
+             <!-- TopicName  -->
+            <div class="mb-2">
+                <div class="flex">
+                    <label asp-for="TechStack" class="text-gray-700 mb-1"></label>
+                </div>
+                <input  asp-for="TechStack" placeholder="Enter Tech Stack ex . Java , mern stack , flutter" class="w-full bg-gray-100 text-gray-900 border-0 rounded-md p-2  focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"></input>
+                <span asp-validation-for="TechStack" class="text-red-600"></span>
+            </div>
+
+
+            <div class="flex gap-x-4">
+                <partial name="_Submit_Button" model="@(title)" />
+                <partial name="_Back_Button" model="@("Back")" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script> <!-- Local version of jQuery -->
+<script>
+    const easymde = new EasyMDE({
+        element: document.getElementById('my-text-area'),
+    });
+    
+    const questionArea = new EasyMDE({
+        element: document.getElementById('question-area'),
+    });
+    
+</script>

@@ -28,11 +28,15 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         public async Task<IActionResult> ListMcq(Guid? courseId , Guid? topicId , Guid? subTopicId)
         {
              ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}?courseId={courseId}&topicId={topicId}&subTopicId="+subTopicId);
+
+             List<McqModel>  mcqList = new List<McqModel>();
+
                 if(response.StatusCode != 200)
                 {
                    TempData["ErrorMessage"] = response.Message;
+                   return View(mcqList);
                 }
-                List<McqModel>  mcqList =  JsonConvert.DeserializeObject<List<McqModel>>(response.Data!.ToString());
+                mcqList =  JsonConvert.DeserializeObject<List<McqModel>>(response.Data!.ToString());
 
                 // set search dropdown value ( course , topic , subTopic)
                 await  setCourseTopicSubTopicDropDownsValues();

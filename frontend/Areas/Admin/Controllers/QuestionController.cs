@@ -23,7 +23,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             _exportService = exportService;
         }
 
-        #region list of Topic
+        #region list of Question
         [CheckAccess]
         public async Task<IActionResult> ListQuestion()
         {
@@ -41,6 +41,28 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
         #endregion
 
+        #region List of Interview Question
+        [CheckAccess]
+        public async Task<IActionResult> InterviewQuestionList()
+        {
+            // ApiResponseModel response = await _apiClient.GetAsync("InterviewQuestion");
+            //     if(response.StatusCode != 200)
+            //     {
+            //        TempData["ErrorMessage"] = response.Message;
+            //     }
+            //     List<QuestionModel>  questionList =  JsonConvert.DeserializeObject<List<QuestionModel>>(response.Data!.ToString());
+
+            //      // set search dropdown value ( course , topic , subTopic)
+            //     await  setCourseTopicSubTopicDropDownsValues();
+
+            // return View(questionList);
+            return View();
+        }
+        #endregion
+
+     
+
+       
         #region add or Edit Question
         [CheckAccess]
         public async Task<IActionResult> AddOrEditQuestion(string? questionId)
@@ -113,8 +135,45 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             return View(questions);
         }
         #endregion
+       
+        #region Add or Edit Interview Question
+        [CheckAccess]
+        public async Task<IActionResult> AddOrEditInterviewQuestion(string? questionId)
+        {
+                return View();
+        }
+  
+        [CheckAccess]
+        [HttpPost]
+        public async Task<IActionResult> AddOrEditInterviewQuestion(QuestionModel questions)
+        {
+            //Server side validation
+            if (ModelState.IsValid)
+            {
+                 ApiResponseModel response = new ApiResponseModel();
+                if(questions.QuestionId != Guid.Empty && questions.QuestionId != null)
+                {
+                    // Call API to update data
+                     response = await _apiClient.PutAsync(_apiBaseUrl, questions);
+                }else{
+                     // Call API to save data
+                     questions.QuestionId = Guid.NewGuid();
+                      response = await _apiClient.PostAsync(_apiBaseUrl, questions);
+                }
+               
+                if(response.StatusCode == 201 || response.StatusCode == 200)
+                {
+                    TempData["SuccessMessage"] = response.Message;
+                    return RedirectToAction("ListQuestion");
+                }else {
+                     TempData["ErrorMessage"] = response.Message;
+                }
+            }
+            return View(questions);
+        }
 
-        
+        #endregion
+
         #region delete Question
         [Route("/DeleteQuestion/{questionId}")]
         [CheckAccess]
@@ -215,3 +274,5 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         #endregion
     }
 }
+
+

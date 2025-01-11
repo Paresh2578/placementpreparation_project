@@ -12,10 +12,14 @@
     <link rel="stylesheet" href="~/css/table.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/comman.css" asp-append-version="true" />
     <link rel="stylesheet" href="./_Layout_Admin.cshtml.css"/>
+    <link rel="stylesheet" href="~/css/admin/main.css"/>
 
 
     <!-- fontawesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Bootstrap CSS -->
+    @* <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> *@
 
 
 
@@ -82,7 +86,25 @@
             </div>
     </header>
 
+    <!-- model dialog -->
+    @* <div class="modal fade" id="customBootstrapModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Modal Title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                Modal body content goes here.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div> *@
 
+    <!--end model dialog-->
 
     <div class="flex w-full">
         <!-- Side bar-->
@@ -101,7 +123,9 @@
                 new {name = "Topic" , icon = "~/assets/icons/topic.png",controller="Topic" , action="ListTopic"},
                 new {name = "Sub Topic" , icon = "~/assets/icons/topic.png",controller="SubTopic" , action="ListSubTopic"},
                 new {name = "Question"  , icon = "~/assets/icons/qa.png",controller="Question" , action="ListQuestion"},
+                new {name = "Interview Question"  , icon = "~/assets/icons/qa.png",controller="Question" , action="InterviewQuestionList"},
                 new {name = "Mcq"  , icon = "~/assets/icons/online-test.png",controller="Mcq" , action="ListMcq"},
+                new {name = "Interview Mcq"  , icon = "~/assets/icons/online-test.png",controller="Mcq" , action="ListMcq"},
                 };
                     foreach (var menu in itemlist)
                     {
@@ -113,7 +137,6 @@
                 }
             </ul>
         </div>
-
 
         <!--body-->
         <div id="mainContent" class="p-4  transition-all duration-300  no-scrollbar" style="overflow-x: scroll;width:100%">
@@ -201,6 +224,9 @@
 
     <!-- Search jquery -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     <!--Notyf Notification Toast-->
     @await Component.InvokeAsync("Notyf")

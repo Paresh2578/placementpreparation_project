@@ -1,0 +1,77 @@
+@model SignUpModel
+
+@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<div class="sign-container">
+  <div class="sign-card">
+    <h1 class="sign-card-title">Sign Up</h1>
+    <hr class="sign-card-divider">
+    <form asp-action="SignIn" method="post" class="sign-form">
+
+
+     <!-- Name fields -->
+      <div class="mb-2">
+        <div class="sign-label">
+          <span class="validation-error">*</span>
+          <label asp-for="Name"></label>
+        </div>
+        <input asp-for="Name" class="input" placeholder="Enter Name">
+        <span asp-validation-for="Name" class="validation-error"></span>
+      </div>
+
+    <!-- college Name fields -->
+      <div class="mb-2">
+        <div class="sign-label">
+          <label asp-for="collegeName"></label>
+        </div>
+        <input asp-for="collegeName" class="input" placeholder="Enter college name">
+        <span asp-validation-for="collegeName" class="validation-error"></span>
+      </div>
+
+     <!-- Email fields -->
+      <div class="mb-2">
+        <div class="sign-label">
+          <span class="validation-error">*</span>
+          <label asp-for="Email"></label>
+        </div>
+        <input asp-for="Email" class="input" placeholder="Enter Email">
+        <span asp-validation-for="Email" class="validation-error"></span>
+      </div>
+
+    <!-- Password fields -->
+      <div class="mb-2">
+        <div class="sign-label">
+          <span class="validation-error">*</span>
+          <label asp-for="Password">Password</label>
+        </div>
+        <input asp-for="Password" class="input" placeholder="Enter Password">
+        <span asp-validation-for="Password" class="validation-error"></span>
+      </div>
+
+      <!-- Confirm Password fields -->
+        <div class="mb-2">
+            <div class="sign-label">
+                <span class="validation-error">*</span>
+                <label asp-for="ConfirmPassword"></label>
+            </div>
+            <input asp-for="ConfirmPassword" class="input" placeholder="Confirm Password">
+            <span asp-validation-for="ConfirmPassword" class="validation-error"></span>
+        </div>
+
+       <!-- Links for Forgot Password and Register -->
+    <div class="sign-links d-flex justify-between" style="margin-top: 10px; justify-content: space-between;">
+      <br>
+      <a href="/Account/Register" class="sign-link">already have an account?</a>
+    </div>
+
+      <button type="submit" class="sign-button">Sign Up</button>
+    </form>
+  </div>
+</div>
+
+
+
+
+

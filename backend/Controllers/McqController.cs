@@ -44,7 +44,7 @@ namespace backend.Controllers
         public async Task<IActionResult> GetAllMcq([FromQuery] Guid? courseId , [FromQuery] Guid? topicId , [FromQuery] Guid? subTopicId, [FromQuery] int? pageNumber, [FromQuery] int? pageSize = 5, [FromQuery] bool onlyActiveMcqs = false)
         {
             var response = await _mcqInterface.GetAllMcq(courseId:courseId , topicId : topicId , subTopicId : subTopicId , onlyActiveMcqs: onlyActiveMcqs,pageNumber:pageNumber , pageSize:pageSize);
-            return StatusCode(response.StatusCode, response);
+                return StatusCode(response.StatusCode, response);
         }
         #endregion
 

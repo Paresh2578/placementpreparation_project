@@ -74,6 +74,13 @@ namespace Frontend.Areas.Authentication.Controllers
         }
         #endregion
 
+        #region sign up
+        public IActionResult SignUp()
+        {
+            return View();
+        }
+        #endregion
+        
         #region  Log out
         [Route("~/logout")]
         public IActionResult LogOutAdmin()

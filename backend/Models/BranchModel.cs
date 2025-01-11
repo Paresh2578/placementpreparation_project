@@ -8,7 +8,6 @@ namespace backend.Models
         [Key]
         public Guid BranchId { get; set; }
 
-        [Required(ErrorMessage = "Branch Name is required")]
         public required string BranchName { get; set; }
     }
 }

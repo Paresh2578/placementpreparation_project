@@ -24,6 +24,15 @@ namespace Placement_Preparation.Areas.Admin.Models
         // Is Active
         public bool IsActive { get; set; } = true;
 
+        // Tech Stack Name
+        [Display(Name = "Tech Stack")]
+        public string? TechStack { get; set; }
+
+        // Compnay Name
+        [Required(ErrorMessage = "Company Name is required.")]
+        [Display(Name = "Company Name")]
+        public string CompanyName { get; set; }
+
         // Foreign Key to Course
         [Required(ErrorMessage = "Course is required.")]
         public Guid CourseId { get; set; }
