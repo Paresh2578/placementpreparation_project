@@ -2984,6 +2984,12 @@ Sign Form
   border: none;
   border-top: 2px solid #8f95a2; /* Default hr styling */
 }
+.welcome-message{
+  font-size: 1rem;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+}
 
 /* Form styling */
 .sign-form {
@@ -2997,6 +3003,31 @@ Sign Form
   margin-bottom: 0.25rem;
   display: flex;
   align-items: center;
+}
+
+.validation-error-lable {
+  animation: fadeIn 0.3s ease-in-out; 
+  color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.form-navigation-meassege{
+  color: #333030;
+}
+
+/* Add animation for the validation message */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Input styling */

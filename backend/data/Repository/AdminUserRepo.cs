@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
+using backend.Service;
 
 namespace backend.data.Repository
 {
@@ -13,10 +14,12 @@ namespace backend.data.Repository
     {
         private readonly ApplicationDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public AdminUserRepo(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
+        private readonly EmailService _emailService;
+        public AdminUserRepo(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor, EmailService emailService)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+            _emailService = emailService;
         }
         public async Task<ResponseModel> AddAdminUser(AdminUserModel adminUser)
         {
@@ -127,6 +130,54 @@ namespace backend.data.Repository
             }catch{
                   return new ResponseModel { StatusCode= 500, Message = "Internal Server Error" };
                }
+        }
+   
+        public async Task<ResponseModel> SendOtp(string email)
+        {
+            try
+            {
+                // Generate OTP
+                var otp = OTPGenerator.GenerateOTP();
+
+                // send OTP in Mail
+                ResponseModel response = await _emailService.SendEmail(email, "Email Varification", $"Your OTP is {otp}");
+                if(response.StatusCode != 200){
+                    return response;
+                }
+
+                // Store OTP in session for verification (for simplicity in this example)
+             _httpContextAccessor.HttpContext.Session.SetString($"{email}OTP", otp.ToString());
+                
+                return new ResponseModel { StatusCode= 200, Message = "OTP sent successfully." };
+            }
+            catch {
+                return new ResponseModel { StatusCode= 500, Message = "Internal Server Error" };
+            }
+        }
+
+        public async Task<ResponseModel> VarifyOtp(string email, string otp)
+        {
+            try
+            {
+                // Get the OTP from session
+                var sessionOtp = _httpContextAccessor.HttpContext.Session.GetString($"{email}OTP");
+                if(sessionOtp is null){
+                    return new ResponseModel { StatusCode= 400, Message = "OTP expired." };
+                }
+
+                // Verify the OTP
+                if(sessionOtp != otp){
+                    return new ResponseModel { StatusCode= 400, Message = "Invalid OTP." };
+                }
+
+                // Clear the OTP from session
+                _httpContextAccessor.HttpContext.Session.Remove($"{email}OTP");
+
+                return new ResponseModel { StatusCode= 200, Message = "OTP verified successfully." };
+            }
+            catch {
+                return new ResponseModel { StatusCode= 500, Message = "Internal Server Error" };
+            }
         }
     }
 }

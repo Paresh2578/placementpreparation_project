@@ -4,6 +4,7 @@ using backend.data;
 using backend.data.Interface;
 using backend.data.Repository;
 using backend.Models;
+using backend.Service;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using FluentValidation;
@@ -45,10 +46,20 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Add session support
+builder.Services.AddDistributedMemoryCache(); // Required for session storage
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(10); // Set session timeout
+    options.Cookie.HttpOnly = true; // Set cookies as HTTP only
+    options.Cookie.IsEssential = true; // Make the session cookie essential
+});
+
 
 
 // Register services
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<AdminUserRepo>();
 builder.Services.AddScoped<BranchRepo>();
 builder.Services.AddScoped<CourseTypeRepo>();
@@ -110,6 +121,8 @@ if (app.Environment.IsDevelopment())
 
 // Enable CORS
 app.UseCors("AllowAll");
+
+app.UseSession();
 
 app.UseHttpsRedirection();
 

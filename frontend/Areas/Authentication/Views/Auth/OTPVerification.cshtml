@@ -1,0 +1,294 @@
+@using Placement_Preparation.Utils
+@model OTPModel
+
+@{
+    ViewData["Title"] = "OTP Verification"; // Title of the page
+
+    string email = UrlEncryptor.Decrypt(Model.Email ?? ""); // Decrypt the email
+}
+
+
+    <div class="form-body sign-container p-2">
+    <div class="container">
+        <form class="otp-form" method="post" asp-action="OTPVerification">
+        <h1>Verify OTP</h1>
+        <hr class="sign-card-divider">
+        <p class="description">
+            Enter the 6-digit code sent to 
+            <span class="highlighted-email">@(email)</span>
+            <a asp-action="EmailVarification" id="change-email-link" class="change-email">Change</a>.
+        </p>
+         @if(TempData["LableErrorMesssage"] != null)
+        {
+          <p class="validation-error-lable" style="text-align: start;">@TempData["LableErrorMesssage"]</p>
+        }
+        <input type="hidden" asp-for="Email" id="email-hidden" value="@email" />
+        <div class="otp-inputs">
+            <input asp-for="FirstDigit" type="text" maxlength="1" class="otp-input" autofocus required>
+            <input asp-for="SecoundDigit"type="text" maxlength="1" class="otp-input" required>
+            <input asp-for="ThirdDigit" type="text" maxlength="1" class="otp-input" required>
+            <input asp-for="FourthDigit" type="text" maxlength="1" class="otp-input" required>
+            <input asp-for="FifthDigit" type="text" maxlength="1" class="otp-input" required>
+            <input asp-for="SixthDigit" type="text" maxlength="1" class="otp-input" required>
+        </div>
+            <button type="submit" class="sign-button" style="margin: 0px;">Verify</button>
+        <p class="note">
+            Didn’t receive the code? 
+            <a  id="resend-link" class="resend-link disabled" onclick="return false;">Resend OTP</a> 
+            in <span id="timer">1:00</span>.
+            </p>
+
+            
+        </form>
+    </div>
+
+    </div>
+
+
+
+@section Scripts {
+    <!-- OTP inputs -->
+    <script>
+        document.querySelectorAll('.otp-input').forEach((input, index, inputs) => {
+        input.addEventListener('input', (e) => {
+            const value = e.target.value;
+            if (value && index < inputs.length - 1) {
+            inputs[index + 1].focus();
+            } else if (!value && index > 0) {
+            inputs[index - 1].focus();
+            }
+        });
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !e.target.value && index > 0) {
+            inputs[index - 1].focus();
+            }
+        });
+        });
+    </script>
+
+    <!-- Resend OTP timer -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const timerElement = document.getElementById('timer');
+        const resendLink = document.getElementById('resend-link');
+        const email = document.getElementById('email-hidden').value;
+        let countdown = 5; // 1-minute countdown
+
+        // Update the timer display
+        function updateTimer() {
+            const minutes = Math.floor(countdown / 60);
+            const seconds = countdown % 60;
+            timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Handle resend OTP functionality
+        function handleResendOtp() {
+            resendLink.classList.add('disabled'); // Disable the link
+            resendLink.textContent = 'Resending...'; // Indicate action
+
+            console.log(email);
+
+            // Perform AJAX request to resend OTP
+            fetch('/Authentication/Auth/ResendOtp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: email }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                  console.log(data);
+                    if (data.success) {
+                        alert(data.message);
+                        countdown = 60; // Restart the countdown
+                        startCountdown();
+                    } else {
+                        alert(data.message);
+                        resendLink.classList.remove('disabled');
+                        resendLink.textContent = 'Resend OTP';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    resendLink.classList.remove('disabled');
+                    resendLink.textContent = 'Resend OTP';
+                });
+        }
+
+        // Start the countdown timer
+        function startCountdown() {
+            resendLink.classList.add('disabled');
+            resendLink.textContent = 'Resend OTP';
+            const timerInterval = setInterval(() => {
+                if (countdown > 0) {
+                    countdown--;
+                    updateTimer();
+                } else {
+                    clearInterval(timerInterval);
+                    timerElement.textContent = ''; // Clear timer
+                    resendLink.classList.remove('disabled'); // Enable the link
+                    resendLink.onclick = () => {
+                        handleResendOtp();
+                        return false; // Prevent default link behavior
+                    };
+                }
+            }, 1000);
+        }
+
+        // Start the initial countdown
+        startCountdown();
+    });
+</script>
+
+    @* <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        const timerElement = document.getElementById('timer');
+        const resendLink = document.getElementById('resend-link');
+        let countdown = 60; // 1 minute
+
+        function updateTimer() {
+            const minutes = Math.floor(countdown / 60);
+            const seconds = countdown % 60;
+            timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startCountdown() {
+            resendLink.classList.add('disabled'); // Disable the link initially
+            const timerInterval = setInterval(() => {
+            if (countdown > 0) {
+                countdown--;
+                updateTimer();
+            } else {
+                clearInterval(timerInterval);
+                timerElement.textContent = ''; // Remove timer text
+                resendLink.classList.remove('disabled'); // Enable the link
+                resendLink.onclick = () => {
+                // Handle resend OTP functionality here
+                countdown = 60; // Restart the timer    
+                startCountdown(); // Restart the countdown
+                return false; // Prevent default link behavior
+                };
+            }
+            }, 1000);
+        }
+
+        startCountdown(); // Start the initial countdown
+        });
+
+    </script> *@
+ 
+}
+
+
+<style>
+  .form-body {
+    }
+
+.container {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.description {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.highlighted-email {
+  color: #007BFF; /* Modern blue shade */
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.highlighted-email:hover {
+  color: #0056b3; /* Slightly darker on hover */
+  text-decoration: none; /* Removes underline on hover */
+}
+
+.otp-inputs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.otp-input {
+  width: 40px;
+  height: 50px;
+  font-size: 1.5rem;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: border-color 0.3s ease;
+}
+
+.otp-input:focus {
+  border-color: #007BFF;
+  outline: none;
+}
+
+.btn {
+  background: #007BFF;
+  color: #fff;
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: 100%;
+}
+
+.btn:hover {
+  background: #0056b3;
+  color: #fff;
+}
+
+.note {
+  font-size: 0.95rem;
+  color: #666;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.note a {
+  color: #007BFF;
+  text-decoration: none;
+}
+
+.note a:hover {
+  text-decoration: underline;
+}
+
+.resend-link {
+  color: #007BFF;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.resend-link.disabled {
+  color: #ccc;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+.resend-link:not(.disabled):hover {
+  text-decoration: underline;
+}
+
+
+</style>

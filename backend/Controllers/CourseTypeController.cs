@@ -1,4 +1,5 @@
 ﻿using backend.Constant;
+using backend.data.Interface;
 using backend.data.Repository;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -9,17 +10,17 @@ namespace backend.Controllers
     [ApiController]
     public class CourseTypeController : ControllerBase
     {
-        private readonly CourseTypeRepo _courseTypeRepo;
-        public CourseTypeController(CourseTypeRepo courseTypeRepo)
+        private readonly CourseTypeInterface _courseTypeInterface;
+        public CourseTypeController(CourseTypeInterface courseTypeInterface)
         {
-            _courseTypeRepo = courseTypeRepo;
+            _courseTypeInterface = courseTypeInterface;
         }
 
         #region  Get All Course Types
         [HttpGet]
         public async Task<IActionResult> GetAllCourseTypes()
         {
-            ResponseModel response = await _courseTypeRepo.GetAllCourseTypes();
+            ResponseModel response = await _courseTypeInterface.GetAllCourseTypes();
             return StatusCode(response.StatusCode, response);
         }
 
@@ -29,7 +30,7 @@ namespace backend.Controllers
         [HttpGet("{courseTypeId}")]
         public async Task<IActionResult> GetCourseTypeById(Guid courseTypeId)
         {
-            ResponseModel response = await _courseTypeRepo.GetCourseTypeById(courseTypeId);
+            ResponseModel response = await _courseTypeInterface.GetCourseTypeById(courseTypeId);
             return StatusCode(response.StatusCode, response);
         }
         #endregion
@@ -39,7 +40,7 @@ namespace backend.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCourseType([FromBody] CourseTypeModel courseType)
         {
-            ResponseModel response = await _courseTypeRepo.AddCourseType(courseType);
+            ResponseModel response = await _courseTypeInterface.AddCourseType(courseType);
             return StatusCode(response.StatusCode, response);
         }
         #endregion
@@ -51,12 +52,12 @@ namespace backend.Controllers
         {
 
             // Check if the course type is in use Course type id
-            ResponseModel response = await _courseTypeRepo.GetCourseTypeById(courseTypeId);
+            ResponseModel response = await _courseTypeInterface.GetCourseTypeById(courseTypeId);
             if(response.StatusCode != 200){
                 return StatusCode(response.StatusCode, response);
             }
 
-             response = await _courseTypeRepo.DeleteCourseType(response.Data);
+             response = await _courseTypeInterface.DeleteCourseType(response.Data);
             return StatusCode(response.StatusCode, response);
         }
         #endregion
@@ -66,7 +67,7 @@ namespace backend.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateCourseType([FromBody] CourseTypeModel courseType)
         {
-            ResponseModel response = await _courseTypeRepo.UpdateCourseType(courseType);
+            ResponseModel response = await _courseTypeInterface.UpdateCourseType(courseType);
             return StatusCode(response.StatusCode, response);
         }
         #endregion
@@ -75,7 +76,7 @@ namespace backend.Controllers
         [HttpDelete("DeleteMultiple")]
         [CheckAccess]
         public async Task<IActionResult> DeleteMultipleMcq([FromBody] List<Guid> courseTypeIds){
-            var response = await _courseTypeRepo.DeleteMultipleCourseType(courseTypeIds);
+            var response = await _courseTypeInterface.DeleteMultipleCourseType(courseTypeIds);
             return StatusCode(response.StatusCode , response);
         }
         #endregion

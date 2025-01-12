@@ -3,6 +3,7 @@ using Frontend.Services;
 using Microsoft.AspNetCore.Mvc;
 using Frontend.Models;
 using Newtonsoft.Json;
+using Placement_Preparation.Utils;
 
 
 
@@ -79,8 +80,130 @@ namespace Frontend.Areas.Authentication.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> SignUp(SignUpModel model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                // ApiResponseModel response = await _apiClient.PostAsync($"{_apiBaseUrl}/signup", model);
+                // if (response.StatusCode == 200)
+                // {
+                //     TempData["SuccessMessage"] = response.Message;
+                    return RedirectToAction("OTPVerification");
+                // }
+                // else
+                // {
+                //     TempData["ErrorMessage"] = response.Message;
+                // }
+            }
+            return View(model);
+        }
+
         #endregion
-        
+
+        #region  EmailVarification
+        public IActionResult EmailVarification()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EmailVarification(EmailVarificationModel emailVarification)
+        {
+
+            if (ModelState.IsValid)
+            {
+                ApiResponseModel response = await _apiClient.PostAsync($"{_apiBaseUrl}/sendOtp/{emailVarification.Email}","");
+                if (response.StatusCode == 200)
+                {
+                   TempData["SuccessMessage"] = response.Message;
+                // encypt email and send to the otp verification page
+                return RedirectToAction("OTPVerification", new { email = UrlEncryptor.Encrypt(emailVarification.Email) });
+                }
+                else
+                {
+                   TempData["LableErrorMesssage"] = response.Message;
+                }
+            }
+            return View(emailVarification);
+        }
+        #endregion
+
+        #region  ForgetPassword
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+        #endregion
+
+        #region  OTP Verification
+        public IActionResult OTPVerification(string email)
+        {
+            return View(new OTPModel() { Email =email});
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> OTPVerification(OTPModel otp)
+        {
+            string otpCode =(otp.FirstDigit == null || otp.SecoundDigit == null || otp.ThirdDigit == null || otp.FourthDigit == null || otp.FifthDigit == null || otp.SixthDigit == null) ? "" : otp.FirstDigit.ToString() + otp.SecoundDigit.ToString() + otp.ThirdDigit.ToString() + otp.FourthDigit.ToString() + otp.FifthDigit.ToString() + otp.SixthDigit.ToString();
+            // otp varification
+            if(otpCode.Trim().Length != 6)
+            {
+                ModelState.AddModelError("invalidOtp", "Please enter the OTP");
+                TempData["LableErrorMesssage"] = "Please enter the OTP";
+                return View(otp);
+            }else{
+                ModelState.Remove("invalidOtp");
+            }
+
+            if (ModelState.IsValid)
+            {
+                ApiResponseModel response = await _apiClient.PostAsync($"{_apiBaseUrl}/varifyOtp/{UrlEncryptor.Decrypt(otp.Email)}/{otpCode}", "");
+                if (response.StatusCode == 200)
+                {
+                    TempData["SuccessMessage"] = response.Message;
+                    return RedirectToAction("SignUp");
+                }
+                else
+                {
+                    TempData["LableErrorMesssage"] = response.Message;
+                }
+            }
+            return View(otp);
+        }
+
+        #endregion
+
+
+        #region Resend OTP
+        [HttpPost]
+        public async Task<IActionResult> ResendOtp([FromBody] EmailVarificationModel email)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(email.Email))
+                {
+                    return Json(new { success = false, message = "Invalid email address." });
+                }
+
+
+                ApiResponseModel response = await _apiClient.PostAsync($"{_apiBaseUrl}/sendOtp/{email.Email}", "");
+                if (response.StatusCode == 200)
+                {
+                    return Json(new { success = true, message = "OTP has been resent successfully." });
+                }
+
+                return Json(new { success = false, message = response.Message });
+            }catch(Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+        #endregion
+
+
         #region  Log out
         [Route("~/logout")]
         public IActionResult LogOutAdmin()

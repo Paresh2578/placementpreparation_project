@@ -8,7 +8,7 @@
   <div class="sign-card">
     <h1 class="sign-card-title">Sign Up</h1>
     <hr class="sign-card-divider">
-    <form asp-action="SignIn" method="post" class="sign-form">
+    <form asp-action="SignUp" method="post" class="sign-form">
 
 
      <!-- Name fields -->
@@ -24,10 +24,10 @@
     <!-- college Name fields -->
       <div class="mb-2">
         <div class="sign-label">
-          <label asp-for="collegeName"></label>
+          <label asp-for="CollegeName"></label>
         </div>
-        <input asp-for="collegeName" class="input" placeholder="Enter college name">
-        <span asp-validation-for="collegeName" class="validation-error"></span>
+        <input asp-for="CollegeName" class="input" placeholder="Enter college name">
+        <span asp-validation-for="CollegeName" class="validation-error"></span>
       </div>
 
      <!-- Email fields -->
@@ -63,7 +63,7 @@
        <!-- Links for Forgot Password and Register -->
     <div class="sign-links d-flex justify-between" style="margin-top: 10px; justify-content: space-between;">
       <br>
-      <a href="/Account/Register" class="sign-link">already have an account?</a>
+      <a asp-action="SignIn" class="sign-link">already have an account?</a>
     </div>
 
       <button type="submit" class="sign-button">Sign Up</button>

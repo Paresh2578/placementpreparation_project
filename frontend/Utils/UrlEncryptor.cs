@@ -10,7 +10,7 @@ namespace Placement_Preparation.Utils{
     public static string Encrypt(string text)
     {
         using (var aesAlg = Aes.Create())
-        {
+        {   
             aesAlg.Key = Encoding.UTF8.GetBytes(EncryptionKey);
             aesAlg.IV = new byte[16]; // Initialize the IV to 0s
 

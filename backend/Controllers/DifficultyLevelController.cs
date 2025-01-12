@@ -1,4 +1,5 @@
 ﻿using backend.Constant;
+using backend.data.Interface;
 using backend.data.Repository;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -9,17 +10,17 @@ namespace backend.Controllers
     [ApiController]
     public class DifficultyLevelController : ControllerBase
     {
-        private readonly DifficultyLevelRepo _difficultyLevelRepo;
-        public DifficultyLevelController(DifficultyLevelRepo difficultyLevelRepo)
+        private readonly DifficultyLevelInterface _difficultyLevelInterface;
+        public DifficultyLevelController(DifficultyLevelInterface difficultyLevelInterface)
         {
-            _difficultyLevelRepo = difficultyLevelRepo;
+            _difficultyLevelInterface = difficultyLevelInterface;
         }
 
         #region Get All Difficulty Levels
         [HttpGet]
         public async Task<IActionResult> GetAllDifficultyLevels()
         {
-            var response = await _difficultyLevelRepo.GetAllDifficultyLevels();
+            var response = await _difficultyLevelInterface.GetAllDifficultyLevels();
             return StatusCode(response.StatusCode, response);
         }
         #endregion
@@ -28,7 +29,7 @@ namespace backend.Controllers
         [HttpGet("{difficultyLevelId}")]
         public async Task<IActionResult> GetDifficultyLevelById(Guid difficultyLevelId)
         {
-            var response = await _difficultyLevelRepo.GetDifficultyLevelById(difficultyLevelId);
+            var response = await _difficultyLevelInterface.GetDifficultyLevelById(difficultyLevelId);
             return StatusCode(response.StatusCode, response);
         }
         #endregion
@@ -38,7 +39,7 @@ namespace backend.Controllers
         [HttpPost]
         public async Task<IActionResult> AddDifficultyLevel([FromBody] DifficultyLevelModel difficultyLevelModel)
         {
-            var response = await _difficultyLevelRepo.AddDifficultyLevel(difficultyLevelModel);
+            var response = await _difficultyLevelInterface.AddDifficultyLevel(difficultyLevelModel);
             return StatusCode(response.StatusCode, response);
         }
         #endregion
@@ -48,7 +49,7 @@ namespace backend.Controllers
         [HttpPut()]
         public async Task<IActionResult> UpdateDifficultyLevel([FromBody] DifficultyLevelModel difficultyLevelModel)
         {
-            var response = await _difficultyLevelRepo.UpdateDifficultyLevel(difficultyLevelModel);
+            var response = await _difficultyLevelInterface.UpdateDifficultyLevel(difficultyLevelModel);
             return StatusCode(response.StatusCode, response);
         }
         #endregion
@@ -59,12 +60,12 @@ namespace backend.Controllers
         public async Task<IActionResult> DeleteDifficultyLevel(Guid difficultyLevelId)
         {
             // Check if the difficulty level exists
-            var difficultyLevel = await _difficultyLevelRepo.GetDifficultyLevelById(difficultyLevelId);
+            var difficultyLevel = await _difficultyLevelInterface.GetDifficultyLevelById(difficultyLevelId);
             if(difficultyLevel.StatusCode != 200){
                 return StatusCode(difficultyLevel.StatusCode, difficultyLevel);
             }
 
-            var response = await _difficultyLevelRepo.DeleteDifficultyLevel(difficultyLevelId);
+            var response = await _difficultyLevelInterface.DeleteDifficultyLevel(difficultyLevelId);
             return StatusCode(response.StatusCode, response);
         }
         #endregion
@@ -73,7 +74,7 @@ namespace backend.Controllers
         [HttpDelete("DeleteMultiple")]
         [CheckAccess]
         public async Task<IActionResult> DeleteMultipleDifficultyLevel([FromBody] List<Guid> difficultyLevelIds){
-            var response = await _difficultyLevelRepo.DeleteMultipleDifficultyLevel(difficultyLevelIds);
+            var response = await _difficultyLevelInterface.DeleteMultipleDifficultyLevel(difficultyLevelIds);
             return StatusCode(response.StatusCode , response);
         }
         #endregion

@@ -9,6 +9,14 @@ namespace Placement_Preparation.BAL
             _httpContextAccessor = new HttpContextAccessor();
         }
 
+        public static void SetEmail(string email){
+            _httpContextAccessor.HttpContext!.Session.SetString("Email", email);
+        }
+
+        public static string GetEmail(){
+            return _httpContextAccessor.HttpContext!.Session.GetString("Email")!;
+        }
+
           public static string? UserName()
         {
             return _httpContextAccessor.HttpContext!.Session.GetString("UserName");

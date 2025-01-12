@@ -1,0 +1,42 @@
+@model EmailVarificationModel
+
+@{
+    ViewData["Title"] = "Email Varification";
+}
+
+
+<div class="sign-container">
+  <div class="sign-card">
+    <h1 class="sign-card-title">Sign Up</h1>
+    <hr class="sign-card-divider">
+
+    <p class="welcome-message"><strong>Welcome!</strong> Please enter your email to sign up.</p>
+
+    @if(TempData["LableErrorMesssage"] != null)
+    {
+      <p class="validation-error-lable">@TempData["LableErrorMesssage"]</p>
+    }
+    <form asp-action="EmailVarification" method="post" class="sign-form">
+
+     <!-- Email fields -->
+      <div class="mb-2">
+        <div class="sign-label">
+          <span class="validation-error">*</span>
+          <label asp-for="Email"></label>
+        </div>
+        <input asp-for="Email"  class="input" placeholder="Enter Email">
+        <span asp-validation-for="Email" class="validation-error"></span>
+      </div>
+
+
+       <!-- Links for Forgot Password and Register -->
+    <div class="sign-links d-flex justify-between" style="margin-top: 10px; justify-content: end; gap: 5px;">
+      <br>
+      <p class="form-navigation-meassege">already have an account?</p>
+      <a asp-action="SignIn" class="sign-link " style="margin-bottom: 0px;">Login here</a>
+    </div>
+
+      <button type="submit" class="sign-button" style="margin: 0px;">Send OTP</button>
+    </form>
+  </div>
+</div>
