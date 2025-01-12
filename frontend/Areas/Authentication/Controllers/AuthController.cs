@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Frontend.Models;
 using Newtonsoft.Json;
 using Placement_Preparation.Utils;
+using Placement_Preparation.BAL;
 
 
 
@@ -44,8 +45,8 @@ namespace Frontend.Areas.Authentication.Controllers
 
 
                     // set the user session
-                   _httpContextAccessor.HttpContext!.Session.SetString("UserName", userName);
-                   _httpContextAccessor.HttpContext.Session.SetString("email", email);
+                   CV.SetEmail(email);
+                   CV.SetUserName(userName);
 
                     // set token in cookie
                     var token = response.Data!.token.ToString() ?? string.Empty;
@@ -68,7 +69,7 @@ namespace Frontend.Areas.Authentication.Controllers
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = response.Message;
+                    TempData["LableErrorMesssage"] = response.Message;
                 }
             }
             return View(model);
@@ -87,16 +88,17 @@ namespace Frontend.Areas.Authentication.Controllers
 
             if (ModelState.IsValid)
             {
-                // ApiResponseModel response = await _apiClient.PostAsync($"{_apiBaseUrl}/signup", model);
-                // if (response.StatusCode == 200)
-                // {
-                //     TempData["SuccessMessage"] = response.Message;
-                    return RedirectToAction("OTPVerification");
-                // }
-                // else
-                // {
-                //     TempData["ErrorMessage"] = response.Message;
-                // }
+                model.Email = CV.GetEmail();
+                ApiResponseModel response = await _apiClient.PostAsync($"{_apiBaseUrl}/signup", model);
+                if (response.StatusCode == 201)
+                {
+                    TempData["SuccessMessage"] = response.Message;
+                    return RedirectToAction("SignIn");
+                }
+                else
+                {
+                    TempData["LableErrorMesssage"] = response.Message;
+                }
             }
             return View(model);
         }
@@ -164,6 +166,8 @@ namespace Frontend.Areas.Authentication.Controllers
                 if (response.StatusCode == 200)
                 {
                     TempData["SuccessMessage"] = response.Message;
+                    // store email in seesion
+                    CV.SetEmail(UrlEncryptor.Decrypt(otp.Email));
                     return RedirectToAction("SignUp");
                 }
                 else
@@ -189,7 +193,7 @@ namespace Frontend.Areas.Authentication.Controllers
                 }
 
 
-                ApiResponseModel response = await _apiClient.PostAsync($"{_apiBaseUrl}/sendOtp/{email.Email}", "");
+                ApiResponseModel response = await _apiClient.PostAsync($"{_apiBaseUrl}/sendOtp/{UrlEncryptor.Decrypt(email.Email)}", "");
                 if (response.StatusCode == 200)
                 {
                     return Json(new { success = true, message = "OTP has been resent successfully." });

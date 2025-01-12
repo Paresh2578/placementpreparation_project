@@ -33,7 +33,7 @@ namespace backend.data.Repository
                 await _context.SaveChangesAsync();
                 
                 // If successful, return a success response
-                return new ResponseModel { StatusCode= 201 , Message = "Admin user added successfully." };
+                return new ResponseModel { StatusCode= 201 , Message = "Sign Up successfully." };
             }
             catch
             {
@@ -77,6 +77,11 @@ namespace backend.data.Repository
 
         public async Task<ResponseModel> SignIn(string email, string password)
         {
+
+            // remove white spaces from email , password
+            email = email.Trim();
+            password = password.Trim();
+
             try
             {
                 // Find the user by email

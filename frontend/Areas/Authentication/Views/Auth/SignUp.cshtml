@@ -8,6 +8,10 @@
   <div class="sign-card">
     <h1 class="sign-card-title">Sign Up</h1>
     <hr class="sign-card-divider">
+      @if(TempData["LableErrorMesssage"] != null)
+        {
+          <p class="validation-error-lable" style="text-align: start;">@TempData["LableErrorMesssage"]</p>
+        }
     <form asp-action="SignUp" method="post" class="sign-form">
 
 
@@ -15,30 +19,16 @@
       <div class="mb-2">
         <div class="sign-label">
           <span class="validation-error">*</span>
-          <label asp-for="Name"></label>
+          <label asp-for="UserName"></label>
         </div>
-        <input asp-for="Name" class="input" placeholder="Enter Name">
-        <span asp-validation-for="Name" class="validation-error"></span>
+        <input asp-for="UserName" class="input" placeholder="Enter Name">
+        <span asp-validation-for="UserName" class="validation-error"></span>
       </div>
 
-    <!-- college Name fields -->
-      <div class="mb-2">
-        <div class="sign-label">
-          <label asp-for="CollegeName"></label>
-        </div>
-        <input asp-for="CollegeName" class="input" placeholder="Enter college name">
-        <span asp-validation-for="CollegeName" class="validation-error"></span>
-      </div>
+    
 
      <!-- Email fields -->
-      <div class="mb-2">
-        <div class="sign-label">
-          <span class="validation-error">*</span>
-          <label asp-for="Email"></label>
-        </div>
-        <input asp-for="Email" class="input" placeholder="Enter Email">
-        <span asp-validation-for="Email" class="validation-error"></span>
-      </div>
+     <input asp-for="Email" type="hidden">
 
     <!-- Password fields -->
       <div class="mb-2">
@@ -60,11 +50,21 @@
             <span asp-validation-for="ConfirmPassword" class="validation-error"></span>
         </div>
 
+
+        <!-- college Name fields -->
+      <div class="mb-2">
+        <div class="sign-label">
+          <label asp-for="CollegeName"></label>
+        </div>
+        <input asp-for="CollegeName" class="input" placeholder="Enter college name">
+        <span asp-validation-for="CollegeName" class="validation-error"></span>
+      </div>
+
        <!-- Links for Forgot Password and Register -->
-    <div class="sign-links d-flex justify-between" style="margin-top: 10px; justify-content: space-between;">
+    @* <div class="sign-links d-flex justify-between" style="margin-top: 10px; justify-content: space-between;">
       <br>
       <a asp-action="SignIn" class="sign-link">already have an account?</a>
-    </div>
+    </div> *@
 
       <button type="submit" class="sign-button">Sign Up</button>
     </form>

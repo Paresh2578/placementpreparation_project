@@ -4,14 +4,13 @@ namespace Frontend.Areas.Authentication.Models
 {
    public class SignUpModel{
         [Required]
-        public string Name { get; set; }
+        [Display(Name = "Name")]
+        public required string UserName { get; set; }
         
         [Display(Name = "College Name")]
         public string? CollegeName {get;set;}
 
-        [Required]
-        [EmailAddress]
-        public required string Email { get; set; }
+        public  string? Email { get; set; }
 
         [Required]
         // password command validation like length , special character, number, upper case
@@ -19,7 +18,7 @@ namespace Frontend.Areas.Authentication.Models
         public required string Password { get; set; }
 
         [Required]
-        [Display(Name = "Confirm Password")]
+        [Display(Name = "Confo  rm Password")]
         [Compare("Password", ErrorMessage = "Password and Confirm Password must match")]
         public required string ConfirmPassword { get; set; }
 

@@ -22,7 +22,7 @@
         {
           <p class="validation-error-lable" style="text-align: start;">@TempData["LableErrorMesssage"]</p>
         }
-        <input type="hidden" asp-for="Email" id="email-hidden" value="@email" />
+        <input type="hidden" asp-for="Email" id="email-hidden" />
         <div class="otp-inputs">
             <input asp-for="FirstDigit" type="text" maxlength="1" class="otp-input" autofocus required>
             <input asp-for="SecoundDigit"type="text" maxlength="1" class="otp-input" required>
@@ -73,7 +73,7 @@
         const timerElement = document.getElementById('timer');
         const resendLink = document.getElementById('resend-link');
         const email = document.getElementById('email-hidden').value;
-        let countdown = 5; // 1-minute countdown
+        let countdown = 60; // 1-minute countdown
 
         // Update the timer display
         function updateTimer() {

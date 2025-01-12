@@ -57,9 +57,10 @@ namespace backend.Controllers
                 return StatusCode(response.StatusCode,response);
             }
 
-
+               // password is null
+               response.Data!.Password = null;
                 // Generate token
-                var token = TokenGenerator.CreateToken(response.Data!.AdminUserId.ToString());
+                var token = TokenGenerator.CreateToken(response.Data.ToString());
 
                 var commonCookieOptions = new CookieOptions
                 {
@@ -73,11 +74,10 @@ namespace backend.Controllers
                 // Set the 'token' cookie
                 _httpContextAccessor.HttpContext!.Response.Cookies.Append("token", token, commonCookieOptions);
 
-                // Set the 'userData' cookie
                 var userData = new
                 {
                     response.Data!.UserName,
-                    response.Data!.Email
+                    response.Data!.Email,
                 };
 
                 // _httpContextAccessor.HttpContext!.Response.Cookies.Append("userData", Newtonsoft.Json.JsonConvert.SerializeObject(cookieData), commonCookieOptions);

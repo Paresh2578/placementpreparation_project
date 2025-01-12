@@ -8,6 +8,10 @@
   <div class="sign-card">
     <h1 class="sign-card-title">Login</h1>
     <hr class="sign-card-divider">
+    @if(TempData["LableErrorMesssage"] != null)
+    {
+      <p class="validation-error-lable" style="text-align: start;">@TempData["LableErrorMesssage"]</p>
+    }
     <form asp-action="SignIn" method="post" class="sign-form">
       <div class="mb-2">
         <div class="sign-label">

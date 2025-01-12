@@ -19,5 +19,8 @@ namespace backend.Models
         public required string Password { get; set; }
 
         public string? CollegeName { get; set; }
+
+        public bool? IsAdmin { get; set; } = false;
+        public string? ApproveStatus { get; set; } = "Pending";
     }
 }

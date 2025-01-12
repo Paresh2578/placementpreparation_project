@@ -17,6 +17,10 @@ namespace Placement_Preparation.BAL
             return _httpContextAccessor.HttpContext!.Session.GetString("Email")!;
         }
 
+        public static void SetUserName(string userName){
+            _httpContextAccessor.HttpContext!.Session.SetString("UserName", userName);
+        }
+
           public static string? UserName()
         {
             return _httpContextAccessor.HttpContext!.Session.GetString("UserName");
