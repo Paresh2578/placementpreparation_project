@@ -86,6 +86,9 @@
                     </tr>
                 </thead>
                 <tbody id="question" class="text-gray-700 text-sm font-light">
+                    @if(ViewData["InternalServerError"] != null){
+                        <partial name="_Errors" />
+                    }
                     @{
                         int index = 1;
                         foreach (var question in Model)

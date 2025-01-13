@@ -1,0 +1,46 @@
+using backend.Constant;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+
+namespace backend.BAL
+{
+    // Use ActionFilterAttribute for general action filtering
+    public class MainAdminAccess : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            // Check if the "Token" cookie exists
+            if (!context.HttpContext.Request.Cookies.ContainsKey("token"))
+            {
+                // If not, return a forbidden result
+               context.Result = new UnauthorizedResult();
+            }else
+            {
+                // Retrieve the token from the cookie
+                var token = context.HttpContext.Request.Cookies["token"];
+                Dictionary<string, dynamic>? userData = CV.GetUserDataFromToken(token);
+
+                if(string.IsNullOrEmpty(token) || !TokenGenerator.ValidateToken(token)){
+                    context.Result = new UnauthorizedResult();
+                }else if (userData is null)
+                {
+                    context.Result = new UnauthorizedResult();
+                }else if(userData["IsAdmin"] == null || userData["IsAdmin"] == false)
+                {
+                    context.Result = new ForbidResult();
+                }
+            }
+
+            base.OnActionExecuting(context);
+        }
+
+        // Optional: Set cache headers
+        public override void OnResultExecuting(ResultExecutingContext context)
+        {
+            context.HttpContext.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+            context.HttpContext.Response.Headers["Expires"] = "-1";
+            context.HttpContext.Response.Headers["Pragma"] = "no-cache";
+            base.OnResultExecuting(context);
+        }
+    }
+}

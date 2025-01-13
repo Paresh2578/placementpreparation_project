@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using backend.Constant;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace backend.Constant
+namespace backend.BAL
 {
     // Use ActionFilterAttribute for general action filtering
     public class CheckAccess : ActionFilterAttribute

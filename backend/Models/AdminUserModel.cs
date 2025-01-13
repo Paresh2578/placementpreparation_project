@@ -23,4 +23,5 @@ namespace backend.Models
         public bool? IsAdmin { get; set; } = false;
         public string? ApproveStatus { get; set; } = "Pending";
     }
+
 }

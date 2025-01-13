@@ -65,39 +65,39 @@
 
     
 
-    table tbody .action-button button.reject {
+    table tbody .action-button .button.reject {
         background-color: #ef4444;
         color: #ffff;
         padding: 0.5em 1rem /* 16px */;
         border-radius: 5px;
     }
 
-    table tbody .action-button button.accept {
+    table tbody .action-button .button.accept {
         background-color: #22c55e;
         color: #fff;
         padding: 0.5em 1rem /* 16px */;
         border-radius: 5px;
     }
 
-    table tbody .action-button button {
+    table tbody .action-button .button {
         border: none;
         cursor: pointer;
     }
 
-    table tbody .action-button button:hover {
+    table tbody .action-button .button:hover {
         opacity: 0.8;
     }
 
-    table tbody .action-button button:active {
+    table tbody .action-button .button:active {
         transform: translateY(1px);
     }
 
-    table tbody .action-button button:disabled {
+    table tbody .action-button .button:disabled {
         cursor: not-allowed;
         opacity: 0.5;
     }
 
-    table tbody .status.success{
+    table tbody .status.accept{
         color: #22c55e;
     }
 
@@ -106,7 +106,7 @@
         
     }
 
-    table tbody .status.rejected{
+    table tbody .status.reject{
         color: #ef4444;
     }
 

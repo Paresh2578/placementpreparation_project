@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Placement_Preparation.BAL
 {
     
         // Use ActionFilterAttribute for general action filtering
-        public class CheckAccess : ActionFilterAttribute
+        public class MainAdminAccess : ActionFilterAttribute
         {
             public override void OnActionExecuting(ActionExecutingContext context)
             {
@@ -14,6 +15,19 @@ namespace Placement_Preparation.BAL
                 {
                     // If not, return a forbidden result
                     context.Result = new RedirectResult("~/Authentication/Auth/SignIn");
+                }else{
+                    Dictionary<string, dynamic>? userData =CV.TokenToUserData(context.HttpContext.Request.Cookies["Token"]!);
+
+                    //  validate userData 
+                    if(userData == null || userData.Count == 0 || !userData.ContainsKey("IsAdmin")){
+                        context.Result = new RedirectResult("~/Authentication/Auth/SignIn");
+                    }
+
+
+                if (userData!["IsAdmin"] == false)
+                {
+                    context.Result = new RedirectResult("~/Admin/Common/Error403");
+                }
             }
 
                 base.OnActionExecuting(context);

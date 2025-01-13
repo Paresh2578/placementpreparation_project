@@ -12,12 +12,10 @@ namespace Placement_Preparation.Areas.Admin.Models
 
         // Question
         [Required(ErrorMessage = "Question  is required.")]
-        // [StringLength(500, ErrorMessage = "Question text can't be longer than 500 characters.")]
         public required string Question { get; set; }
 
         // Question Answer
         [Required(ErrorMessage = "Question Answer is required.")]
-        // [StringLength(1000, ErrorMessage = "Question Answer can't be longer than 1000 characters.")]
         [Display(Name = "Question Answer")]
         public required string QuestionAnswer { get; set; }
 
@@ -29,20 +27,22 @@ namespace Placement_Preparation.Areas.Admin.Models
         public string? TechStack { get; set; }
 
         // Compnay Name
-        [Required(ErrorMessage = "Company Name is required.")]
         [Display(Name = "Company Name")]
-        public string CompanyName { get; set; }
+        public string? CompanyName { get; set; }
 
-        // Foreign Key to Course
-        [Required(ErrorMessage = "Course is required.")]
-        public Guid CourseId { get; set; }
+        
+         public string? ApproveStatus {get;set;} = "Pending";
+
+         // Foreign Key to Course
+        // [Required(ErrorMessage = "Course is required.")]
+        public Guid? CourseId { get; set; }
 
         [ForeignKey("CourseId")]
         public virtual CourseModel? Course { get; set; }
 
         // Foreign Key to Topic
-        [Required(ErrorMessage = "Topic is required.")]
-        public Guid TopicId { get; set; }
+        // [Required(ErrorMessage = "Topic is required.")]
+        public Guid? TopicId { get; set; }
 
         [ForeignKey("TopicId")]
         public virtual TopicModel? Topic { get; set; }
@@ -55,15 +55,11 @@ namespace Placement_Preparation.Areas.Admin.Models
         public virtual SubTopicModel? SubTopic { get; set; }
 
         //Foreign Key to Difficulty Level
-        [Required(ErrorMessage = "Difficulty Level is required.")]
-        public Guid DifficultyLevelId { get; set; }
+        // [Required(ErrorMessage = "Difficulty Level is required.")]
+        public Guid? DifficultyLevelId { get; set; }
 
         [ForeignKey("DifficultyLevelId")]
         public virtual DifficultyLevelModel? DifficultyLevel { get; set; }
-
-        
-
-        
     }
 }
 

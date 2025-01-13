@@ -1,4 +1,4 @@
-﻿using backend.Constant;
+﻿using backend.BAL;
 using backend.data.Interface;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -74,6 +74,15 @@ namespace backend.Controllers
         public async Task<IActionResult> DeleteMultipleMcq([FromBody] List<Guid> questionIds){
             var response = await _questionInterface.DeleteMultipleQuestion(questionIds);
             return StatusCode(response.StatusCode , response);
+        }
+        #endregion
+
+        #region Get Interview questions
+        [HttpGet("InterviewQuestions")]
+        public async Task<IActionResult> GetInterviewQuestions(Guid? addedById)
+        {
+            var response = await _questionInterface.GetInterviewQuestions(addedById);
+            return StatusCode(response.StatusCode, response);
         }
         #endregion
     }

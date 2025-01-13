@@ -42,7 +42,7 @@ namespace Frontend.Areas.Authentication.Controllers
                     
                     string userName = response.Data!.userData.userName;
                     string email = response.Data!.userData.email;
-
+                   
 
                     // set the user session
                    CV.SetEmail(email);
@@ -162,7 +162,7 @@ namespace Frontend.Areas.Authentication.Controllers
 
             if (ModelState.IsValid)
             {
-                ApiResponseModel response = await _apiClient.PostAsync($"{_apiBaseUrl}/varifyOtp/{UrlEncryptor.Decrypt(otp.Email)}/{otpCode}", "");
+                ApiResponseModel response = await _apiClient.PostAsync($"{_apiBaseUrl}/VerifyOtp/{UrlEncryptor.Decrypt(otp.Email)}/{otpCode}", "");
                 if (response.StatusCode == 200)
                 {
                     TempData["SuccessMessage"] = response.Message;

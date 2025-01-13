@@ -2,8 +2,8 @@
   scroll bar
  *********/
  html {
-    --scrollbarBG: red;
-    --thumbBG: #90A4AE;
+    /* --scrollbarBG: red; */
+    /* --thumbBG: #90A4AE; */
   }
   body::-webkit-scrollbar {
     width: 11px;
@@ -19,6 +19,15 @@
     background-color: var(--thumbBG) ;
     border-radius: 6px;
     border: 3px solid var(--scrollbarBG);
+  }
+
+  .validation-error-lable {
+    animation: fadeIn 0.3s ease-in-out; 
+    color: #721c24;
+      background-color: #f8d7da;
+      border-color: #f5c6cb;
+      padding: 5px 10px;
+      border-radius: 5px;
   }
   
 

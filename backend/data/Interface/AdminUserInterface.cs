@@ -13,7 +13,8 @@ namespace backend.data.Interface
         public Task<ResponseModel> FindAdminUsersById(Guid adminUserId);
         public Task<ResponseModel> CheckEmailExist(String email);
         public Task<ResponseModel> SendOtp(String email);
-        public Task<ResponseModel> VarifyOtp(String email,String otp);
+        public Task<ResponseModel> VerifyOtp(string email,string otp);
+        public Task<ResponseModel> UpdateApprovelStudentStatus(Guid id , String status);
     }
 
 }

@@ -14,37 +14,42 @@ namespace backend.Models
 
         // Question
         [Required(ErrorMessage = "Question  id  is required.")]
-        // [StringLength(500, ErrorMessage = "Question text can't be longer than 500 characters.")]
         public required string Question { get; set; }
 
         // Question Answer
         [Required(ErrorMessage = "Question Answer is required.")]
-        // [StringLength(1000, ErrorMessage = "Question Answer can't be longer than 1000 characters.")]
         public required string QuestionAnswer { get; set; }
 
         // Is Active
         public bool IsActive { get; set; } = true;
 
+        // Tech Stack Name
+        public string? TechStack { get; set; }
+
+        // AddedBy
+        public Guid? AddedBy { get; set; }
+
+        // CompanyName
+        public  string? CompanyName { get; set; }
+
+        public string? ApproveStatus {get;set;} = "Pending";
+
+
 
         // Foreign Key to Course
-        [Required(ErrorMessage = "Course is required.")]
-        [NotEmptyGuid(ErrorMessage = "Please select a valid course.")]
-        public Guid CourseId { get; set; }
+        public Guid? CourseId { get; set; }
 
         [ForeignKey("CourseId")]
         public CourseModel? Course { get; set; }
 
         // Foreign Key to Topic
-        [NotEmptyGuid(ErrorMessage = "Please select a valid topic.")]
-        [Required(ErrorMessage = "Topic id is required.")]
-        public Guid TopicId { get; set; }
+        public Guid? TopicId { get; set; }
 
         [ForeignKey("TopicId")]
         public TopicModel? Topic { get; set; }
 
 
         // Foreign Key to SubTopic
-        [NotEmptyGuid(ErrorMessage = "Please select a valid sub-topic.")]
         public Guid? SubTopicId { get; set; }
 
         [ForeignKey("SubTopicId")]
@@ -52,9 +57,7 @@ namespace backend.Models
 
 
         // Foreign Key to DifficultyLevel
-        [Required(ErrorMessage = "Difficulty Level id is required.")]
-        [NotEmptyGuid(ErrorMessage = "Please select a valid difficulty level.")]
-        public Guid DifficultyLevelId { get; set; }
+        public Guid? DifficultyLevelId { get; set; }
 
         [ForeignKey("DifficultyLevelId")]
         public DifficultyLevelModel? DifficultyLevel { get; set; }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using backend.Constant;
+using backend.BAL;
 using backend.Models;
 using backend.data.Repository;
 using backend.data;
@@ -49,6 +49,7 @@ namespace backend.Controllers
     
        #region  get all Branches
         [HttpGet("")]
+        [CheckAccess]
         public async Task<IActionResult> GetAllBranches()
         {
             ResponseModel response = await _branchRepo.GetAllBranches();

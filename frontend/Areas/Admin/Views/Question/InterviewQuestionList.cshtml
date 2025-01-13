@@ -43,22 +43,38 @@
                     </tr>
                 </thead>
                 <tbody id="courses" class="text-gray-700 text-sm font-light">
-                    <tr class="border-b text-nowrap  border-gray-200 ">
-                     <th><input type="checkbox"  class="select-row" value="" onclick="toggleCheckbox(this)" /></th>
-                        <td class="py-3 px-6 text-left">1</td>
-                        <td class="py-3 px-6 text-left">John Doe</td>
-                        <td class="py-3 px-6 text-left">
-                            <a href="#" class="text-blue-500">View Details</a>
-                        </td>
-                        <td class="py-3 px-6 text-left">
-                            <span class="status pending">Pending</span>
-                        </td>
+                     @if(ViewData["InternalServerError"] != null){
+                        <partial name="_Errors" />
+                    }
+                    @{
+                        int idx = 0;
+                        foreach(QuestionModel question in Model){
+                          <tr class="border-b text-nowrap  border-gray-200 ">
+                             <th><input type="checkbox"  class="select-row" value="" onclick="toggleCheckbox(this)" /></th>
+                                <td class="py-3 px-6 text-left">@idx</td>
+                                <td class="py-3 px-6 text-left">@question.Question</td>
+                                <td class="py-3 px-6 text-left">
+                                    <a href="#" class="text-blue-500">View Details</a>
+                                </td>
+                                <td class="py-3 px-6 text-left">
+                                    <span class="status @question.ApproveStatus.ToLower()">@question.ApproveStatus</span>
+                                </td>
 
-                          <td class="py-3 px-6 text-left flex gap-x-4">
-                                    <a class="cursor-pointer" asp-action="AddOrEditCourse" ><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
-                                    <a class="cursor-pointer"  onclick="confirmDelete('/DeleteCourse/')"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a>
-                        </td>
-                    </tr>    
+                                <td class="py-3 px-6 text-left flex gap-x-4">
+                                            <a class="cursor-pointer" asp-action="AddOrEditCourse" ><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
+                                            <a class="cursor-pointer"  onclick="confirmDelete('/DeleteCourse/')"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a>
+                                </td>
+                             </tr>  
+                             idx++; 
+                        }
+                        // no data found
+                        if(idx == 0){
+                            <tr class="border-b text-nowrap  border-gray-200 ">
+                                <td class="py-3 px-6 text-center" colspan="6">No data found</td>
+                            </tr>
+                        }
+                    }
+                     
 
                 </tbody>
             </table>

@@ -3005,14 +3005,7 @@ Sign Form
   align-items: center;
 }
 
-.validation-error-lable {
-  animation: fadeIn 0.3s ease-in-out; 
-  color: #721c24;
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-    padding: 5px 10px;
-    border-radius: 5px;
-}
+
 
 .form-navigation-meassege{
   color: #333030;

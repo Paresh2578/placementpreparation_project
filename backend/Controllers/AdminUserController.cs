@@ -2,6 +2,7 @@
 using backend.Models;
 using backend.data.Repository;
 using backend.Constant;
+using backend.BAL;
 using System.Net.Http.Json;
 using Newtonsoft.Json;
 using System.Collections;
@@ -50,6 +51,11 @@ namespace backend.Controllers
                 return BadRequest(new ResponseModel { StatusCode = 400, Message = "Email and Password are required." });
             }
 
+            // email validation
+            if (!CommonMethods.IsValidEmail(email)){
+                return BadRequest(new ResponseModel { StatusCode = 400, Message = "Email is not valid." });
+            }
+
              // check if the email exists
             ResponseModel response = await _adminUserInterface.SignIn(email, password);
              if (response.StatusCode != 200)
@@ -59,8 +65,9 @@ namespace backend.Controllers
 
                // password is null
                response.Data!.Password = null;
+
                 // Generate token
-                var token = TokenGenerator.CreateToken(response.Data.ToString());
+                var token = TokenGenerator.CreateToken(JsonConvert.SerializeObject(response.Data));
 
                 var commonCookieOptions = new CookieOptions
                 {
@@ -133,15 +140,26 @@ namespace backend.Controllers
         }
         #endregion
 
-       #region  varify Otp
+       #region  VerifyOtp Otp
         [HttpPost]
-        [Route("varifyOtp/{email}/{otp}")]
-        public async Task<IActionResult> VarifyOtp(string email, string otp)
+        [Route("VerifyOtp/{email}/{otp}")]
+        public async Task<IActionResult> VerifyOtp(string email, string otp)
         {
-           ResponseModel response = await _adminUserInterface.VarifyOtp(email, otp);
+           ResponseModel response = await _adminUserInterface.VerifyOtp(email, otp);
             return StatusCode(response.StatusCode, response);
         }
         #endregion
+
+       #region Update Approvel Student Status
+       [HttpPut]
+       [MainAdminAccess]
+       [Route("UpdateApprovelStudentStatus/{id}/{Status}")]
+       public async Task<IActionResult> UpdateApprovelStudentStatus(Guid id , string Status)
+       {
+           ResponseModel response = await _adminUserInterface.UpdateApprovelStudentStatus(id , Status);
+           return StatusCode(response.StatusCode, response);
+       }
+       #endregion
 
         }
 }

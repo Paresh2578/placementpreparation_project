@@ -160,12 +160,12 @@ namespace backend.data.Repository
             }
         }
 
-        public async Task<ResponseModel> VarifyOtp(string email, string otp)
+        public async Task<ResponseModel> VerifyOtp(string email, string otp)
         {
             try
             {
                 // Get the OTP from session
-                var sessionOtp = _httpContextAccessor.HttpContext.Session.GetString($"{email}OTP");
+                string? sessionOtp = _httpContextAccessor.HttpContext.Session.GetString($"{email}OTP");
                 if(sessionOtp is null){
                     return new ResponseModel { StatusCode= 400, Message = "OTP expired." };
                 }
@@ -184,5 +184,18 @@ namespace backend.data.Repository
                 return new ResponseModel { StatusCode= 500, Message = "Internal Server Error" };
             }
         }
-    }
+    
+        public async Task<ResponseModel> UpdateApprovelStudentStatus(Guid id , string status)
+        {
+            try
+            {
+                // update student status
+                await _context.Database.ExecuteSqlRawAsync("UPDATE AdminUsers SET ApproveStatus = {0} Where AdminUserId = {1}", status ,id);
+                return new ResponseModel { StatusCode= 200, Message = "Student status updated successfully." };
+            }
+            catch {
+                return new ResponseModel { StatusCode= 500, Message = "Internal Server Error" };
+            }
+        }
+     }
 }

@@ -9,7 +9,7 @@ namespace backend.data.Interface
       public Task<ResponseModel> AddQuestion(QuestionModel question);
       public Task<ResponseModel> UpdateQuestion(QuestionModel question);
       public Task<ResponseModel> DeleteQuestion(QuestionModel question);  
-
         public Task<ResponseModel> DeleteMultipleQuestion(List<Guid> questionIds); 
+        public Task<ResponseModel> GetInterviewQuestions(Guid? addeddById); 
     }
 }

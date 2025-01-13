@@ -24,7 +24,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
 
         #region list of Mcq
-    [CheckAccess]
+    [MainAdminAccess]
         public async Task<IActionResult> ListMcq(Guid? courseId , Guid? topicId , Guid? subTopicId)
         {
              ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}?courseId={courseId}&topicId={topicId}&subTopicId="+subTopicId);
@@ -46,7 +46,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         #endregion
 
         #region add or Edit Mcq
-        [CheckAccess]
+        [MainAdminAccess]
         public async Task<IActionResult> AddOrEditMcq(string? mcqId)
         {
            // Set DropDown Value
@@ -75,7 +75,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [CheckAccess]
+        [MainAdminAccess]
         public async Task<IActionResult> AddOrEditMcq(McqModel mcq)
         {
             //Server side validation
@@ -121,7 +121,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
 
         #region delete Mcq
         [Route("/DeleteMcq/{mcqId}")]
-        [CheckAccess]
+        [MainAdminAccess]
         public async Task<IActionResult> DeleteTopic(string mcqId)
         {
             ApiResponseModel response = await _apiClient.DeleteAsync($"{_apiBaseUrl}/{mcqId}");
@@ -136,7 +136,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         #endregion
 
         #region  Delete Multiple Mcq
-        [CheckAccess]
+        [MainAdminAccess]
         public async Task<IActionResult> DeleteMultipleMcq(string  mcqIds)
         {
             ApiResponseModel response = await _apiClient.DeleteMultipleAsync($"{_apiBaseUrl}/DeleteMultiple",mcqIds.Split(","));
@@ -169,7 +169,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         #endregion
    
          #region Export Mcq to Excel
-         [CheckAccess]
+         [MainAdminAccess]
         public async Task<IActionResult> ExportToExcelMcq()
         {
             ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}");

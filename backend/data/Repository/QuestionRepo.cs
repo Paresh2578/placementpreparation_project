@@ -128,5 +128,16 @@ namespace backend.data.Repository
                 return new ResponseModel { StatusCode = 500, Message = ex.Message };
             }
         }
+
+        public async Task<ResponseModel> GetInterviewQuestions(Guid? addeddById)
+        {
+            try{
+                List<QuestionModel> questions = await _context.Questions.Where(q => q.AddedBy == addeddById).ToListAsync();
+                return new ResponseModel { StatusCode = 200, Data = questions, Message = "Questions retrieved successfully" };
+            }catch(Exception ex)
+            {
+                return new ResponseModel { StatusCode = 500, Message = ex.Message };
+            }
+        }
     }
 }

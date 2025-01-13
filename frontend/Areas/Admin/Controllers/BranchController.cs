@@ -10,7 +10,7 @@ using Placement_Preparation.Utils;
 namespace Placement_Preparation.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [CheckAccess]
+    [MainAdminAccess]
     public class BranchController : Controller
     {
         private readonly ApiClientService _apiClient;

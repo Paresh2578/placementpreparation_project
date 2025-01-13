@@ -18,7 +18,7 @@ namespace Frontend.Areas.Authentication.Models
         public required string Password { get; set; }
 
         [Required]
-        [Display(Name = "Confo  rm Password")]
+        [Display(Name = "Conform Password")]
         [Compare("Password", ErrorMessage = "Password and Confirm Password must match")]
         public required string ConfirmPassword { get; set; }
 

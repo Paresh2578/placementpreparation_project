@@ -12,7 +12,7 @@ using Placement_Preparation.BAL;
 namespace Placement_Preparation.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [CheckAccess]
+    [MainAdminAccess]
     public class SubTopicController : Controller
     {
         private readonly string _apiBaseUrl = "SubTopic";

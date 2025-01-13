@@ -24,7 +24,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
 
         #region list of Question
-        [CheckAccess]
+        [MainAdminAccess]
         public async Task<IActionResult> ListQuestion()
         {
             ApiResponseModel response = await _apiClient.GetAsync(_apiBaseUrl);
@@ -42,29 +42,23 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         #endregion
 
         #region List of Interview Question
-        [CheckAccess]
+        [BothAdminAccess]
         public async Task<IActionResult> InterviewQuestionList()
         {
-            // ApiResponseModel response = await _apiClient.GetAsync("InterviewQuestion");
-            //     if(response.StatusCode != 200)
-            //     {
-            //        TempData["ErrorMessage"] = response.Message;
-            //     }
-            //     List<QuestionModel>  questionList =  JsonConvert.DeserializeObject<List<QuestionModel>>(response.Data!.ToString());
-
-            //      // set search dropdown value ( course , topic , subTopic)
-            //     await  setCourseTopicSubTopicDropDownsValues();
-
-            // return View(questionList);
-            return View();
+            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/InterviewQuestions?addedById={CV.GetId()}");
+                if(response.StatusCode != 200)
+                {
+                   TempData["ErrorMessage"] = response.Message;
+                   ViewData["InternalServerError"] = response.Message;
+                   return View();
+                }
+                List<QuestionModel>  questionList =  JsonConvert.DeserializeObject<List<QuestionModel>>(response.Data!.ToString());
+            return View(questionList);
         }
         #endregion
 
-     
-
-       
         #region add or Edit Question
-        [CheckAccess]
+        [MainAdminAccess]
         public async Task<IActionResult> AddOrEditQuestion(string? questionId)
         {
             // Set DropDown Value
@@ -137,20 +131,19 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         #endregion
        
         #region Add or Edit Interview Question
-        [CheckAccess]
+        [BothAdminAccess]
         public async Task<IActionResult> AddOrEditInterviewQuestion(string? questionId)
         {
                 return View();
         }
-  
-        [CheckAccess]
+
+        [BothAdminAccess]
         [HttpPost]
         public async Task<IActionResult> AddOrEditInterviewQuestion(QuestionModel questions)
         {
             //Server side validation
-            if (ModelState.IsValid)
-            {
-                 ApiResponseModel response = new ApiResponseModel();
+            if (ModelState.IsValid){
+                ApiResponseModel response = new ApiResponseModel();
                 if(questions.QuestionId != Guid.Empty && questions.QuestionId != null)
                 {
                     // Call API to update data
@@ -158,25 +151,24 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                 }else{
                      // Call API to save data
                      questions.QuestionId = Guid.NewGuid();
-                      response = await _apiClient.PostAsync(_apiBaseUrl, questions);
+                     response = await _apiClient.PostAsync(_apiBaseUrl, questions);
                 }
                
                 if(response.StatusCode == 201 || response.StatusCode == 200)
                 {
                     TempData["SuccessMessage"] = response.Message;
-                    return RedirectToAction("ListQuestion");
+                    return RedirectToAction("InterviewQuestionList");
                 }else {
-                     TempData["ErrorMessage"] = response.Message;
+                     TempData["LableErrorMesssage"] = response.Message;
                 }
             }
-            return View(questions);
+                return View(questions);
         }
-
         #endregion
 
         #region delete Question
         [Route("/DeleteQuestion/{questionId}")]
-        [CheckAccess]
+        [MainAdminAccess]
         public async Task<IActionResult> DeleteTopic(string questionId)
         {
             ApiResponseModel response = await _apiClient.DeleteAsync($"{_apiBaseUrl}/{questionId}");
@@ -191,7 +183,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         #endregion
 
         #region  Delete Multiple Question
-        [CheckAccess]
+        [MainAdminAccess]
         public async Task<IActionResult> DeleteMultipleQuestion(string  questionIds)
         {
             ApiResponseModel response = await _apiClient.DeleteMultipleAsync($"{_apiBaseUrl}/DeleteMultiple",questionIds.Split(","));
