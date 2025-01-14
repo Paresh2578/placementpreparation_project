@@ -13,7 +13,7 @@ namespace backend.data.Interface
 
         public Task<ResponseModel> DeleteMultipleMcq(List<Guid> mcqIds);
         public Task<ResponseModel> GetMcqsByTopicOrSubTopicId(Guid topicId, Guid? subTopicId);
-         public Task<ResponseModel> GetInterviewMcqs(); 
+         public Task<ResponseModel> GetInterviewMcqs(int? pageNumber,int? pageSize,bool onlyActiveMcqs); 
          public Task<ResponseModel> UpdateNewInterviewMcqRequestStatus(Guid id , String status); 
 
     }

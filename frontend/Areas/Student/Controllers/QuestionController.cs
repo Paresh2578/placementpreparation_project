@@ -42,33 +42,46 @@ namespace Placement_Preparation.Areas.Student.Controllers
         #endregion
 
         #region  List All Question by courses 
-        public async Task<IActionResult> QuestionList(string courseName , string courseId,int? pageNumber=1,int? pageSize=10){
-          ApiResponseModel apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}?courseId={courseId}&onlyActiveQuestions=true&pageNumber={pageNumber}&pageSize={pageSize}");
-          Dictionary<string,dynamic> questionData = JsonConvert.DeserializeObject<Dictionary<string,dynamic>>(apiResponse.Data.ToString());
+        public async Task<IActionResult> QuestionList(string courseName , string? courseId,int? pageNumber=1,int? pageSize=10){
+          try{
+              ApiResponseModel apiResponse = new ApiResponseModel();
+            if(courseId == null){
+              // get interview  questions
+              apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}/InterviewQuestions?onlyActiveQuestions=true&pageNumber={pageNumber}&pageSize={pageSize}");
+            }else{
+              // get couese wise questions
+              apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}?courseId={courseId}&onlyActiveQuestions=true&pageNumber={pageNumber}&pageSize={pageSize}");
+            }
+            
           
+            List<QuestionModel> questions = new List<QuestionModel>();
 
-          List<QuestionModel> questions = new List<QuestionModel>();
+            // check api response is success or not
+            if(apiResponse.StatusCode != 200){
+              TempData["ErrorMessage"] = apiResponse.Message;
+              return View(questions);
+            }
 
-           // check api response is success or not
-          if(apiResponse.StatusCode != 200){
-            TempData["ErrorMessage"] = apiResponse.Message;
-            return View(questions);
-          }
+               Dictionary<string, dynamic> questionData = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(apiResponse.Data.ToString());
 
-          // add empty data for pagination
-          questions.AddRange(Enumerable.Repeat(new QuestionModel { Question = string.Empty, QuestionAnswer = string.Empty }, Convert.ToInt32(questionData["totalQuestions"])));
+                // add empty data for pagination
+                questions.AddRange(Enumerable.Repeat(new QuestionModel { Question = string.Empty, QuestionAnswer = string.Empty }, Convert.ToInt32(questionData["totalQuestions"])));
 
-          // fill current page data only. Other data will be empty
-          int j=0;
-          for(int i=(pageNumber-1)*pageSize??1;i<=(pageNumber*pageSize) && j < questionData["questions"].Count;i++){
-            questions[i] = JsonConvert.DeserializeObject<QuestionModel>(questionData["questions"][j].ToString());
-            j++;
-          }
-         
-          // convert list of QuestionModel to list of paged QuestionModel
-          var pagedQuestions = questions.ToPagedList(pageNumber ?? 1, pageSize??1);
+            // fill current page data only. Other data will be empty
+            int j=0;
+            for(int i=(pageNumber-1)*pageSize??1;i<=(pageNumber*pageSize) && j < questionData["questions"].Count;i++){
+              questions[i] = JsonConvert.DeserializeObject<QuestionModel>(questionData["questions"][j].ToString());
+              j++;
+            }
           
-          return View(pagedQuestions);
+            // convert list of QuestionModel to list of paged QuestionModel
+            var pagedQuestions = questions.ToPagedList(pageNumber ?? 1, pageSize??1);
+            
+            return View(pagedQuestions);
+          }catch(Exception ex){
+            TempData["ErrorMessage"] = ex.Message;
+            return View(new List<QuestionModel>());
+          }
         }
         #endregion
 

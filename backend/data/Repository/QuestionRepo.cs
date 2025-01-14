@@ -66,14 +66,14 @@ namespace backend.data.Repository
                 if (pageNumber == null)
                 {
                     // get all questions
-                    questions = await _context.Questions.Where(q => (q.CourseId == courseId || courseId == null) && (q.TopicId == topicId || topicId == null) && (q.SubTopicId == subTopicId || subTopicId == null) && (onlyActiveQuestions ? q.IsActive : true)).ToListAsync();
+                    questions = await _context.Questions.Where(q => (q.CourseId == courseId || courseId == null) && (q.TopicId == topicId || topicId == null) && (q.SubTopicId == subTopicId || subTopicId == null) && (!onlyActiveQuestions || q.IsActive)).ToListAsync();
                     return new ResponseModel { StatusCode = 200, Data = questions, Message = "Questions retrieved successfully" };
 
                 }
                 else
                 {
                     // use pagination
-                    questions = await _context.Questions.Where(q => (q.CourseId == courseId || courseId == null) && (q.TopicId == topicId || topicId == null) && (q.SubTopicId == subTopicId || subTopicId == null) && (onlyActiveQuestions ? q.IsActive : true)).Skip((pageNumber-1)*pageSize??1).Take(pageSize??5).ToListAsync();
+                    questions = await _context.Questions.Where(q => (q.CourseId == courseId || courseId == null) && (q.TopicId == topicId || topicId == null) && (q.SubTopicId == subTopicId || subTopicId == null) && (!onlyActiveQuestions || q.IsActive)).Skip((pageNumber-1)*pageSize??1).Take(pageSize??5).ToListAsync();
 
                     // count total 
                     using(SqlCommand command = _dbHelper.getSqlCommand("PR_Question_COUNT"))
@@ -129,11 +129,34 @@ namespace backend.data.Repository
             }
         }
 
-        public async Task<ResponseModel> GetInterviewQuestions(Guid? addeddById)
+        public async Task<ResponseModel> GetInterviewQuestions(Guid? addeddById, int? pageNumber, int? pageSize, bool onlyActiveQuestions)
         {
+
             try{
-                List<QuestionModel> questions = await _context.Questions.Where(q => q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById)).ToListAsync();
-                return new ResponseModel { StatusCode = 200, Data = questions, Message = "Questions retrieved successfully" };
+                List<QuestionModel> questions = new List<QuestionModel>();
+                int totalQuestions = 0;
+                if(pageNumber == null){
+                    questions = await _context.Questions.Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById)).ToListAsync();
+                    return new ResponseModel { StatusCode = 200, Data = questions, Message = "Questions retrieved successfully" };
+                }else{
+                    // count total questions
+                        // int totalQuestions = (await _context.Questions.Where(q => !onlyActiveQuestions || q.IsActive).ToListAsync()).Count;
+                        using(SqlCommand command = _dbHelper.getSqlCommand("PR_Question_COUNT"))
+                        {
+                            command.Parameters.Add("@onlyActiveGets", SqlDbType.Bit).Value = onlyActiveQuestions ? 1 : 0;
+                            command.Parameters.Add("@onlyInterviewQuestions", SqlDbType.Bit).Value =1;
+
+                            using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                            {
+                                while (reader.Read())
+                                {
+                                    totalQuestions = reader.GetInt32(0);
+                                }
+                            }
+                    }
+                    questions = await _context.Questions.Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById)).Skip((pageNumber-1)*pageSize??1).Take(pageSize??10).ToListAsync();
+                }
+                return new ResponseModel { StatusCode = 200, Data = new {totalQuestions,questions}, Message = "Questions retrieved successfully" };
             }catch(Exception ex)
             {
                 return new ResponseModel { StatusCode = 500, Message = ex.Message };

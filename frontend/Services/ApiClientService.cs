@@ -22,7 +22,7 @@ namespace Frontend.Services
                 var responseContent = await response.Content.ReadAsStringAsync();
 
                 ApiResponseModel? apiResponseModel = JsonConvert.DeserializeObject<ApiResponseModel>(responseContent);
-                if(apiResponseModel is not null)
+                if(apiResponseModel is not null && apiResponseModel.StatusCode != 0)
                 {
                     return apiResponseModel;    
                 }

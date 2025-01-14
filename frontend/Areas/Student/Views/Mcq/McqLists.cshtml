@@ -23,8 +23,12 @@
         <nav class="breadcrumbs">
             <ol>
                 <li><a asp-controller="Home" asp-action="Home">Home</a></li>
-                <li><a asp-controller="Mcq" asp-action="ListAllCourses">Courses</a></li>
-                <li class="current">Mcqs</li>
+                @if(query["courseName"].ToString() != "Interview Mcqs"){
+                    <li><a asp-controller="Mcq" asp-action="ListAllCourses">Courses</a></li>
+                }
+                   <li class="current">Mcqs</li>
+                
+                
             </ol>
         </nav>
     </div>

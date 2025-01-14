@@ -191,7 +191,7 @@ namespace backend.data.Repository
         }
 
         
-        public async Task<ResponseModel> GetInterviewMcqs()
+        public async Task<ResponseModel> GetInterviewMcqs(int? pageNumber, int? pageSize, bool onlyActiveMcqs)
         {
             try{
                 // get login user data from token
@@ -200,12 +200,23 @@ namespace backend.data.Repository
                 if(userData != null && (userData["IsAdmin"] == null || userData["AdminUserId"] == null)){
                     return new ResponseModel { StatusCode = 401, Message = "Unauthorized" };
                 }else{
-                    if(userData["IsAdmin"] == false){
+                    if(userData != null && userData["IsAdmin"] == false){
                         addeddById = userData["AdminUserId"];
                     }
                 }
-                List<McqModel> questions = await _context.Mcqs.Where(q => q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById)).ToListAsync();
-                return new ResponseModel { StatusCode = 200, Data = questions, Message = "Mcqs retrieved successfully" };
+                List<McqModel> mcqs = new List<McqModel>();
+                int totalMcqs = 0;
+                if(pageNumber == null){
+                    // get all mcqs
+                    mcqs = await _context.Mcqs.Where(q => (!onlyActiveMcqs || q.IsActive) && ( q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById))).ToListAsync();
+                    return new ResponseModel { StatusCode = 200, Data = mcqs, Message = "Mcqs retrieved successfully" };
+                }else{
+                    // apply pagination
+                    mcqs = await _context.Mcqs.Where(q => (!onlyActiveMcqs || q.IsActive) && ( q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById))).Skip((pageNumber - 1) * pageSize??1).Take(pageSize??1).ToListAsync();
+                    // total count
+                    totalMcqs = await _context.Mcqs.Where(q => (!onlyActiveMcqs || q.IsActive) && ( q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById))).CountAsync();
+                }
+                return new ResponseModel { StatusCode = 200, Data = new {totalMcqs, mcqs}, Message = "Mcqs retrieved successfully" };
             }catch(Exception ex)
             {
                 return new ResponseModel { StatusCode = 500, Message = ex.Message };

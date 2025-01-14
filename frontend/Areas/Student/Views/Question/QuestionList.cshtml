@@ -22,8 +22,15 @@
         <nav class="breadcrumbs">
             <ol>
                 <li><a asp-controller="Home" asp-action="Home">Home</a></li>
-                <li><a asp-controller="Mcq" asp-action="ListAllCourses">Courses</a></li>
+                @if(query["courseName"] != "Interview Questions")
+                {
+                    <li><a asp-controller="Mcq" asp-action="ListAllCourses">Courses</a></li>
                 <li class="current">Quesitons</li>
+                }
+                else
+                {
+                    <li class="current">Interview Questions</li>
+                }
             </ol>
         </nav>
     </div>

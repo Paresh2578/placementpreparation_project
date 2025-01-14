@@ -90,9 +90,9 @@ namespace backend.Controllers
 
         #region Get Interview questions
         [HttpGet("InterviewQuestions")]
-        public async Task<IActionResult> GetInterviewQuestions(Guid? addedById)
+        public async Task<IActionResult> GetInterviewQuestions(Guid? addedById , [FromQuery] int? pageNumber , [FromQuery] int? pageSize=5, [FromQuery] bool onlyActiveQuestions= false)
         {
-            var response = await _questionInterface.GetInterviewQuestions(addedById);
+            var response = await _questionInterface.GetInterviewQuestions(addedById,pageNumber:pageNumber,pageSize:pageSize , onlyActiveQuestions: onlyActiveQuestions);
             return StatusCode(response.StatusCode, response);
         }
         #endregion

@@ -41,47 +41,64 @@ namespace Placement_Preparation.Areas.Student.Controllers
         }
         #endregion
 
-        #region  List All Mcq by courses 
-        public async Task<IActionResult> McqLists(string courseName , string courseId,int? pageNumber=1,int? pageSize=5){
-          ApiResponseModel apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}?courseId={courseId}&onlyActiveMcqs=true&pageNumber={pageNumber}&pageSize={pageSize}");
+      #region List All Mcq by courses
+      public async Task<IActionResult> McqLists(string courseName, string? courseId, int? pageNumber = 1, int? pageSize = 10)
+      {
+          try
+          {
+              ApiResponseModel apiResponse = new ApiResponseModel();
 
-          Dictionary<string,dynamic> mcqData = JsonConvert.DeserializeObject<Dictionary<string,dynamic>>(apiResponse.Data.ToString());
-          List<McqModel> mcqs = new List<McqModel>();
+              if (courseId == null)
+              {
+                  // Get interview MCQs
+                  apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}/GetInterviewMcqs?onlyActiveMcqs=true&pageNumber={pageNumber}&pageSize={pageSize}");
+              }
+              else
+              {
+                  // Get course-wise MCQs
+                  apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}?courseId={courseId}&onlyActiveMcqs=true&pageNumber={pageNumber}&pageSize={pageSize}");
+              }
 
-          // check api response is success or not
-          if(apiResponse.StatusCode != 200){
-            TempData["ErrorMessage"] = apiResponse.Message;
-            return View(mcqs);
+              if (apiResponse.StatusCode != 200)
+              {
+                  TempData["ErrorMessage"] = apiResponse.Message;
+                  return View(Enumerable.Empty<McqModel>().ToPagedList(pageNumber ?? 1, pageSize ?? 10));
+              }
+
+              Dictionary<string, dynamic> mcqData = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(apiResponse.Data.ToString());
+
+              int totalMcqs = Convert.ToInt32(mcqData["totalMcqs"]);
+              List<McqModel> mcqs = Enumerable.Repeat(new McqModel
+              {
+                  QuestionText = string.Empty,
+                  OptionA = string.Empty,
+                  OptionB = string.Empty,
+                  OptionC = string.Empty,
+                  OptionD = string.Empty,
+                  CorrectAnswer = string.Empty,
+                  AnswerDescription = string.Empty
+              }, totalMcqs).ToList();
+
+              int startIndex = ((pageNumber ?? 1) - 1) * (pageSize ?? 10);
+              int endIndex = Math.Min(startIndex + (pageSize ?? 10), totalMcqs);
+
+              int j = 0;
+              for (int i = startIndex; i < endIndex && j < mcqData["mcqs"].Count; i++, j++)
+              {
+                  mcqs[i] = JsonConvert.DeserializeObject<McqModel>(mcqData["mcqs"][j].ToString());
+              }
+
+              var pagedMcqs = mcqs.ToPagedList(pageNumber ?? 1, pageSize ?? 10);
+              return View(pagedMcqs);
           }
+          catch (Exception ex)
+          {
+              TempData["ErrorMessage"] = ex.Message;
 
-          // add empty data for pagination
-          mcqs.AddRange(Enumerable.Repeat(new McqModel 
-          { 
-              QuestionText = string.Empty, 
-              OptionA = string.Empty, 
-              OptionB = string.Empty, 
-              OptionC = string.Empty, 
-              OptionD = string.Empty, 
-              CorrectAnswer = string.Empty, 
-              AnswerDescription = string.Empty 
-          }, Convert.ToInt32(mcqData["totalMcqs"])));
-
-          // fill current page data only. Other data will be empty
-          int j=0;
-          for(int i=(pageNumber-1)*pageSize??1;i<=(pageNumber*pageSize) && j < mcqData["mcqs"].Count;i++){
-            mcqs[i] = JsonConvert.DeserializeObject<McqModel>(mcqData["mcqs"][j].ToString());
-            j++;
+              // Return an empty paged list in case of an exception
+              return View(Enumerable.Empty<McqModel>().ToPagedList(pageNumber ?? 1, pageSize ?? 10));
           }
-
-          // convert list of McqModel to list of paged McqModel
-          var pagedMcqs = mcqs.ToPagedList(pageNumber ?? 1, pageSize??1);
-
-          // convert api response data to list of McqModel
-          // mcqs = JsonConvert.DeserializeObject<List<McqModel>>(apiResponse.Data.ToString());
-          
-          return View(pagedMcqs);
-        }
-        #endregion
-
+      }
+      #endregion
        }
 }
