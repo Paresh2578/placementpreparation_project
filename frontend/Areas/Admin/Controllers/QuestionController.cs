@@ -45,7 +45,9 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         [BothAdminAccess]
         public async Task<IActionResult> InterviewQuestionList()
         {
-            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/InterviewQuestions?addedById={CV.GetId()}");
+
+            string? userId = CV.GetIsAdmin() == null || CV.GetIsAdmin() == true ? null : CV.GetId();
+            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/InterviewQuestions?addedById={userId}");
                 if(response.StatusCode != 200)
                 {
                    TempData["ErrorMessage"] = response.Message;
@@ -151,6 +153,11 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                 }else{
                      // Call API to save data
                      questions.QuestionId = Guid.NewGuid();
+                     // set status  accept when admin add question
+                     if(CV.GetIsAdmin()?? false)
+                     {
+                         questions.ApproveStatus = "Accept";
+                     }
                      response = await _apiClient.PostAsync(_apiBaseUrl, questions);
                 }
                
@@ -264,6 +271,9 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             return RedirectToAction("ListQuestion");
         }
         #endregion
+
+
+
     }
 }
 

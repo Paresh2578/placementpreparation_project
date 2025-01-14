@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 using backend.Service;
+using System.Collections;
+using Newtonsoft.Json;
 
 namespace backend.data.Repository
 {
@@ -197,5 +199,44 @@ namespace backend.data.Repository
                 return new ResponseModel { StatusCode= 500, Message = "Internal Server Error" };
             }
         }
+     
+
+     public async Task<ResponseModel> RefreshToken(Guid id){
+        try{
+            //update user data
+             ResponseModel response = await FindAdminUsersById(id);
+            if(response.StatusCode != 200) {
+                return new ResponseModel { StatusCode = response.StatusCode, Message = response.Message };
+            }
+
+            AdminUserModel adminUser = (AdminUserModel)response.Data!;
+            adminUser.Password = null;
+
+            // Generate new token
+            var newToken = TokenGenerator.CreateToken(JsonConvert.SerializeObject(adminUser));
+
+            // Set the 'token' cookie
+            var commonCookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = false, // Set to true in production
+                SameSite = SameSiteMode.None, // Adjust as needed
+                //Expires = DateTime.Now.AddDays(1)
+                Expires = DateTime.Now.AddHours(1)
+            };
+
+            _httpContextAccessor.HttpContext!.Response.Cookies.Append("token", newToken, commonCookieOptions);
+
+            var data = new Hashtable
+            {
+                { "token", newToken  },
+                {"data" , adminUser }
+            };
+
+            return  new ResponseModel { Message = "Token refreshed successfully", StatusCode = 200,Data = data };
+        }catch{
+            return new ResponseModel { StatusCode= 500, Message = "Internal Server Error" };
+        }
      }
+    }
 }

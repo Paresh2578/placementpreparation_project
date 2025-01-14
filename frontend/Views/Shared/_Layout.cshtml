@@ -73,15 +73,20 @@
                     <li><a asp-action="Home" asp-controller="Home" asp-area="Student" class="active">Home</a></li>
                    <li><a href="/Student/Course/ListAllCourse?courseType=programing">Programing</a></li>
                    <li><a href="/Student/Course/ListAllCourse?courseType=Aptitude">Aptitude</a></li>
-                   <li><a href="/Student/Question/ListAllCourses">Interview Questions</a></li>
-                   <li><a href="/Student/Mcq/ListAllCourses">Important Mcqs</a></li>
-                    @* <li class="dropdown">
-                        <a href="#"><span>Aptitude</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                  <li class="dropdown">
+                        <a href="#"><span>Questions</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
                         <ul>
-                            <li><a href="#">Quantitative</a></li>
-                            <li><a href="#">Reasoning</a></li>
+                            <li><a href="#">Interview Questions</a></li>
+                            <li><a href="/Student/Question/ListAllCourses">Course Wise Questions</a></li>
                         </ul>
-                    </li> *@
+                  </li>
+                  <li class="dropdown">
+                        <a href="#"><span>Mcqs</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                        <ul>
+                            <li><a href="#">Interview Mcqs</a></li>
+                            <li><a href="/Student/Mcq/ListAllCourses">Course Wise Mcqs</a></li>
+                        </ul>
+                  </li>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>

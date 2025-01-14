@@ -74,17 +74,15 @@ namespace backend.Controllers
                 //add  padding New Student Request , Padding New Mcq Request , Padding New Question Request
                 if(userData["IsAdmin"]){
                     List<AdminUserModel> paddingStudentRequest = await _context.AdminUsers.Where(user => user.ApproveStatus == "Pending").ToListAsync();
-                    List<QuestionModel> paddingQuestionRequest = await _context.Questions.Where(question => question.ApproveStatus == "Pending").ToListAsync();
-                    // List<McqModel> paddingMcqRequest = await _context.Mcqs.Where(mcq => mcq.ApproveStatus == "Pending").ToListAsync();
-                    List<McqModel> paddingMcqRequest = new List<McqModel>{};
+                    List<QuestionModel> paddingQuestionRequest = await _context.Questions.Where(question => question.AddedBy != null && question.ApproveStatus == "Pending").ToListAsync();
+                    List<McqModel> paddingMcqRequest = await _context.Mcqs.Where(mcq => mcq.AddedBy != null && mcq.ApproveStatus == "Pending").ToListAsync();
                     
                     data.Add("PaddingStudentRequest", paddingStudentRequest);
                     data.Add("PaddingQuestionRequest", paddingQuestionRequest);
                     data.Add("PaddingMcqRequest", paddingMcqRequest);
                 }else{
-                    List<QuestionModel> paddingQuestionRequest = await _context.Questions.Where(question => question.ApproveStatus == "Pending" && question.AddedBy.ToString() == adminUserId).ToListAsync();
-                    List<McqModel> paddingMcqRequest = new List<McqModel>{};
-                    // List<McqModel> paddingMcqRequest = await _context.Mcqs.Where(mcq => mcq.ApproveStatus == "Pending").ToListAsync();
+                    List<QuestionModel> paddingQuestionRequest = await _context.Questions.Where(question => question.ApproveStatus == "Pending" &&question.AddedBy != null  && question.AddedBy.ToString() == adminUserId).ToListAsync();
+                    List<McqModel> paddingMcqRequest = await _context.Mcqs.Where(mcq => mcq.ApproveStatus == "Pending" && mcq.AddedBy != null && mcq.AddedBy.ToString() == adminUserId).ToListAsync();
 
                     data.Add("PaddingStudentRequest", null);
                     data.Add("PaddingQuestionRequest", paddingQuestionRequest);

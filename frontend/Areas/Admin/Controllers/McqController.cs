@@ -119,6 +119,68 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
         #endregion
 
+        #region List of Interview Mcq
+        [BothAdminAccess]
+        public async Task<IActionResult> InterviewMcqList()
+        {
+
+            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/GetInterviewMcqs");
+            List<McqModel>  mcqList = new List<McqModel>();
+                if(response.StatusCode != 200)
+                {
+                   TempData["ErrorMessage"] = response.Message?? "Internal Serverl Error";
+                   ViewData["InternalServerError"] = response.Message?? "Internal Serverl Error";
+                   return View(mcqList);
+                }
+                  mcqList =  JsonConvert.DeserializeObject<List<McqModel>>(response.Data!.ToString());
+            return View(mcqList);
+        }
+        #endregion
+
+
+        #region Add or Edit Interview Question
+        [BothAdminAccess]
+        public async Task<IActionResult> AddOrEditInterviewMcq(string? questionId)
+        {
+                return View();
+        }
+
+        [BothAdminAccess]
+        [HttpPost]
+        public async Task<IActionResult> AddOrEditInterviewMcq(McqModel mcq)
+        {
+            //Server side validation
+            if (ModelState.IsValid){
+                ApiResponseModel response = new ApiResponseModel();
+                if(mcq.McqId != Guid.Empty && mcq.McqId != null)
+                {
+                    // Call API to update data
+                     response = await _apiClient.PutAsync(_apiBaseUrl, mcq);
+                }else{
+                     // Call API to save data
+                     mcq.McqId = Guid.NewGuid();
+                     // set status  accept when admin add question
+                     if(CV.GetIsAdmin()?? false)
+                     {
+                         mcq.ApproveStatus = "Accept";
+                     }
+                     response = await _apiClient.PostAsync(_apiBaseUrl, mcq);
+                }
+               
+                if(response.StatusCode == 201 || response.StatusCode == 200)
+                {
+                    TempData["SuccessMessage"] = response.Message;
+                    return RedirectToAction("InterviewMcqList");
+                }else {
+                     TempData["LableErrorMesssage"] = response.Message;
+                }
+            }
+                return View(mcq);
+        }
+        #endregion
+
+
+
         #region delete Mcq
         [Route("/DeleteMcq/{mcqId}")]
         [MainAdminAccess]

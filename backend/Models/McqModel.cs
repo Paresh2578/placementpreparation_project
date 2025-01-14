@@ -48,31 +48,34 @@ namespace backend.Models
         // IsActive
         public bool IsActive { get; set; } = true;
 
+        public Guid? AddedBy { get; set; }
+
+        public string? TechStack { get; set; }  
+
+        public string? CompanyName { get; set; }
+
+        public string? ApproveStatus { get; set; } = "Pending";
+
         // Foreign Key to Course
-        [NotEmptyGuid(ErrorMessage = "Please select a valid course id.")]
-        public Guid CourseId { get; set; }
+        public Guid? CourseId { get; set; }
         
         [ForeignKey("CourseId")]
         public CourseModel? Course { get; set; }
 
         // Foreign Key to Topic
-        [NotEmptyGuid(ErrorMessage = "Please select a valid topic id.")]
-        [Required]
-        public Guid TopicId { get; set; }
+        public Guid? TopicId { get; set; }
 
         [ForeignKey("TopicId")]
         public TopicModel? Topic { get; set; }
 
         // Foreign Key to SubTopic
-        [NotEmptyGuid(ErrorMessage = "Please select a valid sub-topic id.")]
         public Guid? SubTopicId { get; set; }
 
         [ForeignKey("SubTopicId")] 
         public SubTopicModel? SubTopic { get; set; }
 
         // Foreign Key to DefaultDifficultyLevel
-        [NotEmptyGuid(ErrorMessage = "Please select a valid difficulty level id.")]
-        public Guid DifficultyLevelId { get; set; }
+        public Guid? DifficultyLevelId { get; set; }
 
         [ForeignKey("DifficultyLevelId")]
         public DifficultyLevelModel? DifficultyLevel { get; set; }

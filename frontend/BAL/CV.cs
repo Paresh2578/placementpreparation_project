@@ -29,8 +29,11 @@ namespace Placement_Preparation.BAL
             _httpContextAccessor.HttpContext!.Session.SetString("UserName", userName);
         }
 
-          public static string GetId(){
-            return _httpContextAccessor.HttpContext!.Session.GetString("Id")!;
+          public static string? GetId(){
+            string? id = _httpContextAccessor.HttpContext!.Session.GetString("Id");
+            if(id == null)
+                return null;
+            return id;
         }
 
 
@@ -51,11 +54,13 @@ namespace Placement_Preparation.BAL
             _httpContextAccessor.HttpContext!.Session.SetString("Id", id);
         }
 
-        public static bool GetIsAdmin()
+        public static bool? GetIsAdmin()
         {
-            return Convert.ToBoolean(_httpContextAccessor.HttpContext!.Session.GetString("IsAdmin"));
+            string? IsAdmin = _httpContextAccessor.HttpContext!.Session.GetString("IsAdmin");
+            if(IsAdmin == null)
+                return null;
+            return Convert.ToBoolean(IsAdmin);
         }
-
         public static string GetApprovalStatus()
         {
             return _httpContextAccessor.HttpContext!.Session.GetString("ApprovalStatus");

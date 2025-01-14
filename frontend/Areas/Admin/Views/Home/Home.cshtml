@@ -3,13 +3,14 @@
 
 @{
     ViewBag.Title = "Dashboard";
+    bool isAdmin = CV.GetIsAdmin()?? false;
 }
 
 <div class="dashboard">
     <partial name="_Errors"/>
     <!-- Widgets count -->
     <div class="widgets">
-        @if(CV.GetIsAdmin()){
+        @if(isAdmin){
             <!--Total Course -->
             <div class="widget">
                 <div class="icon-container" style="background-color: #6C63FF;">
@@ -38,7 +39,7 @@
                     <i class="fa-solid fa-check-double"></i>
                 </div>
                 <div>
-                    <p class="widget-value" style="color: #FFC107;">@Model.TotalInterviewMcqs</p>
+                    <p class="widget-value" style="color: #FFC107;">@Model.TotalCoursesMcqs</p>
                     <p class="widget-title">Total Courses MCQs</p>
                 </div>
             </div>
@@ -67,9 +68,13 @@
         </div>
     </div>
 
+       @if(TempData["LableErrorMesssage"] != null)
+            {
+            <p class="validation-error-lable" style="text-align: start;">@TempData["LableErrorMesssage"]</p>
+            }
 
     <!-- New Student Padding Request-->
-    @if(CV.GetIsAdmin()){
+    @if(isAdmin){
         <div class="bg-white p-4 rounded-md shadow-lg mt-5  ">
         <!-- Header Section -->
             <div class="table-hader">
@@ -100,7 +105,7 @@
                                         <a href="#" class="text-blue-500">View Details</a>
                                     </td>
                                     <td class="action-button">
-                                        <a class="reject button"><i class="fa-solid fa-times-circle"></i> Reject</a>
+                                        <a asp-action="UpdateStudentApprovelStatus" asp-route-id='@student["adminUserId"]' asp-route-status="Reject" class="reject button"><i class="fa-solid fa-times-circle"></i> Reject</a>
                                         <a asp-action="UpdateStudentApprovelStatus" asp-route-id='@student["adminUserId"]' asp-route-status="Accept" class="accept button" style="background:#22c55e"><i class="fa-solid fa-check-circle"></i> Accept</a>
                                     </td>
                                 </tr> 
@@ -119,11 +124,7 @@
       </div>
     }
 
-     @if(TempData["LableErrorMesssage"] != null)
-            {
-            <p class="validation-error-lable" style="text-align: start;">@TempData["LableErrorMesssage"]</p>
-            }
-
+  
 
      <!-- New Mcq Padding Request-->
     <div class="bg-white p-4 rounded-md shadow-lg mt-5  ">
@@ -140,11 +141,15 @@
                         <th class="py-3 px-6 text-left">#</th>
                         <th class="py-3 px-6 text-left">Mcq</th>
                         <th class="py-3 px-6 text-left">Details</th>
+                        @if(isAdmin){
+                            <th class="py-3 px-6 text-left">Action</th>
+                        }else{
                             <th class="py-3 px-6 text-left">Status</th>
-                        <th class="py-3 px-6 text-left">Action</th>
+                        }
                     </tr>
                 </thead>
                 <tbody id="courses" class="text-gray-700 text-sm font-light">
+                    @* Start of Razor code block *@
                     @{
                         int mcqIdx = 1;
                         foreach(McqModel mcq in Model.PaddingMcqRequest){
@@ -154,21 +159,24 @@
                                 <td class="py-3 px-6 text-left">
                                     <a href="#" class="text-blue-500">View Details</a>
                                 </td>
-                                <td class="py-3 px-6 text-left">
-                                    <span class="status pending">Pending</span>
-                                </td>
-                                <td class="action-button">
-                                    <button class="reject"><i class="fa-solid fa-times-circle"></i> Reject</button>
-                                    @* <button class="accept text-white px-4 py-2 rounded-md shadow" style="background:#22c55e"><i class="fa-solid fa-check-circle"></i> Accept</button> *@
-                                    <button class="accept " style="background:#22c55e"><i class="fa-solid fa-check-circle"></i> Accept</button>
-                                </td>
+                                @if(isAdmin){
+                                    <td class="action-button">
+                                        <a asp-action="UpdateNewInterviewMcqRequestStatus" asp-route-id='@mcq.McqId' asp-route-status="Reject" class="reject button"><i class="fa-solid fa-times-circle"></i> Reject</a>
+                                        <a asp-action="UpdateNewInterviewMcqRequestStatus" asp-route-id='@mcq.McqId' asp-route-status="Accept" class="accept button" style="background:#22c55e"><i class="fa-solid fa-check-circle"></i> Accept</a>
+                                    </td>
+                                }else{
+                                    <td class="py-3 px-6 text-left">
+                                     <span class="status @mcq.ApproveStatus.ToLower()">@mcq.ApproveStatus</span>
+                                    </td>
+                                }
                           </tr>  
                           mcqIdx++; 
                         }
                         // not found
+                        @**@
                         if(Model.PaddingMcqRequest.Count == 0){
                             <tr class="border-b text-nowrap  border-gray-200 ">
-                                <td class="py-3 px-6  text-center" colspan="5">No Record Found</td>
+                                <td class="py-3 px-6  text-center" colspan="4">No Record Found</td>
                             </tr>
                         }
 
@@ -194,7 +202,7 @@
                         <th class="py-3 px-6 text-left">#</th>
                         <th class="py-3 px-6 text-left">Question</th>
                         <th class="py-3 px-6 text-left">Details</th>
-                        @if(CV.GetIsAdmin()){
+                        @if(isAdmin){
                             <th class="py-3 px-6 text-left">Action</th>
                         }else{
                             <th class="py-3 px-6 text-left">Status</th>
@@ -211,11 +219,11 @@
                                 <td class="py-3 px-6 text-left">
                                     <a href="#" class="text-blue-500">View Details</a>
                                 </td>
-                                @if(CV.GetIsAdmin()){
+                                @if(isAdmin){
                                     <td class="action-button">
-                                        <button class="reject"><i class="fa-solid fa-times-circle"></i> Reject</button>
+                                        <a asp-action="UpdateNewInterviewQuestionRequestStatus" asp-route-id='@question.QuestionId' asp-route-status="Reject" class="reject button"><i class="fa-solid fa-times-circle"></i> Reject</a>
                                         @* <button class="accept text-white px-4 py-2 rounded-md shadow" style="background:#22c55e"><i class="fa-solid fa-check-circle"></i> Accept</button> *@
-                                        <button class="accept " style="background:#22c55e"><i class="fa-solid fa-check-circle"></i> Accept</button>
+                                        <a asp-action="UpdateNewInterviewQuestionRequestStatus" asp-route-id='@question.QuestionId' asp-route-status="Accept" class="accept button" style="background:#22c55e"><i class="fa-solid fa-check-circle"></i> Accept</a>
                                     </td>
                                 }else{
                                     <td class="py-3 px-6 text-left">

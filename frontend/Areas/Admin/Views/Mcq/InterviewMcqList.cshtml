@@ -1,0 +1,352 @@
+@model List<McqModel>
+
+@{
+    ViewData["Title"] = "Interview Mcq List";
+}
+
+
+<div class="bg-white p-4 rounded-md shadow-lg ">
+     <!-- Loading -->
+    <div id="model-loading" style="display: none;" >
+         <partial name="_Loading_Dialong"/>
+    </div>
+</div>
+
+    <!-- Header Section -->
+    <div class="table-hader">
+        <h1 class="table-responsive-title">List of Interview Mcq</h1>
+        <div class="flex gap-4" style="gap:0.5rem">
+             <a asp-action="ExportToExcelMcq" asp-asp-controller="Mcq" class="export-excel-btn"><i class="fa-solid fa-file-export fa-bounce"></i> Export in Excel</a>
+             <a asp-action="AddOrEditInterviewMcq" asp-controller="Mcq" class="primary-button"><i class="fa-solid fa-plus fa-bounce"></i> Add Mcq</a>
+        </div>
+    </div>
+
+    <div>
+        <!-- Search Bar Section -->
+        <div class="relative">
+
+            <input id="mcqSearch" class="bg-gray-100 w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-500 shadow-sm focus:shadow-md"
+                   placeholder="Search for Mcq..." />
+            <button class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
+                    type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="transparent" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-8 h-8 text-slate-600">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Table Section -->
+        <div class="mt-6 overflow-x-auto w-full">
+            <table class="min-w-full  bg-white border border-gray-200">
+                  @if(ViewData["InternalServerError"] != null){
+                        <partial name="_Errors" />
+                    }else{
+                        <thead>
+                            <tr class="bg-gray-100 text-nowrap text-gray-600  uppercase text-sm leading-normal" >
+                                <th><input type="checkbox" id="selectAll" /></th>
+                                <th class="py-3 px-6 text-left">#</th>
+                                <th class="py-3 px-6 text-left">Question Text</th>
+                                <th class="py-3 px-6 text-left">Active</th>
+                                <th class="py-3 px-6 text-left">Status</th>
+                                <th class="py-3 px-6 text-left">Details</th>
+                                <th class="py-3 px-6 text-left">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mcqs" class="text-gray-700 text-sm font-light">
+                            
+                            @{
+                                int index = 1;
+                                foreach (var mcq in Model)
+                                {
+                                    <tr data-id="@mcq.McqId"  class="mcq-row border-b text-nowrap hover:cursor-pointer  border-gray-200 " >
+                                        <th><input type="checkbox"  class="select-mcq" value="@mcq.McqId" onclick="toggleCheckbox(this)" /></th>
+                                        <td class="py-3 px-6 text-left">@index</td>
+                                        <td class="py-3 px-6 text-left" style="max-width: 500px; overflow-x: hidden; white-space: normal; "> @mcq.QuestionText </td>
+                                        @* <td class="py-3 px-6 text-left text-wrap" style="max-width: 500px;overflow-wrap: break-word;">@mcq.QuestionText</td> *@
+                                        <td class="py-3 px-6 text-left"><span class="@(mcq.IsActive ? "yes-btn" : "no-btn")">@(mcq.IsActive ? "Yes": "No")</span></td>
+                                        <td class="py-3 px-6 text-left">
+                                         <span class="status @mcq.ApproveStatus.ToLower()">@mcq.ApproveStatus</span>
+                                        </td>
+                                        <td class="py-3 px-6 text-left">
+                                            <a href="#" class="text-blue-500">View Details</a>
+                                        </td>
+                
+                                        <td class="py-3 px-6 text-left flex gap-x-4">
+                                            <a class="cursor-pointer" asp-action="AddOrEditMcq" asp-controller="Mcq" asp-route-mcqId="@mcq.McqId"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
+                                            <a class="cursor-pointer" onclick="confirmDelete('/DeleteMcq/@mcq.McqId')"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a>
+                                        </td>
+                                    </tr>
+                                index++;
+
+                                }
+                                // If no mcq found
+                                if (Model.Count == 0)
+                                {
+                                    <tr class="border-b text-nowrap border-gray-200  no-mcq-found">
+                                        <td class="py-3 px-6 text-center" colspan="5">No Mcq  Found</td>
+                                    </tr>
+                                }
+                            }
+
+                        
+                        </tbody>
+                        }
+            </table>
+              
+        </div>
+        <button id="handleDelete" class="clear-button m-4" style="margin-top: 20px; display: block;width: fit-content;"><i class="fa-regular fa-trash-can fa-bounce"></i> Delete </button>
+    </div>
+</div> 
+
+
+@section Scripts{
+   @* Input search  bar *@
+   <script>
+       $(document).ready(function () {
+           $('#mcqSearch').on("keyup", function () {
+               var value = $(this).val().toLowerCase().toString().trim();
+
+               // Filter table rows based on search input
+               $("#mcqs tr").filter(function () {
+                   $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+               });
+
+               // Check the number of visible rows
+               var visibleRows = $("#mcqs tr:visible").length;
+
+               // Remove existing "No Mcq   Found" row if it exists
+               $("#mcqs .no-mcq-found").remove();
+
+               // If no rows are visible, add the "No mcq Found" row
+               if (visibleRows === 0) {
+                   $("#mcqs").append('<tr class="mcq-row border-b text-nowrap border-gray-200  no-mcq-found"><td class="py-3 px-6 text-center" colspan="5">No Mcq  Found</td></tr>');
+               }
+           });
+       });
+   </script>
+
+ <!-- Search using Dropdown -->
+   <script src="~/lib/jquery/dist/jquery.min.js"></script> <!-- Local version of jQuery -->
+<script  type="text/javascript">
+ function handleRedirect(url) {
+        window.location = url;
+    }
+
+    // Loading
+   const loading = document.getElementById("model-loading");
+
+   //show loading dialong
+   function showLoadingDialong(){
+     loading.style.display = "block";
+   }
+
+   //hide loading dialong
+   function hideLoadingDialong(){
+     loading.style.display = "none";
+   }
+
+    $(document).ready(function () {
+       @* course dropdown change *@
+        $('#courses').change(function () {
+            // show loading 
+            showLoadingDialong();
+
+            var courseId = $(this).val();
+
+            //set topic dropdown-- data
+            $.ajax({
+                url: '/GetTopicsByCourseId/'+courseId,
+                type: 'GET',
+                success: function (data) {
+                    $('#topics').empty();
+                    $('#topics').append('<option value="">Select Topic</option>');
+                    $.each(data.value, function (index, item) {
+                        $('#topics').append('<option value="' + item.topicId + '">' + item.topicName + '</option>');
+                    });
+
+                     //Hide loading dialong
+                    hideLoadingDialong();
+                }
+            });
+
+
+        // set subTopic dropdown data
+         $.ajax({
+                url: '/GetSubTopicsByCourseId/'+courseId,
+                type: 'GET',
+                success: function (data) {
+                    $('#subTopics').empty();
+                    $('#subTopics').append('<option value="">Select Sub Topic</option>');
+                    $.each(data.value, function (index, item) {
+                        $('#subTopics').append('<option value="' + item.subTopicId + '">' + item.subTopicName + '</option>');
+                    });
+                     //Hide loading dialong
+                    hideLoadingDialong();
+                }
+            });
+        });
+
+        @* topic dropdown change *@
+        $('#topics').change(function () {
+            // show loading 
+            showLoadingDialong();
+
+            var topicId = $(this).val();
+            $.ajax({
+                url: '/GetSubTopicsByTopicId/' + topicId,
+                type: 'GET',
+                success: function (data) {
+                    //Hide loading dialong
+                    hideLoadingDialong();
+
+                    $('#subTopics').empty();
+                    $('#subTopics').append('<option value="">Select Sub Topic</option>');
+                    $.each(data.value, function (index, item) {
+                            $('#subTopics').append('<option value="' + item.subTopicId + '">' + item.subTopicName + '</option>');
+                    });
+                }
+            });
+        });
+
+        
+        //Seach button click
+        $('#handlerSearch').click(function () {
+            // show loading 
+            showLoadingDialong();
+
+             let courseId = $('#courses').val();
+            let topicId = $('#topics').val();
+            let subTopicId = $('#subTopics').val();
+
+            // if All  select field are empty then return
+            if (!courseId && !topicId && !subTopicId) {
+                alert('Please select any one field');
+                return;
+            }
+
+            $.ajax({
+                url: '/Mcq/GetMcqs',
+                type: 'GET',
+                data: { courseId: courseId, topicId: topicId, subTopicId: subTopicId },
+                success: function (data) {
+                    // show loading 
+                         showLoadingDialong();
+                    
+                    $('#mcqs').empty();
+                    if (data && data.length) {
+                        let html = '';
+                        $.each(data, function (index, mcq) {
+                            console.log(mcq);
+                            html += '<tr data-id="'+(mcq.mcqId)+'" class="border-b mcq-row text-nowrap border-gray-200 "  onclick="toggleCheckbox(this)">';
+                    html += '<th><input type="checkbox" class="select-mcq" value="' + mcq.mcqId + '" onchange="highlightRow(this)" /></th>';
+                            html += '<td class="py-3 px-6 text-left">' + (index+1) + '</td>';
+                            html += '<td class="py-3 px-6 text-left">' + mcq.questionText + '</td>';
+                            html += '<td class="py-3 px-6 text-left"><span class="' + (mcq.isActive ? "yes-btn" : "no-btn") + '">' + (mcq.isActive ? "Yes" : "No") + '</span></td>';
+                          html += '<td class="py-3 px-6 text-left flex gap-x-4">' +
+                                '<a class="cursor-pointer" onclick="handleRedirect(\'/Admin/Mcq/AddOrEditMcq?mcqId=' + mcq.mcqId + '\')">' +
+                                '<img src="../../../../../assets/icons/edit.svg" height="20" width="20" />' +
+                                '</a>' +
+                                '<a class="cursor-pointer" onclick="confirmDelete(\'/DeleteMcq/' + mcq.mcqId + '\')">' +
+                                '<img src="../../../../../assets/icons/delete.svg" height="20" width="20" />' +
+                                '</a>' +
+                                '</td>';
+                            html += '</tr>';
+                        });
+                        $('#mcqs').append(html);
+                    } else {
+                        $('#mcqs').append('<tr><td colspan="5" class="text-center py-4">No MCQs found</td></tr>');
+                    }
+
+                    //Hide loading dialong
+                    hideLoadingDialong();
+                },
+                error: function (xhr, status, error) {
+                    $('#mcqs').empty().append('<tr><td colspan="5" class="text-center text-red-500 py-4">Failed to load MCQs</td></tr>');
+
+                    // hide loading dialong
+                    hideLoadingDialong();
+                }
+            });
+        });
+    });
+</script>
+
+<!-- Delete All checkbox Box -->
+<script>
+      function toggleCheckbox(checkbox) {
+             highlightRow(checkbox); // Call highlightRow explicitly
+             updateSelectAllState(); // Update the select all checkbox state
+        }
+        
+
+    // Highlight the row if the checkbox is checked
+    function highlightRow(checkbox) {
+        const row = checkbox.closest('tr');
+        @* console.log(checkbox.checked); *@
+        if (checkbox.checked) {
+            row.classList.add('row-highlight');
+        } else {
+            row.classList.remove('row-highlight');
+        }
+    }
+
+   // select All checkbox
+    document.getElementById('selectAll').addEventListener('change', function () {
+        const checkboxes = document.querySelectorAll('.select-mcq');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+            highlightRow(checkbox);
+        });
+    });
+    function updateSelectAllState() {
+    const checkboxes = document.querySelectorAll('.select-mcq');
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+    const noneChecked = Array.from(checkboxes).every(checkbox => !checkbox.checked);
+
+    if (allChecked) {
+        selectAllCheckbox.checked = true;
+        selectAllCheckbox.indeterminate = false; // Not in an indeterminate state
+    } else if (noneChecked) {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = false; // Not in an indeterminate state
+    } else {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = true; // Set indeterminate state
+    }
+}
+
+    // Prevent the row click from triggering when clicking on specific elements like the edit/delete buttons
+    document.querySelectorAll('.mcq-row').forEach(row => {
+        row.addEventListener('click', function (e) {
+            if (e.target.tagName === 'A' || e.target.tagName === 'IMG') {
+                e.stopPropagation();
+            }
+        });
+    });
+
+    // Delete button click
+    document.getElementById('handleDelete').addEventListener('click', function () {
+        const selectedMcqIds = Array.from(document.querySelectorAll('.select-mcq:checked')).map(checkbox => checkbox.value);
+        if (selectedMcqIds.length === 0) {
+            alert('Please select at least one MCQ to delete');
+            return;
+        }
+
+         Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        // If the user confirms, redirect to the delete URL
+        if (result.isConfirmed) {
+            window.location.href = '/Admin/Mcq/DeleteMultipleMcq?mcqIds=' + selectedMcqIds.join(',');
+        }
+    });
+    });
+</script>
+}

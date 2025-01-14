@@ -55,16 +55,23 @@ namespace Placement_Preparation.Areas.Admin.Models
         [Display(Name = "Is Active")]
         public bool IsActive { get; set; } = true;
 
+        
+        public Guid? AddedBy { get; set; }
+
+        public string? TechStack { get; set; }  
+
+        public string? CompanyName { get; set; }
+
+        public string? ApproveStatus { get; set; } = "Pending";
+
         // Foreign Key to Course
-        [Required(ErrorMessage = "Course is required.")]
-        public Guid CourseId { get; set; }
+        public Guid? CourseId { get; set; }
         
         [ForeignKey("CourseId")]
         public CourseModel? Course { get; set; }
 
         // Foreign Key to Topic
-        [Required(ErrorMessage = "Topic is required.")]
-        public Guid TopicId { get; set; }
+        public Guid? TopicId { get; set; }
 
         [ForeignKey("TopicId")]
         public TopicModel? Topic { get; set; }
@@ -76,8 +83,7 @@ namespace Placement_Preparation.Areas.Admin.Models
         public SubTopicModel? SubTopic { get; set; }
 
         // Foreign Key to DefaultDifficultyLevel
-        [Required(ErrorMessage = "Difficulty Level is required.")]
-        public Guid DifficultyLevelId { get; set; }
+        public Guid? DifficultyLevelId { get; set; }
 
         [ForeignKey("DifficultyLevelId")]
         public DifficultyLevelModel? DifficultyLevel { get; set; }

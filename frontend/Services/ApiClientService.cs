@@ -14,7 +14,7 @@ namespace Frontend.Services
             _httpClient = httpClient;
         }
 
-       # region Common GetAsync 
+        #region Common GetAsync 
         public async Task<ApiResponseModel> GetAsync(string endpoint)
         {
             try{

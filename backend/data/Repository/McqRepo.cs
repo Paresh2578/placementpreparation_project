@@ -1,4 +1,5 @@
-﻿using backend.Constant;
+﻿using backend.BAL;
+using backend.Constant;
 using backend.data.Interface;
 using backend.Models;
 using Microsoft.Data.SqlClient;
@@ -11,11 +12,13 @@ namespace backend.data.Repository
     public class McqRepo : McqInterface
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly DbHelper _dbHelper;
-        public McqRepo(ApplicationDbContext context , DbHelper dbHelper)
+        public McqRepo(ApplicationDbContext context , DbHelper dbHelper, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _dbHelper = dbHelper;
+            _httpContextAccessor = httpContextAccessor;
         }
        public async Task<ResponseModel> AddMcq(McqModel mcq)
         {
@@ -181,6 +184,39 @@ namespace backend.data.Repository
             {
                 List<McqModel> mcqs = await _context.Mcqs.Where(m => (m.TopicId == topicId) && (m.SubTopicId == subTopicId || subTopicId == null) && m.IsActive).ToListAsync();
                 return new ResponseModel { StatusCode = 200, Message = "Successfully Get Mcqs", Data = mcqs };
+            }catch(Exception ex)
+            {
+                return new ResponseModel { StatusCode = 500, Message = ex.Message };
+            }
+        }
+
+        
+        public async Task<ResponseModel> GetInterviewMcqs()
+        {
+            try{
+                // get login user data from token
+                Dictionary<string,dynamic>? userData = CV.GetUserDataFromToken(_httpContextAccessor.HttpContext.Request.Cookies["token"]);
+                string? addeddById = null;
+                if(userData != null && (userData["IsAdmin"] == null || userData["AdminUserId"] == null)){
+                    return new ResponseModel { StatusCode = 401, Message = "Unauthorized" };
+                }else{
+                    if(userData["IsAdmin"] == false){
+                        addeddById = userData["AdminUserId"];
+                    }
+                }
+                List<McqModel> questions = await _context.Mcqs.Where(q => q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById)).ToListAsync();
+                return new ResponseModel { StatusCode = 200, Data = questions, Message = "Mcqs retrieved successfully" };
+            }catch(Exception ex)
+            {
+                return new ResponseModel { StatusCode = 500, Message = ex.Message };
+            }
+        }
+
+          public async Task<ResponseModel> UpdateNewInterviewMcqRequestStatus(Guid id, string status)
+        {
+            try{
+                await _context.Database.ExecuteSqlRawAsync("UPDATE Mcqs SET ApproveStatus = {0} Where McqId = {1}", status ,id);
+                return new ResponseModel { StatusCode = 200, Message = "Mcq status updated successfully" };
             }catch(Exception ex)
             {
                 return new ResponseModel { StatusCode = 500, Message = ex.Message };

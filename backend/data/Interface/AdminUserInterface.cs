@@ -15,6 +15,8 @@ namespace backend.data.Interface
         public Task<ResponseModel> SendOtp(String email);
         public Task<ResponseModel> VerifyOtp(string email,string otp);
         public Task<ResponseModel> UpdateApprovelStudentStatus(Guid id , String status);
+        public Task<ResponseModel> RefreshToken(Guid id);
+
     }
 
 }

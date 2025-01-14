@@ -20,6 +20,14 @@ namespace backend.Controllers
         [HttpPost]
         public async Task<IActionResult> AddMcq(McqModel mcq)
         {
+             // if course id is null when add addedd by id from token
+            if(mcq.CourseId == null && mcq.TopicId == null){
+                var userData = CV.GetUserDataFromToken(HttpContext.Request.Cookies["token"]);
+                if(userData is null || !userData.ContainsKey("AdminUserId")){
+                    return Unauthorized();
+                }
+                mcq.AddedBy = Guid.Parse(userData["AdminUserId"]);
+            }
             var response = await _mcqInterface.AddMcq(mcq);
             return StatusCode(response.StatusCode, response);
         }
@@ -84,6 +92,27 @@ namespace backend.Controllers
             return StatusCode(response.StatusCode , response);
         }
         #endregion
+
+        #region Get Interview Mcq
+        [HttpGet("GetInterviewMcqs")]
+        public async Task<IActionResult> GetInterviewMcqs()
+        {
+            var response = await _mcqInterface.GetInterviewMcqs();
+            return StatusCode(response.StatusCode, response);
+        }
+        #endregion
+
+        
+        #region Update new  Interview Mcq Request
+       [HttpPut]
+       [MainAdminAccess]
+       [Route("UpdateNewInterviewMcqRequestStatus/{id}/{Status}")]
+       public async Task<IActionResult> UpdateNewInterviewMcqRequestStatus(Guid id , string Status)
+       {
+           ResponseModel response = await _mcqInterface.UpdateNewInterviewMcqRequestStatus(id , Status);
+           return StatusCode(response.StatusCode, response);
+       }
+       #endregion
 
        /* #region Get Mcqs by topic or subTopic Id
         [HttpGet("GetMcqsByTopicOrSubTopicId/{topicId}/{subTopicId?}")]

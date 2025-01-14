@@ -132,8 +132,19 @@ namespace backend.data.Repository
         public async Task<ResponseModel> GetInterviewQuestions(Guid? addeddById)
         {
             try{
-                List<QuestionModel> questions = await _context.Questions.Where(q => q.AddedBy == addeddById).ToListAsync();
+                List<QuestionModel> questions = await _context.Questions.Where(q => q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById)).ToListAsync();
                 return new ResponseModel { StatusCode = 200, Data = questions, Message = "Questions retrieved successfully" };
+            }catch(Exception ex)
+            {
+                return new ResponseModel { StatusCode = 500, Message = ex.Message };
+            }
+        }
+
+        public async Task<ResponseModel> UpdateNewInterviewQuestionRequestStatus(Guid id, string status)
+        {
+            try{
+                await _context.Database.ExecuteSqlRawAsync("UPDATE Questions SET ApproveStatus = {0} Where QuestionId = {1}", status ,id);
+                return new ResponseModel { StatusCode = 200, Message = "Question status updated successfully" };
             }catch(Exception ex)
             {
                 return new ResponseModel { StatusCode = 500, Message = ex.Message };

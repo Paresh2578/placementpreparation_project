@@ -38,6 +38,7 @@
 
                         <th class="py-3 px-6 text-left">Question</th>
                         <th class="py-3 px-6 text-left">Details</th>
+                        <th class="py-3 px-6 text-left">Active</th>
                         <th class="py-3 px-6 text-left">Status</th>
                         <th class="py-3 px-6 text-left">Action</th>
                     </tr>
@@ -56,6 +57,9 @@
                                 <td class="py-3 px-6 text-left">
                                     <a href="#" class="text-blue-500">View Details</a>
                                 </td>
+                                 <td class="py-3 px-6 text-left"><span
+                                        class="@(question.IsActive ? "yes-btn" : "no-btn")">@(question.IsActive ? "Yes" :
+                                "No")</span></td>
                                 <td class="py-3 px-6 text-left">
                                     <span class="status @question.ApproveStatus.ToLower()">@question.ApproveStatus</span>
                                 </td>

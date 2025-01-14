@@ -10,9 +10,11 @@ namespace backend.Controllers
     public class QuestionController : ControllerBase
     {
         private readonly QuestionInterface _questionInterface;
-        public QuestionController(QuestionInterface questionInterface)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public QuestionController(QuestionInterface questionInterface, IHttpContextAccessor httpContextAccessor)
         {
             _questionInterface = questionInterface;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         #region Get all questions
@@ -38,6 +40,15 @@ namespace backend.Controllers
         [HttpPost]
         public async Task<IActionResult> AddQuestion([FromBody] QuestionModel question)
         {
+            // if course id is null when add addedd by id from token
+            if(question.CourseId == null && question.TopicId == null){
+                var userData = CV.GetUserDataFromToken(_httpContextAccessor.HttpContext.Request.Cookies["token"]);
+                if(userData is null || !userData.ContainsKey("AdminUserId")){
+                    return Unauthorized();
+                }
+                question.AddedBy = Guid.Parse(userData["AdminUserId"]);
+            }
+
             var response = await _questionInterface.AddQuestion(question);
             return StatusCode(response.StatusCode, response);
         }
@@ -85,5 +96,16 @@ namespace backend.Controllers
             return StatusCode(response.StatusCode, response);
         }
         #endregion
+
+        #region Update new  Interview Question Request
+       [HttpPut]
+       [MainAdminAccess]
+       [Route("UpdateNewInterviewQuestionRequestStatus/{id}/{Status}")]
+       public async Task<IActionResult> UpdateNewInterviewQuestionRequestStatus(Guid id , string Status)
+       {
+           ResponseModel response = await _questionInterface.UpdateNewInterviewQuestionRequestStatus(id , Status);
+           return StatusCode(response.StatusCode, response);
+       }
+       #endregion
     }
 }

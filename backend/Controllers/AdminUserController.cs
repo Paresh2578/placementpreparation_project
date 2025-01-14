@@ -7,6 +7,7 @@ using System.Net.Http.Json;
 using Newtonsoft.Json;
 using System.Collections;
 using backend.data.Interface;
+using CloudinaryDotNet.Actions;
 
 namespace backend.Controllers
 {
@@ -159,7 +160,16 @@ namespace backend.Controllers
            ResponseModel response = await _adminUserInterface.UpdateApprovelStudentStatus(id , Status);
            return StatusCode(response.StatusCode, response);
        }
-       #endregion
+        #endregion
 
+        #region  refres token
+        [HttpPost]
+        [Route("refreshToken/{id}")]
+        public async Task<IActionResult> RefreshToken(Guid id)
+        {
+           ResponseModel response = await _adminUserInterface.RefreshToken(id);
+            return StatusCode(response.StatusCode, response);
         }
+        #endregion
+      }
 }
