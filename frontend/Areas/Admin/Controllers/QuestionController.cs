@@ -136,7 +136,25 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         [BothAdminAccess]
         public async Task<IActionResult> AddOrEditInterviewQuestion(string? questionId)
         {
+
+            // If sub questionId is null then it is add Topic
+            if(questionId == null)
+            {
                 return View();
+            }
+           
+                // Call API to get data
+                ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/{questionId}");
+                if(response.StatusCode != 200)
+                {
+                    TempData["ErrorMessage"] = response.Message;
+                    TempData["LableErrorMesssage"] = response.Message;
+
+                    return RedirectToAction("InterviewQuestionList");
+                }
+                QuestionModel question = JsonConvert.DeserializeObject<QuestionModel>(response.Data!.ToString());
+
+                return View(question);
         }
 
         [BothAdminAccess]
@@ -175,8 +193,8 @@ namespace Placement_Preparation.Areas.Admin.Controllers
 
         #region delete Question
         [Route("/DeleteQuestion/{questionId}")]
-        [MainAdminAccess]
-        public async Task<IActionResult> DeleteTopic(string questionId)
+        [BothAdminAccess]
+        public async Task<IActionResult> DeleteTopic(string questionId , [FromQuery] string? returnActionName)
         {
             ApiResponseModel response = await _apiClient.DeleteAsync($"{_apiBaseUrl}/{questionId}");
             if(response.StatusCode == 200)
@@ -184,14 +202,15 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                 TempData["SuccessMessage"] = response.Message;
             }else {
                 TempData["ErrorMessage"] = response.Message;
+                TempData["LableErrorMesssage"] = response.Message;
             }
-            return RedirectToAction("ListQuestion");
+            return RedirectToAction(returnActionName ?? "ListQuestion");
         }
         #endregion
 
         #region  Delete Multiple Question
-        [MainAdminAccess]
-        public async Task<IActionResult> DeleteMultipleQuestion(string  questionIds)
+        [BothAdminAccess]
+        public async Task<IActionResult> DeleteMultipleQuestion(string  questionIds, [FromQuery] string? returnActionName)
         {
             ApiResponseModel response = await _apiClient.DeleteMultipleAsync($"{_apiBaseUrl}/DeleteMultiple",questionIds.Split(","));
             if(response.StatusCode == 200)
@@ -200,7 +219,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             }else {
                 TempData["ErrorMessage"] = response.Message;
             }
-            return RedirectToAction("ListQuestion");
+            return RedirectToAction(returnActionName??"ListQuestion");
         }
         #endregion
 

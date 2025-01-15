@@ -140,9 +140,24 @@ namespace Placement_Preparation.Areas.Admin.Controllers
 
         #region Add or Edit Interview Question
         [BothAdminAccess]
-        public async Task<IActionResult> AddOrEditInterviewMcq(string? questionId)
+        public async Task<IActionResult> AddOrEditInterviewMcq(string? mcqId)
         {
+            // If sub mcqId is null then it is add Topic
+            if(mcqId == null)
+            {
                 return View();
+            }
+           
+                // Call API to get data
+                ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/{mcqId}");
+                if(response.StatusCode != 200)
+                {
+                    TempData["ErrorMessage"] = response.Message;
+                      TempData["LableErrorMesssage"] = response.Message;
+                    return RedirectToAction("InterviewMcqList");
+                }
+                McqModel mcq = JsonConvert.DeserializeObject<McqModel>(response.Data!.ToString());
+                return View(mcq);
         }
 
         [BothAdminAccess]
@@ -183,8 +198,8 @@ namespace Placement_Preparation.Areas.Admin.Controllers
 
         #region delete Mcq
         [Route("/DeleteMcq/{mcqId}")]
-        [MainAdminAccess]
-        public async Task<IActionResult> DeleteTopic(string mcqId)
+        [BothAdminAccess]
+        public async Task<IActionResult> DeleteTopic(string mcqId , [FromQuery] string? returnActionName)
         {
             ApiResponseModel response = await _apiClient.DeleteAsync($"{_apiBaseUrl}/{mcqId}");
             if(response.StatusCode == 200)
@@ -193,7 +208,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             }else {
                 TempData["ErrorMessage"] = response.Message;
             }
-            return RedirectToAction("ListMcq");
+            return RedirectToAction(returnActionName??"ListMcq");
         }
         #endregion
 

@@ -20,6 +20,11 @@ namespace backend.data.Repository
        public async Task<ResponseModel> AddQuestion(QuestionModel question)
         {
             try{
+                // set by default ApproveStatus Pending
+                if(question.ApproveStatus == null)
+                {
+                    question.ApproveStatus = "Pending";
+                }
                 await _context.Questions.AddAsync(question);
                 await _context.SaveChangesAsync();
                 return new ResponseModel { StatusCode = 201, Message = "Question added successfully" };
@@ -120,9 +125,26 @@ namespace backend.data.Repository
                 {
                     return new ResponseModel { StatusCode = 404, Message = "Question not found" };
                 }
-                 _context.Entry(questionExists).CurrentValues.SetValues(question);
-                await _context.SaveChangesAsync();
-                return new ResponseModel { StatusCode = 200, Message = "Question updated successfully" };
+                else
+                {
+                    //_context.Entry(questionExists).CurrentValues.SetValues(question);
+                    questionExists.Question = question.Question;
+                    questionExists.QuestionAnswer = question.QuestionAnswer;
+                    questionExists.IsActive = question.IsActive;
+                    questionExists.TechStack = question.TechStack;
+                    questionExists.AddedBy = question.AddedBy;
+                    questionExists.CompanyName = question.CompanyName;
+                    questionExists.ApproveStatus = question.ApproveStatus;
+                    questionExists.CourseId = question.CourseId;
+                    questionExists.TopicId = question.TopicId;
+                    questionExists.SubTopicId = question.SubTopicId;
+                    questionExists.DifficultyLevelId = question.DifficultyLevelId;
+
+                    await _context.SaveChangesAsync();
+                    return new ResponseModel { StatusCode = 200, Message = "Question updated successfully" };
+                }
+                
+                
             }catch(Exception ex)
             {
                 return new ResponseModel { StatusCode = 500, Message = ex.Message };

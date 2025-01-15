@@ -30,6 +30,9 @@ namespace Placement_Preparation.Areas.Admin.Models
         [Display(Name = "Company Name")]
         public string? CompanyName { get; set; }
 
+        // Added By
+        public Guid? AddedBy { get; set; }
+
         
          public string? ApproveStatus {get;set;} = "Pending";
 

@@ -1,7 +1,7 @@
 @model McqModel
 
 @{
-     string title = Model == null ||  Model.SubTopicId == null ? "Add" : "Edit";
+     string title = Model == null ||  Model.McqId == null ? "Add" : "Edit";
      ViewData["Title"] = title + " Mcq";
 }
 
@@ -30,8 +30,10 @@
                 <p class="validation-error-lable" style="text-align: start;">@TempData["LableErrorMesssage"]</p>
                 }
 
-            <!-- Mcq Id -->
+            <!--hidden  Mcq Id ,--hidden ApproveStatus , Addeddby-->
             <input asp-for="McqId" type="hidden"/>
+            <input asp-for="ApproveStatus" type="hidden"/>
+            <input asp-for="AddedBy" type="hidden"/>
 
             <!--Question-->
             <div class="mb-2">

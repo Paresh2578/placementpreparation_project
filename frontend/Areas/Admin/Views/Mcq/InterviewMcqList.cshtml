@@ -72,8 +72,8 @@
                                         </td>
                 
                                         <td class="py-3 px-6 text-left flex gap-x-4">
-                                            <a class="cursor-pointer" asp-action="AddOrEditMcq" asp-controller="Mcq" asp-route-mcqId="@mcq.McqId"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
-                                            <a class="cursor-pointer" onclick="confirmDelete('/DeleteMcq/@mcq.McqId')"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a>
+                                            <a class="cursor-pointer" asp-action="AddOrEditInterviewMcq" asp-controller="Mcq" asp-route-mcqId="@mcq.McqId"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
+                                            <a class="cursor-pointer" onclick="confirmDelete('/DeleteMcq/@mcq.McqId?returnActionName=InterviewMcqList')"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a>
                                         </td>
                                     </tr>
                                 index++;
@@ -119,7 +119,7 @@
 
                // If no rows are visible, add the "No mcq Found" row
                if (visibleRows === 0) {
-                   $("#mcqs").append('<tr class="mcq-row border-b text-nowrap border-gray-200  no-mcq-found"><td class="py-3 px-6 text-center" colspan="5">No Mcq  Found</td></tr>');
+                   $("#mcqs").append('<tr class="mcq-row border-b text-nowrap border-gray-200  no-mcq-found"><td class="py-3 px-6 text-center" colspan="7">No Mcq  Found</td></tr>');
                }
            });
        });

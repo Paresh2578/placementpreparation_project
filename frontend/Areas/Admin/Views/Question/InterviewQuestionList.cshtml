@@ -18,8 +18,9 @@
 
          <!-- Search Bar Section -->
         <div class="relative">
-            <input id="courseSearch" class="bg-gray-100 w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-500 shadow-sm focus:shadow-md"
-                   placeholder="Search for Course..." />
+            <input id="questionSearch"
+                class="bg-gray-100 w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-blue-500 hover:border-blue-500 shadow-sm focus:shadow-md"
+                placeholder="Search for Question..." />
             <button class="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
                     type="button">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="transparent" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-8 h-8 text-slate-600">
@@ -27,6 +28,11 @@
                 </svg>
             </button>
         </div>
+
+         @if(TempData["LableErrorMesssage"] != null)
+                {
+                <p class="validation-error-lable" style="text-align: start;">@TempData["LableErrorMesssage"]</p>
+                }
 
        <!-- Table Section -->
         <div class="mt-6 overflow-x-auto w-full">
@@ -43,15 +49,15 @@
                         <th class="py-3 px-6 text-left">Action</th>
                     </tr>
                 </thead>
-                <tbody id="courses" class="text-gray-700 text-sm font-light">
+                <tbody id="question" class="text-gray-700 text-sm font-light">
                      @if(ViewData["InternalServerError"] != null){
                         <partial name="_Errors" />
                     }
                     @{
-                        int idx = 0;
+                        int idx = 1;
                         foreach(QuestionModel question in Model){
-                          <tr class="border-b text-nowrap  border-gray-200 ">
-                             <th><input type="checkbox"  class="select-row" value="" onclick="toggleCheckbox(this)" /></th>
+                          <tr data-id="@question.QuestionId" class="question-row border-b text-nowrap hover:cursor-pointer border-gray-200 ">
+                             <th><input type="checkbox"  class="select-question" value="@question.QuestionId" onclick="toggleCheckbox(this)" /></th>
                                 <td class="py-3 px-6 text-left">@idx</td>
                                 <td class="py-3 px-6 text-left">@question.Question</td>
                                 <td class="py-3 px-6 text-left">
@@ -65,14 +71,14 @@
                                 </td>
 
                                 <td class="py-3 px-6 text-left flex gap-x-4">
-                                            <a class="cursor-pointer" asp-action="AddOrEditCourse" ><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
-                                            <a class="cursor-pointer"  onclick="confirmDelete('/DeleteCourse/')"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a>
+                                            <a class="cursor-pointer" asp-action="AddOrEditInterviewQuestion" asp-route-questionId="@question.QuestionId"><img src="~/assets/icons/edit.svg" height="20" width="20" /></a>
+                                            <a class="cursor-pointer"  onclick="confirmDelete('/DeleteQuestion/@question.QuestionId?returnActionName=InterviewQuestionList')"><img src="~/assets/icons/delete.svg" height="20" width="20" /></a>
                                 </td>
                              </tr>  
                              idx++; 
                         }
                         // no data found
-                        if(idx == 0){
+                        if(idx == 1){
                             <tr class="border-b text-nowrap  border-gray-200 ">
                                 <td class="py-3 px-6 text-center" colspan="6">No data found</td>
                             </tr>
@@ -82,8 +88,118 @@
 
                 </tbody>
             </table>
+             <button id="handleDelete" class="clear-button m-4" style="margin-top: 20px; display: block;width: fit-content;"><i class="fa-regular fa-trash-can fa-bounce"></i> Delete </button>
         </div>
     </div>
 
 
-    
+
+@section Scripts {
+ <!--  Input search  bar  -->
+    <script>
+        $(document).ready(function () {
+            $('#questionSearch').on("keyup", function () {
+                var value = $(this).val().toLowerCase().toString().trim();
+
+                // Filter table rows based on search input
+                $("#question tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+
+                // Check the number of visible rows
+                var visibleRows = $("#question tr:visible").length;
+
+                // Remove existing "No question   Found" row if it exists
+                $("#question .no-question-found").remove();
+
+                // If no rows are visible, add the "No Question Found" row
+                if (visibleRows === 0) {
+                    $("#question").append('<tr class="border-b text-nowrap border-gray-200  no-question-found"><td class="py-3 px-6 text-center" colspan="6">No Question  Found</td></tr>');
+                }
+            });
+        });
+    </script>
+
+
+     <!-- Search using Dropdown -->
+   <script src="~/lib/jquery/dist/jquery.min.js"></script> <!-- Local version of jQuery -->
+
+<!-- Delete All checkbox Box -->
+<script>
+      function toggleCheckbox(checkbox) {
+             highlightRow(checkbox); // Call highlightRow explicitly
+             updateSelectAllState(); // Update the select all checkbox state
+        }
+        
+
+    // Highlight the row if the checkbox is checked
+    function highlightRow(checkbox) {
+        const row = checkbox.closest('tr');
+        @* console.log(checkbox.checked); *@
+        if (checkbox.checked) {
+            row.classList.add('row-highlight');
+        } else {
+            row.classList.remove('row-highlight');
+        }
+    }
+
+   // select All checkbox
+    document.getElementById('selectAll').addEventListener('change', function () {
+        const checkboxes = document.querySelectorAll('.select-question');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+            highlightRow(checkbox);
+        });
+    });
+    function updateSelectAllState() {
+    const checkboxes = document.querySelectorAll('.select-question');
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+    const noneChecked = Array.from(checkboxes).every(checkbox => !checkbox.checked);
+
+    if (allChecked) {
+        selectAllCheckbox.checked = true;             
+        selectAllCheckbox.indeterminate = false; // Not in an indeterminate state
+    } else if (noneChecked) {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = false; // Not in an indeterminate state
+    } else {
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = true; // Set indeterminate state
+    }
+}
+
+    // Prevent the row click from triggering when clicking on specific elements like the edit/delete buttons
+    document.querySelectorAll('.mcq-question').forEach(row => {
+        row.addEventListener('click', function (e) {
+            if (e.target.tagName === 'A' || e.target.tagName === 'IMG') {
+                e.stopPropagation();
+            }
+        });
+    });
+
+    // Delete button click
+    document.getElementById('handleDelete').addEventListener('click', function () {
+        const selectedQuestionIds = Array.from(document.querySelectorAll('.select-question:checked')).map(checkbox => checkbox.value);
+        if (selectedQuestionIds.length === 0) {
+            alert('Please select at least one Question to delete');
+            return;
+        }
+
+         Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        // If the user confirms, redirect to the delete URL
+        if (result.isConfirmed) {
+            window.location.href = '/Admin/Question/DeleteMultipleQuestion?returnActionName=InterviewQuestionList&questionIds=' + selectedQuestionIds.join(',');
+        }
+    });
+    });
+</script>
+}

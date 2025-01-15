@@ -1,17 +1,20 @@
 -- Count ALL Qustion
-alter procedure PR_Question_COUNT 
-	@CourseId UNIQUEIDENTIFIER = NULL,
+ALTER PROCEDURE PR_Question_COUNT null ,null , null , 0 , 1
+    @CourseId UNIQUEIDENTIFIER = NULL,
     @TopicId UNIQUEIDENTIFIER = NULL,
     @SubTopicId UNIQUEIDENTIFIER = NULL,
-	@onlyActiveGets BIT = 0,
-	@onlyInterviewQuestions BIT = 0
+    @onlyActiveGets BIT = 0,
+    @onlyInterviewQuestions BIT = 0
 AS
-BEGIN 
-   SELECT  count(Case when @onlyActiveGets = 0  then 1 else (case when IsActive = 1 then 1 else null end)  end) as totelQuestion
-    FROM [dbo].Questions
+BEGIN
+    SELECT 
+        COUNT(*) AS TotalQuestions
+    FROM 
+        [dbo].Questions
     WHERE 
-        (CourseId = @CourseId OR @CourseId IS NULL)
-        AND (TopicId = @TopicId OR @TopicId IS NULL)
-        AND (SubTopicId = @SubTopicId OR @SubTopicId IS NULL)
-		
+        (@CourseId IS NULL OR CourseId = @CourseId)
+        AND (@TopicId IS NULL OR TopicId = @TopicId)
+        AND (@SubTopicId IS NULL OR SubTopicId = @SubTopicId)
+        AND (@onlyActiveGets = 0 OR IsActive = 1)
+        AND (@onlyInterviewQuestions = 0 OR AddedBy IS NOT NULL);
 END

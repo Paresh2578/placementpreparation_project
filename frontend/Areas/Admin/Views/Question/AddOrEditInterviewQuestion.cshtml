@@ -22,8 +22,10 @@
 
         <form asp-action="AddOrEditInterviewQuestion" asp-controller="Question" method="post" class="flex  w-full flex-col">
 
-            <!-- Question Id -->
+            <!--hidden  Question Id ,--hidden ApproveStatus , Addeddby-->
             <input asp-for="QuestionId" type="hidden"/>
+            <input asp-for="ApproveStatus" type="hidden"/>
+            <input asp-for="AddedBy" type="hidden"/>
 
             <!-- Display validation summary for the entire form -->
             <div asp-validation-summary="ModelOnly" class="text-red-600"></div>
