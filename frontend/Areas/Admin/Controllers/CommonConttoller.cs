@@ -26,6 +26,19 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         }
         #endregion
 
+        #region Page Not Found
+        [Route("Admin/Error/{statusCode}")]
+        public IActionResult HandleErrorCode(int statusCode)
+        {
+            return statusCode switch
+            {
+                404 => View("NotFound"),// Return the NotFound view for 404 errors
+                _ => View("Error"),// Return the Error view for all other errors
+            };
+        }
+        #endregion
+
+
         #region  Approval Status Page
         public async Task<IActionResult> ApprovalStatus()
         {

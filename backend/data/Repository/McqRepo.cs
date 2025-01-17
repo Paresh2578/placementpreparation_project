@@ -23,6 +23,10 @@ namespace backend.data.Repository
        public async Task<ResponseModel> AddMcq(McqModel mcq)
         {
             try{
+                // If  Approve status is null set default Pending 
+                if(mcq.ApproveStatus == null){
+                    mcq.ApproveStatus = "Pending";
+                }
                  await _context.Mcqs.AddAsync(mcq);
                 await _context.SaveChangesAsync();
                 return new ResponseModel { StatusCode = 201, Message = "Mcq Added Successfully" };
@@ -113,7 +117,7 @@ namespace backend.data.Repository
                 if(pageNumber == null)
                 {
                     // Get All Mcqs
-                    mcqs = await _context.Mcqs.Where(m => (m.CourseId == courseId || courseId == null) && (m.TopicId == topicId || topicId == null) && (m.SubTopicId == subTopicId || subTopicId == null) && (onlyActiveMcqs ? m.IsActive : true)).ToListAsync();
+                    mcqs = await _context.Mcqs.Where(m =>(m.AddedBy == null) && (m.CourseId == courseId || courseId == null) && (m.TopicId == topicId || topicId == null) && (m.SubTopicId == subTopicId || subTopicId == null) && (onlyActiveMcqs ? m.IsActive : true)).ToListAsync();
 
                     return new ResponseModel { StatusCode = 200, Data = mcqs, Message = "MCQs fetched successfully." };
                 }

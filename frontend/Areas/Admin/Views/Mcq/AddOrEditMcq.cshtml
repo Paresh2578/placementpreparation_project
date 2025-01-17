@@ -2,6 +2,7 @@
 
 @{
      string title = Model == null ||  Model.SubTopicId == null ? "Add" : "Edit";
+     ViewData["Title"] = title + "Mcq";
 }
 
 
@@ -233,6 +234,16 @@
 
             var courseId = $(this).val();
 
+            // No course select when empty topic and subTopics values
+            if(courseId.toString().trim() == ""){
+                hideLoadingDialong();
+                $('#topics').empty();
+                $('#subTopics').empty();
+                $('#topics').append('<option value="">Select Topic</option>');
+                $('#subTopics').append('<option value="">Select Sub Topic</option>');
+                return;
+            }
+
             $.ajax({
                 url: '/GetTopicsByCourseId/'+courseId,
                 type: 'GET',
@@ -255,6 +266,14 @@
             // show loading 
             showLoadingDialong();
             var topicId = $(this).val();
+
+            // No topic select when empty subTopics values
+            if(topicId.toString().trim() == ""){
+                hideLoadingDialong();
+                $('#subTopics').empty();
+                $('#subTopics').append('<option value="">Select Sub Topic</option>');
+                return;
+            }
 
 
             $.ajax({

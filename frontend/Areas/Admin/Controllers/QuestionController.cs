@@ -55,6 +55,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                    return View();
                 }
                 List<QuestionModel>  questionList =  JsonConvert.DeserializeObject<List<QuestionModel>>(response.Data!.ToString());
+
             return View(questionList);
         }
         #endregion
@@ -91,6 +92,17 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> AddOrEditQuestion(QuestionModel questions)
         {
+            // add course  , Topic , Difficulty validation
+            if(questions.CourseId is null){
+                ModelState.AddModelError("CourseId", "Course Name is Required");
+            }
+            if(questions.TopicId is null){
+                ModelState.AddModelError("TopicId","Topic Name is Required");
+            }
+            if(questions.DifficultyLevelId is null){
+                ModelState.AddModelError("DifficultyLevelId", "DifficultyLevel is Required");
+            }
+
             //Server side validation
             if (ModelState.IsValid)
             {

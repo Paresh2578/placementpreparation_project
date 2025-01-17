@@ -1,6 +1,91 @@
-﻿@{
-    ViewData["Title"] = "Error";
+﻿@model string
+
+@{
+    ViewData["Title"] = "403 - Forbidden";
+    var fullUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Query["url"]}";
+}
+
+<div class="error-container">
+    <div class="error-content">
+        <h1 class="error-code">403</h1>
+        <h2 class="error-title">Access Forbidden</h2>
+        <p class="error-message">Sorry, you don’t have permission to access this page.</p>
+        @if (!string.IsNullOrEmpty(Context.Request.Query["url"]))
+        {
+            <p class="error-url">
+                The requested URL: <span>@fullUrl</span>
+            </p>
+        }
+        <a asp-action="Home" asp-controller="Home" asp-area="Admin" class="error-link">Back to Home</a>
+    </div>
+</div>
+
+
+<style>
+    @* body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+} *@
+
+.error-container {
+    text-align: center;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.error-code {
+    font-size: 96px;
+    color: #e74c3c;
+    margin: 0;
+}
+
+.error-title {
+    font-size: 28px;
+    color: #333;
+    margin: 10px 0;
+}
+
+.error-message {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.error-link {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #3498db;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
 
-Error Page
+
+.error-link:hover {
+    background-color: #2980b9;
+}
+
+.error-url {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.error-url span {
+    color: #3498db;
+    font-weight: bold;
+    word-break: break-all; /* Break long URLs gracefully */
+}
+
+
+</style>

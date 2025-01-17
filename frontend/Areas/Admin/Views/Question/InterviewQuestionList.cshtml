@@ -16,6 +16,26 @@
         </div>
 
 
+         @* <!-- Search Student dropdown-->
+        <div class="responsive-div mb-4" style="justify-content: start">
+            <!-- Select Student Dropdown -->
+            <div class="dropdown-container" style="max-width: fit-content;">
+                <label class="text-gray-700 mb-1">Student</label>
+                <select style="" asp-items="@(ViewBag.courseList as List<SelectListItem>)" id="courses"  class="input-field bg-red" style="color:red">
+                    <option value="">Select Student</option>
+                </select>
+            </div>
+
+            <!-- search and clear btn -->
+            <div class="button-container">
+                <!-- Search Button -->
+                <button id="handlerSearch" class="primary-button"><i class="fa-solid fa-magnifying-glass fa-bounce"></i> Search</button>
+                <!-- Clear Button -->
+                <a asp-action="ClearSearch" asp-controller="Question" class="clear-button"> <i class="fa-solid fa-xmark fa-bounce"></i> Clear</a>
+            </div>
+        </div> *@
+
+
          <!-- Search Bar Section -->
         <div class="relative">
             <input id="questionSearch"

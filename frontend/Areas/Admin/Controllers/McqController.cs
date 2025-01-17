@@ -78,6 +78,16 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         [MainAdminAccess]
         public async Task<IActionResult> AddOrEditMcq(McqModel mcq)
         {
+             // add course  , Topic , Difficulty validation
+            if(mcq.CourseId is null){
+                ModelState.AddModelError("CourseId", "Course Name is Required");
+            }
+            if(mcq.TopicId is null){
+                ModelState.AddModelError("TopicId","Topic Name is Required");
+            }
+            if(mcq.DifficultyLevelId is null){
+                ModelState.AddModelError("DifficultyLevelId", "DifficultyLevel is Required");
+            }
             //Server side validation
             if (ModelState.IsValid)
             {
@@ -213,8 +223,8 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         #endregion
 
         #region  Delete Multiple Mcq
-        [MainAdminAccess]
-        public async Task<IActionResult> DeleteMultipleMcq(string  mcqIds)
+        [BothAdminAccess]
+        public async Task<IActionResult> DeleteMultipleMcq(string  mcqIds,string? returnActionName)
         {
             ApiResponseModel response = await _apiClient.DeleteMultipleAsync($"{_apiBaseUrl}/DeleteMultiple",mcqIds.Split(","));
             if(response.StatusCode == 200)
@@ -223,7 +233,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
             }else {
                 TempData["ErrorMessage"] = response.Message;
             }
-            return RedirectToAction("ListMcq");
+            return RedirectToAction(returnActionName??"ListMcq");
         }
         #endregion
 

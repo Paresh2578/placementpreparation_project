@@ -31,7 +31,7 @@
             <input asp-for="FifthDigit" type="text" maxlength="1" class="otp-input" required>
             <input asp-for="SixthDigit" type="text" maxlength="1" class="otp-input" required>
         </div>
-            <button type="submit" class="sign-button" style="margin: 0px;">Verify</button>
+            <button type="submit" class="sign-button" style="margin: 0px;width: 100%;">Verify</button>
         <p class="note">
             Didn’t receive the code? 
             <a  id="resend-link" class="resend-link disabled" onclick="return false;">Resend OTP</a> 
@@ -142,42 +142,7 @@
     });
 </script>
 
-    @* <script>
-        document.addEventListener('DOMContentLoaded', () => {
-        const timerElement = document.getElementById('timer');
-        const resendLink = document.getElementById('resend-link');
-        let countdown = 60; // 1 minute
 
-        function updateTimer() {
-            const minutes = Math.floor(countdown / 60);
-            const seconds = countdown % 60;
-            timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        }
-
-        function startCountdown() {
-            resendLink.classList.add('disabled'); // Disable the link initially
-            const timerInterval = setInterval(() => {
-            if (countdown > 0) {
-                countdown--;
-                updateTimer();
-            } else {
-                clearInterval(timerInterval);
-                timerElement.textContent = ''; // Remove timer text
-                resendLink.classList.remove('disabled'); // Enable the link
-                resendLink.onclick = () => {
-                // Handle resend OTP functionality here
-                countdown = 60; // Restart the timer    
-                startCountdown(); // Restart the countdown
-                return false; // Prevent default link behavior
-                };
-            }
-            }, 1000);
-        }
-
-        startCountdown(); // Start the initial countdown
-        });
-
-    </script> *@
  
 }
 
@@ -242,7 +207,7 @@ h1 {
 }
 
 .btn {
-  background: #007BFF;
+  @* background: #007BFF;
   color: #fff;
   padding: 10px;
   font-size: 1rem;
@@ -250,7 +215,7 @@ h1 {
   border-radius: 5px;
   cursor: pointer;
   transition: background 0.3s ease;
-  width: 100%;
+  width: 100%; *@
 }
 
 .btn:hover {

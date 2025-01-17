@@ -147,7 +147,10 @@ namespace backend.data.Repository
                 var otp = OTPGenerator.GenerateOTP();
 
                 // send OTP in Mail
-                ResponseModel response = await _emailService.SendEmail(email, "Email Varification", $"Your OTP is {otp}");
+                string subject = "OTP Verification";
+                string bodyContent = otp.ToString();
+
+                ResponseModel response = await _emailService.SendEmail(email, subject, bodyContent);
                 if(response.StatusCode != 200){
                     return response;
                 }

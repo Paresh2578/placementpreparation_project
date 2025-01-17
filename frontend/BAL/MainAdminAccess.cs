@@ -26,7 +26,8 @@ namespace Placement_Preparation.BAL
 
                 if (userData!["IsAdmin"] == false)
                 {
-                    context.Result = new RedirectResult("~/Admin/Common/Error403");
+                    string currentUrl = Uri.EscapeDataString(context.HttpContext.Request.Path + context.HttpContext.Request.QueryString);
+                    context.Result = new RedirectResult($"~/Admin/Common/Error403?url={currentUrl}");
                 }
             }
 

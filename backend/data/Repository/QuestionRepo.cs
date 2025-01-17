@@ -71,7 +71,7 @@ namespace backend.data.Repository
                 if (pageNumber == null)
                 {
                     // get all questions
-                    questions = await _context.Questions.Where(q => (q.CourseId == courseId || courseId == null) && (q.TopicId == topicId || topicId == null) && (q.SubTopicId == subTopicId || subTopicId == null) && (!onlyActiveQuestions || q.IsActive)).ToListAsync();
+                    questions = await _context.Questions.Where(q =>(q.AddedBy == null) && (q.CourseId == courseId || courseId == null) && (q.TopicId == topicId || topicId == null) && (q.SubTopicId == subTopicId || subTopicId == null) && (!onlyActiveQuestions || q.IsActive)).ToListAsync();
                     return new ResponseModel { StatusCode = 200, Data = questions, Message = "Questions retrieved successfully" };
 
                 }

@@ -3,4 +3,137 @@
     ViewData["Title"] = "Approval Status";
 }
 
-<p>Status Approval @(CV.GetApprovalStatus())</p>
+<div class="main-container">
+    <div class="status-container">
+    <h1 class="status-title">Approval Status</h1>
+    <p class="status-message">Status: <span>@(CV.GetApprovalStatus())</span></p>
+
+    @if (CV.GetApprovalStatus() == "Pending")
+    {
+        <div class="status-notification status-pending">
+            <p>Your account is currently pending approval.</p>
+        </div>
+    }
+    else if (CV.GetApprovalStatus() == "Pending")
+    {
+        <div class="status-notification status-rejected">
+            <p>Your account has been rejected. Please contact support for further details.</p>
+            <a href="/support" class="support-link">Contact Support</a>
+        </div>
+    }
+
+    <button onclick="location.reload()" class="refresh-button">
+        <span class="icon">&#x21bb;</span> Refresh Status
+    </button>
+</div>
+</div>
+
+
+<style>
+    .main-container {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+}
+
+.status-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+}
+
+.status-title {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.status-message {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.status-message span {
+    font-weight: bold;
+    color: #3498db;
+}
+
+.status-notification {
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+/* Pending status styles */
+.status-pending {
+    background-color: #fef9c3;
+    border: 1px solid #f7d700;
+    color: #7a6a0b;
+}
+
+/* Rejected status styles */
+.status-rejected {
+    background-color: #f8d7da;
+    border: 1px solid #f5c2c7;
+    color: #842029;
+}
+
+.support-link {
+    display: inline-block;
+    margin-top: 10px;
+    color: #fff;
+    background-color: #dc3545;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.support-link:hover {
+    background-color: #bd2130;
+}
+
+/* Refresh button */
+.refresh-button {
+    display: inline-flex;
+    align-items: center;
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.refresh-button:hover {
+    background-color: #2980b9;
+}
+
+.refresh-button .icon {
+    font-size: 18px;
+    margin-right: 8px;
+    display: inline-block;
+    line-height: 1;
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
+}
+
+.refresh-button:hover .icon {
+    transform: rotate(360deg);
+}
+
+</style>

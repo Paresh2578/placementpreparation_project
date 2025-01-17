@@ -180,3 +180,111 @@
       100% { transform: translate3d(0, 0, 0) scale(1); }
   }
   
+
+
+  /****
+    Not Found Page
+  ****/
+
+      /* Centering the content */
+      .error-container {
+        text-align: center;
+        padding: 50px;
+        font-family: 'Arial', sans-serif;
+        animation: fadeIn 1s ease-in-out;
+        margin-top: 100px;
+    }
+
+    /* Animating the icon */
+    .error-icon {
+        font-size: 80px;
+        color: #e74c3c;
+        margin-bottom: 20px;
+        animation: rotateIcon 2s infinite;
+    }
+
+    /* Rotating animation for the icon */
+    @keyframes rotateIcon {
+        0% {
+            transform: rotate(0deg);
+        }
+        50% {
+            transform: rotate(180deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Styling for the 404 text */
+    .error-container h1 {
+        font-size: 120px;
+        color: #e74c3c;
+        animation: fadeInUp 1s ease-out;
+    }
+
+    .error-container h2 {
+        font-size: 36px;
+        color: #333;
+        animation: fadeInUp 1.5s ease-out;
+    }
+
+    .error-container p {
+        font-size: 18px;
+        color: #555;
+        margin-bottom: 30px;
+        animation: fadeInUp 2s ease-out;
+    }
+
+     /* Modern Back to Home button */
+     .btn-back-home {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 20px;
+      font-size: 18px;
+      color: #fff;
+      background: linear-gradient(90deg, #3498db, #2980b9);
+      text-decoration: none;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+      animation: fadeInUp 2.5s ease-out;
+  }
+
+  .btn-back-home i {
+      margin-right: 8px;
+      font-size: 20px;
+  }
+
+  .btn-back-home:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(41, 128, 185, 0.5);
+      background: linear-gradient(90deg, #2980b9, #1e6b92);
+      color: #fff;
+  }
+
+
+    /* Animation for elements appearing */
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Fade in effect */
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
