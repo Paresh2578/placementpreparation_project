@@ -2,6 +2,7 @@
 using Frontend.Services;
 using Markdig;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Placement_Preparation.Areas.Admin.Models;
 using Placement_Preparation.Utils;
@@ -42,12 +43,17 @@ namespace Placement_Preparation.Areas.Student.Controllers
         #endregion
 
         #region  List All Question by courses 
-        public async Task<IActionResult> QuestionList(string courseName , string? courseId,int? pageNumber=1,int? pageSize=10){
+        public async Task<IActionResult> QuestionList(string courseName,string? companyName , string? techStack, string? courseId,int? pageNumber=1,int? pageSize=10){
           try{
               ApiResponseModel apiResponse = new ApiResponseModel();
             if(courseId == null){
               // get interview  questions
-              apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}/InterviewQuestions?onlyActiveQuestions=true&pageNumber={pageNumber}&pageSize={pageSize}");
+              apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}/InterviewQuestions?onlyActiveQuestions=true&pageNumber={pageNumber}&pageSize={pageSize}&techStack={techStack}&companyName={companyName}");
+
+              // set compnay name and tech stack dropdown value
+              Dictionary<string,List<SelectListItem>> comanyNameAndTechStack = await _allDropDown.GetQuestionCompanyAndTechStack();
+              ViewBag.companyNames = comanyNameAndTechStack["companyNames"];
+              ViewBag.techStacks = comanyNameAndTechStack["techStacks"];
             }else{
               // get couese wise questions
               apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}?courseId={courseId}&onlyActiveQuestions=true&pageNumber={pageNumber}&pageSize={pageSize}");

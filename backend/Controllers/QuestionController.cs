@@ -90,9 +90,9 @@ namespace backend.Controllers
 
         #region Get Interview questions
         [HttpGet("InterviewQuestions")]
-        public async Task<IActionResult> GetInterviewQuestions(Guid? addedById , [FromQuery] int? pageNumber , [FromQuery] int? pageSize=5, [FromQuery] bool onlyActiveQuestions= false,[FromQuery]  bool withAddedByDetails = false)
+        public async Task<IActionResult> GetInterviewQuestions(Guid? addedById , [FromQuery] int? pageNumber ,[FromQuery] string? companyName , [FromQuery] string? techStack,[FromQuery] int? pageSize=5, [FromQuery] bool onlyActiveQuestions= false,[FromQuery]  bool withAddedByDetails = false) 
         {
-            var response = await _questionInterface.GetInterviewQuestions(addedById,pageNumber:pageNumber,pageSize:pageSize , onlyActiveQuestions: onlyActiveQuestions,withAddedByDetails:withAddedByDetails);
+            var response = await _questionInterface.GetInterviewQuestions(addedById,pageNumber:pageNumber,pageSize:pageSize , onlyActiveQuestions: onlyActiveQuestions,withAddedByDetails:withAddedByDetails,companyName:companyName??"".Trim(),techStack:techStack??"".Trim());
             return StatusCode(response.StatusCode, response);
         }
         #endregion
@@ -107,5 +107,16 @@ namespace backend.Controllers
            return StatusCode(response.StatusCode, response);
        }
        #endregion
+    
+    
+       #region  get all uniqe company names and TechStack
+        [HttpGet]
+        [Route("GetAllUniqueCompanyNamesAndTechStack")]
+        public async Task<IActionResult> GetAllUniqueCompanyNamesAndTechStack()
+        {
+            var response = await _questionInterface.GetAllUniqueCompanyNamesAndTechStack();
+            return StatusCode(response.StatusCode, response);
+        }
+        #endregion
     }
 }

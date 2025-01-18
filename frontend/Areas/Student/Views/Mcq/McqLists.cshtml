@@ -55,6 +55,10 @@
 
          <div data-aos="fade-up" class="mcq shadow p-3 mb-3 ms-2  me-2 bg-white rounded" id="mcq@(mcq.McqId)" >
                 <h4>@(Html.Raw(Markdown.ToHtml("Q" + (index)+ ". "+ mcq.QuestionText , pipeline)))</h4>
+                <div class="tags mb-2" style="">
+                       @if(mcq.CompanyName != null){ <span class="tag company">@mcq.CompanyName</span>}
+                       @if(mcq.TechStack != null){ <span class="tag tech-stack">@mcq.TechStack</span>}
+                    </div>
                 <div id="mcq-option-section@(mcq.McqId)" class="mcq-option-section">
                     <div class="mcq-option " style="padding-bottom: 1px;" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="a" )" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'>@(optionA)</div>
                     <div class="mcq-option" style="padding-bottom: 1px;" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="b")" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'> @(optionB)</div>

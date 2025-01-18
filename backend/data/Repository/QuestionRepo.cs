@@ -152,7 +152,7 @@ namespace backend.data.Repository
             }
         }
 
-        public async Task<ResponseModel> GetInterviewQuestions(Guid? addeddById, int? pageNumber, int? pageSize, bool onlyActiveQuestions, bool withAddedByDetails)
+        public async Task<ResponseModel> GetInterviewQuestions(Guid? addeddById, int? pageNumber, int? pageSize,string? companyName , string? techStack, bool onlyActiveQuestions, bool withAddedByDetails)
         {
 
             try{
@@ -160,9 +160,9 @@ namespace backend.data.Repository
                 int totalQuestions = 0;
                 if(pageNumber == null){
                     if(withAddedByDetails){
-                        questions = await _context.Questions.Include(q => q.AddedByAdminUser).Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById)).ToListAsync();
+                        questions = await _context.Questions.Include(q => q.AddedByAdminUser).Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById) &&  (string.IsNullOrEmpty(companyName) || q.CompanyName == companyName) &&  (string.IsNullOrEmpty(techStack) || q.TechStack == techStack)).ToListAsync();
                     }else{
-                        questions = await _context.Questions.Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById)).ToListAsync();
+                        questions = await _context.Questions.Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById) &&  (string.IsNullOrEmpty(companyName) || q.CompanyName == companyName) &&  (string.IsNullOrEmpty(techStack) || q.TechStack == techStack)).ToListAsync();
                     }
                     return new ResponseModel { StatusCode = 200, Data = questions, Message = "Questions retrieved successfully" };
                 }else{
@@ -182,9 +182,9 @@ namespace backend.data.Repository
                             }
                     }
                      if(withAddedByDetails){
-                    questions = await _context.Questions.Include(q => q.AddedByAdminUser).Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById)).Skip((pageNumber-1)*pageSize??1).Take(pageSize??10).ToListAsync();
+                    questions = await _context.Questions.Include(q => q.AddedByAdminUser).Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById) &&  (string.IsNullOrEmpty(companyName) || q.CompanyName == companyName) &&  (string.IsNullOrEmpty(techStack) || q.TechStack == techStack)).Skip((pageNumber-1)*pageSize??1).Take(pageSize??10).ToListAsync();
                     }else{
-                        questions = await _context.Questions.Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById)).Skip((pageNumber-1)*pageSize??1).Take(pageSize??10).ToListAsync();
+                        questions = await _context.Questions.Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById) &&  (string.IsNullOrEmpty(companyName) || q.CompanyName == companyName) &&  (string.IsNullOrEmpty(techStack) || q.TechStack == techStack)).Skip((pageNumber-1)*pageSize??1).Take(pageSize??10).ToListAsync();
                     }
                 }
                 return new ResponseModel { StatusCode = 200, Data = new {totalQuestions,questions}, Message = "Questions retrieved successfully" };
@@ -199,6 +199,18 @@ namespace backend.data.Repository
             try{
                 await _context.Database.ExecuteSqlRawAsync("UPDATE Questions SET ApproveStatus = {0} Where QuestionId = {1}", status ,id);
                 return new ResponseModel { StatusCode = 200, Message = "Question status updated successfully" };
+            }catch(Exception ex)
+            {
+                return new ResponseModel { StatusCode = 500, Message = ex.Message };
+            }
+        }
+
+        public async Task<ResponseModel> GetAllUniqueCompanyNamesAndTechStack()
+        {
+            try{
+                List<string>? companyNames = await _context.Questions.Select(q =>q.CompanyName).Distinct().ToListAsync();
+                List<string>? techStacks = await _context.Questions.Select(q => q.TechStack).Distinct().ToListAsync();
+                return new ResponseModel { StatusCode = 200, Data = new{companyNames,techStacks}, Message = "Company names and TechStack retrieved successfully" };
             }catch(Exception ex)
             {
                 return new ResponseModel { StatusCode = 500, Message = ex.Message };

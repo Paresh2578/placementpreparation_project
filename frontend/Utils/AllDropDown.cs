@@ -55,6 +55,8 @@ namespace Placement_Preparation.Utils
                           branchList.Add(new SelectListItem { Value = item.BranchId.ToString(), Text = item.BranchName });
                      }
                 }
+
+                Console.WriteLine(branchList);
             return branchList;
         }
 
@@ -187,6 +189,43 @@ namespace Placement_Preparation.Utils
         }
 
         return topicLevel;
+       }
+
+       public async Task<Dictionary<string,List<SelectListItem>>> GetQuestionCompanyAndTechStack(){
+        ApiResponseModel response = await _apiClient.GetAsync("Question/GetAllUniqueCompanyNamesAndTechStack");
+        Dictionary<string,List<SelectListItem>> companyAndTechStack = new Dictionary<string,List<SelectListItem>>{};
+
+        if(response.StatusCode != 200){
+            return companyAndTechStack;
+        }
+
+        Dictionary<string,List<string>> companyAndTechStackDict = JsonConvert.DeserializeObject<Dictionary<string,List<string>>>(response.Data!.ToString());
+
+        List<SelectListItem> companyList = new List<SelectListItem>{
+        new SelectListItem(){Text="All Company",Value=""}
+        };
+        List<SelectListItem> techStackList = new List<SelectListItem>{
+        new SelectListItem(){Text="All Tech Stack",Value=""}
+        };
+
+        foreach(string? company in companyAndTechStackDict["companyNames"]){
+            if(string.IsNullOrEmpty(company)){
+                continue;
+            }
+            companyList.Add(new SelectListItem(){Text=company,Value=company});
+        }
+
+        foreach(string? techStack in companyAndTechStackDict["techStacks"]){
+            if(string.IsNullOrEmpty(techStack)){
+                continue;
+            }
+            techStackList.Add(new SelectListItem(){Text=techStack,Value=techStack});
+        }
+
+        companyAndTechStack.Add("companyNames",companyList);
+        companyAndTechStack.Add("techStacks",techStackList);
+
+        return  companyAndTechStack;
        }
     }
 }

@@ -3113,25 +3113,48 @@ Sign Form
 }
 
 
-
-/* ----------------------
-   Loading
------------------*/
-/* .loading-spinner{
-  width:30px;
-  height:30px;
-  border:2px solid indigo;
-  border-radius:50%;
-  border-top-color:#0001;
-  display:inline-block;
-  animation:loadingspinner .7s linear infinite;
+/* ------------------
+  Question Card
+------------------*/
+.courses-section .question-card-container{
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  margin-inline-start: 0.5rem;
+  margin-inline-end: 0.5rem;
+  border-radius: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
-@keyframes loadingspinner{
-  0%{
-    transform:rotate(0deg)
-  }
-  100%{
-    transform:rotate(360deg)
-  }
-}    */
 
+.courses-section .question-card-container:hover{
+  background-color: #f3f9ff;
+  cursor: pointer;
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+/* Tags Container */
+.tags {
+  display: flex;
+  gap: 10px;
+}
+
+/* Individual Tags */
+.tags .tag {
+  display: inline-block;
+  padding: 1px 7px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.tags .tag.company {
+  background-color: #d1e9ff;
+  color: #0b73e3;
+}
+
+.tag.tech-stack {
+  background-color: #dfffd8;
+  color: #267a0f;
+}
