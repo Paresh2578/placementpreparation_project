@@ -95,9 +95,9 @@ namespace backend.Controllers
 
         #region Get Interview Mcq
         [HttpGet("GetInterviewMcqs")]
-        public async Task<IActionResult> GetInterviewMcqs([FromQuery] int? pageNumber , [FromQuery] int? pageSize=10, [FromQuery] bool onlyActiveMcqs= false)
+        public async Task<IActionResult> GetInterviewMcqs([FromQuery] int? pageNumber , [FromQuery] int? pageSize=10, [FromQuery] bool onlyActiveMcqs= false,[FromQuery]  bool? withAddedByDetails = false)
         {
-            var response = await _mcqInterface.GetInterviewMcqs(pageNumber:pageNumber,pageSize:pageSize , onlyActiveMcqs: onlyActiveMcqs);
+            var response = await _mcqInterface.GetInterviewMcqs(pageNumber:pageNumber,pageSize:pageSize , onlyActiveMcqs: onlyActiveMcqs,withAddedByDetails:withAddedByDetails);
             return StatusCode(response.StatusCode, response);
         }
         #endregion

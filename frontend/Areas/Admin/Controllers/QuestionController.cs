@@ -47,7 +47,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         {
 
             string? userId = CV.GetIsAdmin() == null || CV.GetIsAdmin() == true ? null : CV.GetId();
-            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/InterviewQuestions?addedById={userId}");
+            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/InterviewQuestions?addedById={userId}&withAddedByDetails=true");
                 if(response.StatusCode != 200)
                 {
                    TempData["ErrorMessage"] = response.Message;

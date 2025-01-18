@@ -71,6 +71,7 @@ namespace backend.data.Repository
                 if (pageNumber == null)
                 {
                     // get all questions
+
                     questions = await _context.Questions.Where(q =>(q.AddedBy == null) && (q.CourseId == courseId || courseId == null) && (q.TopicId == topicId || topicId == null) && (q.SubTopicId == subTopicId || subTopicId == null) && (!onlyActiveQuestions || q.IsActive)).ToListAsync();
                     return new ResponseModel { StatusCode = 200, Data = questions, Message = "Questions retrieved successfully" };
 
@@ -151,14 +152,18 @@ namespace backend.data.Repository
             }
         }
 
-        public async Task<ResponseModel> GetInterviewQuestions(Guid? addeddById, int? pageNumber, int? pageSize, bool onlyActiveQuestions)
+        public async Task<ResponseModel> GetInterviewQuestions(Guid? addeddById, int? pageNumber, int? pageSize, bool onlyActiveQuestions, bool withAddedByDetails)
         {
 
             try{
                 List<QuestionModel> questions = new List<QuestionModel>();
                 int totalQuestions = 0;
                 if(pageNumber == null){
-                    questions = await _context.Questions.Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById)).ToListAsync();
+                    if(withAddedByDetails){
+                        questions = await _context.Questions.Include(q => q.AddedByAdminUser).Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById)).ToListAsync();
+                    }else{
+                        questions = await _context.Questions.Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById)).ToListAsync();
+                    }
                     return new ResponseModel { StatusCode = 200, Data = questions, Message = "Questions retrieved successfully" };
                 }else{
                     // count total questions
@@ -176,7 +181,11 @@ namespace backend.data.Repository
                                 }
                             }
                     }
-                    questions = await _context.Questions.Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById)).Skip((pageNumber-1)*pageSize??1).Take(pageSize??10).ToListAsync();
+                     if(withAddedByDetails){
+                    questions = await _context.Questions.Include(q => q.AddedByAdminUser).Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById)).Skip((pageNumber-1)*pageSize??1).Take(pageSize??10).ToListAsync();
+                    }else{
+                        questions = await _context.Questions.Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById)).Skip((pageNumber-1)*pageSize??1).Take(pageSize??10).ToListAsync();
+                    }
                 }
                 return new ResponseModel { StatusCode = 200, Data = new {totalQuestions,questions}, Message = "Questions retrieved successfully" };
             }catch(Exception ex)

@@ -134,7 +134,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         public async Task<IActionResult> InterviewMcqList()
         {
 
-            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/GetInterviewMcqs");
+            ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/GetInterviewMcqs?withAddedByDetails=true");
             List<McqModel>  mcqList = new List<McqModel>();
                 if(response.StatusCode != 200)
                 {

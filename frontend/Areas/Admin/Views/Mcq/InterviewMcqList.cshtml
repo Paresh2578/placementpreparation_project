@@ -1,3 +1,4 @@
+@using Newtonsoft.Json
 @model List<McqModel>
 
 @{
@@ -11,6 +12,9 @@
          <partial name="_Loading_Dialong"/>
     </div>
 </div>
+
+<!-- Detalis Dailog-->
+<partial name="_McqDetailsModal" />
 
     <!-- Header Section -->
     <div class="table-hader">
@@ -68,7 +72,7 @@
                                          <span class="status @mcq.ApproveStatus.ToLower()">@mcq.ApproveStatus</span>
                                         </td>
                                         <td class="py-3 px-6 text-left">
-                                            <a href="#" class="text-blue-500">View Details</a>
+                                            <a href="javascript:void(0);" class="text-blue-500 view-details" data-mcq='@Html.Raw(JsonConvert.SerializeObject(mcq))'>View Details</a>
                                         </td>
                 
                                         <td class="py-3 px-6 text-left flex gap-x-4">
@@ -203,5 +207,77 @@
         }
     });
     });
+</script>
+
+<!-- Detalis Dailog -->
+<script>
+       document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("mcqDetailsModal");
+    const closeModalButton = document.getElementById("closeMcqDetailsModal");
+
+    document.querySelectorAll(".view-details").forEach(button => {
+        button.addEventListener("click", function () {
+            @* modal.classList.remove("hidden");    *@
+            modal.style.display = "flex";
+            
+            // Parse the MCQ data
+        const mcq = JSON.parse(this.getAttribute("data-mcq"));
+
+            // Dynamically populate the modal content
+        mcqDetailsContent.innerHTML = `
+    <div class="mcq-detail">
+        <h2 class="mcq-title">${mcq.QuestionText}</h2>
+        <div class="mcq-options">
+            <p><strong>Options:</strong></p>
+            <ul>
+                <li><strong>A:</strong> ${mcq.OptionA}</li>
+                <li><strong>B:</strong> ${mcq.OptionB}</li>
+                <li><strong>C:</strong> ${mcq.OptionC}</li>
+                <li><strong>D:</strong> ${mcq.OptionD}</li>
+            </ul>
+        </div>
+        <p><strong>Correct Answer:</strong> <span class="correct-answer">${mcq.CorrectAnswer}</span></p>
+        <p><strong>Answer Description:</strong> ${mcq.AnswerDescription}</p>
+        <p><strong>Technology Stack:</strong> ${mcq.TechStack || "N/A"}</p>
+        <p><strong>Company:</strong> ${mcq.CompanyName || "N/A"}</p>
+        <p><strong>Status:</strong> ${mcq.ApproveStatus}</p>
+        <p><strong>Active:</strong> ${mcq.IsActive ? "Yes" : "No"}</p>
+
+         <!-- Added by User Section -->
+        <div class="added-by-info">
+            <p><strong>Added By:</strong></p>
+            <p><strong>Name:</strong> ${mcq.AddedByAdminUser.UserName || "N/A"}</p>
+            <p><strong>Email:</strong> ${mcq.AddedByAdminUser.Email || "N/A"}</p>
+            <p><strong>College:</strong> ${mcq.AddedByAdminUser.CollegeName || "N/A"}</p>
+        </div>
+    </div>
+`;
+
+                    @* document.getElementById("mcqDetailsContent").innerHTML = mcq; *@
+            @* fetch(`/Admin/Mcq/GetMcqDetails/${mcqId}`)
+                .then(response => response.text())
+                .then(data => {
+                })
+                .catch(() => {
+                    document.getElementById("mcqDetailsContent").innerHTML = "Error loading details.";
+                }); *@
+        });
+    });
+
+    // Close modal
+    closeModalButton.addEventListener("click", function () {
+        @* modal.classList.add("hidden"); *@
+        modal.style.display = "none";
+    });
+
+    // Close modal when clicking outside content
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            @* modal.classList.add("hidden"); *@
+            modal.style.display = "none";
+        }
+    });
+});
+
 </script>
 }

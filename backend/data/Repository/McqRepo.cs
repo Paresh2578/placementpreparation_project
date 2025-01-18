@@ -195,7 +195,7 @@ namespace backend.data.Repository
         }
 
         
-        public async Task<ResponseModel> GetInterviewMcqs(int? pageNumber, int? pageSize, bool onlyActiveMcqs)
+        public async Task<ResponseModel> GetInterviewMcqs(int? pageNumber, int? pageSize, bool onlyActiveMcqs,bool? withAddedByDetails)
         {
             try{
                 // get login user data from token
@@ -212,13 +212,25 @@ namespace backend.data.Repository
                 int totalMcqs = 0;
                 if(pageNumber == null){
                     // get all mcqs
-                    mcqs = await _context.Mcqs.Where(q => (!onlyActiveMcqs || q.IsActive) && ( q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById))).ToListAsync();
+                    if(withAddedByDetails == true){
+                        mcqs = await _context.Mcqs.Include(q => q.AddedByAdminUser).Where(q => (!onlyActiveMcqs || q.IsActive) &&  q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById)).ToListAsync();
+                        // password should not be sent
+                        mcqs.ForEach(q => q.AddedByAdminUser!.Password = null);
+                    }else{
+                        mcqs = await _context.Mcqs.Where(q => (!onlyActiveMcqs || q.IsActive) && ( q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById))).ToListAsync();
+                    }
                     return new ResponseModel { StatusCode = 200, Data = mcqs, Message = "Mcqs retrieved successfully" };
                 }else{
                     // apply pagination
-                    mcqs = await _context.Mcqs.Where(q => (!onlyActiveMcqs || q.IsActive) && ( q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById))).Skip((pageNumber - 1) * pageSize??1).Take(pageSize??1).ToListAsync();
+                    if(withAddedByDetails == true){
+                        mcqs = await _context.Mcqs.Include(q => q.AddedByAdminUser).Where(q => (!onlyActiveMcqs || q.IsActive) &&  q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById)).Skip((pageNumber - 1) * pageSize??1).Take(pageSize??1).ToListAsync();
+                        // password should not be sent
+                        mcqs.ForEach(q => q.AddedByAdminUser!.Password = null);
+                    }else{
+                    mcqs = await _context.Mcqs.Where(q => (!onlyActiveMcqs || q.IsActive) &&  q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById)).Skip((pageNumber - 1) * pageSize??1).Take(pageSize??1).ToListAsync();
+                    }
                     // total count
-                    totalMcqs = await _context.Mcqs.Where(q => (!onlyActiveMcqs || q.IsActive) && ( q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById))).CountAsync();
+                    totalMcqs = await _context.Mcqs.Where(q => (!onlyActiveMcqs || q.IsActive) &&  q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById)).CountAsync();
                 }
                 return new ResponseModel { StatusCode = 200, Data = new {totalMcqs, mcqs}, Message = "Mcqs retrieved successfully" };
             }catch(Exception ex)

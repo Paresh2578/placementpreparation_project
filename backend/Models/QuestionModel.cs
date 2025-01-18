@@ -29,6 +29,9 @@ namespace backend.Models
         // AddedBy
         public Guid? AddedBy { get; set; }
 
+         [ForeignKey("AddedBy")]
+        public AdminUserModel? AddedByAdminUser { get; set; }
+
         // CompanyName
         public  string? CompanyName { get; set; }
 

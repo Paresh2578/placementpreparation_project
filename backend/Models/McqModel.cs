@@ -50,6 +50,9 @@ namespace backend.Models
 
         public Guid? AddedBy { get; set; }
 
+        [ForeignKey("AddedBy")]
+        public AdminUserModel? AddedByAdminUser { get; set; }
+
         public string? TechStack { get; set; }  
 
         public string? CompanyName { get; set; }

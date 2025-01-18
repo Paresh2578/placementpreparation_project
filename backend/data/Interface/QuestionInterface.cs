@@ -10,7 +10,7 @@ namespace backend.data.Interface
       public Task<ResponseModel> UpdateQuestion(QuestionModel question);
       public Task<ResponseModel> DeleteQuestion(QuestionModel question);  
         public Task<ResponseModel> DeleteMultipleQuestion(List<Guid> questionIds); 
-        public Task<ResponseModel> GetInterviewQuestions(Guid? addeddById,int? pageNumber ,int? pageSize , bool onlyActiveQuestions); 
+        public Task<ResponseModel> GetInterviewQuestions(Guid? addeddById,int? pageNumber ,int? pageSize , bool onlyActiveQuestions,bool withAddedByDetails); 
         public Task<ResponseModel> UpdateNewInterviewQuestionRequestStatus(Guid id , String status); 
         
     }

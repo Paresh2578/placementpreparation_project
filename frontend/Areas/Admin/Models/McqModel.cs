@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Frontend.Areas.Authentication.Models;
 
 namespace Placement_Preparation.Areas.Admin.Models
 {
@@ -57,6 +58,9 @@ namespace Placement_Preparation.Areas.Admin.Models
 
         
         public Guid? AddedBy { get; set; }
+
+        [ForeignKey("AddedBy")]
+        public SignUpModel? AddedByAdminUser { get; set; }
 
         public string? TechStack { get; set; }  
 

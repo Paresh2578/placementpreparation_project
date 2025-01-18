@@ -1,3 +1,4 @@
+@using Newtonsoft.Json
 @model List<QuestionModel>
 
 @{
@@ -6,6 +7,8 @@
 
 <!-- Intweview Question  -->
     <div class="bg-white p-4 rounded-md shadow-lg mt-5  ">
+        <!-- Detalis Dailog-->
+<partial name="_QuestionDetailsModal" />
        <!-- Header Section -->
         <div class="table-hader">
             <h1 class="table-responsive-title">List of Interview Question</h1>
@@ -81,7 +84,7 @@
                                 <td class="py-3 px-6 text-left">@idx</td>
                                 <td class="py-3 px-6 text-left">@question.Question</td>
                                 <td class="py-3 px-6 text-left">
-                                    <a href="#" class="text-blue-500">View Details</a>
+                                    <a href="javascript:void(0);" class="text-blue-500 view-details" data-question='@Html.Raw(JsonConvert.SerializeObject(question))'>View Details</a>
                                 </td>
                                  <td class="py-3 px-6 text-left"><span
                                         class="@(question.IsActive ? "yes-btn" : "no-btn")">@(question.IsActive ? "Yes" :
@@ -221,5 +224,60 @@
         }
     });
     });
+</script>
+
+
+<!-- Detalis Dailog -->
+<script>
+       document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("detailsModal");
+    const closeModalButton = document.getElementById("closeModalButton");
+
+    document.querySelectorAll(".view-details").forEach(button => {
+        button.addEventListener("click", function () {
+            @* modal.classList.remove("hidden");    *@
+            modal.style.display = "flex";
+            
+            // Parse the Question data
+        const question = JSON.parse(this.getAttribute("data-question"));
+        console.log(question);
+
+
+
+            // Load details dynamically
+     // Dynamically load the question details into the modal
+        detailsContent.innerHTML = `
+            <p><strong>Question:</strong> ${question.Question}</p>
+            <p><strong>Answer:</strong> ${question.QuestionAnswer}</p>
+            <p><strong>Tech Stack:</strong> ${question.TechStack || 'N/A'}</p>
+            <p><strong>Company Name:</strong> ${question.CompanyName || 'N/A'}</p>
+            <p><strong>Status:</strong> ${question.approveStatus || 'Pending'}</p>
+
+             <!-- Added by User Section -->
+        <div class="added-by-info">
+            <p><strong>Added By:</strong></p>
+            <p><strong>Name:</strong> ${question.AddedByAdminUser.UserName || "N/A"}</p>
+            <p><strong>Email:</strong> ${question.AddedByAdminUser.Email || "N/A"}</p>
+            <p><strong>College:</strong> ${question.AddedByAdminUser.CollegeName || "N/A"}</p>
+        </div>
+        `;
+    });
+    });
+
+    // Close modal
+    closeModalButton.addEventListener("click", function () {
+        @* modal.classList.add("hidden"); *@
+        modal.style.display = "none";
+    });
+
+    // Close modal when clicking outside content
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            @* modal.classList.add("hidden"); *@
+            modal.style.display = "none";
+        }
+    });
+});
+
 </script>
 }
