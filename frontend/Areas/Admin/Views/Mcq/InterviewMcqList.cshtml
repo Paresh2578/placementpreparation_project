@@ -252,28 +252,17 @@
         </div>
     </div>
 `;
-
-                    @* document.getElementById("mcqDetailsContent").innerHTML = mcq; *@
-            @* fetch(`/Admin/Mcq/GetMcqDetails/${mcqId}`)
-                .then(response => response.text())
-                .then(data => {
-                })
-                .catch(() => {
-                    document.getElementById("mcqDetailsContent").innerHTML = "Error loading details.";
-                }); *@
         });
     });
 
     // Close modal
     closeModalButton.addEventListener("click", function () {
-        @* modal.classList.add("hidden"); *@
         modal.style.display = "none";
     });
 
     // Close modal when clicking outside content
     modal.addEventListener("click", function (event) {
         if (event.target === modal) {
-            @* modal.classList.add("hidden"); *@
             modal.style.display = "none";
         }
     });

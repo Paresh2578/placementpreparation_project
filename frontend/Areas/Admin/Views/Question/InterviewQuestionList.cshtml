@@ -8,7 +8,7 @@
 <!-- Intweview Question  -->
     <div class="bg-white p-4 rounded-md shadow-lg mt-5  ">
         <!-- Detalis Dailog-->
-<partial name="_QuestionDetailsModal" />
+<partial name="_QuestionDetailsModal"/>
        <!-- Header Section -->
         <div class="table-hader">
             <h1 class="table-responsive-title">List of Interview Question</h1>
@@ -240,9 +240,8 @@
             
             // Parse the Question data
         const question = JSON.parse(this.getAttribute("data-question"));
-        console.log(question);
 
-
+        demo = question;
 
             // Load details dynamically
      // Dynamically load the question details into the modal

@@ -1,4 +1,5 @@
-﻿@using Placement_Preparation.BAL
+﻿@using Newtonsoft.Json
+@using Placement_Preparation.BAL
 @model DashboardModel;
 
 @{
@@ -8,6 +9,11 @@
 
 <div class="dashboard">
     <partial name="_Errors"/>
+          <!-- Detalis Dailogs-->
+        <partial name="_QuestionDetailsModal"/>
+        <partial name="_McqDetailsModal" />
+        <partial name="_StudentDetailsModal" />
+        
     <!-- Widgets count -->
     <div class="widgets">
         @if(isAdmin){
@@ -102,7 +108,7 @@
                                     <td class="py-3 px-6 text-left">@student["userName"]</td>
                                     <td class="py-3 px-6 text-left">@student["email"]</td>
                                     <td class="py-3 px-6 text-left">
-                                        <a href="#" class="text-blue-500">View Details</a>
+                                        <a href="javascript:void(0);" class="text-blue-500 student-view-details" data-question='@Html.Raw(JsonConvert.SerializeObject(student))'>View Details</a>
                                     </td>
                                     <td class="action-button">
                                         <a asp-action="UpdateStudentApprovelStatus" asp-route-id='@student["adminUserId"]' asp-route-status="Reject" class="reject button"><i class="fa-solid fa-times-circle"></i> Reject</a>
@@ -157,7 +163,7 @@
                                 <td class="py-3 px-6 text-left">@mcqIdx</td>
                                 <td class="py-3 px-6 text-left">@mcq.QuestionText</td>
                                 <td class="py-3 px-6 text-left">
-                                    <a href="#" class="text-blue-500">View Details</a>
+                                    <a href="javascript:void(0);" class="text-blue-500 mcq-view-details" data-mcq='@Html.Raw(JsonConvert.SerializeObject(mcq))'>View Details</a>
                                 </td>
                                 @if(isAdmin){
                                     <td class="action-button">
@@ -217,7 +223,7 @@
                                 <td class="py-3 px-6 text-left">@questionIdx</td>
                                 <td class="py-3 px-6 text-left">@question.Question</td>
                                 <td class="py-3 px-6 text-left">
-                                    <a href="#" class="text-blue-500">View Details</a>
+                                    <a href="javascript:void(0);" class="text-blue-500 question-view-details" data-question='@Html.Raw(JsonConvert.SerializeObject(question))'>View Details</a>
                                 </td>
                                 @if(isAdmin){
                                     <td class="action-button">
@@ -251,3 +257,158 @@
 </div>
 
 
+
+@section Scripts {
+    <!-- Detalis Dailogs -->
+
+    <!-- Question -->
+<script>
+       document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("detailsModal");
+    const closeModalButton = document.getElementById("closeModalButton");
+
+    document.querySelectorAll(".question-view-details").forEach(button => {
+        button.addEventListener("click", function () {
+            @* modal.classList.remove("hidden");    *@
+            modal.style.display = "flex";
+            
+            // Parse the Question data
+        const question = JSON.parse(this.getAttribute("data-question"));
+     // Dynamically load the question details into the modal
+        detailsContent.innerHTML = `
+            <p><strong>Question:</strong> ${question.Question}</p>
+            <p><strong>Answer:</strong> ${question.QuestionAnswer}</p>
+            <p><strong>Tech Stack:</strong> ${question.TechStack || 'N/A'}</p>
+            <p><strong>Company Name:</strong> ${question.CompanyName || 'N/A'}</p>
+            <p><strong>Status:</strong> ${question.approveStatus || 'Pending'}</p>
+
+             <!-- Added by User Section -->
+        <div class="added-by-info">
+            <p><strong>Added By:</strong></p>
+            <p><strong>Name:</strong> ${question.AddedByAdminUser.UserName || "N/A"}</p>
+            <p><strong>Email:</strong> ${question.AddedByAdminUser.Email || "N/A"}</p>
+            <p><strong>College:</strong> ${question.AddedByAdminUser.CollegeName || "N/A"}</p>
+        </div>
+        `;
+    });
+    });
+
+    // Close modal
+    closeModalButton.addEventListener("click", function () {
+        @* modal.classList.add("hidden"); *@
+
+        modal.style.display = "none";
+    });
+
+    // Close modal when clicking outside content
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            @* modal.classList.add("hidden"); *@
+            modal.style.display = "none";
+        }
+    });
+});
+
+</script>
+
+<!-- Student -->
+<script>
+       document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("student-detailsModal");
+    const closeModalButton = document.getElementById("student-closeModalButton");
+
+    document.querySelectorAll(".student-view-details").forEach(button => {
+        button.addEventListener("click", function () {
+            @* modal.classList.remove("hidden");    *@
+            modal.style.display = "flex";
+            
+            // Parse the Student data
+        const student = JSON.parse(this.getAttribute("data-question"));
+     // Dynamically load the student details into the modal
+        studentDetailsContent.innerHTML = `
+            <p><strong>Name:</strong> ${student.userName}</p>
+            <p><strong>Email:</strong> ${student.email}</p>
+            <p><strong>College:</strong> ${student.collegeName || 'N/A'}</p>
+            <p><strong>ApproveStatus:</strong> ${student.approveStatus || 'N/A'}</p>
+        `;
+    });
+    });
+
+    // Close modal
+    closeModalButton.addEventListener("click", function () {
+        @* modal.classList.add("hidden"); *@
+        modal.style.display = "none";
+    });
+
+    // Close modal when clicking outside content
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            @* modal.classList.add("hidden"); *@
+            modal.style.display = "none";
+        }
+    });
+});
+
+</script>
+
+<!-- Mcq -->
+<script>
+       document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("mcqDetailsModal");
+    const closeModalButton = document.getElementById("closeMcqDetailsModal");
+
+    document.querySelectorAll(".mcq-view-details").forEach(button => {
+        button.addEventListener("click", function () {
+            @* modal.classList.remove("hidden");    *@
+            modal.style.display = "flex";
+            
+            // Parse the MCQ data
+        const mcq = JSON.parse(this.getAttribute("data-mcq"));
+
+            // Dynamically populate the modal content
+        mcqDetailsContent.innerHTML = `
+    <div class="mcq-detail">
+        <h2 class="mcq-title">${mcq.QuestionText}</h2>
+        <div class="mcq-options">
+            <p><strong>Options:</strong></p>
+            <ul>
+                <li><strong>A:</strong> ${mcq.OptionA}</li>
+                <li><strong>B:</strong> ${mcq.OptionB}</li>
+                <li><strong>C:</strong> ${mcq.OptionC}</li>
+                <li><strong>D:</strong> ${mcq.OptionD}</li>
+            </ul>
+        </div>
+        <p><strong>Correct Answer:</strong> <span class="correct-answer">${mcq.CorrectAnswer}</span></p>
+        <p><strong>Answer Description:</strong> ${mcq.AnswerDescription}</p>
+        <p><strong>Technology Stack:</strong> ${mcq.TechStack || "N/A"}</p>
+        <p><strong>Company:</strong> ${mcq.CompanyName || "N/A"}</p>
+        <p><strong>Status:</strong> ${mcq.ApproveStatus}</p>
+        <p><strong>Active:</strong> ${mcq.IsActive ? "Yes" : "No"}</p>
+
+         <!-- Added by User Section -->
+        <div class="added-by-info">
+            <p><strong>Added By:</strong></p>
+            <p><strong>Name:</strong> ${mcq.AddedByAdminUser.UserName || "N/A"}</p>
+            <p><strong>Email:</strong> ${mcq.AddedByAdminUser.Email || "N/A"}</p>
+            <p><strong>College:</strong> ${mcq.AddedByAdminUser.CollegeName || "N/A"}</p>
+        </div>
+    </div>
+`;
+        });
+    });
+
+    // Close modal
+    closeModalButton.addEventListener("click", function () {
+        modal.style.display = "none";
+    });
+
+    // Close modal when clicking outside content
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+});
+
+</script>
+}

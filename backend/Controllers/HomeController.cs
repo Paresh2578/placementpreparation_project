@@ -74,8 +74,13 @@ namespace backend.Controllers
                 //add  padding New Student Request , Padding New Mcq Request , Padding New Question Request
                 if(userData["IsAdmin"]){
                     List<AdminUserModel> paddingStudentRequest = await _context.AdminUsers.Where(user => user.ApproveStatus == "Pending").ToListAsync();
-                    List<QuestionModel> paddingQuestionRequest = await _context.Questions.Where(question => question.AddedBy != null && question.ApproveStatus == "Pending").ToListAsync();
-                    List<McqModel> paddingMcqRequest = await _context.Mcqs.Where(mcq => mcq.AddedBy != null && mcq.ApproveStatus == "Pending").ToListAsync();
+                    List<QuestionModel> paddingQuestionRequest = await _context.Questions.Where(question => question.AddedBy != null && question.ApproveStatus == "Pending").Include(q=> q.AddedByAdminUser).ToListAsync();
+                    List<McqModel> paddingMcqRequest = await _context.Mcqs.Where(mcq => mcq.AddedBy != null && mcq.ApproveStatus == "Pending").Include(m => m.AddedByAdminUser).ToListAsync();
+
+                    // set null password for security reason
+                    paddingStudentRequest.ForEach(user => user.Password = null);
+                    paddingQuestionRequest.ForEach(question => question.AddedByAdminUser.Password = null);
+                    paddingMcqRequest.ForEach(mcq => mcq.AddedByAdminUser.Password = null);
                     
                     data.Add("PaddingStudentRequest", paddingStudentRequest);
                     data.Add("PaddingQuestionRequest", paddingQuestionRequest);
