@@ -48,7 +48,7 @@ namespace Placement_Preparation.Areas.Student.Controllers
               ApiResponseModel apiResponse = new ApiResponseModel();
             if(courseId == null){
               // get interview  questions
-              apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}/InterviewQuestions?onlyActiveQuestions=true&pageNumber={pageNumber}&pageSize={pageSize}&techStack={techStack}&companyName={companyName}");
+              apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}/InterviewQuestions?onlyActiveQuestions=true&onlyAcceptApprovalStatus=true&pageNumber={pageNumber}&pageSize={pageSize}&techStack={techStack}&companyName={companyName}");
 
               // set compnay name and tech stack dropdown value
               Dictionary<string,List<SelectListItem>> comanyNameAndTechStack = await _allDropDown.GetQuestionCompanyAndTechStack();

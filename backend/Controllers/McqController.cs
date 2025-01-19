@@ -95,9 +95,9 @@ namespace backend.Controllers
 
         #region Get Interview Mcq
         [HttpGet("GetInterviewMcqs")]
-        public async Task<IActionResult> GetInterviewMcqs([FromQuery] int? pageNumber , [FromQuery] int? pageSize=10, [FromQuery] bool onlyActiveMcqs= false,[FromQuery]  bool? withAddedByDetails = false)
+        public async Task<IActionResult> GetInterviewMcqs([FromQuery] int? pageNumber ,[FromQuery] string? companyName , [FromQuery] string? techStack,[FromQuery] int? pageSize=10, [FromQuery] bool onlyActiveMcqs= false,[FromQuery]  bool withAddedByDetails = false,[FromQuery] bool onlyAcceptApprovalStatus=false)
         {
-            var response = await _mcqInterface.GetInterviewMcqs(pageNumber:pageNumber,pageSize:pageSize , onlyActiveMcqs: onlyActiveMcqs,withAddedByDetails:withAddedByDetails);
+            var response = await _mcqInterface.GetInterviewMcqs(pageNumber:pageNumber,pageSize:pageSize , onlyActiveMcqs: onlyActiveMcqs,withAddedByDetails:withAddedByDetails,companyName:companyName,techStack:techStack,onlyAcceptApprovalStatus:onlyAcceptApprovalStatus);
             return StatusCode(response.StatusCode, response);
         }
         #endregion
@@ -113,6 +113,16 @@ namespace backend.Controllers
            return StatusCode(response.StatusCode, response);
        }
        #endregion
+
+        #region  get all uniqe company names and TechStack
+        [HttpGet]
+        [Route("GetAllUniqueCompanyNamesAndTechStack")]
+        public async Task<IActionResult> GetAllUniqueCompanyNamesAndTechStack()
+        {
+            var response = await _mcqInterface.GetAllUniqueCompanyNamesAndTechStack();
+            return StatusCode(response.StatusCode, response);
+        }
+        #endregion
 
        /* #region Get Mcqs by topic or subTopic Id
         [HttpGet("GetMcqsByTopicOrSubTopicId/{topicId}/{subTopicId?}")]

@@ -8,6 +8,11 @@
     ViewData["Title"] = "McqLists";
     var query = HttpContextAccessor.HttpContext!.Request.Query;
 
+      string? companyName = query["companyName"];
+    string? techStack = query["techStack"];
+   string? courseId = query["courseId"];
+    
+
     
   var pipeline = new MarkdownPipelineBuilder()
             .UseAdvancedExtensions() // Enables advanced Markdown features
@@ -35,6 +40,8 @@
 </div><!-- End Page Title -->
 
 
+   
+
 <!-- Topic   Section -->
 <section id="courses-section " class=" container courses-section section">
     <!-- Section Title -->
@@ -42,50 +49,92 @@
         <h2>All Mcqs</h2>
       </div><!-- End Section Title -->  
 
+         <!-- Filtter  -->
+      @if(string.IsNullOrEmpty(query["courseId"])){
+        <div data-aos="fade-up" class="container mb-3">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="filter-container">
+                <!-- companyName dropDrown -->
+              <div class="filter shadow-sm ">
+                <select  name="company" id="company" class="form-select" 
+                    onchange="window.location.href='McqLists?courseName=Interview Questions&companyName=' + this.value + '&techStack=@(techStack ?? "")';">
+                        @foreach (var item in (List<SelectListItem>)ViewBag.companyNames)
+                        {
+                            <option value="@item.Value" selected="@(item.Value == companyName)">
+                                @item.Text
+                            </option>
+                        }
+                </select>
+              </div>
+              <!-- tech-stack dropDrown -->
+              <div class="filter shadow-sm ">
+                <select name="tech-stack" id="tech-stack" class="form-select"
+                    onchange="window.location.href='McqLists?courseName=Interview Questions&techStack=' + this.value + '&companyName=@(companyName ?? "")';">
+                        @foreach (var item in (List<SelectListItem>)ViewBag.techStacks)
+                        {
+                            <option value="@item.Value" selected="@(item.Value == techStack)">
+                                @item.Text
+                            </option>
+                 }
+            </select>
+             </div>
+            </div>
+        </div>
+    </div>
+            </div>
+      }
+            <!-- End Filtter  -->
+
+
     <!-- mcq list -->
     @{
         int index =  (Model.PageNumber - 1) * Model.PageSize + 1;
-    foreach(McqModel mcq in Model){
-      <!-- convert markdown to html -->
-           var optionA = Html.Raw(Markdown.ToHtml("A . "+mcq.OptionA , pipeline));
-           var optionB = Html.Raw(Markdown.ToHtml("B . "+mcq.OptionB , pipeline));
-           var optionC = Html.Raw(Markdown.ToHtml("C . "+mcq.OptionC , pipeline));
-           var optionD = Html.Raw(Markdown.ToHtml("D . "+mcq.OptionD , pipeline));
-           var answerDescription = Html.Raw(Markdown.ToHtml(mcq.AnswerDescription , pipeline));
+        foreach(McqModel mcq in Model){
+          <!-- convert markdown to html -->
+              var optionA = Html.Raw(Markdown.ToHtml("A . "+mcq.OptionA , pipeline));
+              var optionB = Html.Raw(Markdown.ToHtml("B . "+mcq.OptionB , pipeline));
+              var optionC = Html.Raw(Markdown.ToHtml("C . "+mcq.OptionC , pipeline));
+              var optionD = Html.Raw(Markdown.ToHtml("D . "+mcq.OptionD , pipeline));
+              var answerDescription = Html.Raw(Markdown.ToHtml(mcq.AnswerDescription , pipeline));
 
-         <div data-aos="fade-up" class="mcq shadow p-3 mb-3 ms-2  me-2 bg-white rounded" id="mcq@(mcq.McqId)" >
-                <h4>@(Html.Raw(Markdown.ToHtml("Q" + (index)+ ". "+ mcq.QuestionText , pipeline)))</h4>
-                <div class="tags mb-2" style="">
-                       @if(mcq.CompanyName != null){ <span class="tag company">@mcq.CompanyName</span>}
-                       @if(mcq.TechStack != null){ <span class="tag tech-stack">@mcq.TechStack</span>}
+            <div data-aos="fade-up" class="mcq shadow p-3 mb-3 ms-2  me-2 bg-white rounded" id="mcq@(mcq.McqId)" >
+                    <h4>@(Html.Raw(Markdown.ToHtml("Q" + (index)+ ". "+ mcq.QuestionText , pipeline)))</h4>
+                    <div class="tags mb-2" style="">
+                          @if(mcq.CompanyName != null){ <span class="tag company">@mcq.CompanyName</span>}
+                          @if(mcq.TechStack != null){ <span class="tag tech-stack">@mcq.TechStack</span>}
+                        </div>
+                    <div id="mcq-option-section@(mcq.McqId)" class="mcq-option-section">
+                        <div class="mcq-option " style="padding-bottom: 1px;" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="a" )" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'>@(optionA)</div>
+                        <div class="mcq-option" style="padding-bottom: 1px;" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="b")" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'> @(optionB)</div>
+                        <div class="mcq-option" style="padding-bottom: 1px;" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="c")" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'> @(optionC)</div>
+                        <div class="mcq-option" style="padding-bottom: 1px;" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="d")" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'>@(optionD)</div>
                     </div>
-                <div id="mcq-option-section@(mcq.McqId)" class="mcq-option-section">
-                    <div class="mcq-option " style="padding-bottom: 1px;" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="a" )" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'>@(optionA)</div>
-                    <div class="mcq-option" style="padding-bottom: 1px;" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="b")" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'> @(optionB)</div>
-                    <div class="mcq-option" style="padding-bottom: 1px;" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="c")" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'> @(optionC)</div>
-                    <div class="mcq-option" style="padding-bottom: 1px;" data-value="@(mcq.CorrectAnswer.ToLower().Trim() =="d")" onclick='clickMcqOption(this,"@(mcq.McqId.ToString())")'>@(optionD)</div>
-                </div>
-                <!-- answer -->
-                <div class="mcq-answer">
-                  <button class="ans-toggel-btn shadow" onclick='togelShowAnswer(this,"@(mcq.McqId.ToString())")'>Show Answer</button>
-                  <div class="mcq-ans-discription d-none">
-                    <p>Answer : @(mcq.CorrectAnswer.ToLower() == "a" ? mcq.OptionA : mcq.CorrectAnswer.ToLower() == "b" ? mcq.OptionB : mcq.CorrectAnswer.ToLower() == "c" ? mcq.OptionC : mcq.OptionD )</p>
-                    <span class="fw-bold">Explanation</span>
-                    <div class="p-2 " style="border-style: dotted; border-color: gray;">
-                      @(answerDescription)
+                    <!-- answer -->
+                    <div class="mcq-answer">
+                      <button class="ans-toggel-btn shadow" onclick='togelShowAnswer(this,"@(mcq.McqId.ToString())")'>Show Answer</button>
+                      <div class="mcq-ans-discription d-none">
+                        <p>Answer : @(mcq.CorrectAnswer.ToLower() == "a" ? mcq.OptionA : mcq.CorrectAnswer.ToLower() == "b" ? mcq.OptionB : mcq.CorrectAnswer.ToLower() == "c" ? mcq.OptionC : mcq.OptionD )</p>
+                        <span class="fw-bold">Explanation</span>
+                        <div class="p-2 " style="border-style: dotted; border-color: gray;">
+                          @(answerDescription)
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              index++;
-    }     
+                  index++;
+        }     
+       // not found
+       if(Model.Count == 0){
+          <h3 class="text-center mt-4" data-aos="fade-up">No Mcq Found</h3>
+       }
     }
 
     <!-- Pagination -->
     <div class="pagination-container mt-4 text-center">
         @Html.PagedListPager(
             Model,
-            page => Url.Action("McqLists", new { pageNumber = page }),
+            page => Url.Action("McqLists", new { pageNumber = page,courseId = courseId }),
             new PagedListRenderOptions
             {
                 DisplayLinkToFirstPage = PagedListDisplayMode.Always,

@@ -125,21 +125,7 @@ namespace backend.data.Repository
                 {
                     // apply pagination
                     mcqs = await _context.Mcqs.Where(m => (m.CourseId == courseId || courseId == null) && (m.TopicId == topicId || topicId == null) && (m.SubTopicId == subTopicId || subTopicId == null) && (onlyActiveMcqs ? m.IsActive : true)).Skip((pageNumber - 1) * pageSize??1).Take(pageSize??1).ToListAsync();
-
-                    // total count
-                    using (SqlCommand command = _dbHelper.getSqlCommand("PR_Mcq_COUNT"))
-                    {
-                        command.Parameters.Add("@onlyActiveGets", SqlDbType.Bit).Value = onlyActiveMcqs ? 1 : 0;
-
-                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
-                        {
-                            while (reader.Read())
-                            {
-                                totalMcqs = reader.GetInt32(0);
-                            }
-                        }
-                    }
-                }
+                    totalMcqs = await _context.Mcqs.Where(m => (m.CourseId == courseId || courseId == null) && (m.TopicId == topicId || topicId == null) && (m.SubTopicId == subTopicId || subTopicId == null) && (onlyActiveMcqs ? m.IsActive : true)).CountAsync();}
                 return new ResponseModel { StatusCode = 200, Data = new { totalMcqs, mcqs }, Message = "MCQs fetched successfully." };
             }
             catch
@@ -195,7 +181,7 @@ namespace backend.data.Repository
         }
 
         
-        public async Task<ResponseModel> GetInterviewMcqs(int? pageNumber, int? pageSize, bool onlyActiveMcqs,bool? withAddedByDetails)
+        public async Task<ResponseModel> GetInterviewMcqs(int? pageNumber, int? pageSize,string? companyName , string? techStack, bool onlyActiveMcqs,bool? withAddedByDetails,bool onlyAcceptApprovalStatus)
         {
             try{
                 // get login user data from token
@@ -213,24 +199,24 @@ namespace backend.data.Repository
                 if(pageNumber == null){
                     // get all mcqs
                     if(withAddedByDetails == true){
-                        mcqs = await _context.Mcqs.Include(q => q.AddedByAdminUser).Where(q => (!onlyActiveMcqs || q.IsActive) &&  q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById)).ToListAsync();
+                        mcqs = await _context.Mcqs.Include(q => q.AddedByAdminUser).Where(q =>(!onlyAcceptApprovalStatus || q.ApproveStatus == "Accept") && (!onlyActiveMcqs || q.IsActive) &&  q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById)&& (string.IsNullOrEmpty(companyName) || q.CompanyName == companyName) &&  (string.IsNullOrEmpty(techStack) || q.TechStack == techStack)).ToListAsync();
                         // password should not be sent
                         mcqs.ForEach(q => q.AddedByAdminUser!.Password = null);
                     }else{
-                        mcqs = await _context.Mcqs.Where(q => (!onlyActiveMcqs || q.IsActive) && ( q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById))).ToListAsync();
+                        mcqs = await _context.Mcqs.Where(q =>(!onlyAcceptApprovalStatus || q.ApproveStatus == "Accept") &&  (!onlyActiveMcqs || q.IsActive) &&  q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById)&& (string.IsNullOrEmpty(companyName) || q.CompanyName == companyName) &&  (string.IsNullOrEmpty(techStack) || q.TechStack == techStack)).ToListAsync();
                     }
                     return new ResponseModel { StatusCode = 200, Data = mcqs, Message = "Mcqs retrieved successfully" };
                 }else{
                     // apply pagination
                     if(withAddedByDetails == true){
-                        mcqs = await _context.Mcqs.Include(q => q.AddedByAdminUser).Where(q => (!onlyActiveMcqs || q.IsActive) &&  q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById)).Skip((pageNumber - 1) * pageSize??1).Take(pageSize??1).ToListAsync();
+                        mcqs = await _context.Mcqs.Include(q => q.AddedByAdminUser).Where(q =>(!onlyAcceptApprovalStatus || q.ApproveStatus == "Accept") &&  (!onlyActiveMcqs || q.IsActive) &&  q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById)&& (string.IsNullOrEmpty(companyName) || q.CompanyName == companyName) &&  (string.IsNullOrEmpty(techStack) || q.TechStack == techStack)).Skip((pageNumber - 1) * pageSize??1).Take(pageSize??1).ToListAsync();
                         // password should not be sent
                         mcqs.ForEach(q => q.AddedByAdminUser!.Password = null);
                     }else{
-                    mcqs = await _context.Mcqs.Where(q => (!onlyActiveMcqs || q.IsActive) &&  q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById)).Skip((pageNumber - 1) * pageSize??1).Take(pageSize??1).ToListAsync();
+                    mcqs = await _context.Mcqs.Where(q =>(!onlyAcceptApprovalStatus || q.ApproveStatus == "Accept") &&  (!onlyActiveMcqs || q.IsActive) &&  q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById)&& (string.IsNullOrEmpty(companyName) || q.CompanyName == companyName) &&  (string.IsNullOrEmpty(techStack) || q.TechStack == techStack)).Skip((pageNumber - 1) * pageSize??1).Take(pageSize??1).ToListAsync();
                     }
                     // total count
-                    totalMcqs = await _context.Mcqs.Where(q => (!onlyActiveMcqs || q.IsActive) &&  q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById)).CountAsync();
+                    totalMcqs = await _context.Mcqs.Where(q =>(!onlyAcceptApprovalStatus || q.ApproveStatus == "Accept") &&  (!onlyActiveMcqs || q.IsActive) &&  q.AddedBy != null && (addeddById == null || q.AddedBy.ToString() == addeddById) && (string.IsNullOrEmpty(companyName) || q.CompanyName == companyName) &&  (string.IsNullOrEmpty(techStack) || q.TechStack == techStack)).CountAsync();
                 }
                 return new ResponseModel { StatusCode = 200, Data = new {totalMcqs, mcqs}, Message = "Mcqs retrieved successfully" };
             }catch(Exception ex)
@@ -244,6 +230,18 @@ namespace backend.data.Repository
             try{
                 await _context.Database.ExecuteSqlRawAsync("UPDATE Mcqs SET ApproveStatus = {0} Where McqId = {1}", status ,id);
                 return new ResponseModel { StatusCode = 200, Message = "Mcq status updated successfully" };
+            }catch(Exception ex)
+            {
+                return new ResponseModel { StatusCode = 500, Message = ex.Message };
+            }
+        }
+
+        public async Task<ResponseModel> GetAllUniqueCompanyNamesAndTechStack()
+        {
+            try{
+                List<string>? companyNames = await _context.Mcqs.Select(q =>q.CompanyName).Distinct().ToListAsync();
+                List<string>? techStacks = await _context.Mcqs.Select(q => q.TechStack).Distinct().ToListAsync();
+                return new ResponseModel { StatusCode = 200, Data = new{companyNames,techStacks}, Message = "Company names and TechStack retrieved successfully" };
             }catch(Exception ex)
             {
                 return new ResponseModel { StatusCode = 500, Message = ex.Message };

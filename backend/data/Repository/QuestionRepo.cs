@@ -80,20 +80,7 @@ namespace backend.data.Repository
                 {
                     // use pagination
                     questions = await _context.Questions.Where(q => (q.CourseId == courseId || courseId == null) && (q.TopicId == topicId || topicId == null) && (q.SubTopicId == subTopicId || subTopicId == null) && (!onlyActiveQuestions || q.IsActive)).Skip((pageNumber-1)*pageSize??1).Take(pageSize??5).ToListAsync();
-
-                    // count total 
-                    using(SqlCommand command = _dbHelper.getSqlCommand("PR_Question_COUNT"))
-                    {
-                        command.Parameters.Add("@onlyActiveGets", SqlDbType.Bit).Value = onlyActiveQuestions ? 1 : 0;
-
-                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
-                        {
-                            while (reader.Read())
-                            {
-                                totalQuestions = reader.GetInt32(0);
-                            }
-                        }
-                    }
+                    totalQuestions = await _context.Questions.Where(q => (q.CourseId == courseId || courseId == null) && (q.TopicId == topicId || topicId == null) && (q.SubTopicId == subTopicId || subTopicId == null) && (!onlyActiveQuestions || q.IsActive)).CountAsync();
                 }
                 return new ResponseModel { StatusCode = 200, Data = new {totalQuestions,questions} , Message = "Questions retrieved successfully" };
             }catch(Exception ex)
@@ -152,39 +139,28 @@ namespace backend.data.Repository
             }
         }
 
-        public async Task<ResponseModel> GetInterviewQuestions(Guid? addeddById, int? pageNumber, int? pageSize,string? companyName , string? techStack, bool onlyActiveQuestions, bool withAddedByDetails)
+        public async Task<ResponseModel> GetInterviewQuestions(Guid? addeddById, int? pageNumber, int? pageSize,string? companyName , string? techStack, bool onlyActiveQuestions, bool withAddedByDetails, bool onlyAcceptApprovalStatus)
         {
 
             try{
                 List<QuestionModel> questions = new List<QuestionModel>();
                 int totalQuestions = 0;
+                
                 if(pageNumber == null){
                     if(withAddedByDetails){
-                        questions = await _context.Questions.Include(q => q.AddedByAdminUser).Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById) &&  (string.IsNullOrEmpty(companyName) || q.CompanyName == companyName) &&  (string.IsNullOrEmpty(techStack) || q.TechStack == techStack)).ToListAsync();
+                        questions = await _context.Questions.Include(q => q.AddedByAdminUser).Where(q => (!onlyAcceptApprovalStatus || q.ApproveStatus == "Accept") && (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById) &&  (string.IsNullOrEmpty(companyName) || q.CompanyName == companyName) &&  (string.IsNullOrEmpty(techStack) || q.TechStack == techStack)).ToListAsync();
                     }else{
-                        questions = await _context.Questions.Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById) &&  (string.IsNullOrEmpty(companyName) || q.CompanyName == companyName) &&  (string.IsNullOrEmpty(techStack) || q.TechStack == techStack)).ToListAsync();
+                        questions = await _context.Questions.Where(q =>(!onlyAcceptApprovalStatus || q.ApproveStatus == "Accept") && (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById) &&  (string.IsNullOrEmpty(companyName) || q.CompanyName == companyName) &&  (string.IsNullOrEmpty(techStack) || q.TechStack == techStack)).ToListAsync();
                     }
                     return new ResponseModel { StatusCode = 200, Data = questions, Message = "Questions retrieved successfully" };
                 }else{
                     // count total questions
-                        // int totalQuestions = (await _context.Questions.Where(q => !onlyActiveQuestions || q.IsActive).ToListAsync()).Count;
-                        using(SqlCommand command = _dbHelper.getSqlCommand("PR_Question_COUNT"))
-                        {
-                            command.Parameters.Add("@onlyActiveGets", SqlDbType.Bit).Value = onlyActiveQuestions ? 1 : 0;
-                            command.Parameters.Add("@onlyInterviewQuestions", SqlDbType.Bit).Value =1;
-
-                            using (SqlDataReader reader = await command.ExecuteReaderAsync())
-                            {
-                                while (reader.Read())
-                                {
-                                    totalQuestions = reader.GetInt32(0);
-                                }
-                            }
-                    }
+                        totalQuestions =  await _context.Questions.Where(q =>(!onlyAcceptApprovalStatus || q.ApproveStatus == "Accept") && (!onlyActiveQuestions || q.IsActive) &&  q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById) && (string.IsNullOrEmpty(companyName) || q.CompanyName == companyName) &&  (string.IsNullOrEmpty(techStack) || q.TechStack == techStack)).CountAsync();
+               
                      if(withAddedByDetails){
-                    questions = await _context.Questions.Include(q => q.AddedByAdminUser).Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById) &&  (string.IsNullOrEmpty(companyName) || q.CompanyName == companyName) &&  (string.IsNullOrEmpty(techStack) || q.TechStack == techStack)).Skip((pageNumber-1)*pageSize??1).Take(pageSize??10).ToListAsync();
+                     questions = await _context.Questions.Include(q => q.AddedByAdminUser).Where(q => (!onlyAcceptApprovalStatus || q.ApproveStatus == "Accept") &&(!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById) &&  (string.IsNullOrEmpty(companyName) || q.CompanyName == companyName) &&  (string.IsNullOrEmpty(techStack) || q.TechStack == techStack)).Skip((pageNumber-1)*pageSize??1).Take(pageSize??10).ToListAsync();
                     }else{
-                        questions = await _context.Questions.Where(q => (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById) &&  (string.IsNullOrEmpty(companyName) || q.CompanyName == companyName) &&  (string.IsNullOrEmpty(techStack) || q.TechStack == techStack)).Skip((pageNumber-1)*pageSize??1).Take(pageSize??10).ToListAsync();
+                        questions = await _context.Questions.Where(q =>(!onlyAcceptApprovalStatus || q.ApproveStatus == "Accept") && (!onlyActiveQuestions || q.IsActive) && q.AddedBy != null && (addeddById == null || q.AddedBy == addeddById) &&  (string.IsNullOrEmpty(companyName) || q.CompanyName == companyName) &&  (string.IsNullOrEmpty(techStack) || q.TechStack == techStack)).Skip((pageNumber-1)*pageSize??1).Take(pageSize??10).ToListAsync();
                     }
                 }
                 return new ResponseModel { StatusCode = 200, Data = new {totalQuestions,questions}, Message = "Questions retrieved successfully" };

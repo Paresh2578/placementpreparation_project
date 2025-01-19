@@ -2,6 +2,7 @@
 using Frontend.Services;
 using Markdig;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Placement_Preparation.Areas.Admin.Models;
 using Placement_Preparation.Utils;
@@ -42,7 +43,7 @@ namespace Placement_Preparation.Areas.Student.Controllers
         #endregion
 
       #region List All Mcq by courses
-      public async Task<IActionResult> McqLists(string courseName, string? courseId, int? pageNumber = 1, int? pageSize = 10)
+      public async Task<IActionResult> McqLists(string courseName,string? companyName , string? techStack, string? courseId, int? pageNumber = 1, int? pageSize = 10)
       {
           try
           {
@@ -51,7 +52,11 @@ namespace Placement_Preparation.Areas.Student.Controllers
               if (courseId == null)
               {
                   // Get interview MCQs
-                  apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}/GetInterviewMcqs?onlyActiveMcqs=true&pageNumber={pageNumber}&pageSize={pageSize}");
+                  apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}/GetInterviewMcqs?onlyActiveMcqs=true&onlyAcceptApprovalStatus=true&pageNumber={pageNumber}&pageSize={pageSize}&techStack={techStack}&companyName={companyName}");
+                  // set compnay name and tech stack dropdown value
+                    Dictionary<string,List<SelectListItem>> comanyNameAndTechStack = await _allDropDown.GetMcqCompanyAndTechStack();
+                    ViewBag.companyNames = comanyNameAndTechStack["companyNames"];
+                    ViewBag.techStacks = comanyNameAndTechStack["techStacks"];
               }
               else
               {

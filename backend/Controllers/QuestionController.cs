@@ -90,9 +90,9 @@ namespace backend.Controllers
 
         #region Get Interview questions
         [HttpGet("InterviewQuestions")]
-        public async Task<IActionResult> GetInterviewQuestions(Guid? addedById , [FromQuery] int? pageNumber ,[FromQuery] string? companyName , [FromQuery] string? techStack,[FromQuery] int? pageSize=5, [FromQuery] bool onlyActiveQuestions= false,[FromQuery]  bool withAddedByDetails = false) 
+        public async Task<IActionResult> GetInterviewQuestions(Guid? addedById , [FromQuery] int? pageNumber ,[FromQuery] string? companyName , [FromQuery] string? techStack,[FromQuery] int? pageSize=5, [FromQuery] bool onlyActiveQuestions= false,[FromQuery]  bool withAddedByDetails = false,[FromQuery] bool onlyAcceptApprovalStatus=false) 
         {
-            var response = await _questionInterface.GetInterviewQuestions(addedById,pageNumber:pageNumber,pageSize:pageSize , onlyActiveQuestions: onlyActiveQuestions,withAddedByDetails:withAddedByDetails,companyName:companyName??"".Trim(),techStack:techStack??"".Trim());
+            var response = await _questionInterface.GetInterviewQuestions(addedById,pageNumber:pageNumber,pageSize:pageSize , onlyActiveQuestions: onlyActiveQuestions,withAddedByDetails:withAddedByDetails,companyName:companyName??"".Trim(),techStack:techStack??"".Trim(),onlyAcceptApprovalStatus:onlyAcceptApprovalStatus);
             return StatusCode(response.StatusCode, response);
         }
         #endregion

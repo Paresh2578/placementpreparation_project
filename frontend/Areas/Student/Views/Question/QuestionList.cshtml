@@ -10,9 +10,8 @@
 
     string? companyName = query["companyName"];
     string? techStack = query["techStack"];
+    string? courseId = query["courseId"];
 
-    companyName = string.IsNullOrEmpty(companyName) ? "" : companyName;
-    techStack = string.IsNullOrEmpty(techStack) ? "" : techStack;
 
       
   var pipeline = new MarkdownPipelineBuilder()
@@ -60,7 +59,7 @@
                 <!-- companyName dropDrown -->
               <div class="filter shadow-sm ">
                 <select  name="company" id="company" class="form-select" 
-                    onchange="window.location.href='QuestionList?courseName=Interview Questions&companyName=' + this.value + '&companyName=@(techStack ?? "")';">
+                    onchange="window.location.href='QuestionList?courseName=Interview Questions&companyName=' + this.value + '&techStack=@(techStack ?? "")';">
                         @foreach (var item in (List<SelectListItem>)ViewBag.companyNames)
                         {
                             <option value="@item.Value" selected="@(item.Value == companyName)">
@@ -108,14 +107,18 @@
                </div>
               </div>
               index++;
-      }     
+      }  
+      // not found
+       if(Model.Count == 0){
+          <h3 class="text-center mt-4" data-aos="fade-up">No Question Found</h3>
+       }   
     }
 
    <!-- Pagination -->
     <div class="pagination-container mt-4 text-center">
         @Html.PagedListPager(
             Model,
-            page => Url.Action("QuestionList", new { pageNumber = page }),
+            page => Url.Action("QuestionList", new { pageNumber = page,courseId = courseId }),
             new PagedListRenderOptions
             {
                 DisplayLinkToFirstPage = PagedListDisplayMode.Always,
