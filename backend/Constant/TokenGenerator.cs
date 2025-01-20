@@ -16,7 +16,7 @@ namespace backend.Constant
             _secret = secret ?? throw new ArgumentNullException(nameof(secret), "Secret key cannot be null");
         }
 
-        public static string CreateToken(string userId)
+        public static string CreateToken(string userId , double expireTimeInHours = 1)
         {
             if (string.IsNullOrEmpty(_secret))
                 throw new InvalidOperationException("Secret key is not initialized. Call Initialize() first.");
@@ -26,7 +26,7 @@ namespace backend.Constant
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, userId) }),
-                Expires = DateTime.UtcNow.AddHours(1), // Token expiration time
+                Expires = DateTime.UtcNow.AddHours(expireTimeInHours), // Token expiration time
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

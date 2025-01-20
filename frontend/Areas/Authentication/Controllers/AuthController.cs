@@ -138,6 +138,26 @@ namespace Frontend.Areas.Authentication.Controllers
         {
             return View();
         }
+        
+
+        [HttpPost]
+        public async Task<IActionResult> ForgetPassword(ForgetPassword forgetPassword)
+        {
+            if (ModelState.IsValid)
+            {
+                ApiResponseModel response = await _apiClient.PostAsync($"{_apiBaseUrl}/forgetPassword/{forgetPassword.Email}", "");
+                if (response.StatusCode == 200)
+                {
+                    TempData["SuccessMessage"] = response.Message;
+                    return RedirectToAction("SentLinkSuccessfully");
+                }
+                else
+                {
+                    TempData["LableErrorMesssage"] = response.Message;
+                }
+            }
+            return View(forgetPassword);
+        }
         #endregion
 
         #region  OTP Verification
@@ -207,6 +227,38 @@ namespace Frontend.Areas.Authentication.Controllers
         }
         #endregion
 
+        #region sent link successfully 
+        public IActionResult SentLinkSuccessfully()
+        {
+            return View();
+        }
+        #endregion
+
+        #region  Reset Password
+        public IActionResult ResetPassword(string token)
+        {
+            return View(new ResetPasswordModel() { Token = token,NewPassword = "",ConfirmPassword = "" });
+        }
+        [HttpPost]
+
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel resetPassword)
+        {
+            if (ModelState.IsValid)
+            {
+                ApiResponseModel response = await _apiClient.PostAsync($"{_apiBaseUrl}/resetPassword", resetPassword);
+                if (response.StatusCode == 200)
+                {
+                    TempData["SuccessMessage"] = response.Message;
+                    return RedirectToAction("SignIn");
+                }
+                else
+                {
+                    TempData["LableErrorMesssage"] = response.Message;
+                }
+            }
+            return View(resetPassword);
+        }
+        #endregion
 
         #region  Log out
         [Route("~/logout")]

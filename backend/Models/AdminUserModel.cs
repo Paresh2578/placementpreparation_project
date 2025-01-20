@@ -22,6 +22,18 @@ namespace backend.Models
 
         public bool? IsAdmin { get; set; } = false;
         public string? ApproveStatus { get; set; } = "Pending";
+
+        public string? Token { get; set; }
+        public DateTime? TokenExpiryTime { get; set; }
     }
 
+    public class ResetPasswordModel
+    {
+        [Required(ErrorMessage = "New Password is required.")]
+         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,15}$", ErrorMessage = "Password must be 8-15 characters long and contain at least one uppercase letter, one lowercase letter, one digit and one special character.")]
+        public required string NewPassword { get; set; }
+
+        [Required(ErrorMessage = "Token is required.")]
+        public required string Token { get; set; }
+    }
 }

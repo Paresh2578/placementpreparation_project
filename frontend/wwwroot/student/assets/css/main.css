@@ -2968,6 +2968,7 @@ Sign Form
   border-radius: 0.5rem; /* Rounded-lg */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06); /* Shadow-md */
   padding: 1.5rem; /* p-6 */
+  animation: fadeIn 0.8s ease-in-out;
 }
 
 /* Title */
@@ -3157,4 +3158,76 @@ Sign Form
 .tag.tech-stack {
   background-color: #dfffd8;
   color: #267a0f;
+}
+
+
+
+/* ------------------
+  sent link successfully 
+------------------*/
+
+/* Icon Styling */
+.icon {
+    margin-bottom: 20px;
+}
+
+.icon svg {
+    animation: bounce 1.5s infinite;
+}
+
+/* Text Styling */
+h1 {
+    animation: slideDown 0.8s ease-out;
+}
+
+p {
+    animation: slideUp 0.8s ease-out;
+}
+
+
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
 }

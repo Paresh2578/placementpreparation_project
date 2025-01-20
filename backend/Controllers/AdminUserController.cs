@@ -171,5 +171,35 @@ namespace backend.Controllers
             return StatusCode(response.StatusCode, response);
         }
         #endregion
+
+        #region Forget Password
+        [HttpPost]
+        [Route("forgetPassword/{email}")]
+        public async Task<IActionResult> ForgetPassword(string email)
+        {
+            // check if the email is empty
+            if (string.IsNullOrEmpty(email)){
+                return BadRequest(new ResponseModel { StatusCode = 400, Message = "Email is required." });
+            }
+
+            ResponseModel response = await _adminUserInterface.ForgetPassword(email);
+            return StatusCode(response.StatusCode, response);
+        }
+        #endregion
+
+        #region Reset Password
+        [HttpPost]
+        [Route("resetPassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] Dictionary<string,string> resetPassword)
+        {
+            // check if the email is empty
+            if (!resetPassword.ContainsKey("NewPassword") || !resetPassword.ContainsKey("Token") || string.IsNullOrEmpty(resetPassword["NewPassword"]) || string.IsNullOrEmpty(resetPassword["Token"])){
+                return BadRequest(new ResponseModel { StatusCode = 400, Message = "password or token is required." });
+            }
+
+            ResponseModel response = await _adminUserInterface.ResetPassword(resetPassword["NewPassword"], resetPassword["Token"]);
+            return StatusCode(response.StatusCode, response);
+        }
       }
+        #endregion
 }

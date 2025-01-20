@@ -1,0 +1,40 @@
+@model ForgetPassword;
+
+@{
+    ViewData["Title"] = "Sent Link Successfully";
+}
+
+<div class="sign-container shadow">
+  <div class="sign-card container">
+        <div class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="green" width="72px" height="72px">
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M9 16.17l-3.88-3.88L4.71 13.71 9 18l12-12-1.41-1.41z"/>
+            </svg>
+        </div>
+        <h1>Link Sent Successfully</h1>
+        <p>We have sent a reset link to your email address. Please check your inbox to reset your password.</p>
+         <a asp-action="SignIn" class="btn-back-home">
+        <i class="fa fa-sign-in-alt"></i> Back to Login  </a>
+  </div>
+</div>
+
+<style>
+    .container {
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #666;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+</style>

@@ -148,17 +148,38 @@ namespace backend.data.Repository
 
                 // send OTP in Mail
                 string subject = "OTP Verification";
-                string bodyContent = otp.ToString();
+                string bodyContent =$@"<h2 style=""font-size: 20px; color: #333333;"">Verify Your Email Address</h2>
+                        <p>Thank you for signing up with <b>Placement Preparation</b>. To complete your registration, please use the OTP below to verify your email address.</p>
+
+                        <!-- OTP Code -->
+                        <div style=""display: inline-block; margin: 20px 0; font-size: 28px; font-weight: bold; color: #4CAF50; letter-spacing: 4px;"">{otp}</div>
+
+                        <p>Please note that this OTP is valid for only <strong>15 minutes</strong>.</p>
+                        <p>If you didn’t request this, please ignore this email.</p>";
 
                 ResponseModel response = await _emailService.SendEmail(email, subject, bodyContent);
                 if(response.StatusCode != 200){
                     return response;
                 }
 
-                // Store OTP in session for verification (for simplicity in this example)
-             _httpContextAccessor.HttpContext.Session.SetString($"{email}OTP", otp.ToString());
-                
-                return new ResponseModel { StatusCode= 200, Message = "OTP sent successfully." };
+
+                // Set expiration time to 15 minutes from now
+                var expirationTime = DateTime.UtcNow.AddMinutes(15);
+
+                // Combine OTP and expiration time into a single object
+                var otpData = new
+                {
+                    OTP = otp.ToString(),
+                    Expiration = expirationTime
+                };
+
+                // Serialize the object to a JSON string for storage in session
+                var otpJson = JsonConvert.SerializeObject(otpData);
+
+                // Store in session
+                _httpContextAccessor.HttpContext.Session.SetString($"{email}OTP", otpJson);
+                                
+               return new ResponseModel { StatusCode= 200, Message = "OTP sent successfully." };
             }
             catch {
                 return new ResponseModel { StatusCode= 500, Message = "Internal Server Error" };
@@ -169,14 +190,30 @@ namespace backend.data.Repository
         {
             try
             {
-                // Get the OTP from session
-                string? sessionOtp = _httpContextAccessor.HttpContext.Session.GetString($"{email}OTP");
-                if(sessionOtp is null){
+                // Retrieve the OTP data from session
+                var otpJson = _httpContextAccessor.HttpContext.Session.GetString($"{email}OTP");
+
+                if (string.IsNullOrEmpty(otpJson))
+                {
                     return new ResponseModel { StatusCode= 400, Message = "OTP expired." };
                 }
 
+                // Deserialize the JSON string back into an object
+                var otpData = JsonConvert.DeserializeObject<dynamic>(otpJson);
+
+                if(otpData is null){
+                    return new ResponseModel { StatusCode= 400, Message = "OTP expired." };
+                }
+
+                // Check if the OTP has expired
+                DateTime? expiration = otpData.Expiration;
+                if (DateTime.UtcNow > expiration)
+                {
+                   return new ResponseModel { StatusCode= 400, Message = "OTP expired." };
+                }
+
                 // Verify the OTP
-                if(sessionOtp != otp){
+                if( otpData.OTP != otp){
                     return new ResponseModel { StatusCode= 400, Message = "Invalid OTP." };
                 }
 
@@ -241,5 +278,84 @@ namespace backend.data.Repository
             return new ResponseModel { StatusCode= 500, Message = "Internal Server Error" };
         }
      }
+      
+      public async Task<ResponseModel> ForgetPassword(string email){
+        try{
+            // Find the user by email
+            AdminUserModel? user = await _context.AdminUsers.FirstOrDefaultAsync(x => x.Email == email);
+            if (user == null)
+            {
+                return new ResponseModel { StatusCode= 400, Message = "Invalid email." };
+            }
+
+            string token = TokenGenerator.CreateToken(user.AdminUserId.ToString(),expireTimeInHours:0.15);
+            DateTime expriryTime = DateTime.Now.AddHours(0.15);
+
+            // update token in database
+            await _context.Database.ExecuteSqlRawAsync("UPDATE AdminUsers SET Token = {0}, TokenExpiryTime = {1} Where AdminUserId = {2}", token , expriryTime , user.AdminUserId);
+
+            // send mail to reset password from link
+            string subject = "Reset Your Password";
+            string url = "http://localhost:5033/Authentication/Auth/ResetPassword?token=" + token;
+            string bodyContent = $@"
+             <div style=""padding: 20px;"">
+                        <p style=""color: #333333; font-size: 16px; line-height: 1.5;"">
+                            You recently requested to reset your password for your <strong>Placement Preparation</strong> account. 
+                            Click the button below to reset it. This password reset is only valid for the next <strong>15 minutes</strong>.
+                        </p>
+                        <div style=""text-align: center; margin: 20px 0;"">
+                            <a href=""{url}"" 
+                            style=""display: inline-block; background-color: #4CAF50; color: #ffffff; text-decoration: none; 
+                            padding: 10px 20px; border-radius: 5px; font-size: 16px;"">
+                            Reset Your Password
+                            </a>
+                        </div>
+                        <p style=""color: #666666; font-size: 14px; line-height: 1.5;"">
+                            If you didn’t request this, you can safely ignore this email. 
+                            If you have any questions, feel free to contact our support team.
+                        </p>
+                    </div>";
+
+
+
+            ResponseModel response = await _emailService.SendEmail(email, subject, bodyContent);
+            if(response.StatusCode != 200){
+                return response;
+            }
+
+                
+            return new ResponseModel { StatusCode= 200, Message = "Link sent successfully." };
+        }catch{
+            return new ResponseModel { StatusCode= 500, Message = "Internal Server Error" };
+      }
+      }
+
+
+      public async Task<ResponseModel> ResetPassword(string newPassword , string token){
+        try{
+            // Find the user by token
+            AdminUserModel? user = await _context.AdminUsers.FirstOrDefaultAsync(x => x.Token == token);
+            if (user == null)
+            {
+                return new ResponseModel { StatusCode= 400, Message = "Invalid token." };
+            }
+
+            // check token expiry
+            if(user.TokenExpiryTime < DateTime.Now){
+                return new ResponseModel { StatusCode= 400, Message = "Token expired." };
+            }
+
+            // hash the password
+            user.Password = PasswordHasher.HashPassword(password : newPassword);
+
+            // update password in database
+            await _context.Database.ExecuteSqlRawAsync("UPDATE AdminUsers SET Password = {0}, Token = {1}, TokenExpiryTime = {2} Where AdminUserId = {3}", user.Password , null , null , user.AdminUserId);
+
+            return new ResponseModel { StatusCode= 200, Message = "Password reset successfully." };
+        }catch{
+            return new ResponseModel { StatusCode= 500, Message = "Internal Server Error" };
+        }
+      }
+   
     }
 }
