@@ -1,11 +1,14 @@
 ﻿@model Dictionary<string, dynamic>
 
-
+@{
+    string courseName = Model["course"]["courseName"];
+    ViewData["Title"] = courseName;
+}
 
 <!-- Page Title -->
 <div class="page-title light-background">
     <div class="course">
-        <h1>@Model["course"]["courseName"]</h1>
+        <h1>@courseName</h1>
         <h4>@Model["course"]["description"]</h4>
         <nav class="breadcrumbs">
             <ol>

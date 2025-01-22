@@ -3,7 +3,7 @@
 @model DashboardModel;
 
 @{
-    ViewBag.Title = "Dashboard";
+    ViewData["Title"] = "Dashboard";
     bool isAdmin = CV.GetIsAdmin()?? false;
 }
 

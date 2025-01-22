@@ -8,11 +8,25 @@ namespace Frontend.Services
     public class ApiClientService
     {
         private readonly HttpClient _httpClient;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        
 
-        public ApiClientService(HttpClient httpClient)
+        public ApiClientService(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClient;
+            _httpContextAccessor = httpContextAccessor;
         }
+        #region Redirect to Login
+        
+        private void RedirectToLogin()
+        {
+            var context = _httpContextAccessor.HttpContext;
+            if (context != null)
+            {
+                context.Response.Redirect("/Authentication/Auth/SignIn"); 
+            }
+        }
+        #endregion
 
         #region Common GetAsync 
         public async Task<ApiResponseModel> GetAsync(string endpoint)
@@ -25,6 +39,11 @@ namespace Frontend.Services
                 if(apiResponseModel is not null && apiResponseModel.StatusCode != 0)
                 {
                     return apiResponseModel;    
+                }
+                 // Redirect to login if unauthorized
+                if(apiResponseModel.StatusCode == 403 || response.ReasonPhrase == "Unauthorized")
+                {
+                    RedirectToLogin();
                 }
                 return new ApiResponseModel {StatusCode = (int)response.StatusCode,Message = response.ReasonPhrase};
             }catch(Exception ex){
@@ -47,8 +66,10 @@ namespace Frontend.Services
                     return apiResponseModel;
                 }
 
-                if(apiResponseModel.StatusCode == 403){
-                    //  RerectToUrl("LogIn");
+                // Redirect to login if unauthorized
+                if(apiResponseModel.StatusCode == 403 || response.ReasonPhrase == "Unauthorized")
+                {
+                    RedirectToLogin();
                 }
 
                 return new ApiResponseModel {StatusCode = (int)response.StatusCode,Message = response.ReasonPhrase};
@@ -71,6 +92,11 @@ namespace Frontend.Services
                 {
                     return apiResponseModel;
                 }
+                 // Redirect to login if unauthorized
+                if(apiResponseModel.StatusCode == 403 || response.ReasonPhrase == "Unauthorized")
+                {
+                    RedirectToLogin();
+                }
                 return new ApiResponseModel {StatusCode = (int)response.StatusCode,Message = response.ReasonPhrase};
             }catch(Exception ex){
                 return new ApiResponseModel {StatusCode = 500,Message = ex.Message};
@@ -91,6 +117,11 @@ namespace Frontend.Services
                     {
                         return apiResponseModel;
                     }
+                     // Redirect to login if unauthorized
+                if(apiResponseModel.StatusCode == 403 || response.ReasonPhrase == "Unauthorized")
+                {
+                    RedirectToLogin();
+                }
                     return new ApiResponseModel {StatusCode = (int)response.StatusCode,Message = response.ReasonPhrase};
                 }catch(Exception ex){
                     return new ApiResponseModel {StatusCode = 500,Message = ex.Message};
@@ -117,6 +148,11 @@ namespace Frontend.Services
                 if(apiResponseModel != null && apiResponseModel.StatusCode != 0)
                 {
                     return apiResponseModel;
+                }
+                 // Redirect to login if unauthorized
+                if(apiResponseModel.StatusCode == 403 || response.ReasonPhrase == "Unauthorized")
+                {
+                    RedirectToLogin();
                 }
                 return new ApiResponseModel {StatusCode = (int)response.StatusCode,Message = response.ReasonPhrase};
             }catch(Exception ex){
@@ -148,6 +184,11 @@ namespace Frontend.Services
                 if(apiResponseModel != null && apiResponseModel.StatusCode != 0)
                 {
                     return apiResponseModel;
+                }
+                 // Redirect to login if unauthorized
+                if(apiResponseModel.StatusCode == 403 || response.ReasonPhrase == "Unauthorized")
+                {
+                    RedirectToLogin();
                 }
                    return new ApiResponseModel {StatusCode = (int)response.StatusCode,Message = response.ReasonPhrase};
             }
