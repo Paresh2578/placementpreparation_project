@@ -127,5 +127,9 @@ namespace Placement_Preparation.BAL
             }
 
         }
+
+        public static string BaseURL(){
+            return _configartion.GetSection("ApiSettings")["BaseUrl"];
+        }
     }
 }

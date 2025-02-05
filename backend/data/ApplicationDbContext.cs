@@ -18,5 +18,7 @@ namespace backend.data
         public DbSet<SubTopicModel> SubTopics { get;set; }
         public DbSet<QuestionModel> Questions { get;set; }
         public DbSet<McqModel> Mcqs { get;set; }
+
+        public DbSet<FeedbackModel> Feedbacks { get;set; }
     }
 }

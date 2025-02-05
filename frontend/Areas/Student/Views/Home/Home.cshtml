@@ -1,8 +1,19 @@
 ﻿@model List<CourseModel>
+@using Placement_Preparation.BAL;    
 
 @{
     ViewData["Title"] = "Home";
+    
 }
+
+<div>
+
+    <!-- Loading -->
+    <div>
+        <div id="model-loading" class="d-none">
+       <partial name="_Loading_Dialong" />
+     </div>
+    </div>
 
 
 <!-- Hero Section -->
@@ -62,7 +73,7 @@
                                 <img src="@course.Img" class="img-fluid" alt="Walter White" 
                                     style="width: 100%; height: 100%; object-fit: cover;">
                                 <div style="position: absolute; top: 5px; left: 10px;">
-                                    <span class="badge bg-danger">@course.CourseType.CourseTypeName</span>
+                                    <span class="badge bg-danger">@course.CourseType?.CourseTypeName</span>
                                 </div>
                             </div>
                             <div class="card-content">
@@ -85,6 +96,47 @@
 
 </section><!-- /course Section -->
 
+@{
+   List<Dictionary<string, dynamic>> faqList = new List<Dictionary<string, dynamic>>()
+{
+    new Dictionary<string, dynamic>()
+    {
+        {"Question", "What is this website about?"},
+        {"Answer", "This website is designed to help students and job seekers prepare for placements. It offers interview questions, MCQs, topic-wise documentation, and structured courses to enhance learning and job readiness."}
+    },
+    new Dictionary<string, dynamic>()
+    {
+        {"Question", "Who can use this website?"},
+        {"Answer", "Anyone preparing for placements,technical interviews can use this website, including students, fresh graduates, and working professionals."}
+    },
+    new Dictionary<string, dynamic>()
+    {
+        {"Question", "Is this website free to use?"},
+        {"Answer", "Yes! This website is completely free. All courses, resources, and MCQs are available without any cost."}
+    },
+    new Dictionary<string, dynamic>()
+    {
+        {"Question", "What types of interview questions are available?"},
+        {"Answer", "We provide technical, HR, and aptitude-based interview questions covering various domains like software development, data science, finance, and more."}
+    },
+    new Dictionary<string, dynamic>()
+    {
+        {"Question", "Do you provide company-specific interview questions?"},
+        {"Answer", "Yes! We have a collection of interview questions asked by top companies like Google, Microsoft, Amazon, TCS, and more."}
+    },
+    new Dictionary<string, dynamic>()
+    {
+        {"Question", "How can I practice MCQs?"},
+        {"Answer", "You can access MCQs from different course wise , topic wise ."}
+    },
+    new Dictionary<string, dynamic>()
+    {
+        {"Question", "Is there a structured course for learning?"},
+        {"Answer", "Yes! We offer topic-wise structured courses with documentation, MCQs, and coding questions to help you master concepts step by step."}
+    },
+};
+
+}
 
 
 
@@ -96,7 +148,7 @@
 
             <div class="col-lg-5" data-aos="fade-up">
                 <h2 class="faq-title">Have a question? Check out the FAQ</h2>
-                <p class="faq-description">Maecenas tempus tellus eget condimentum rhoncus sem quam semper libero sit amet adipiscing sem neque sed ipsum.</p>
+                @* <p class="faq-description">Maecenas tempus tellus eget condimentum rhoncus sem quam semper libero sit amet adipiscing sem neque sed ipsum.</p> *@
                 <div class="faq-arrow d-none d-lg-block" data-aos="fade-up" data-aos-delay="200">
                     <svg class="faq-arrow" width="200" height="211" viewBox="0 0 200 211" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M198.804 194.488C189.279 189.596 179.529 185.52 169.407 182.07L169.384 182.049C169.227 181.994 169.07 181.939 168.912 181.884C166.669 181.139 165.906 184.546 167.669 185.615C174.053 189.473 182.761 191.837 189.146 195.695C156.603 195.912 119.781 196.591 91.266 179.049C62.5221 161.368 48.1094 130.695 56.934 98.891C84.5539 98.7247 112.556 84.0176 129.508 62.667C136.396 53.9724 146.193 35.1448 129.773 30.2717C114.292 25.6624 93.7109 41.8875 83.1971 51.3147C70.1109 63.039 59.63 78.433 54.2039 95.0087C52.1221 94.9842 50.0776 94.8683 48.0703 94.6608C30.1803 92.8027 11.2197 83.6338 5.44902 65.1074C-1.88449 41.5699 14.4994 19.0183 27.9202 1.56641C28.6411 0.625793 27.2862 -0.561638 26.5419 0.358501C13.4588 16.4098 -0.221091 34.5242 0.896608 56.5659C1.8218 74.6941 14.221 87.9401 30.4121 94.2058C37.7076 97.0203 45.3454 98.5003 53.0334 98.8449C47.8679 117.532 49.2961 137.487 60.7729 155.283C87.7615 197.081 139.616 201.147 184.786 201.155L174.332 206.827C172.119 208.033 174.345 211.287 176.537 210.105C182.06 207.125 187.582 204.122 193.084 201.144C193.346 201.147 195.161 199.887 195.423 199.868C197.08 198.548 193.084 201.144 195.528 199.81C196.688 199.192 197.846 198.552 199.006 197.935C200.397 197.167 200.007 195.087 198.804 194.488ZM60.8213 88.0427C67.6894 72.648 78.8538 59.1566 92.1207 49.0388C98.8475 43.9065 106.334 39.2953 114.188 36.1439C117.295 34.8947 120.798 33.6609 124.168 33.635C134.365 33.5511 136.354 42.9911 132.638 51.031C120.47 77.4222 86.8639 93.9837 58.0983 94.9666C58.8971 92.6666 59.783 90.3603 60.8213 88.0427Z" fill="currentColor"></path>
@@ -107,53 +159,23 @@
             <div class="col-lg-7" data-aos="fade-up" data-aos-delay="300">
                 <div class="faq-container">
 
-                    <div class="faq-item faq-active">
-                        <h3>Non consectetur a erat nam at lectus urna duis?</h3>
-                        <div class="faq-content">
-                            <p>Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.</p>
-                        </div>
-                        <i class="faq-toggle bi bi-chevron-right"></i>
-                    </div><!-- End Faq item-->
+                    @foreach(Dictionary<string, dynamic> faq in faqList){
+                        <div class="faq-item">
+                            <h3>@faq["Question"]</h3>
+                            <div class="faq-content">
+                                <p>@faq["Answer"]</p>
+                            </div>
+                            <i class="faq-toggle bi bi-chevron-right"></i>
+                        </div><!-- End Faq item-->
+                    }
 
-                    <div class="faq-item">
-                        <h3>Feugiat scelerisque varius morbi enim nunc faucibus?</h3>
+                    @* <div class="faq-item">
+                        <h3> What is this website about ?</h3>
                         <div class="faq-content">
-                            <p>Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.</p>
+                            <p>This website is designed to help students and job seekers prepare for placements. It offers interview questions, MCQs, topic-wise documentation, and structured courses to enhance learning and job readiness.</p>
                         </div>
                         <i class="faq-toggle bi bi-chevron-right"></i>
-                    </div><!-- End Faq item-->
-
-                    <div class="faq-item">
-                        <h3>Dolor sit amet consectetur adipiscing elit pellentesque?</h3>
-                        <div class="faq-content">
-                            <p>Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis</p>
-                        </div>
-                        <i class="faq-toggle bi bi-chevron-right"></i>
-                    </div><!-- End Faq item-->
-
-                    <div class="faq-item">
-                        <h3>Ac odio tempor orci dapibus. Aliquam eleifend mi in nulla?</h3>
-                        <div class="faq-content">
-                            <p>Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.</p>
-                        </div>
-                        <i class="faq-toggle bi bi-chevron-right"></i>
-                    </div><!-- End Faq item-->
-
-                    <div class="faq-item">
-                        <h3>Tempus quam pellentesque nec nam aliquam sem et tortor?</h3>
-                        <div class="faq-content">
-                            <p>Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in. Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est. Purus gravida quis blandit turpis cursus in</p>
-                        </div>
-                        <i class="faq-toggle bi bi-chevron-right"></i>
-                    </div><!-- End Faq item-->
-
-                    <div class="faq-item">
-                        <h3>Perspiciatis quod quo quos nulla quo illum ullam?</h3>
-                        <div class="faq-content">
-                            <p>Enim ea facilis quaerat voluptas quidem et dolorem. Quis et consequatur non sed in suscipit sequi. Distinctio ipsam dolore et.</p>
-                        </div>
-                        <i class="faq-toggle bi bi-chevron-right"></i>
-                    </div><!-- End Faq item-->
+                    </div><!-- End Faq item--> *@
 
                 </div>
             </div>
@@ -162,3 +184,133 @@
     </div>
 </section><!-- /Faq Section -->
 
+
+<!-- Feedback Section -->
+<section id="feedback" class="feedback-section">
+  <div class="container">
+    
+    <!-- Section Title -->
+    <div class="section-title">
+      <h2>Share Your Thoughts</h2>
+      <p>Your feedback helps us enhance the experience. Let us know how we can improve!</p>
+    </div>
+
+    <div class="feedback-content">
+    <div class="container feedback-container">
+    
+    <!-- Left Section: Feedback Info -->
+    <div class="feedback-info " data-aos="fade-right">
+      <div class="info-box">
+        <i class="bi bi-chat-dots"></i>
+        <div style="">
+          <div><h4>Suggestions & Improvements</h4></div>
+          <div>Have an idea to enhance the platform? Let us know!</div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <i class="bi bi-bug"></i>
+        <div>
+          <div><h4>Report an Issue</h4></div>
+          <div>Found a bug? Tell us, and we'll fix it as soon as possible.</div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <i class="bi bi-star"></i>
+        <div>
+          <div><h4>Appreciation & Testimonials</h4></div>
+          <div>Enjoying our platform? We'd love to hear your success stories.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Section: Feedback Form -->
+    <div class="feedback-form" data-aos="fade-left">
+      <h3>Write Your Feedback</h3>
+      <form action="#">
+        <input type="text" name="Name" placeholder="Your Name" required>
+        <input type="email" name="Email" placeholder="Your Email">
+        
+        <select name="FeedbackType" required>
+          <option value="">Select Feedback Type</option>
+          <option value="suggestion">Suggestion</option>
+          <option value="bug">Report an Issue</option>
+          <option value="appreciation">Appreciation</option>
+          <option value="other">Other</option>
+        </select>
+
+        <textarea name="FeedbackMessage" rows="5" placeholder="Your Feedback" required></textarea>
+        <button type="submit" class="btn-submit">Submit Feedback</button>
+      </form>
+    </div>
+  
+  </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Feedback Submitted</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Thank you for your feedback!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Feedback js -->
+  <script>
+        document.querySelector('.feedback-form form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const modelLoading = document.getElementById('model-loading');
+
+            const formData = new FormData(event.target);
+            const data = {
+                Name: formData.get('Name'),
+                Email: formData.get('Email'),
+                FeedbackType: formData.get('FeedbackType'),
+                FeedbackMessage: formData.get('FeedbackMessage')
+            };
+
+            //show Loading
+            modelLoading.classList.remove('d-none');
+
+            @* fetch(`${CV.baseUrl()}Feedback`, { *@
+            fetch(`http://localhost:5067/api/Feedback`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)  
+            })
+            .then(response => response.json())
+            .then(result => {
+                // Show success modal dialog
+                const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                successModal.show();
+                // hide Loading
+                modelLoading.classList.add('d-none');
+                event.target.reset();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // hide Loading
+                modelLoading.classList.add('d-none');
+                alert('An error occurred while submitting your feedback.');
+            });
+        });
+    </script>

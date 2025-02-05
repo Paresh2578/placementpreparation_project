@@ -42,11 +42,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <!-- Showdown Library for Markdown Conversion -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
+  @* <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script> *@
+     <script src="~/js/showdown.min.js"></script>
 
   <!-- Highlight.js Library and Styles -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    @* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css"> *@
+    <link rel="stylesheet" href="~/css/default.min.css">
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script> *@
+    <script src="~/js/highlight.min.js"></script>
    
 
 </head>
@@ -93,11 +96,11 @@
             </nav>
 
             <!-- login and logout button -->
-            @if(CV.GetId() != null){
+            @* @if(CV.GetId() != null){
                  <a class="btn-getstarted" href="/logout">Log Out</a>
-            }else{
+            }else{ *@
                 <a class="btn-getstarted" asp-area="Authentication" asp-controller="Auth" asp-action="SignIn">Log In</a>
-            }
+            @* } *@
 
         </div>
     </header>

@@ -3231,3 +3231,271 @@ p {
         transform: translateY(-5px);
     }
 }
+
+
+/* Feedback section */
+.feedback-section {
+  /* padding: 60px 20px; */
+  display: flex;
+  justify-content: center;
+}
+
+.feedback-container {
+  max-width: 1100px;
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+} 
+
+/* Left Section */
+.feedback-info {
+  flex: 1;
+  max-width: 500px;
+  justify-content: center;
+  align-items: center;
+}
+
+.feedback-info h2 {
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--heading-color);
+} 
+.feedback-info p {
+  font-size: 16px;
+  color: var(--default-color);
+  margin-bottom: 30px;
+}
+
+.info-box {
+  display: flex;
+  align-items: center;
+  background: var(--surface-color);
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+.info-box:hover {
+  transform: translateY(-3px);
+}
+
+.info-box i {
+  font-size: 28px;
+  color: var(--accent-color);
+  margin-right: 15px;
+}
+
+.info-box h4 {
+  font-size: 18px;
+  color: var(--heading-color);
+  margin-bottom: 5px;
+}
+
+.info-box p {
+  font-size: 14px;
+  color: var(--default-color);
+}
+
+/* Right Section */
+.feedback-form {
+  flex: 1;
+  max-width: 500px;
+  background: var(--surface-color);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.feedback-form h3 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: var(--heading-color);
+  text-align: center;
+}
+
+.feedback-form input,
+.feedback-form select,
+.feedback-form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  background: var(--background-color);
+  color: var(--default-color);
+}
+
+.feedback-form textarea {
+  resize: none;
+}
+
+.btn-submit {
+  background-color: var(--accent-color);
+  color: var(--contrast-color);
+  font-size: 18px;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-submit:hover {
+  background-color: #005bb5;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .feedback-info,
+  .feedback-form {
+    max-width: 100%;
+  }
+}
+
+
+
+/* new Footer */
+
+/* 
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 20px;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.header h1 {
+  font-size: 36px;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.header p {
+  font-size: 18px;
+  color: #666;
+}
+
+.content {
+  display: flex;
+  gap: 48px;
+}
+
+.feedback-options,
+.feedback-form {
+  flex: 1;
+}
+
+.feedback-options h2,
+.feedback-form h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 24px;
+}
+
+.feedback-options > p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 32px;
+}
+
+.option {
+  display: flex;
+  gap: 16px;
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+  transition: box-shadow 0.3s ease;
+}
+
+.option:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.icon {
+  background-color: #e6f3ff;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.icon svg {
+  width: 24px;
+  height: 24px;
+  color: #0080ff;
+}
+
+.text h3 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.text p {
+  font-size: 14px;
+  color: #666;
+}
+
+.feedback-form {
+  background-color: #fff;
+  padding: 32px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+button {
+  background-color: #0080ff;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0066cc;
+}
+
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+}
+ */

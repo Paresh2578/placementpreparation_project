@@ -122,6 +122,9 @@
                   // Both are access
                 itemlist.Add(new {name = "Interview Question"  , icon = "~/assets/icons/qa.png",controller="Question" , action="InterviewQuestionList"});
                 itemlist.Add(new {name = "Interview Mcq"  , icon = "~/assets/icons/online-test.png",controller="Mcq" , action="InterviewMcqList"});
+                 if(CV.GetIsAdmin()??false){
+                      itemlist.Add(new {name = "Feedback"  , icon = "~/assets/icons/feedback.png",controller="Feedback" , action="ListFeedback"});
+                }
                     foreach (var menu in itemlist)
                     {
                                 <a asp-controller="@menu.controller" asp-action="@menu.action" class="cursor-pointer m-2 flex gap-6 p-2 hover:bg-slate-300 rounded-md">

@@ -82,6 +82,7 @@ builder.Services.AddScoped<TopicInterface, TopicRepo>();
 builder.Services.AddScoped<SubTopicInterface, SubTopicRepo>();
 builder.Services.AddScoped<QuestionInterface, QuestionRepo>();
 builder.Services.AddScoped<McqInterface, McqRepo>();
+builder.Services.AddScoped<FeedbackInterface, FeedbackRepo>();
 
 
 

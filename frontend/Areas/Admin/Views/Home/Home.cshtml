@@ -102,7 +102,8 @@
                     <tbody id="courses" class="text-gray-700 text-sm font-light">
                         @{
                             int idx = 1;
-                            foreach(Dictionary<string,dynamic> student in Model.PaddingStudentRequest){
+                            @if(Model != null && Model.PaddingStudentRequest != null){
+                                foreach(Dictionary<string,dynamic> student in Model.PaddingStudentRequest){
                                 <tr class="border-b text-nowrap  border-gray-200 ">
                                     <td class="py-3 px-6 text-left">@idx</td>
                                     <td class="py-3 px-6 text-left">@student["userName"]</td>
@@ -123,6 +124,7 @@
                                         <td class="py-3 px-6  text-center" colspan="5">No Record Found</td>
                                   </tr>
                                   }
+                            }
                         }
                     </tbody>
                 </table>

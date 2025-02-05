@@ -55,8 +55,8 @@ namespace Frontend.Areas.Authentication.Controllers
                         HttpOnly = false,
                         Secure = true, // Set to true in production
                         SameSite = SameSiteMode.None, // Adjust as needed
-                        // Expires = DateTime.Now.AddDays(1)
-                        Expires = DateTime.Now.AddHours(1)
+                        Expires = DateTime.Now.AddDays(1)
+                        // Expires = DateTime.Now.AddHours(1)
                     };
 
                     _httpContextAccessor.HttpContext!.Response.Cookies.Append("token", token, cookieOptions);
