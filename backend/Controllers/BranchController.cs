@@ -49,7 +49,7 @@ namespace backend.Controllers
     
        #region  get all Branches
         [HttpGet("")]
-        [CheckAccess]
+        // [CheckAccess]
         public async Task<IActionResult> GetAllBranches()
         {
             ResponseModel response = await _branchRepo.GetAllBranches();
