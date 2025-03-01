@@ -71,7 +71,6 @@ namespace backend.data.Repository
        public async Task<ResponseModel> GetAllTopics()
         {
             try{
-                // var topics = await _context.Topics.ToListAsync();
                 var topics = await _context.Topics.Include(c => c.Course).Include(d => d.DifficultyLevel).OrderBy(t => t.Level).ToListAsync();
                 return new ResponseModel{StatusCode = 200,Message = "Successfully Get All Topics",Data = topics};
             }catch(Exception ex){

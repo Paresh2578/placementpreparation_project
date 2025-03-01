@@ -195,14 +195,14 @@ namespace backend.data.Repository
 
                 if (string.IsNullOrEmpty(otpJson))
                 {
-                    return new ResponseModel { StatusCode= 400, Message = "OTP expired." };
+                    return new ResponseModel { StatusCode= 400, Message = "Something went wrong while sending the OTP. Please try again." };
                 }
 
                 // Deserialize the JSON string back into an object
                 var otpData = JsonConvert.DeserializeObject<dynamic>(otpJson);
 
                 if(otpData is null){
-                    return new ResponseModel { StatusCode= 400, Message = "OTP expired." };
+                    return new ResponseModel { StatusCode= 400, Message = "Something went wrong while sending the OTP. Please try again." };
                 }
 
                 // Check if the OTP has expired
@@ -296,7 +296,7 @@ namespace backend.data.Repository
 
             // send mail to reset password from link
             string subject = "Reset Your Password";
-            string url = "http://localhost:5033/Authentication/Auth/ResetPassword?token=" + token;
+            string url = "https://placementpreparation.somee.com/Authentication/Auth/ResetPassword?token=" + token;
             string bodyContent = $@"
              <div style=""padding: 20px;"">
                         <p style=""color: #333333; font-size: 16px; line-height: 1.5;"">

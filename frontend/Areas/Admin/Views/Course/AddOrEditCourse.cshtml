@@ -1,7 +1,9 @@
-﻿@model CourseModel
+﻿
+@model CourseModel
 
 @{
      string title = Model == null ||  Model.CourseId == null ? "Add" : "Edit";
+        ViewData["Title"] = title + " Course";
 }
 
 <div class="flex flex-col items-center">
