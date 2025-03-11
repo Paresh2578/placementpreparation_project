@@ -1,9 +1,9 @@
 ﻿@model Dictionary<string, dynamic>
 
 @{
-    string courseName =Model != null && Model["course"] != null ? Model["course"]["courseName"] : "";
-    string courseDescription = Model != null ? Model["course"]["description"] : "";
-    string courseId = Model != null ? Model["course"]["courseId"] : "";
+    string courseName =Model != null && Model.ContainsKey("course") ? Model["course"]["courseName"] : "";
+    string courseDescription = Model != null && Model.ContainsKey("course") ? Model["course"]["description"] : "";
+    string courseId = Model != null && Model.ContainsKey("course") ? Model["course"]["courseId"] : "";
     ViewData["Title"] = courseName;
 }
 
@@ -45,6 +45,9 @@
      </div>     
 
     <!-- List  Subtopic -->
+     @if(ViewData["InternalServerError"] != null){
+          <partial name="_Errors" />
+        }else{
        <div class="table-container rounded-4 shadow">
             <table class="table-body">
                 <thead>
@@ -77,6 +80,7 @@
                 </tbody>
             </table>
         </div>
+      }
       </div><!-- End Section Title -->
 
 </section>

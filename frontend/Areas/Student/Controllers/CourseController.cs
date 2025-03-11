@@ -50,6 +50,7 @@ namespace Placement_Preparation.Areas.Student.Controllers
 
           if(apiResponse.StatusCode != 200){
             TempData["ErrorMessage"] = apiResponse.Message;
+            ViewData["InternalServerError"] =apiResponse.Message;
              return View(courseDetails);
           }
 
@@ -72,6 +73,7 @@ namespace Placement_Preparation.Areas.Student.Controllers
             // check successfully fetch data or not
             if(apiResponse.StatusCode != 200){
               TempData["ErrorMessage"] = apiResponse.Message;
+              ViewData["InternalServerError"] =apiResponse.Message;
               return View(sidebarData);
             }
 

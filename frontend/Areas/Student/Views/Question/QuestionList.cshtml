@@ -60,11 +60,13 @@
               <div class="filter shadow-sm ">
                 <select  name="company" id="company" class="form-select" 
                     onchange="window.location.href='QuestionList?courseName=Interview Questions&companyName=' + this.value + '&techStack=@(techStack ?? "")';">
-                        @foreach (var item in (List<SelectListItem>)ViewBag.companyNames)
+                        @if(ViewBag.companyNames != null){
+                            foreach (var item in (List<SelectListItem>)ViewBag.companyNames)
                         {
                             <option value="@item.Value" selected="@(item.Value == companyName)">
                                 @item.Text
                             </option>
+                        }
                         }
                 </select>
               </div>

@@ -35,8 +35,8 @@
       <ul class="sidebar-nav" id="sidebar-nav">
         <li class="nav-heading">All Topics</li>
     
-        @{
-      
+        @if(Model != null && Model.ContainsKey("sidebar"))
+        {
         bool setNextTopicId = false;
         int topicIdx = 0;
         foreach (var topic in (Newtonsoft.Json.Linq.JArray)Model["sidebar"])
@@ -166,12 +166,21 @@
               </div>
 
             <div class="content prose prose-sm sm:prose lg:prose-lg max-w-none">
-              @if(string.IsNullOrEmpty(Model["documention"]["content"].ToString()))
+              <!-- show error -->
+              @if(ViewData["InternalServerError"] != null){
+                <partial name="_Errors" />
+              }else{
+              if(Model  != null && Model.ContainsKey("documention")){
+                if(string.IsNullOrEmpty(Model["documention"]["content"].ToString()))
               {
                 <p class="text-center">No data available</p>
               }else{
                  @Html.Raw(Markdown.ToHtml(Model["documention"]["content"].ToString() , pipeline))
               }
+              }
+              }
+
+              
              
             </div>
             </div>

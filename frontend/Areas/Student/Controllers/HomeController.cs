@@ -28,6 +28,12 @@ namespace Placement_Preparation.Areas.Student.Controllers
             }else{
               ViewData["InternalServerError"] = responseModel.Message;
             }
+
+            /// write a code for two sum
+            
+            
+
+
             return View(courses);
         }
     }
