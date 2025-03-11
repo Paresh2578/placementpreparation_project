@@ -13,6 +13,10 @@
         Add Difficulty Level
         </h2> *@
 
+          @if(TempData["ErrorMessage"] != null){
+            <p class="validation-error-lable" style="text-align: start;">@TempData["ErrorMessage"]</p>
+        }
+
 
         <form asp-action="AddOrEditCourseType" asp-controller="CourseType" method="post" class="flex flex-col">
             <!-- Hidden Field for CourseTypeId-->

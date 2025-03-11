@@ -28,11 +28,14 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         public async Task<IActionResult> List()
         {
             ApiResponseModel response = await _apiClient.GetAsync(_apiBaseUrl);
+            List<DifficultyLevelModel> difficultyLevelList = new List<DifficultyLevelModel>();
                 if(response.StatusCode != 200)
                 {
                    TempData["ErrorMessage"] = response.Message;
+                   ViewData["InternalServerError"] = response.Message;
+                   return View(difficultyLevelList);
                 }
-                List<DifficultyLevelModel>  difficultyLevelList =  JsonConvert.DeserializeObject<List<DifficultyLevelModel>>(response.Data!.ToString());
+                difficultyLevelList =  JsonConvert.DeserializeObject<List<DifficultyLevelModel>>(response.Data!.ToString());
 
            
             return View(difficultyLevelList);

@@ -10,6 +10,10 @@
     <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
         <h2 class="responsive-title text-gray-900 mb-4 text-center"> @(title) Branch</h2>
 
+        @if(TempData["ErrorMessage"] != null){
+            <p class="validation-error-lable" style="text-align: start;">@TempData["ErrorMessage"]</p>
+        }
+
         <form asp-action="AddOrEditBranch" asp-controller="Branch" asp-area="Admin" method="post" class="flex flex-col">
             <!-- Hidden Field for BranchId-->
             <input asp-for="BranchId" type="hidden" /> 

@@ -38,6 +38,10 @@
             </div>
         </div> *@
 
+         @if(TempData["ErrorMessage"] != null){
+            <p class="validation-error-lable" style="text-align: start;">@TempData["ErrorMessage"]</p>
+        }
+
 
          <!-- Search Bar Section -->
         <div class="relative">
@@ -73,9 +77,6 @@
                     </tr>
                 </thead>
                 <tbody id="question" class="text-gray-700 text-sm font-light">
-                     @if(ViewData["InternalServerError"] != null){
-                        <partial name="_Errors" />
-                    }
                     @{
                         int idx = 1;
                         foreach(QuestionModel question in Model){

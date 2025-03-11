@@ -29,13 +29,14 @@ namespace Placement_Preparation.Areas.Student.Controllers
             ApiResponseModel responseModel = await _apiClient.GetAsync($"{_apiBaseUrl}?courseType={courseType}");
 
             List<CourseModel> courses = new List<CourseModel>();
-            if (responseModel.StatusCode == 200)
+            if (responseModel.StatusCode != 200)
             {
-                courses = JsonConvert.DeserializeObject<List<CourseModel>>(responseModel.Data.ToString());
+              ViewData["InternalServerError"] = responseModel.Message;
+              return View(courses);
             }
-
-            // set DropDown Value
-            await SetBranchCourseDifficultyLevelDropdownValue();
+              // set DropDown Value
+               await SetBranchCourseDifficultyLevelDropdownValue();
+                courses = JsonConvert.DeserializeObject<List<CourseModel>>(responseModel.Data.ToString());
 
             return View(courses);
         }
@@ -53,9 +54,6 @@ namespace Placement_Preparation.Areas.Student.Controllers
           }
 
           courseDetails = JsonConvert.DeserializeObject<Dictionary<string,dynamic>>(apiResponse.Data.ToString());
-
-            //Dictionary<string, dynamic> test = new Dictionary<string, dynamic>();
-            //test.Add("course", new Dictionary<string, dynamic> { { "description", "Java is Programing Language" },{ "courseName","Java Pro" } });
 
           // set difficulty level dropdown
           ViewBag.DifficultyLevelList =await _allDropDown.DifficultyLevel();

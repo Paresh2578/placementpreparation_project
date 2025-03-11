@@ -28,11 +28,13 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         public async Task<IActionResult> ListQuestion()
         {
             ApiResponseModel response = await _apiClient.GetAsync(_apiBaseUrl);
+            List<QuestionModel> questionList = new List<QuestionModel> { };
                 if(response.StatusCode != 200)
                 {
                    TempData["ErrorMessage"] = response.Message;
+                     return View(questionList);
                 }
-                List<QuestionModel>  questionList =  JsonConvert.DeserializeObject<List<QuestionModel>>(response.Data!.ToString());
+                questionList =  JsonConvert.DeserializeObject<List<QuestionModel>>(response.Data!.ToString());
 
                  // set search dropdown value ( course , topic , subTopic)
                 await  setCourseTopicSubTopicDropDownsValues();
@@ -48,13 +50,14 @@ namespace Placement_Preparation.Areas.Admin.Controllers
 
             string? userId = CV.GetIsAdmin() == null || CV.GetIsAdmin() == true ? null : CV.GetId();
             ApiResponseModel response = await _apiClient.GetAsync($"{_apiBaseUrl}/InterviewQuestions?addedById={userId}&withAddedByDetails=true");
+            List<QuestionModel> questionList = new List<QuestionModel> { };
                 if(response.StatusCode != 200)
                 {
                    TempData["ErrorMessage"] = response.Message;
                    ViewData["InternalServerError"] = response.Message;
-                   return View();
+                   return View(questionList);
                 }
-                List<QuestionModel>  questionList =  JsonConvert.DeserializeObject<List<QuestionModel>>(response.Data!.ToString());
+                questionList =  JsonConvert.DeserializeObject<List<QuestionModel>>(response.Data!.ToString());
 
             return View(questionList);
         }

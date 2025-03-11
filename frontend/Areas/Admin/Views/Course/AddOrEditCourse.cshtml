@@ -10,6 +10,10 @@
     <div class="w-full bg-white rounded-lg shadow-lg p-6">
         <h2 class="responsive-title text-gray-900 mb-4 text-center">@(title) Course</h2>
 
+         @if(TempData["ErrorMessage"] != null){
+            <p class="validation-error-lable" style="text-align: start;">@TempData["ErrorMessage"]</p>
+        }
+
         <form asp-action="AddOrEditCourse" asp-controller="Course" method="post" enctype="multipart/form-data" class="flex flex-col">
           <!-- course id hide -->
             <input asp-for="CourseId" type="hidden" />

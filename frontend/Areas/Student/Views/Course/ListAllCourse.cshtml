@@ -50,7 +50,10 @@
         <button  onclick="handleSearch()" class="btn btn-primary shadow"><i class="fa-solid fa-magnifying-glass fa-bounce"></i> Search</button>
     </div>
 
-    <!-- List of Courses -->
+     @if(ViewData["InternalServerError"] != null){
+                        <partial name="_Errors" />
+    }else{
+          <!-- List of Courses -->
     <div class="course-list p-2">
         <div class="row gy-4" id="course-list">
             @foreach (var course in courses)
@@ -69,8 +72,14 @@
                     </div>
                 </a>
             }
+
+            @if (courses.Count == 0)
+            {
+                <h3 class="text-center">No Course Found</h3>
+            }
         </div>
     </div>
+    }
 </section>
 
 <!-- jQuery Script -->

@@ -18,6 +18,10 @@
         Add Difficulty Level
         </h2> *@
 
+         @if(TempData["ErrorMessage"] != null){
+            <p class="validation-error-lable" style="text-align: start;">@TempData["ErrorMessage"]</p>
+        }
+
 
         <form asp-action="AddOrEditSubTopic" asp-controller="SubTopic" method="post" class="flex  w-full flex-col">
             <!-- Sub Topic id -->

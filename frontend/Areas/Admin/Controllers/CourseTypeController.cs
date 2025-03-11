@@ -26,11 +26,13 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         public async Task<IActionResult> ListCourseType()
         {
              ApiResponseModel response = await _apiClient.GetAsync(_apiBaseUrl);
+             List<CourseTypeModel> courseTypeList = new List<CourseTypeModel>();
                 if(response.StatusCode != 200)
                 {
                    TempData["ErrorMessage"] = response.Message;
+                   return View(courseTypeList);
                 }
-                List<CourseTypeModel>  courseTypeList =  JsonConvert.DeserializeObject<List<CourseTypeModel>>(response.Data!.ToString());
+                courseTypeList =  JsonConvert.DeserializeObject<List<CourseTypeModel>>(response.Data!.ToString());
 
            
             return View(courseTypeList);

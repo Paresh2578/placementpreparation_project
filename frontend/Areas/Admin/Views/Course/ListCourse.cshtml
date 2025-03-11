@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "List of Course";
+    
 }
 
 <div class="bg-white p-4 rounded-md shadow-lg ">
@@ -13,6 +14,10 @@
             <a asp-action="AddOrEditCourse" asp-controller="Course" class="primary-button"><i class="fa-solid fa-plus fa-bounce"></i> Add Course</a>
         </div>
     </div>
+
+     @if(TempData["ErrorMessage"] != null){
+            <p class="validation-error-lable" style="text-align: start;">@TempData["ErrorMessage"]</p>
+        }
 
     <div>
         <!-- Search Bar Section -->

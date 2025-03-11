@@ -60,6 +60,10 @@
 
         </div>
 
+         @if(TempData["ErrorMessage"] != null){
+            <p class="validation-error-lable" style="text-align: start;">@TempData["ErrorMessage"]</p>
+        }
+
         <!-- Search Bar Section -->
         <div class="relative">
 

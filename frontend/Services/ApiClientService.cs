@@ -33,9 +33,22 @@ namespace Frontend.Services
         {
             try{
                 var response = await _httpClient.GetAsync(endpoint);
+
+                 // many request send to server in a short time
+                if(response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                {
+                    return new ApiResponseModel {StatusCode = 429,Message = "Too many requests send in a short time. Plz try again after 5 secound"};
+                }
+
                 var responseContent = await response.Content.ReadAsStringAsync();
 
-                ApiResponseModel? apiResponseModel = JsonConvert.DeserializeObject<ApiResponseModel>(responseContent);
+				// Redirect to login if unauthorized
+				if (response.ReasonPhrase == "Unauthorized")
+				{
+					RedirectToLogin();
+				}
+
+				ApiResponseModel? apiResponseModel = JsonConvert.DeserializeObject<ApiResponseModel>(responseContent);
                 if(apiResponseModel is not null && apiResponseModel.StatusCode != 0)
                 {
                     return apiResponseModel;    
@@ -45,6 +58,8 @@ namespace Frontend.Services
                 {
                     RedirectToLogin();
                 }
+
+               
                 return new ApiResponseModel {StatusCode = (int)response.StatusCode,Message = response.ReasonPhrase};
             }catch(Exception ex){
                 return new ApiResponseModel {StatusCode = 500,Message = ex.Message};
@@ -57,7 +72,21 @@ namespace Frontend.Services
             try{
                 var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
                 var response = await _httpClient.PostAsync(endpoint,content);
-                var responseContent = await response.Content.ReadAsStringAsync();
+
+
+				// many request send to server in a short time
+                if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests || response.ReasonPhrase == "Too Many Requests")
+				{
+					return new ApiResponseModel { StatusCode = 429, Message = "Too many requests send in a short time. Plz try again after 5 secound" };
+				}
+
+                // Redirect to login if unauthorized
+                if(response.ReasonPhrase == "Unauthorized")
+                {
+                    RedirectToLogin();
+                }
+
+				var responseContent = await response.Content.ReadAsStringAsync();
 
                 ApiResponseModel? apiResponseModel = JsonConvert.DeserializeObject<ApiResponseModel>(responseContent);
 
@@ -72,6 +101,7 @@ namespace Frontend.Services
                     RedirectToLogin();
                 }
 
+
                 return new ApiResponseModel {StatusCode = (int)response.StatusCode,Message = response.ReasonPhrase};
             }catch(Exception ex){
                 return new ApiResponseModel {StatusCode = 500,Message = ex.Message};
@@ -83,7 +113,22 @@ namespace Frontend.Services
       public async Task<ApiResponseModel> PutAsync(string endpoint , object data){
             try{
                 var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+
                 var response = await _httpClient.PutAsync(endpoint,content);
+
+                 // many request send to server in a short time
+                if(response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                {
+                    return new ApiResponseModel {StatusCode = 429,Message = "Too many requests send in a short time. Plz try again after 5 secound"};
+                }
+
+				// Redirect to login if unauthorized
+				if (response.ReasonPhrase == "Unauthorized")
+				{
+					RedirectToLogin();
+				}
+
+
                 var responseContent = await response.Content.ReadAsStringAsync();
 
                 ApiResponseModel? apiResponseModel = JsonConvert.DeserializeObject<ApiResponseModel>(responseContent);
@@ -96,6 +141,13 @@ namespace Frontend.Services
                 if(apiResponseModel.StatusCode == 403 || response.ReasonPhrase == "Unauthorized")
                 {
                     RedirectToLogin();
+                }
+
+                
+                // many request send to server in a short time
+                if(response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                {
+                    return new ApiResponseModel {StatusCode = 429,Message = "Too many requests send in a short time. Plz try again after 5 secound"};
                 }
                 return new ApiResponseModel {StatusCode = (int)response.StatusCode,Message = response.ReasonPhrase};
             }catch(Exception ex){
@@ -122,6 +174,14 @@ namespace Frontend.Services
                 {
                     RedirectToLogin();
                 }
+
+                
+                // many request send to server in a short time
+                if(response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                {
+                    return new ApiResponseModel {StatusCode = 429,Message = "Too many requests send in a short time. Plz try again after 5 secound"};
+                }
+
                     return new ApiResponseModel {StatusCode = (int)response.StatusCode,Message = response.ReasonPhrase};
                 }catch(Exception ex){
                     return new ApiResponseModel {StatusCode = 500,Message = ex.Message};
@@ -154,6 +214,14 @@ namespace Frontend.Services
                 {
                     RedirectToLogin();
                 }
+
+                
+                // many request send to server in a short time
+                if(response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                {
+                    return new ApiResponseModel {StatusCode = 429,Message = "Too many requests send in a short time. Plz try again after 5 secound"};
+                }
+
                 return new ApiResponseModel {StatusCode = (int)response.StatusCode,Message = response.ReasonPhrase};
             }catch(Exception ex){
                 return new ApiResponseModel {StatusCode = 500,Message = ex.Message};
@@ -190,6 +258,14 @@ namespace Frontend.Services
                 {
                     RedirectToLogin();
                 }
+
+                
+                // many request send to server in a short time
+                if(response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                {
+                    return new ApiResponseModel {StatusCode = 429,Message = "Too many requests send in a short time. Plz try again after 5 secound"};
+                }
+
                    return new ApiResponseModel {StatusCode = (int)response.StatusCode,Message = response.ReasonPhrase};
             }
             catch (Exception ex)

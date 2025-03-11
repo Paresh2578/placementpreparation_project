@@ -3,6 +3,7 @@ using backend.Controllers;
 using backend.data;
 using backend.data.Interface;
 using backend.data.Repository;
+using backend.Middlewares;
 using backend.Models;
 using backend.Service;
 using CloudinaryDotNet;
@@ -127,6 +128,7 @@ app.UseSwaggerUI();
 app.UseCors("AllowAll");
 
 app.UseSession();
+app.UseRateLimitMiddleware();
 
 app.UseHttpsRedirection();
 

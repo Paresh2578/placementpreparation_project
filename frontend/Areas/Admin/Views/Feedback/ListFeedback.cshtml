@@ -59,7 +59,10 @@
        <!-- Table Section -->
         <div class="mt-6 overflow-x-auto w-full">
             <table class="min-w-full  bg-white border border-gray-200">
-                <thead>
+                 @if(ViewData["InternalServerError"] != null){
+                        <partial name="_Errors" />
+                    }else{
+                        <thead>
                     <tr class="bg-gray-100 text-nowrap text-gray-600  uppercase text-sm leading-normal">
                     @* <th><input type="checkbox" id="selectAll" /></th> *@
                         <th class="py-3 px-6 text-left">#</th>
@@ -70,9 +73,7 @@
                     </tr>
                 </thead>
                 <tbody id="question" class="text-gray-700 text-sm font-light">
-                     @if(ViewData["InternalServerError"] != null){
-                        <partial name="_Errors" />
-                    }
+                    
                     @{
                         int idx = 1;
                         foreach(FeedbackModel feedback in Model){
@@ -100,6 +101,9 @@
                      
 
                 </tbody>
+
+                    }
+                
             </table>
              @* <button id="handleDelete" class="clear-button m-4" style="margin-top: 20px; display: block;width: fit-content;"><i class="fa-regular fa-trash-can fa-bounce"></i> Delete </button> *@
         </div>

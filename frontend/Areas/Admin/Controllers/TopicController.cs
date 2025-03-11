@@ -31,11 +31,13 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         public async Task<IActionResult> ListTopic()
         {
              ApiResponseModel response = await _apiClient.GetAsync(_apiBaseUrl);
+             List<TopicModel> topicList = new List<TopicModel>();
                 if(response.StatusCode != 200)
                 {
                    TempData["ErrorMessage"] = response.Message;
+                     return View(topicList);
                 }
-                List<TopicModel>  topicList =  JsonConvert.DeserializeObject<List<TopicModel>>(response.Data!.ToString());
+                topicList =  JsonConvert.DeserializeObject<List<TopicModel>>(response.Data!.ToString());
 
             return View(topicList);
         }

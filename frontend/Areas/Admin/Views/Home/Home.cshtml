@@ -13,7 +13,9 @@
         <partial name="_QuestionDetailsModal"/>
         <partial name="_McqDetailsModal" />
         <partial name="_StudentDetailsModal" />
-        
+
+    @if(ViewData["InternalServerError"] == null){
+             
     <!-- Widgets count -->
     <div class="widgets">
         @if(isAdmin){
@@ -160,7 +162,8 @@
                     @* Start of Razor code block *@
                     @{
                         int mcqIdx = 1;
-                        foreach(McqModel mcq in Model.PaddingMcqRequest){
+                         if(Model != null && Model.PaddingMcqRequest != null){
+                             foreach(McqModel mcq in Model.PaddingMcqRequest){
                             <tr class="border-b text-nowrap  border-gray-200 ">
                                 <td class="py-3 px-6 text-left">@mcqIdx</td>
                                 <td class="py-3 px-6 text-left">@mcq.QuestionText</td>
@@ -181,12 +184,13 @@
                           mcqIdx++; 
                         }
                         // not found
-                        @**@
                         if(Model.PaddingMcqRequest.Count == 0){
                             <tr class="border-b text-nowrap  border-gray-200 ">
                                 <td class="py-3 px-6  text-center" colspan="4">No Record Found</td>
                             </tr>
                         }
+                        }
+                       
 
                     } 
 
@@ -220,7 +224,8 @@
                 <tbody id="courses" class="text-gray-700 text-sm font-light">
                     @{
                         int questionIdx = 1;
-                        foreach(QuestionModel question in Model.PaddingQuestionRequest){
+                        if(Model != null && Model.PaddingQuestionRequest != null){
+                             foreach(QuestionModel question in Model.PaddingQuestionRequest){
                             <tr class="border-b text-nowrap  border-gray-200 ">
                                 <td class="py-3 px-6 text-left">@questionIdx</td>
                                 <td class="py-3 px-6 text-left">@question.Question</td>
@@ -250,12 +255,17 @@
                                 <td class="py-3 px-6  text-center" colspan="5">No Record Found</td>
                             </tr>
                         }
+                        }
+                       
                     }   
 
                 </tbody>
             </table>
         </div>
     </div>
+
+    }
+   
 </div>
 
 

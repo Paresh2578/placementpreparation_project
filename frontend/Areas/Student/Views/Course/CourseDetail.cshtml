@@ -1,7 +1,9 @@
 ﻿@model Dictionary<string, dynamic>
 
 @{
-    string courseName = Model["course"]["courseName"];
+    string courseName =Model != null && Model["course"] != null ? Model["course"]["courseName"] : "";
+    string courseDescription = Model != null ? Model["course"]["description"] : "";
+    string courseId = Model != null ? Model["course"]["courseId"] : "";
     ViewData["Title"] = courseName;
 }
 
@@ -9,7 +11,7 @@
 <div class="page-title light-background">
     <div class="course">
         <h1>@courseName</h1>
-        <h4>@Model["course"]["description"]</h4>
+        <h4>@courseDescription</h4>
         <nav class="breadcrumbs">
             <ol>
                 <li><a asp-controller="Home" asp-action="Home">Home</a></li>
@@ -33,9 +35,12 @@
 
         <!-- Dropdown filters -->
         <div class="filter-container">
+            @if(ViewBag.difficultyLevelList != null)
+            {
             <select asp-items="@ViewBag.difficultyLevelList as List<SelectListItem>" class="filter-dropdown shadow-sm">
                 <option value="">All Difficulty Levels</option>
             </select>
+            }
         </div>
      </div>     
 
@@ -50,11 +55,11 @@
                     </tr>
                 </thead>
                 <tbody class="table-body" id="topicListBody">
-                    @{
+                    @if(Model != null && Model.ContainsKey("topicList")){
                         var index = 1;
                         foreach (var topic in Model["topicList"])
                     {
-                        <tr onclick='window.location.assign("CourseRead?courseId=@Model["course"]["courseId"]&topicId=@topic["topicId"]")'>
+                        <tr onclick='window.location.assign("CourseRead?courseId=@courseId&topicId=@topic["topicId"]")'>
                             <td>@index</td>
                             <td>@topic["topicName"]</td>
                             <td>@topic["difficultyLevel"]</td>

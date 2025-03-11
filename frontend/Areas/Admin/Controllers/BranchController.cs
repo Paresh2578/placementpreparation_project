@@ -27,11 +27,15 @@ namespace Placement_Preparation.Areas.Admin.Controllers
         public async Task<IActionResult> List()
         {
                 ApiResponseModel response = await _apiClient.GetAsync(_apiBaseUrl);
+                List<BranchModel> branchList = new List<BranchModel>();
                 if(response.StatusCode != 200)
                 {
                    TempData["ErrorMessage"] = response.Message;
+                   ViewData["InternalServerError"] = response.Message;
+
+                   return View(branchList);
                 }
-                List<BranchModel>  branchList =  JsonConvert.DeserializeObject<List<BranchModel>>(response.Data!.ToString());
+                branchList =  JsonConvert.DeserializeObject<List<BranchModel>>(response.Data!.ToString());
 
             return View(branchList);
         }

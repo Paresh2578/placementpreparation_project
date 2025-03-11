@@ -19,6 +19,10 @@
         Add Difficulty Level
         </h2> *@
 
+         @if(TempData["ErrorMessage"] != null){
+            <p class="validation-error-lable" style="text-align: start;">@TempData["ErrorMessage"]</p>
+        }
+
 
         <form asp-action="AddOrEditInterviewQuestion" asp-controller="Question" method="post" class="flex  w-full flex-col">
 

@@ -25,6 +25,8 @@ namespace Placement_Preparation.Areas.Student.Controllers
             if (responseModel.StatusCode == 200)
             {
                 courses = JsonConvert.DeserializeObject<List<CourseModel>>(responseModel.Data.ToString());
+            }else{
+              ViewData["InternalServerError"] = responseModel.Message;
             }
             return View(courses);
         }

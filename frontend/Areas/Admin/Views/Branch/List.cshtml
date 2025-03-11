@@ -5,6 +5,8 @@
     ViewData["Title"] = "Branch List";
 }
 
+<partial name="_Errors"/>
+@if(ViewData["InternalServerError"] == null){
 <div class="bg-white p-4 rounded-md shadow-lg">
     <!-- Header Section -->
     <div class="table-hader">
@@ -88,6 +90,8 @@
         </button>
     </div>
 </div>
+}
+
 
 @section Scripts {
     <script>

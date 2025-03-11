@@ -39,6 +39,7 @@ namespace Placement_Preparation.Areas.Admin.Controllers
                 if (response.StatusCode != 200)
                 {
                    TempData["ErrorMessage"] = response.Message;
+                     return View(subTopicList);
                 }
                   subTopicList =  JsonConvert.DeserializeObject<List<SubTopicModel>>(response.Data!.ToString());
 

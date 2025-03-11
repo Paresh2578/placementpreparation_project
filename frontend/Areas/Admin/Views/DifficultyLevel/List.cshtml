@@ -6,7 +6,8 @@
     
 }
 
-
+<partial name="_Errors"/>
+@if(ViewData["InternalServerError"] == null){
 <div class="bg-white p-4 rounded-md shadow-lg ">
     <!-- Header Section -->
     <div class="table-hader">
@@ -74,6 +75,7 @@
         <button id="handleDelete" class="clear-button m-4" style="margin-top: 20px; display: block;width: fit-content;"><i class="fa-regular fa-trash-can fa-bounce"></i> Delete </button>
     </div>
 </div> 
+}
 
 
 
