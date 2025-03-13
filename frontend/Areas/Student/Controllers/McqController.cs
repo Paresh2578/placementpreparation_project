@@ -32,6 +32,7 @@ namespace Placement_Preparation.Areas.Student.Controllers
           // check api response is success or not
           if(apiResponse.StatusCode != 200){
             TempData["ErrorMessage"] = apiResponse.Message;
+             ViewData["InternalServerError"] = apiResponse.Message;
             return View(courseData);
           }
 
@@ -53,10 +54,16 @@ namespace Placement_Preparation.Areas.Student.Controllers
               {
                   // Get interview MCQs
                   apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}/GetInterviewMcqs?onlyActiveMcqs=true&onlyAcceptApprovalStatus=true&pageNumber={pageNumber}&pageSize={pageSize}&techStack={techStack}&companyName={companyName}");
-                  // set compnay name and tech stack dropdown value
+
+                  if(apiResponse.StatusCode == 200){
+                    // set compnay name and tech stack dropdown value
                     Dictionary<string,List<SelectListItem>> comanyNameAndTechStack = await _allDropDown.GetMcqCompanyAndTechStack();
-                    ViewBag.companyNames = comanyNameAndTechStack["companyNames"];
-                    ViewBag.techStacks = comanyNameAndTechStack["techStacks"];
+
+                    if(comanyNameAndTechStack.ContainsKey("companyNames") && comanyNameAndTechStack.ContainsKey("techStacks")){
+                      ViewBag.companyNames = comanyNameAndTechStack["companyNames"];
+                      ViewBag.techStacks = comanyNameAndTechStack["techStacks"];
+                    }
+                  }
               }
               else
               {
@@ -67,6 +74,7 @@ namespace Placement_Preparation.Areas.Student.Controllers
               if (apiResponse.StatusCode != 200)
               {
                   TempData["ErrorMessage"] = apiResponse.Message;
+                  ViewData["InternalServerError"] = apiResponse.Message;
                   return View(Enumerable.Empty<McqModel>().ToPagedList(pageNumber ?? 1, pageSize ?? 10));
               }
 
@@ -99,7 +107,7 @@ namespace Placement_Preparation.Areas.Student.Controllers
           catch (Exception ex)
           {
               TempData["ErrorMessage"] = ex.Message;
-
+                ViewData["InternalServerError"] = ex.Message;
               // Return an empty paged list in case of an exception
               return View(Enumerable.Empty<McqModel>().ToPagedList(pageNumber ?? 1, pageSize ?? 10));
           }

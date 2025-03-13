@@ -51,7 +51,8 @@
 
 
       <!-- Filtter  -->
-      @if(string.IsNullOrEmpty(query["courseId"])){
+    @if (Model != null && string.IsNullOrEmpty(query["courseId"]) && ViewBag.companyNames != null && ViewBag.techStacks != null)
+    {
         <div data-aos="fade-up" class="container mb-3">
         <div class="row">
           <div class="col-md-12">
@@ -74,12 +75,14 @@
               <div class="filter shadow-sm ">
                 <select name="tech-stack" id="tech-stack" class="form-select"
                     onchange="window.location.href='QuestionList?courseName=Interview Questions&techStack=' + this.value + '&companyName=@(companyName ?? "")';">
-                        @foreach (var item in (List<SelectListItem>)ViewBag.techStacks)
+                        @if(Model != null && ViewBag.techStacks != null){
+                            foreach (var item in (List<SelectListItem>)ViewBag.techStacks)
                         {
                             <option value="@item.Value" selected="@(item.Value == techStack)">
                                 @item.Text
                             </option>
-                 }
+                      }
+                        }
             </select>
              </div>
             </div>
@@ -90,7 +93,8 @@
             <!-- End Filtter  -->
 
     <!-- mcq list -->
-    @{
+    @if(Model !=  null && ViewData["InternalServerError"] == null)
+    {
         int index =  (Model.PageNumber - 1) * Model.PageSize + 1;
     foreach(QuestionModel question in Model){
          <div data-aos="fade-up" class=" shadow question-card-container bg-white rounded" >
@@ -114,6 +118,8 @@
        if(Model.Count == 0){
           <h3 class="text-center mt-4" data-aos="fade-up">No Question Found</h3>
        }   
+    }else{
+        <partial name="_Errors"/>
     }
 
    <!-- Pagination -->
@@ -137,7 +143,3 @@
     </div>
     <!-- End Pagination -->
 </section>
-
-@section Scripts{
-  
-}

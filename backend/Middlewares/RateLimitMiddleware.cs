@@ -11,7 +11,7 @@ namespace backend.Middlewares
         private readonly RequestDelegate _next;
         private static readonly ConcurrentDictionary<string, List<DateTime>> _requestLogs = new();
 
-        private readonly int _maxRequests = 1; // Max 10 Requests
+        private readonly int _maxRequests = 3; // Max 10 Requests
         private readonly TimeSpan _timeWindow = TimeSpan.FromSeconds(5); // Time Window 5 Seconds
 
         public RateLimitMiddleware(RequestDelegate next)

@@ -3,7 +3,9 @@
 
 @{
     ViewData["Title"] = "Home";
-    
+
+    string apiBaseUrl = CV.BaseURL();
+    ViewData["apiBaseUrl"] = apiBaseUrl;
 }
 
 <div>
@@ -103,7 +105,7 @@
         </div>
         }
       
-        @if(Model.Count <= 4){
+        @if(Model.Count > 4 && ViewData["InternalServerError"] == null){
             <div class="row">
                 <div class="text-center mt-4">
                     <a asp-action="ListAllCourse"  asp-controller="Course" class="more-button icon-button">More Courses</a>
@@ -296,6 +298,7 @@
             event.preventDefault();
 
             const modelLoading = document.getElementById('model-loading');
+            console.log();
 
             const formData = new FormData(event.target);
             const data = {
@@ -307,9 +310,8 @@
 
             //show Loading
             modelLoading.classList.remove('d-none');
-
-            @* fetch(`${CV.baseUrl()}Feedback`, { *@
-            fetch(`http://localhost:5067/api/Feedback`, {
+            fetch(`@ViewData["apiBaseUrl"]Feedback`, {
+            @* fetch(`http://localhost:5067/api/Feedback`, { *@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

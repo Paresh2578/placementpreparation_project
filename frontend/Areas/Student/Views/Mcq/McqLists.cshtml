@@ -32,8 +32,6 @@
                     <li><a asp-controller="Mcq" asp-action="ListAllCourses">Courses</a></li>
                 }
                    <li class="current">Mcqs</li>
-                
-                
             </ol>
         </nav>
     </div>
@@ -50,7 +48,7 @@
       </div><!-- End Section Title -->  
 
          <!-- Filtter  -->
-      @if(string.IsNullOrEmpty(query["courseId"])){
+      @if(string.IsNullOrEmpty(query["courseId"]) && ViewBag.companyNames != null && ViewBag.techStacks != null){
         <div data-aos="fade-up" class="container mb-3">
         <div class="row">
           <div class="col-md-12">
@@ -86,9 +84,15 @@
       }
             <!-- End Filtter  -->
 
+    <!-- show internal server error -->
+    @if(ViewData["InternalServerError"] != null){
+      <partial name="_Errors"/>
+    }
+            
+
 
     <!-- mcq list -->
-    @{
+    @if(Model != null && ViewData["InternalServerError"] == null){
         int index =  (Model.PageNumber - 1) * Model.PageSize + 1;
         foreach(McqModel mcq in Model){
           <!-- convert markdown to html -->

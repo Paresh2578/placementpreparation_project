@@ -1,5 +1,11 @@
 @model List<Dictionary<string, dynamic>>;
 
+
+
+@{
+    TempData["Title"] = "Select Courses for Qestions";
+}
+
 <!-- Page Title -->
 <div class="page-title light-background">
     <div class="course">
@@ -23,9 +29,12 @@
      <div class="search-section">
         <!-- Input field for search -->
        <input type="text" id="input-search" style="flex: 1 1 40%;" class="search-input" placeholder="Search Courses...">
-     </div>     
+     </div> 
 
-    <!-- List  Subtopic -->
+     @if(ViewData["InternalServerError"] != null)    {
+        <partial name="_Errors"/>
+     }else{
+        <!-- List  Subtopic -->
        <div class="table-container rounded-4 shadow">
             <table class="table-body">
                 <thead>
@@ -56,6 +65,7 @@
                 </tbody>
             </table>
         </div>
+     }
       </div><!-- End Section Title -->
 
 </section>

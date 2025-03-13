@@ -32,6 +32,7 @@ namespace Placement_Preparation.Areas.Student.Controllers
           // check api response is success or not
           if(apiResponse.StatusCode != 200){
             TempData["ErrorMessage"] = apiResponse.Message;
+            ViewData["InternalServerError"] = apiResponse.Message;
             return View(courseData);
           }
 
@@ -46,29 +47,47 @@ namespace Placement_Preparation.Areas.Student.Controllers
         public async Task<IActionResult> QuestionList(string courseName,string? companyName , string? techStack, string? courseId,int? pageNumber=1,int? pageSize=10){
           try{
               ApiResponseModel apiResponse = new ApiResponseModel();
+
+              
+            List<QuestionModel> questions = new List<QuestionModel>();
+
+         
+
             if(courseId == null){
               // get interview  questions
               apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}/InterviewQuestions?onlyActiveQuestions=true&onlyAcceptApprovalStatus=true&pageNumber={pageNumber}&pageSize={pageSize}&techStack={techStack}&companyName={companyName}");
 
-              // set compnay name and tech stack dropdown value
-              Dictionary<string,List<SelectListItem>> comanyNameAndTechStack = await _allDropDown.GetQuestionCompanyAndTechStack();
-              ViewBag.companyNames = comanyNameAndTechStack["companyNames"];
-              ViewBag.techStacks = comanyNameAndTechStack["techStacks"];
+                    // check api response is success or not
+                    if (apiResponse.StatusCode == 200)
+                    {
+                        // set compnay name and tech stack dropdown value
+                        Dictionary<string, List<SelectListItem>> comanyNameAndTechStack = await _allDropDown.GetQuestionCompanyAndTechStack();
+
+                        if (!comanyNameAndTechStack.ContainsKey("companyNames"))
+                        {
+                            ViewData["InternalServerError"] = "Some Error for fetching data";
+							return View(questions.ToPagedList(pageNumber ?? 0, pageSize ?? 0));
+                        }
+
+                        ViewBag.companyNames = comanyNameAndTechStack["companyNames"];
+                        ViewBag.techStacks = comanyNameAndTechStack["techStacks"];
+                    }
             }else{
               // get couese wise questions
               apiResponse = await _apiClient.GetAsync($"{_apiBaseUrl}?courseId={courseId}&onlyActiveQuestions=true&pageNumber={pageNumber}&pageSize={pageSize}");
             }
-            
-          
-            List<QuestionModel> questions = new List<QuestionModel>();
 
-            // check api response is success or not
-            if(apiResponse.StatusCode != 200){
-              TempData["ErrorMessage"] = apiResponse.Message;
-              return View(questions);
-            }
+				// check api response is success or not
+				if (apiResponse.StatusCode != 200)
+				{
+					ViewData["ErrorMessage"] = apiResponse.Message;
+					ViewData["InternalServerError"] = apiResponse.Message;
+					return View(questions.ToPagedList(pageNumber ?? 0, pageSize ?? 0));
+				}
 
-               Dictionary<string, dynamic> questionData = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(apiResponse.Data.ToString());
+
+
+				Dictionary<string, dynamic> questionData = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(apiResponse.Data.ToString());
 
                 // add empty data for pagination
                 questions.AddRange(Enumerable.Repeat(new QuestionModel { Question = string.Empty, QuestionAnswer = string.Empty }, Convert.ToInt32(questionData["totalQuestions"])));
@@ -85,7 +104,8 @@ namespace Placement_Preparation.Areas.Student.Controllers
             
             return View(pagedQuestions);
           }catch(Exception ex){
-            TempData["ErrorMessage"] = ex.Message;
+            ViewData["ErrorMessage"] = ex.Message;
+            ViewData["InternalServerError"] = ex.Message;
             return View(new List<QuestionModel>());
           }
         }

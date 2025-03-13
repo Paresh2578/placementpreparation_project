@@ -31,36 +31,38 @@ namespace Frontend.Services
         #region Common GetAsync 
         public async Task<ApiResponseModel> GetAsync(string endpoint)
         {
+  
             try{
                 var response = await _httpClient.GetAsync(endpoint);
 
-                 // many request send to server in a short time
-                if(response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                // many request send to server in a short time
+                if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
                 {
-                    return new ApiResponseModel {StatusCode = 429,Message = "Too many requests send in a short time. Plz try again after 5 secound"};
+                    return new ApiResponseModel { StatusCode = 429, Message = "Too many requests send in a short time. Plz try again after 5 secound" };
                 }
 
                 var responseContent = await response.Content.ReadAsStringAsync();
 
-				// Redirect to login if unauthorized
-				if (response.ReasonPhrase == "Unauthorized")
-				{
-					RedirectToLogin();
-				}
-
-				ApiResponseModel? apiResponseModel = JsonConvert.DeserializeObject<ApiResponseModel>(responseContent);
-                if(apiResponseModel is not null && apiResponseModel.StatusCode != 0)
-                {
-                    return apiResponseModel;    
-                }
-                 // Redirect to login if unauthorized
-                if(apiResponseModel.StatusCode == 403 || response.ReasonPhrase == "Unauthorized")
+                // Redirect to login if unauthorized
+                if (response.ReasonPhrase == "Unauthorized")
                 {
                     RedirectToLogin();
                 }
 
-               
-                return new ApiResponseModel {StatusCode = (int)response.StatusCode,Message = response.ReasonPhrase};
+                ApiResponseModel? apiResponseModel = JsonConvert.DeserializeObject<ApiResponseModel>(responseContent);
+                if (apiResponseModel is not null && apiResponseModel.StatusCode != 0)
+                {
+                    return apiResponseModel;
+                }
+                // Redirect to login if unauthorized
+                if (apiResponseModel.StatusCode == 403 || response.ReasonPhrase == "Unauthorized")
+                {
+                    RedirectToLogin();
+                }
+
+
+                return new ApiResponseModel { StatusCode = (int)response.StatusCode, Message = response.ReasonPhrase };
+            
             }catch(Exception ex){
                 return new ApiResponseModel {StatusCode = 500,Message = ex.Message};
             }
