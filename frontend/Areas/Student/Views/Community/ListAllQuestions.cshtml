@@ -1,0 +1,93 @@
+
+@{
+    ViewData["Title"] = "Community - All Questions";
+}
+
+
+<!-- Question Section -->
+<section id="question-section" class="container community-container section">
+    <div class="container section-title">
+        <h2>All Questions</h2>
+        <h5>Explore all the questions available in the community.</h5>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <a asp-action="AskQuestion" class="ask-btn">Ask Question</a>
+    </header>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="search problem" style="width: 100%;">
+        </div>
+
+        <!-- Questions List -->
+        <div class="questions-list">
+            <!-- Question 1 -->
+            <article class="question-card" tabindex="0" onclick='window.location.assign("/Student/Community/QuestionDetails")'>
+                <div class="question-header">
+                    <div class="question-number">1</div>
+                    <h2 class="question-title">What is flutter ?</h2>
+                </div>
+                <div class="question-meta">
+                    <div class="meta-item timestamp">
+                        Asked : Today
+                    </div>
+                    <div class="meta-item answers-count">
+                        Answers : 10
+                    </div>
+                </div>
+            </article>
+
+            <!-- Question 2 -->
+            <article class="question-card" tabindex="0">
+                <div class="question-header">
+                    <div class="question-number">2</div>
+                    <h2 class="question-title">How to implement state management in React?</h2>
+                </div>
+                <div class="question-meta">
+                    <div class="meta-item timestamp">
+                        Asked : 2 hours ago
+                    </div>
+                    <div class="meta-item answers-count">
+                        Answers : 7
+                    </div>
+                </div>
+            </article>
+
+            <!-- Question 3 -->
+            <article class="question-card" tabindex="0">
+                <div class="question-header">
+                    <div class="question-number">3</div>
+                    <h2 class="question-title">Best practices for responsive web design?</h2>
+                </div>
+                <div class="question-meta">
+                    <div class="meta-item timestamp">
+                        Asked : Yesterday
+                    </div>
+                    <div class="meta-item answers-count">
+                        Answers : 12
+                    </div>
+                </div>
+            </article>
+
+            <!-- Question 4 -->
+            <article class="question-card" tabindex="0">
+                <div class="question-header">
+                    <div class="question-number">4</div>
+                    <h2 class="question-title">How to optimize database queries for better performance?</h2>
+                </div>
+                <div class="question-meta">
+                    <div class="meta-item timestamp">
+                        Asked : 3 days ago
+                    </div>
+                    <div class="meta-item answers-count">
+                        Answers : 18
+                    </div>
+                </div>
+            </article>
+        </div>
+
+    
+</section>
+

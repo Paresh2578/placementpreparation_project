@@ -221,7 +221,7 @@ body {
   }
   
   .section-title {
-    font-size: 1.875rem; /* Tailwind's text-3xl */
+    font-size: 2.875rem; /* Tailwind's text-3xl */
     font-weight: bold;
     margin-bottom: 16px; /* Tailwind's mb-4 */
   }

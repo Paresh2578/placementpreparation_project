@@ -1,0 +1,379 @@
+
+@{
+    ViewData["Title"] = "Community - All Questions";
+}
+
+
+<!-- Question Section -->
+<section id="question-section" class="container community-container section">
+    <!-- Question -->
+        <div class="question-container">
+            <h1 class="question-title">Is it valid to nest usages of two different CRITICAL_SECTIONs?</h1>
+            
+            <div class="question-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Asked</span>
+                    <span class="meta-value">today</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Modified</span>
+                    <span class="meta-value">today</span>
+                </div>
+            </div>
+
+            <div class="question-content">
+                <p class="question-text">
+                    I.e. where <code>CS_ResultSetSpace</code> and <code>CS_MHeap</code> are Win32 <code>CRITICAL_SECTION</code> objects initialized elsewhere:
+                </p>
+
+               
+            </div>
+
+            <div class="question-actions">
+                <a href="#" class="action-btn">
+                    <span>👍</span> Upvote
+                </a>
+                <a href="#" class="action-btn">
+                    <span>👎</span> Downvote
+                </a>
+                <a href="#" class="action-btn">
+                    <span>🔖</span> Bookmark
+                </a>
+                <a href="#" class="action-btn">
+                    <span>🔗</span> Share
+                </a>
+            </div>
+        </div>
+
+        <!-- Answer Form -->
+        <div class="answer-form">
+            <h2 class="form-title">Your Answer</h2>
+            <form>
+                <div class="form-group">
+                    <textarea 
+                        class="form-textarea"
+                        id="post-answer-textarea"
+                        rows="5" 
+                        placeholder="Write your answer here... You can use Markdown formatting."
+                        required
+                    ></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Post Your Answer</button>
+            </form>
+        </div>
+
+        <!-- Answers Section -->
+        <div class="answers-section">
+            <div class="answers-header">
+                <h2 class="answers-title">10 Answers</h2>
+                <div class="sort-container">
+                    <span>Sorted by:</span>
+                    <select class="sort-select">
+                        <option value="highest">Highest Like (default)</option>
+                        <option value="newest">Newest</option>
+                        <option value="oldest">Oldest</option>
+                        <option value="active">Most Active</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Answer 1 -->
+            <div class="answer-item">
+                <div class="answer-content">
+                    <p>Yes, it is valid to nest different CRITICAL_SECTIONs as long as you follow proper locking order to avoid deadlocks. The key principle is to always acquire locks in the same order across all threads.</p>
+                    <p>In your code example, you're acquiring CS_ResultSetSpace first, then CS_MHeap. As long as all other threads that need both locks acquire them in the same order, you won't have deadlock issues.</p>
+                </div>
+                <div class="answer-actions">
+                    <div class="answer-votes">
+                        <button class="vote-btn upvoted">
+                            <span>👍</span> 10
+                        </button>
+                        <button class="comment-btn" data-answer="1">
+                            <span>💬</span> Comment
+                        </button>
+                    </div>
+                    <div class="answer-meta">
+                        answered Dec 22, 2021 at 8:55
+                    </div>
+                </div>
+
+                <!-- Comment Form (Hidden by default) -->
+                <div class="comment-form" id="comment-form-1">
+                    <div class="comment-form-header">
+                        <h3 class="comment-form-title">
+                            <span>💬</span> Add a comment
+                        </h3>
+                        <button class="comment-form-close" type="button">×</button>
+                    </div>
+                    <form class="comment-form-content">
+                        <textarea 
+                            class="comment-input" 
+                            placeholder="Write your comment here... Be respectful and constructive."
+                            maxlength="500"
+                        ></textarea>
+                        <div class="comment-form-actions">
+                            <p class="comment-help-text">Use comments to ask for clarification or suggest improvements.</p>
+                            <div style="display: flex; gap: 10px;">
+                                <button type="button" class="comment-cancel-btn">Cancel</button>
+                                <button type="submit" class="comment-submit-btn">Post Comment</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Existing Comments -->
+                <div class="comments-list">
+                    <div class="comment-item">
+                        <span class="comment-author">developer123</span>
+                        <span class="comment-time">2 hours ago</span>
+                        <div>Great explanation! Could you provide an example of what happens when locks are acquired in different orders?</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Answer 2 -->
+            <div class="answer-item">
+                <div class="answer-content">
+                    <p>While nesting critical sections is technically possible, it's generally not recommended unless absolutely necessary. Consider using a single critical section or redesigning your synchronization strategy.</p>
+                    <p>If you must nest them, document the locking order clearly and ensure all code paths follow the same order.</p>
+                </div>
+                <div class="answer-actions">
+                    <div class="answer-votes">
+                        <button class="vote-btn">
+                            <span>👍</span> 5
+                        </button>
+                        <button class="comment-btn" data-answer="2">
+                            <span>💬</span> Comment
+                        </button>
+                    </div>
+                    <div class="answer-meta">
+                        answered Dec 22, 2021 at 9:12
+                    </div>
+                </div>
+
+                <!-- Comment Form (Hidden by default) -->
+                <div class="comment-form" id="comment-form-2">
+                    <div class="comment-form-header">
+                        <h3 class="comment-form-title">
+                            <span>💬</span> Add a comment
+                        </h3>
+                        <button class="comment-form-close" type="button">×</button>
+                    </div>
+                    <form class="comment-form-content">
+                        <textarea 
+                            class="comment-input" 
+                            id="comment-input-2"
+                            placeholder="Write your comment here... Be respectful and constructive."
+                            maxlength="500"
+                        ></textarea>
+                        <div class="comment-form-actions">
+                            <p class="comment-help-text">Use comments to ask for clarification or suggest improvements.</p>
+                            <div style="display: flex; gap: 10px;">
+                                <button type="button" class="comment-cancel-btn">Cancel</button>
+                                <button type="submit" class="comment-submit-btn">Post Comment</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Answer 3 -->
+            <div class="answer-item">
+                <div class="answer-content">
+                    <p>Be very careful with nested critical sections. The main concern is deadlock prevention. Your code looks safe as long as no other thread tries to acquire these locks in reverse order.</p>
+                </div>
+                <div class="answer-actions">
+                    <div class="answer-votes">
+                        <button class="vote-btn">
+                            <span>👍</span> 3
+                        </button>
+                        <button class="comment-btn" data-answer="3">
+                            <span>💬</span> Comment
+                        </button>
+                    </div>
+                    <div class="answer-meta">
+                        answered Dec 22, 2021 at 10:30
+                    </div>
+                </div>
+
+                <!-- Comment Form (Hidden by default) -->
+                <div class="comment-form" id="comment-form-3">
+                    <div class="comment-form-header">
+                        <h3 class="comment-form-title">
+                            <span>💬</span> Add a comment
+                        </h3>
+                        <button class="comment-form-close" type="button">×</button>
+                    </div>
+                    <form class="comment-form-content">
+                        <textarea 
+                            class="comment-input" 
+                            placeholder="Write your comment here... Be respectful and constructive."
+                            maxlength="500"
+                        ></textarea>
+                        <div class="comment-form-actions">
+                            <p class="comment-help-text">Use comments to ask for clarification or suggest improvements.</p>
+                            <div style="display: flex; gap: 10px;">
+                                <button type="button" class="comment-cancel-btn">Cancel</button>
+                                <button type="submit" class="comment-submit-btn">Post Comment</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+</section>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script> <!-- Local version of jQuery -->
+@section Scripts{
+    @* post answer *@
+    <script>
+        const easymde = new EasyMDE({
+            element: document.getElementById('post-answer-textarea'),
+        });
+    </script>
+    
+
+    <script>
+        // Add interactive functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vote buttons
+            const voteButtons = document.querySelectorAll('.vote-btn');
+            voteButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    this.classList.toggle('upvoted');
+                });
+            });
+
+            // Form submission
+            const answerForm = document.querySelector('.answer-form form');
+            answerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const textarea = this.querySelector('.form-textarea');
+                if (textarea.value.trim()) {
+                    alert('Answer submitted! (This is a demo)');
+                    textarea.value = '';
+                } else {
+                    alert('Please write an answer before submitting.');
+                }
+            });
+
+            // Sort functionality
+            const sortSelect = document.querySelector('.sort-select');
+            sortSelect.addEventListener('change', function() {
+                console.log('Sorting by:', this.value);
+                // Here you would implement actual sorting logic
+            });
+
+            // Action buttons
+            const actionButtons = document.querySelectorAll('.action-btn');
+            actionButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const action = this.textContent.trim();
+                    console.log('Action clicked:', action);
+                });
+            });
+
+            // Comment functionality
+            const commentButtons = document.querySelectorAll('.comment-btn');
+            const commentForms = document.querySelectorAll('.comment-form');
+
+            commentButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const answerId = this.getAttribute('data-answer');
+                    const commentForm = document.getElementById(`comment-form-${answerId}`);
+                    
+                    // Hide all other comment forms
+                    commentForms.forEach(form => {
+                        if (form !== commentForm) {
+                            form.classList.remove('show');
+                        }
+                    });
+
+                    // Toggle current comment form
+                    commentForm.classList.toggle('show');
+                    
+                    // Focus on textarea if form is shown
+                    if (commentForm.classList.contains('show')) {
+                        setTimeout(() => {
+                            const textarea = commentForm.querySelector('.comment-input');
+                            textarea.focus();
+                        }, 200);
+                    }
+                });
+            });
+
+            // Comment form close buttons
+            const closeButtons = document.querySelectorAll('.comment-form-close');
+            closeButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const commentForm = this.closest('.comment-form');
+                    commentForm.classList.remove('show');
+                });
+            });
+
+            // Comment form cancel buttons
+            const cancelButtons = document.querySelectorAll('.comment-cancel-btn');
+            cancelButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const commentForm = this.closest('.comment-form');
+                    const textarea = commentForm.querySelector('.comment-input');
+                    textarea.value = '';
+                    commentForm.classList.remove('show');
+                });
+            });
+
+            // Comment form submissions
+            const commentFormContents = document.querySelectorAll('.comment-form-content');
+            commentFormContents.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const textarea = this.querySelector('.comment-input');
+                    const commentText = textarea.value.trim();
+                    
+                    if (commentText) {
+                        // Simulate comment submission
+                        alert(`Comment posted: "${commentText}" (This is a demo)`);
+                        textarea.value = '';
+                        this.closest('.comment-form').classList.remove('show');
+                        
+                        // Here you would typically send the comment to your backend
+                        console.log('Comment submitted:', commentText);
+                    } else {
+                        alert('Please write a comment before submitting.');
+                    }
+                });
+            });
+
+            // Auto-resize comment textareas
+            const commentInputs = document.querySelectorAll('.comment-input');
+            commentInputs.forEach(textarea => {
+                textarea.addEventListener('input', function() {
+                    this.style.height = 'auto';
+                    this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+                });
+            });
+
+            // Close comment forms when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.comment-form') && !e.target.closest('.comment-btn')) {
+                    commentForms.forEach(form => {
+                        form.classList.remove('show');
+                    });
+                }
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Escape key to close comment forms
+                if (e.key === 'Escape') {
+                    commentForms.forEach(form => {
+                        form.classList.remove('show');
+                    });
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,302 @@
+
+@{
+    ViewData["Title"] = "Community - Ask Question";
+}
+
+
+<!-- Question Section -->
+<section id="question-section" class="container community-container section">
+    <div class="form-container">
+        <div class="form-header">
+            <h1 class="form-title">Ask a Question</h1>
+            <p class="form-subtitle">Get help from our community of developers and experts</p>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            <strong>Success!</strong> Your question has been posted successfully.
+        </div>
+
+        <div class="form-tips">
+            <div class="tips-title">
+                <span>💡</span> Tips for a great question
+            </div>
+            <ul class="tips-list">
+                <li>Write a clear, specific title that summarizes your problem</li>
+                <li>Provide detailed context and what you've already tried</li>
+                <li>Include relevant code, error messages, or examples</li>
+                <li>Be respectful and follow community guidelines</li>
+            </ul>
+        </div>
+
+        <form id="questionForm" novalidate>
+            <!-- Title Field -->
+            <div class="form-group floating-label">
+                <input 
+                    type="text" 
+                    id="title" 
+                    name="title" 
+                    class="form-input" 
+                    placeholder=" "
+                    maxlength="150"
+                    required
+                >
+                <label for="title" class="form-label">Question Title</label>
+                <div class="char-counter" id="titleCounter">0/150</div>
+                <div class="error-message" id="titleError"></div>
+            </div>
+
+            <!-- Description Field -->
+            <div class="form-group floating-label">
+                <textarea 
+                    id="description" 
+                    name="description" 
+                    class="form-textarea" 
+                    placeholder=" "
+                    maxlength="5000"
+                    required
+                ></textarea>
+                <label for="description" class="form-label">Detailed Description</label>
+                <div class="char-counter" id="descriptionCounter">0/5000</div>
+                <div class="error-message" id="descriptionError"></div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span class="btn-text">Post Your Question</span>
+                </button>
+                <button type="button" class="cancel-btn" id="cancelBtn">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+
+</section>
+
+
+@section Scripts{
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('questionForm');
+            const titleInput = document.getElementById('title');
+            const descriptionInput = document.getElementById('description');
+            const submitBtn = document.getElementById('submitBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const successMessage = document.getElementById('successMessage');
+
+            // Character counters
+            const titleCounter = document.getElementById('titleCounter');
+            const descriptionCounter = document.getElementById('descriptionCounter');
+
+            // Error messages
+            const titleError = document.getElementById('titleError');
+            const descriptionError = document.getElementById('descriptionError');
+
+            // Update character counters
+            function updateCharCounter(input, counter, maxLength) {
+                const currentLength = input.value.length;
+                counter.textContent = `${currentLength}/${maxLength}`;
+                
+                // Update counter color based on usage
+                counter.classList.remove('warning', 'danger');
+                if (currentLength > maxLength * 0.8) {
+                    counter.classList.add('warning');
+                }
+                if (currentLength > maxLength * 0.95) {
+                    counter.classList.add('danger');
+                }
+            }
+
+            // Title input handlers
+            titleInput.addEventListener('input', function() {
+                updateCharCounter(this, titleCounter, 150);
+                clearError(titleError);
+            });
+
+            // Description input handlers
+            descriptionInput.addEventListener('input', function() {
+                updateCharCounter(this, descriptionCounter, 5000);
+                clearError(descriptionError);
+                
+                // Auto-resize textarea
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 300) + 'px';
+            });
+
+            // Validation functions
+            function validateTitle() {
+                const title = titleInput.value.trim();
+                if (!title) {
+                    showError(titleError, 'Please enter a question title');
+                    return false;
+                }
+                if (title.length < 10) {
+                    showError(titleError, 'Title must be at least 10 characters long');
+                    return false;
+                }
+                if (title.length > 150) {
+                    showError(titleError, 'Title must be less than 150 characters');
+                    return false;
+                }
+                return true;
+            }
+
+            function validateDescription() {
+                const description = descriptionInput.value.trim();
+                if (!description) {
+                    showError(descriptionError, 'Please provide a detailed description');
+                    return false;
+                }
+                if (description.length < 30) {
+                    showError(descriptionError, 'Description must be at least 30 characters long');
+                    return false;
+                }
+                if (description.length > 5000) {
+                    showError(descriptionError, 'Description must be less than 5000 characters');
+                    return false;
+                }
+                return true;
+            }
+
+            function showError(errorElement, message) {
+                errorElement.textContent = message;
+                errorElement.classList.add('show');
+            }
+
+            function clearError(errorElement) {
+                errorElement.classList.remove('show');
+            }
+
+            function clearAllErrors() {
+                clearError(titleError);
+                clearError(descriptionError);
+            }
+
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                clearAllErrors();
+                
+                const isTitleValid = validateTitle();
+                const isDescriptionValid = validateDescription();
+                
+                if (isTitleValid && isDescriptionValid) {
+                    // Show loading state
+                    submitBtn.classList.add('loading');
+                    submitBtn.disabled = true;
+                    
+                    // Simulate API call
+                    setTimeout(() => {
+                        // Hide loading state
+                        submitBtn.classList.remove('loading');
+                        submitBtn.disabled = false;
+                        
+                        // Show success message
+                        successMessage.classList.add('show');
+                        
+                        // Reset form
+                        form.reset();
+                        updateCharCounter(titleInput, titleCounter, 150);
+                        updateCharCounter(descriptionInput, descriptionCounter, 5000);
+                        descriptionInput.style.height = 'auto';
+                        
+                        // Hide success message after 5 seconds
+                        setTimeout(() => {
+                            successMessage.classList.remove('show');
+                        }, 5000);
+                        
+                        // Scroll to top
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        
+                        console.log('Question submitted:', {
+                            title: titleInput.value,
+                            description: descriptionInput.value
+                        });
+                    }, 2000);
+                }
+            });
+
+            // Cancel button
+            cancelBtn.addEventListener('click', function() {
+                if (titleInput.value.trim() || descriptionInput.value.trim()) {
+                    if (confirm('Are you sure you want to cancel? Your changes will be lost.')) {
+                        form.reset();
+                        updateCharCounter(titleInput, titleCounter, 150);
+                        updateCharCounter(descriptionInput, descriptionCounter, 5000);
+                        descriptionInput.style.height = 'auto';
+                        clearAllErrors();
+                        
+                        // Redirect to questions page (in a real app)
+                        console.log('Redirecting to questions page...');
+                    }
+                } else {
+                    // Redirect to questions page (in a real app)
+                    console.log('Redirecting to questions page...');
+                }
+            });
+
+            // Real-time validation on blur
+            titleInput.addEventListener('blur', validateTitle);
+            descriptionInput.addEventListener('blur', validateDescription);
+
+            // Prevent form submission on Enter in title field
+            titleInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    descriptionInput.focus();
+                }
+            });
+
+            // Auto-save to localStorage (optional feature)
+            function autoSave() {
+                const formData = {
+                    title: titleInput.value,
+                    description: descriptionInput.value,
+                    timestamp: Date.now()
+                };
+                localStorage.setItem('questionDraft', JSON.stringify(formData));
+            }
+
+            // Load saved draft
+            function loadDraft() {
+                const saved = localStorage.getItem('questionDraft');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    // Only load if saved within last hour
+                    if (Date.now() - data.timestamp < 3600000) {
+                        titleInput.value = data.title || '';
+                        descriptionInput.value = data.description || '';
+                        updateCharCounter(titleInput, titleCounter, 150);
+                        updateCharCounter(descriptionInput, descriptionCounter, 5000);
+                    }
+                }
+            }
+
+            // Auto-save every 30 seconds
+            setInterval(autoSave, 30000);
+
+            // Save on input
+            titleInput.addEventListener('input', autoSave);
+            descriptionInput.addEventListener('input', autoSave);
+
+            // Load draft on page load
+            loadDraft();
+
+            // Clear draft on successful submission
+            form.addEventListener('submit', function() {
+                localStorage.removeItem('questionDraft');
+            });
+
+            // Enhanced accessibility
+            titleInput.addEventListener('focus', function() {
+                this.setAttribute('aria-describedby', 'titleCounter titleError');
+            });
+
+            descriptionInput.addEventListener('focus', function() {
+                this.setAttribute('aria-describedby', 'descriptionCounter descriptionError');
+            });
+        });
+    </script>
+}
