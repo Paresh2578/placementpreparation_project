@@ -5,7 +5,7 @@
 
 
 <!-- Question Section -->
-<section id="question-section" class="container community-container section">
+<section id="question-section" class="container community-container section" style="display: flex; justify-content: center; align-items: center;">
     <div class="form-container">
         <div class="form-header">
             <h1 class="form-title">Ask a Question</h1>
@@ -46,7 +46,7 @@
             </div>
 
             <!-- Description Field -->
-            <div class="form-group floating-label">
+            <div class="form-group">
                 <textarea 
                     id="description" 
                     name="description" 
@@ -55,17 +55,16 @@
                     maxlength="5000"
                     required
                 ></textarea>
-                <label for="description" class="form-label">Detailed Description</label>
                 <div class="char-counter" id="descriptionCounter">0/5000</div>
                 <div class="error-message" id="descriptionError"></div>
             </div>
 
             <!-- Form Actions -->
-            <div class="form-actions">
-                <button type="submit" class="submit-btn" id="submitBtn">
+            <div class="add-question-form-actions">
+                <button type="submit" class="question-submit-btn" id="submitBtn">
                     <span class="btn-text">Post Your Question</span>
                 </button>
-                <button type="button" class="cancel-btn" id="cancelBtn">
+                <button type="button" class="question-cancel-btn" id="cancelBtn">
                     Cancel
                 </button>
             </div>
@@ -76,6 +75,15 @@
 
 
 @section Scripts{
+    
+    <script src="~/lib/jquery/jquery.min.js"></script>
+     @* post answer *@
+    <script>
+        const easymde = new EasyMDE({
+            element: document.getElementById('description'),
+        });
+    </script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('questionForm');
@@ -124,60 +132,11 @@
                 this.style.height = Math.min(this.scrollHeight, 300) + 'px';
             });
 
-            // Validation functions
-            function validateTitle() {
-                const title = titleInput.value.trim();
-                if (!title) {
-                    showError(titleError, 'Please enter a question title');
-                    return false;
-                }
-                if (title.length < 10) {
-                    showError(titleError, 'Title must be at least 10 characters long');
-                    return false;
-                }
-                if (title.length > 150) {
-                    showError(titleError, 'Title must be less than 150 characters');
-                    return false;
-                }
-                return true;
-            }
-
-            function validateDescription() {
-                const description = descriptionInput.value.trim();
-                if (!description) {
-                    showError(descriptionError, 'Please provide a detailed description');
-                    return false;
-                }
-                if (description.length < 30) {
-                    showError(descriptionError, 'Description must be at least 30 characters long');
-                    return false;
-                }
-                if (description.length > 5000) {
-                    showError(descriptionError, 'Description must be less than 5000 characters');
-                    return false;
-                }
-                return true;
-            }
-
-            function showError(errorElement, message) {
-                errorElement.textContent = message;
-                errorElement.classList.add('show');
-            }
-
-            function clearError(errorElement) {
-                errorElement.classList.remove('show');
-            }
-
-            function clearAllErrors() {
-                clearError(titleError);
-                clearError(descriptionError);
-            }
-
+            
             // Form submission
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                clearAllErrors();
                 
                 const isTitleValid = validateTitle();
                 const isDescriptionValid = validateDescription();

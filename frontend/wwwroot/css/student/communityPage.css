@@ -13,6 +13,13 @@
             padding:0px  20px;
         }
 
+        /* responsive design */
+        @media (max-width: 768px) {
+            .community-container {
+                margin-top: 10vh;
+            }
+        }
+
         .community-container .section-title h1{
             font-size: 2.5rem;
             font-weight: 700;
@@ -107,7 +114,7 @@
             display: flex;
             align-items: flex-start;
             gap: 16px;
-            margin-bottom: 16px;
+            /* margin-bottom: 16px; */
         }
 
         .question-number {
@@ -158,25 +165,6 @@
 
         /* Responsive Design */
      @media (max-width: 768px) {
-            /* .container {
-                padding: 15px;
-            }
-
-            .header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            } */
-
-            .question-header {
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            .question-meta {
-                flex-wrap: wrap;
-                gap: 12px;
-            }
 
             .ask-btn {
                 width: 100%;
@@ -257,14 +245,14 @@
             line-height: 1.3;
         }
 
-        .question-meta {
+        /* .question-meta {
             display: flex;
             gap: 20px;
             font-size: 14px;
             color: #64748b;
             margin-bottom: 25px;
             flex-wrap: wrap;
-        }
+        } */
 
         .meta-item {
             display: flex;
@@ -615,7 +603,7 @@
             transform: none;
         }
 
-        .comment-cancel-btn {
+        .comment-question-cancel-btn {
             background: none;
             border: 1px solid #e2e8f0;
             color: #64748b;
@@ -626,7 +614,7 @@
             transition: all 0.2s ease;
         }
 
-        .comment-cancel-btn:hover {
+        .comment-question-cancel-btn:hover {
             background: #f8fafc;
             border-color: #cbd5e1;
         }
@@ -679,11 +667,11 @@
             }
 
             .question-title {
-                font-size: 24px;
+                font-size: 20px;
             }
 
             .question-meta {
-                flex-direction: column;
+                /* flex-direction: column; */
                 gap: 10px;
             }
 
@@ -707,6 +695,12 @@
             .comment-help-text {
                 text-align: center;
                 margin-top: 10px;
+            }
+        }
+
+        @media (max-width: 400px){
+            .question-title{
+                font-size: 18px;
             }
         }
 
@@ -770,7 +764,7 @@ Ask Question Page Styles
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background: linear-gradient(90deg, #667eea 0%, #0d83fd 50%, #534667 100%);
         }
 
         .form-header {
@@ -913,12 +907,12 @@ Ask Question Page Styles
         }
 
         /* Submit Button */
-        .submit-btn {
-            width: 100%;
+        .question-submit-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 16px 24px;
+            width: 100%;
+            padding: 14px 24px;
             border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
@@ -929,62 +923,34 @@ Ask Question Page Styles
             overflow: hidden;
         }
 
-        .submit-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
 
-        .submit-btn:hover {
+        .question-submit-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
         }
 
-        .submit-btn:hover::before {
+        .question-submit-btn:hover::before {
             left: 100%;
         }
 
-        .submit-btn:active {
+        .question-submit-btn:active {
             transform: translateY(0);
         }
 
-        .submit-btn:disabled {
+        .question-submit-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
         }
 
         /* Loading State */
-        .submit-btn.loading {
+        .question-submit-btn.loading {
             pointer-events: none;
         }
 
-        .submit-btn.loading::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border: 2px solid transparent;
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
 
         /* Cancel Button */
-        .cancel-btn {
+        .question-cancel-btn {
             width: 100%;
             background: white;
             color: #6b7280;
@@ -995,19 +961,18 @@ Ask Question Page Styles
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 15px;
         }
 
-        .cancel-btn:hover {
+        .question-cancel-btn:hover {
             background: #f9fafb;
             border-color: #d1d5db;
             color: #374151;
         }
 
         /* Form Actions */
-        .form-actions {
-            display: flex;
-            flex-direction: column;
+        .add-question-form-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit , minmax(200px , 2fr));
             gap: 15px;
             margin-top: 40px;
         }
@@ -1146,7 +1111,7 @@ Ask Question Page Styles
         .form-input:focus-visible,
         .form-textarea:focus-visible,
         .submit-btn:focus-visible,
-        .cancel-btn:focus-visible {
+        .question-cancel-btn:focus-visible {
             outline: 2px solid #667eea;
             outline-offset: 2px;
         }
@@ -1156,7 +1121,7 @@ Ask Question Page Styles
             box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3), 0 0 0 3px rgba(102, 126, 234, 0.2);
         }
 
-        .cancel-btn:focus {
+        .question-cancel-btn:focus {
             box-shadow: 0 0 0 3px rgba(229, 231, 235, 0.5);
         }
 
