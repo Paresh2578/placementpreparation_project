@@ -11,22 +11,26 @@ namespace Placement_Preparation.BAL
         {
             public override void OnActionExecuting(ActionExecutingContext context)
             {
+                string currentUrl = Uri.EscapeDataString(context.HttpContext.Request.Path + context.HttpContext.Request.QueryString);
                 // Check if the "Token" cookie exists
-                if (!context.HttpContext.Request.Cookies.ContainsKey("Token"))
-                {
-                    // If not, return a forbidden result
-                    context.Result = new RedirectResult("~/Authentication/Auth/SignIn");
-                }else{
-                    Dictionary<string, dynamic>? userData =CV.TokenToUserData(context.HttpContext.Request.Cookies["Token"]!);
+            if (!context.HttpContext.Request.Cookies.ContainsKey("Token"))
+            {
+                // If not, return a forbidden result
+                context.Result = new RedirectResult("~/Authentication/Auth/SignIn?url=" + currentUrl);
+            }
+            else
+            {
+                Dictionary<string, dynamic>? userData = CV.TokenToUserData(context.HttpContext.Request.Cookies["Token"]!);
 
-                    //  validate userData 
-                    if(userData == null || userData.Count == 0 || !userData.ContainsKey("IsAdmin") || !userData.ContainsKey("ApproveStatus")){
-                        context.Result = new RedirectResult("~/Authentication/Auth/SignIn");
-                    }
-               else  if (userData!["ApproveStatus"] != "Accept")
+                //  validate userData 
+                if (userData == null || userData.Count == 0 || !userData.ContainsKey("IsAdmin") || !userData.ContainsKey("ApproveStatus"))
+                {
+                    context.Result = new RedirectResult("~/Authentication/Auth/SignIn?url=" + currentUrl);
+                }
+                else if (userData!["ApproveStatus"] != "Accept")
                 {
                     // call API to  restore token
-                    context.Result = new RedirectResult("~/Admin/Common/ApprovalStatus");
+                    context.Result = new RedirectResult("~/Admin/Common/ApprovalStatus?url=" + currentUrl);
                 }
             }
 

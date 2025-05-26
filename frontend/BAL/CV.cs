@@ -17,7 +17,16 @@ namespace Placement_Preparation.BAL
             _configartion = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
         }
 
-        public static void SetEmail(string email){
+        public static string GetApiUrl()
+        {
+            string? apiUrl = _configartion.GetSection("ApiSettings")["BaseUrl"];
+            if (string.IsNullOrEmpty(apiUrl))
+                throw new InvalidOperationException("API URL is not configured in appsettings.json");
+            return apiUrl;
+        }
+
+        public static void SetEmail(string email)
+        {
             _httpContextAccessor.HttpContext!.Session.SetString("Email", email);
         }
 

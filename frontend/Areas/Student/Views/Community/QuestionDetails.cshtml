@@ -1,29 +1,41 @@
-
+@using Placement_Preparation.BAL
+@model PostModel;
 @{
     ViewData["Title"] = "Community - All Questions";
+
+    string? userId = CV.GetId();
+
+    ViewData["userId"] = userId; // Store userId in ViewData for use in scripts
 }
 
+
+  <!-- Loading -->
+    <div>
+        <div id="model-loading" class="d-none">
+       <partial name="_Loading_Dialong" />
+     </div>
+    </div>
 
 <!-- Question Section -->
 <section id="question-section" class="container community-container section">
     <!-- Question -->
         <div class="question-container">
-            <h1 class="question-title">Is it valid to nest usages of two different CRITICAL_SECTIONs?</h1>
-            
+            <h1 class="question-title">@Model.Title</h1>
+
             <div class="question-meta">
                 <div class="meta-item">
                     <span class="meta-label">Asked</span>
-                    <span class="meta-value">today</span>
+                    <span class="meta-value">@Model.CreatedAt</span>
                 </div>
                 <div class="meta-item">
                     <span class="meta-label">Modified</span>
-                    <span class="meta-value">today</span>
+                    <span class="meta-value">@Model.UpdatedAt</span>
                 </div>
             </div>
 
             <div class="question-content">
                 <p class="question-text">
-                    I.e. where <code>CS_ResultSetSpace</code> and <code>CS_MHeap</code> are Win32 <code>CRITICAL_SECTION</code> objects initialized elsewhere:
+                   @Model.Description
                 </p>
 
                
@@ -56,9 +68,10 @@
                         rows="5" 
                         placeholder="Write your answer here... You can use Markdown formatting."
                         required
+                        onchange="(e)=>console.log(e.target.value)"
                     ></textarea>
                 </div>
-                <button type="submit" class="submit-btn">Post Your Answer</button>
+                <button type="submit" id="post-answer-submit" class="submit-btn" disabled>Post Your Answer</button>
             </form>
         </div>
 
@@ -227,10 +240,92 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script> <!-- Local version of jQuery -->
 @section Scripts{
     @* post answer *@
-    <script>
+     <script>
+        document.addEventListener('DOMContentLoaded', function() {
         const easymde = new EasyMDE({
             element: document.getElementById('post-answer-textarea'),
         });
+
+        // Get userId from ViewData
+        const userId = '@ViewData["userId"]';
+
+        console.log('User ID:', userId); // Debugging line to check userId
+
+        // Listen for content change in EasyMDE editor
+        let postAnswerSubmitButton = document.getElementById('post-answer-submit');
+        easymde.codemirror.on("change", () => {
+        const content = easymde.value();
+
+            // always disable the button when user not login
+            if (!userId) {
+                postAnswerSubmitButton.disabled = true;
+                postAnswerSubmitButton.textContent = 'Please login to post an answer';
+                return;
+            }
+
+            postAnswerSubmitButton.disabled = !content.trim();
+            postAnswerSubmitButton.textContent = content.trim() ? 'Post Your Answer' : 'Please write an answer';
+        });
+
+        // Handle form submission
+        postAnswerSubmitButton.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Check if user is logged in
+            if (!userId) {
+                alert('Please login to post an answer.');
+                return;
+            }
+
+            if (easymde.value().trim()) {
+                easymde.value('');
+
+                // call api
+                const modelLoading = document.getElementById('model-loading');
+
+                 //show Loading
+                modelLoading.classList.remove('d-none');
+
+                const data = {
+                    answer : easymde.value(),
+                    userId : userId,
+                    questionId: '@Model.QuestionId',
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+
+                // Simulate API call
+
+                fetch(`${CV.GetApiUrl()}Community/QuestionAnswer`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }).then(response => response.json())
+                  .then(response => {
+                      if (response.success) {
+                          // Handle successful answer submission
+                          alert('Answer posted successfully!');
+                      } else {
+                          // Handle error
+                          alert('Error posting answer: ' + response.message);
+                      }
+                  }).catch(error => {
+                      console.error('Error:', error);
+                      alert('An error occurred while posting your answer.');
+                    });
+                    easymde.value('');
+
+                // hide Loading
+                modelLoading.classList.add('d-none');
+
+                postAnswerSubmitButton.disabled = true;
+            } else {
+                alert('Please write an answer before submitting.');
+            }
+        });
+        })
     </script>
     
 
@@ -274,6 +369,16 @@
                     const action = this.textContent.trim();
                     console.log('Action clicked:', action);
                 });
+            });
+
+            postAnswerButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (postAnswerTextarea.value.trim()) {
+                    alert('Answer posted successfully! (This is a demo)');
+                    postAnswerTextarea.value = '';
+                } else {
+                    alert('Please write an answer before posting.');
+                }
             });
 
             // Comment functionality

@@ -5,7 +5,7 @@ namespace backend.Models
   public  class PostModel
     {
         [Key]
-        public Guid QuestionId { get; set; }
+        public Guid? QuestionId { get; set; } = Guid.NewGuid();
 
         [Required(ErrorMessage = "Title is required.")]
         [StringLength(150, ErrorMessage = "Title can't be longer than 150 characters.")]

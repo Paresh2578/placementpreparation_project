@@ -366,6 +366,12 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
 
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         /* Answers Section */
         .answers-section {
             background: white;
@@ -982,7 +988,6 @@ Ask Question Page Styles
             color: #ef4444;
             font-size: 14px;
             margin-top: 8px;
-            display: none;
             animation: slideDown 0.3s ease;
         }
 
@@ -1000,6 +1005,17 @@ Ask Question Page Styles
                 transform: translateY(0);
             }
         }
+
+        .error-banner-message {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border: 1px solid #f87171;
+            color: #7f1d1d;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            animation: slideDown 0.3s ease;
+        }
+
 
         /* Success Message */
         .success-message {

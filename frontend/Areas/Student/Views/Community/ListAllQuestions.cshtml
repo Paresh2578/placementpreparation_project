@@ -1,4 +1,4 @@
-
+@model IEnumerable<PostModel>
 @{
     ViewData["Title"] = "Community - All Questions";
 }
@@ -21,73 +21,44 @@
             <input type="text" class="search-input" placeholder="search problem" style="width: 100%;">
         </div>
 
+        <!-- #region  show error-->
+        @if(ViewData["InternalServerError"] != null)    {
+        <partial name="_Errors"/>
+        }else{
+ 
         <!-- Questions List -->
         <div class="questions-list">
-            <!-- Question 1 -->
-            <article class="question-card" tabindex="0" onclick='window.location.assign("/Student/Community/QuestionDetails")'>
-                <div class="question-header">
-                    <div class="question-number">1</div>
-                    <h2 class="question-title">What is flutter ?</h2>
-                </div>
-                <div class="question-meta">
-                    <div class="meta-itm timestamp">
-                        Asked : Today
-                    </div>
-                    <div class="meta-iem answers-count">
-                        Answers : 10
-                    </div>
-                </div>
-            </article>
+            @{
+                int idx = 1;
+                foreach (PostModel question in Model)
+                {
+                    <a class="question-card" tabindex="0" asp-action="QuestionDetails" asp-route-questionId="@question.QuestionId">
+                        <div class="question-header">
+                            <div class="question-number">@idx</div>
+                            <h2 class="question-title">@question.Title</h2>
+                        </div>
+                        <div class="question-meta">
+                            <div class="meta-itm timestamp">
+                                Asked : @question.CreatedAt.ToString()
+                            </div>
+                            <div class="meta-iem answers-count">
+                                @* Answers : @question.AnswersCount *@
+                                Answers : 10
+                            </div>
+                        </div>
+                    </a>
+                    idx++;
+                }
 
-            <!-- Question 2 -->
-            <article class="question-card" tabindex="0">
-                <div class="question-header">
-                    <div class="question-number">2</div>
-                    <h2 class="question-title">How to implement state management in React?</h2>
-                </div>
-                <div class="question-meta">
-                    <div class="meta-item timestamp">
-                        Asked : 2 hours ago
+                if (Model.Count() == 0)
+                {
+                    <div class="no-questions-found">
+                        <p>No questions found.</p>
                     </div>
-                    <div class="meta-item answers-count">
-                        Answers : 7
-                    </div>
-                </div>
-            </article>
-
-            <!-- Question 3 -->
-            <article class="question-card" tabindex="0">
-                <div class="question-header">
-                    <div class="question-number">3</div>
-                    <h2 class="question-title">Best practices for responsive web design?</h2>
-                </div>
-                <div class="question-meta">
-                    <div class="meta-item timestamp">
-                        Asked : Yesterday
-                    </div>
-                    <div class="meta-item answers-count">
-                        Answers : 12
-                    </div>
-                </div>
-            </article>
-
-            <!-- Question 4 -->
-            <article class="question-card" tabindex="0">
-                <div class="question-header">
-                    <div class="question-number">4</div>
-                    <h2 class="question-title">How to optimize database queries for better performance?</h2>
-                </div>
-                <div class="question-meta">
-                    <div class="meta-item timestamp">
-                        Asked : 3 days ago
-                    </div>
-                    <div class="meta-item answers-count">
-                        Answers : 18
-                    </div>
-                </div>
-            </article>
+                }
+            }
         </div>
+        }
 
-    
-</section>
+    </section>
 

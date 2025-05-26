@@ -64,7 +64,12 @@ namespace Frontend.Areas.Authentication.Controllers
                    // notify the user
                     TempData["SuccessMessage"] = response.Message;
 
-                   //redirect to the home page
+                    //redirect to the home page
+                    if(TempData["nextUrl"] != null)
+                    {
+                        string nextUrl = TempData["nextUrl"].ToString()!;
+                        return Redirect(nextUrl);
+                    }
                     return RedirectToAction("Home", "Home", new { area = "Admin" });
                 }
                 else

@@ -1,4 +1,5 @@
-
+@using Placement_Preparation.BAL
+@model PostModel;
 @{
     ViewData["Title"] = "Community - Ask Question";
 }
@@ -28,7 +29,17 @@
             </ul>
         </div>
 
-        <form id="questionForm" novalidate>
+        <form id="questionForm" method="post" class="add-question-form" asp-action="AskQuestion" asp-controller="Community">
+            <!-- Hidden Fields -->
+            <input type="hidden" name="PostId"/>
+            <input type="hidden" name="UserId" value="@CV.GetId()"/>
+
+            <!-- show errors -->
+            @if(ViewData["InternalServerError"] != null){
+                <div class="error-banner-message">
+                    <strong>Error:</strong> @ViewData["InternalServerError"]
+                </div>
+            }
             <!-- Title Field -->
             <div class="form-group floating-label">
                 <input 
@@ -38,11 +49,11 @@
                     class="form-input" 
                     placeholder=" "
                     maxlength="150"
-                    required
+                    asp-for="Title"
                 >
                 <label for="title" class="form-label">Question Title</label>
                 <div class="char-counter" id="titleCounter">0/150</div>
-                <div class="error-message" id="titleError"></div>
+                <span asp-validation-for="Title" class="error-message" id="titleError"/>
             </div>
 
             <!-- Description Field -->
@@ -51,12 +62,11 @@
                     id="description" 
                     name="description" 
                     class="form-textarea" 
-                    placeholder=" "
+                    placeholder="Write your answer Describe here... You can use Markdown formatting."
                     maxlength="5000"
-                    required
+                    asp-for="Description"
                 ></textarea>
-                <div class="char-counter" id="descriptionCounter">0/5000</div>
-                <div class="error-message" id="descriptionError"></div>
+                <span asp-validation-for="Description" class="error-message" id="descriptionError"></span>
             </div>
 
             <!-- Form Actions -->
@@ -121,133 +131,7 @@
                 updateCharCounter(this, titleCounter, 150);
                 clearError(titleError);
             });
-
-            // Description input handlers
-            descriptionInput.addEventListener('input', function() {
-                updateCharCounter(this, descriptionCounter, 5000);
-                clearError(descriptionError);
-                
-                // Auto-resize textarea
-                this.style.height = 'auto';
-                this.style.height = Math.min(this.scrollHeight, 300) + 'px';
-            });
-
             
-            // Form submission
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                
-                const isTitleValid = validateTitle();
-                const isDescriptionValid = validateDescription();
-                
-                if (isTitleValid && isDescriptionValid) {
-                    // Show loading state
-                    submitBtn.classList.add('loading');
-                    submitBtn.disabled = true;
-                    
-                    // Simulate API call
-                    setTimeout(() => {
-                        // Hide loading state
-                        submitBtn.classList.remove('loading');
-                        submitBtn.disabled = false;
-                        
-                        // Show success message
-                        successMessage.classList.add('show');
-                        
-                        // Reset form
-                        form.reset();
-                        updateCharCounter(titleInput, titleCounter, 150);
-                        updateCharCounter(descriptionInput, descriptionCounter, 5000);
-                        descriptionInput.style.height = 'auto';
-                        
-                        // Hide success message after 5 seconds
-                        setTimeout(() => {
-                            successMessage.classList.remove('show');
-                        }, 5000);
-                        
-                        // Scroll to top
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                        
-                        console.log('Question submitted:', {
-                            title: titleInput.value,
-                            description: descriptionInput.value
-                        });
-                    }, 2000);
-                }
-            });
-
-            // Cancel button
-            cancelBtn.addEventListener('click', function() {
-                if (titleInput.value.trim() || descriptionInput.value.trim()) {
-                    if (confirm('Are you sure you want to cancel? Your changes will be lost.')) {
-                        form.reset();
-                        updateCharCounter(titleInput, titleCounter, 150);
-                        updateCharCounter(descriptionInput, descriptionCounter, 5000);
-                        descriptionInput.style.height = 'auto';
-                        clearAllErrors();
-                        
-                        // Redirect to questions page (in a real app)
-                        console.log('Redirecting to questions page...');
-                    }
-                } else {
-                    // Redirect to questions page (in a real app)
-                    console.log('Redirecting to questions page...');
-                }
-            });
-
-            // Real-time validation on blur
-            titleInput.addEventListener('blur', validateTitle);
-            descriptionInput.addEventListener('blur', validateDescription);
-
-            // Prevent form submission on Enter in title field
-            titleInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    descriptionInput.focus();
-                }
-            });
-
-            // Auto-save to localStorage (optional feature)
-            function autoSave() {
-                const formData = {
-                    title: titleInput.value,
-                    description: descriptionInput.value,
-                    timestamp: Date.now()
-                };
-                localStorage.setItem('questionDraft', JSON.stringify(formData));
-            }
-
-            // Load saved draft
-            function loadDraft() {
-                const saved = localStorage.getItem('questionDraft');
-                if (saved) {
-                    const data = JSON.parse(saved);
-                    // Only load if saved within last hour
-                    if (Date.now() - data.timestamp < 3600000) {
-                        titleInput.value = data.title || '';
-                        descriptionInput.value = data.description || '';
-                        updateCharCounter(titleInput, titleCounter, 150);
-                        updateCharCounter(descriptionInput, descriptionCounter, 5000);
-                    }
-                }
-            }
-
-            // Auto-save every 30 seconds
-            setInterval(autoSave, 30000);
-
-            // Save on input
-            titleInput.addEventListener('input', autoSave);
-            descriptionInput.addEventListener('input', autoSave);
-
-            // Load draft on page load
-            loadDraft();
-
-            // Clear draft on successful submission
-            form.addEventListener('submit', function() {
-                localStorage.removeItem('questionDraft');
-            });
-
             // Enhanced accessibility
             titleInput.addEventListener('focus', function() {
                 this.setAttribute('aria-describedby', 'titleCounter titleError');

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace backend.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/Community/[controller]")]
     public class QuestionAnswerController : ControllerBase
     {
         private readonly QuestionAnswerInterface _questionAnswerRepo;
